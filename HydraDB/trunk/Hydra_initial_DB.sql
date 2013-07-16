@@ -74,6 +74,8 @@ CREATE TABLE tConstraint (
 
 ALTER TABLE tConstraintGroup ADD FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id);
 
+ALTER TABLE tConstraintItem ADD FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id);
+
 /* Data representation */
 
 CREATE TABLE tDescriptor (
@@ -164,4 +166,54 @@ CREATE TABLE tAttrMap (
     attr_id_b INT,
     FOREIGN KEY (attr_id_a) REFERENCES tAttr(attr_id),
     FOREIGN KEY (attr_id_b) REFERENCES tAttr(attr_id)
+);
+
+CREATE TABLE tResourceAttr (
+    resource_attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    attr_id INT,
+    ref_key VARCHAR(45),
+    ref_id INT,
+    attr_group_id INT,
+    attr_is_var VARCHAR(1) NOT NULL,
+    FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
+    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
+);
+
+ALTER TABLE tConstraintItem ADD FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_Attr_id);
+
+ALTER TABLE tResourceScenario ADD FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id);
+
+/* ========================================================================= */
+/* User permission management                                                */
+
+CREATE TABLE tUser (
+    user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username varchar(45),
+    cr_date TIMESTAMP
+);
+
+CREATE TABLE tRole (
+    role_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    role_name VARCHAR(45),
+    cr_date TIMESTAMP
+);
+
+CREATE TABLE tPerm (
+    perm_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    perm_name VARCHAR(45),
+    cr_date TIMESTAMP
+);
+
+CREATE TABLE tRoleUser (
+    user_id INT,
+    role_id INT,
+    FOREIGN KEY (user_id) REFERENCES tUser(user_id),
+    FOREIGN KEY (role_id) REFERENCES tRole(role_id)
+);
+
+CREATE TABLE tRolePerm (
+    perm_id INT,
+    role_id INT,
+    FOREIGN KEY (perm_id) REFERENCES tPerm(perm_id),
+    FOREIGN KEY (role_id) REFERENCES tRole(role_id)
 );
