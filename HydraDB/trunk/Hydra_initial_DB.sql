@@ -6,13 +6,13 @@ USE hydra_initial;
 /* Project network and scenearios */
 
 CREATE TABLE tProject (
-    project_id INT NOT NULL PRIMARY KEY,
+    project_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     project_name VARCHAR(45),
     project_description VARCHAR(1000)
 );
 
 CREATE TABLE tNetwork (
-    network_id INT NOT NULL PRIMARY KEY,
+    network_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     network_name VARCHAR(45),
     network_description VARCHAR(1000),
     project_id INT,
@@ -20,12 +20,12 @@ CREATE TABLE tNetwork (
 );
 
 CREATE TABLE tNode (
-    node_id INT NOT NULL PRIMARY KEY,
+    node_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     node_type VARCHAR(45)
 );
 
 CREATE TABLE tLink (
-    link_id INT PRIMARY KEY,
+    link_id INT PRIMARY KEY AUTO_INCREMENT,
     link_type VARCHAR(45),
     network_id INT,
     node_1_id INT,
@@ -36,7 +36,7 @@ CREATE TABLE tLink (
 );
 
 CREATE TABLE tScenario (
-    scenario_id INT NOT NULL PRIMARY KEY,
+    scenario_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     scenario_name VARCHAR(45),
     scenario_description VARCHAR(1000),
     network_id INT,
@@ -47,13 +47,13 @@ CREATE TABLE tScenario (
 
 CREATE TABLE tConstraintItem (
     constraint_id INT,
-    item_id INT NOT NULL PRIMARY KEY,
+    item_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     resource_attr_id INT
 );
 
 CREATE TABLE tConstraintGroup (
     constraint_id INT,
-    group_id INT NOT NULL PRIMARY KEY,
+    group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ref_key VARCHAR(45),
     ref_id_1 INT,
     ref_id_2 INT,
@@ -63,7 +63,7 @@ CREATE TABLE tConstraintGroup (
 );
 
 CREATE TABLE tConstraint (
-    constraint_id INT NOT NULL PRIMARY KEY,
+    constraint_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     scenario_id INT,
     group_id INT,
     constant DOUBLE,
@@ -82,18 +82,18 @@ CREATE TABLE tDescriptor (
 );
 
 CREATE TABLE tTimeSeries (
-    data_id INT NOT NULL PRIMARY KEY,
+    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ts_time DATETIME,
     ts_value DOUBLE
 );
 
 CREATE TABLE tTimeSeriesArray (
-    ts_array_id INT NOT NULL PRIMARY KEY,
+    ts_array_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     ts_array_data BLOB
 );
 
 CREATE TABLE tEquallySpacedTimeSeries (
-    data_id INT NOT NULL PRIMARY KEY,
+    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     start_time DATETIME,
     frequency FLOAT,
     ts_array_id INT,
@@ -101,12 +101,12 @@ CREATE TABLE tEquallySpacedTimeSeries (
 );
 
 CREATE TABLE tScalar (
-    data_id INT NOT NULL PRIMARY KEY,
+    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     param_value DOUBLE
 );
 
 CREATE TABLE tArray (
-    data_id INT NOT NULL PRIMARY KEY,
+    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     arr_x_dim INT,
     arr_y_dim INT,
     arr_z_dim INt,
@@ -116,7 +116,7 @@ CREATE TABLE tArray (
 );
 
 CREATE TABLE tDataAttr (
-    d_attr_id INT NOT NULL PRIMARY KEY,
+    d_attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     data_id INT,
     data_type VARCHAR(45),
     d_attr_name VARCHAR(45),
@@ -143,12 +143,12 @@ CREATE TABLE tResourceScenario (
 /* Attributes */
 
 CREATE TABLE tAttr (
-    attr_id INT NOT NULL PRIMARY KEY,
+    attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     attr_name VARCHAR(45)
 );
 
 CREATE TABLE tAttrGroup (
-    attr_group_id INT NOT NULL PRIMARY KEY,
+    attr_group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(45)
 );
 
