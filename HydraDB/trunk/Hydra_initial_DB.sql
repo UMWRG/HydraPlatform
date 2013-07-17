@@ -130,6 +130,7 @@ CREATE TABLE tScenarioData (
     data_type VARCHAR(45),
     data_units VARCHAR(45),
     data_name VARCHAR(45),
+    data_dimen VARCHAR(45),
     PRIMARY KEY (data_id, data_type)
 );
 
@@ -146,7 +147,8 @@ CREATE TABLE tResourceScenario (
 
 CREATE TABLE tAttr (
     attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    attr_name VARCHAR(45)
+    attr_name VARCHAR(45),
+    attr_dimen VARCHAR(45)
 );
 
 CREATE TABLE tAttrGroup (
