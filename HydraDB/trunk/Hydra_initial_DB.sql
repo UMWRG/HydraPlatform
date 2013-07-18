@@ -47,6 +47,44 @@ CREATE TABLE tScenario (
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
+/* Attributes */
+
+CREATE TABLE tAttr (
+    attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    attr_name VARCHAR(45),
+    attr_dimen VARCHAR(45)
+);
+
+CREATE TABLE tAttrGroup (
+    attr_group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    group_name VARCHAR(45)
+);
+
+CREATE TABLE tAttrGroupItem (
+    attr_id INT,
+    attr_group_id INT,
+    FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
+    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
+);
+
+CREATE TABLE tAttrMap (
+    attr_id_a INT,
+    attr_id_b INT,
+    FOREIGN KEY (attr_id_a) REFERENCES tAttr(attr_id),
+    FOREIGN KEY (attr_id_b) REFERENCES tAttr(attr_id)
+);
+
+CREATE TABLE tResourceAttr (
+    resource_attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    attr_id INT,
+    ref_key VARCHAR(45),
+    ref_id INT,
+    attr_group_id INT,
+    attr_is_var VARCHAR(1) NOT NULL,
+    FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
+    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
+);
+
 /* Constraints */
 
 CREATE TABLE tConstraint (
@@ -62,7 +100,8 @@ CREATE TABLE tConstraintItem (
     constraint_id INT,
     item_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     resource_attr_id INT,
-    FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id)
+    FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id),
+    FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_Attr_id)
 );
 
 CREATE TABLE tConstraintGroup (
@@ -141,50 +180,9 @@ CREATE TABLE tResourceScenario (
     resource_attr_id INT,
     PRIMARY KEY (data_id, scenario_id),
     FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
-    FOREIGN KEY (data_id) REFERENCES tScenarioData(data_id)
+    FOREIGN KEY (data_id) REFERENCES tScenarioData(data_id),
+    FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id)
 );
-
-/* Attributes */
-
-CREATE TABLE tAttr (
-    attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    attr_name VARCHAR(45),
-    attr_dimen VARCHAR(45)
-);
-
-CREATE TABLE tAttrGroup (
-    attr_group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    group_name VARCHAR(45)
-);
-
-CREATE TABLE tAttrGroupItem (
-    attr_id INT,
-    attr_group_id INT,
-    FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
-    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
-);
-
-CREATE TABLE tAttrMap (
-    attr_id_a INT,
-    attr_id_b INT,
-    FOREIGN KEY (attr_id_a) REFERENCES tAttr(attr_id),
-    FOREIGN KEY (attr_id_b) REFERENCES tAttr(attr_id)
-);
-
-CREATE TABLE tResourceAttr (
-    resource_attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    attr_id INT,
-    ref_key VARCHAR(45),
-    ref_id INT,
-    attr_group_id INT,
-    attr_is_var VARCHAR(1) NOT NULL,
-    FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
-    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
-);
-
-ALTER TABLE tConstraintItem ADD FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_Attr_id);
-
-ALTER TABLE tResourceScenario ADD FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id);
 
 /* ========================================================================= */
 /* User permission management                                                */
