@@ -21,7 +21,10 @@ CREATE TABLE tNetwork (
 
 CREATE TABLE tNode (
     node_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    node_type VARCHAR(45)
+    node_type VARCHAR(45),
+    node_name VARCHAR(45),
+    node_x DOUBLE,
+    node_y DOUBLE
 );
 
 CREATE TABLE tLink (
@@ -30,6 +33,7 @@ CREATE TABLE tLink (
     network_id INT,
     node_1_id INT,
     node_2_id INT,
+    link_name VARCHAR(45),
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id),
     FOREIGN KEY (node_1_id) REFERENCES tNode(node_id),
     FOREIGN KEY (node_2_id) REFERENCES tNode(node_id)
@@ -45,10 +49,20 @@ CREATE TABLE tScenario (
 
 /* Constraints */
 
+CREATE TABLE tConstraint (
+    constraint_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    scenario_id INT,
+    group_id INT,
+    constant DOUBLE,
+    op VARCHAR(10),
+    FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id)
+);
+
 CREATE TABLE tConstraintItem (
     constraint_id INT,
     item_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    resource_attr_id INT
+    resource_attr_id INT,
+    FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id)
 );
 
 CREATE TABLE tConstraintGroup (
@@ -59,22 +73,9 @@ CREATE TABLE tConstraintGroup (
     ref_id_2 INT,
     op VARCHAR(10),
     FOREIGN KEY (ref_id_1) REFERENCES tConstraintItem(item_id),
-    FOREIGN KEY (ref_id_2) REFERENCES tConstraintItem(item_id)
+    FOREIGN KEY (ref_id_2) REFERENCES tConstraintItem(item_id),
+    FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id)
 );
-
-CREATE TABLE tConstraint (
-    constraint_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    scenario_id INT,
-    group_id INT,
-    constant DOUBLE,
-    op VARCHAR(10),
-    FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
-    FOREIGN KEY (group_id) REFERENCES tConstraintGroup(group_id)
-);
-
-ALTER TABLE tConstraintGroup ADD FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id);
-
-ALTER TABLE tConstraintItem ADD FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id);
 
 /* Data representation */
 
