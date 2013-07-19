@@ -55,16 +55,23 @@ CREATE TABLE tAttr (
     attr_dimen VARCHAR(45)
 );
 
-CREATE TABLE tAttrGroup (
-    attr_group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE tResourceTemplateGroup (
+    group_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(45)
 );
 
-CREATE TABLE tAttrGroupItem (
+CREATE TABLE tResourceTemplate(
+    template_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    group_name VARCHAR(45),
+    group_id INT,
+    FOREIGN KEY (group_id) REFERENCES tResourceTemplateGroup(group_id)
+);
+
+CREATE TABLE tResourceTemplateItem (
     attr_id INT,
-    attr_group_id INT,
+    template_id INT,
     FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
-    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
+    FOREIGN KEY (template_id) REFERENCES tResourceTemplate(template_id)
 );
 
 CREATE TABLE tAttrMap (
@@ -79,10 +86,10 @@ CREATE TABLE tResourceAttr (
     attr_id INT,
     ref_key VARCHAR(45),
     ref_id INT,
-    attr_group_id INT,
+    template_id INT,
     attr_is_var VARCHAR(1) NOT NULL,
     FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
-    FOREIGN KEY (attr_group_id) REFERENCES tAttrGroup(attr_group_id)
+    FOREIGN KEY (template_id) REFERENCES tResourceTemplate(template_id)
 );
 
 /* Constraints */
