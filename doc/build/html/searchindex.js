@@ -1,0 +1,1 @@
+Search.setIndex({objects:{},terms:{index:0,search:0,intend:[],welcom:0,databas:[0,1],tool:[],indic:0,modul:0,content:0,hydra:[0,1],build:[],tabl:0,gener:[],model:[],document:0,page:0,network:[],schema:[0,1]},objtypes:{},titles:["Welcome to HYDRA&#8217;s documentation!","Hydra database schema"],objnames:{},filenames:["index","HydraDB/db"]})
