@@ -31,6 +31,15 @@ Tests
 
    tests/python/unittests
 
+
+Miscellaneous
+-------------
+
+.. toctree::
+   :maxdepth: 2
+
+   devdocs/account
+
 ______________________________________________________________________________________
 
 Indices and tables
