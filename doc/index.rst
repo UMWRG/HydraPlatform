@@ -10,20 +10,31 @@ This page unites the complete documentation of the Hydra project. To review the
 code or file a bug visit the `Trac page
 <http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/>`_.
 
-Contents:
+Main packages
+-------------
 
 .. toctree::
    :maxdepth: 3
 
-   HydraDB/db
-   HydraUI/UI
-   HydraServer/server
-   HydraPlugins/plugins
+   HydraDB/index
+   HydraUI/index
+   HydraServer/index
+   HydraPlugins/index
+   HydraLib/index
 
 
+Tests
+-----
+
+.. toctree::
+   :maxdepth: 2
+
+   tests/python/unittests
+
+______________________________________________________________________________________
 
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`
