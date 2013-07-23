@@ -12,6 +12,9 @@ Contents:
    :maxdepth: 3
 
    HydraDB/db
+   HydraUI/UI
+   HydraServer/server
+   HydraPlugins/plugins
 
 
 

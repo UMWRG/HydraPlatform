@@ -9,9 +9,12 @@ Welcome to HYDRA's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    HydraDB/db
+   HydraUI/UI
+   HydraServer/server
+   HydraPlugins/plugins
 
 
 
