@@ -6,6 +6,10 @@
 Welcome to HYDRA's documentation!
 =================================
 
+This page unites the complete documentation of the Hydra project. To review the
+code or file a bug visit the `Trac page
+<http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/>`.
+
 Contents:
 
 .. toctree::
