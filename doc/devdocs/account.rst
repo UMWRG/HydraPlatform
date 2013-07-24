@@ -31,21 +31,18 @@ Windows users
 
     f. A window will ask you for your username and private key passphrase
 
-    g. If that worked without errors, type the following command in the terminal
-       window that appears::
+#. Register as a new user to Trac (top right on the Trac main page)
 
-        htpasswd -c .htpasswd <your username>
+   #. Enter your email address in the "General" tab of the preferences
 
-    h. Logout (``exit``)
-
-#. Let the admin know once you have done this.
-
-#. Login into Trac
+   The Trac page can be found at::
+    
+      http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
 
 It is highly recommended for Windows users to install TortoiseSVN. The URL of
 the SVN repository is::
 
-    svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com /home/svn/svnrepository/HYDRA
+    svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/home/svn/svnrepository/HYDRA
 
 
 Linux users
