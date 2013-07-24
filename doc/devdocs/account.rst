@@ -35,9 +35,9 @@ Windows users
 
    #. Enter your email address in the "General" tab of the preferences
 
-   The Trac page can be found at::
+   The Trac page can be found at:
     
-      http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
+   http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
 
 It is highly recommended for Windows users to install TortoiseSVN. The URL of
 the SVN repository is::
