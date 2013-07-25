@@ -215,6 +215,7 @@ CREATE TABLE tPerm (
 CREATE TABLE tRoleUser (
     user_id INT NOT NULL,
     role_id INT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
     FOREIGN KEY (user_id) REFERENCES tUser(user_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
 );
@@ -222,6 +223,7 @@ CREATE TABLE tRoleUser (
 CREATE TABLE tRolePerm (
     perm_id INT NOT NULL,
     role_id INT NOT NULL,
+    PRIMARY KEY (perm_id, role_id),
     FOREIGN KEY (perm_id) REFERENCES tPerm(perm_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
 );
