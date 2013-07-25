@@ -62,7 +62,7 @@ CREATE TABLE tResourceTemplateGroup (
 
 CREATE TABLE tResourceTemplate(
     template_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    group_name VARCHAR(45),
+    template_name VARCHAR(45),
     group_id INT,
     FOREIGN KEY (group_id) REFERENCES tResourceTemplateGroup(group_id)
 );
@@ -126,65 +126,65 @@ CREATE TABLE tConstraintGroup (
 /* Data representation */
 
 CREATE TABLE tDescriptor (
-    data_id INT NOT NULL PRIMARY KEY,
-    desc_val VARCHAR(45)
+    data_id  INT         NOT NULL PRIMARY KEY,
+    desc_val VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE tTimeSeries (
-    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    ts_time DATETIME,
-    ts_value DOUBLE
+    data_id  INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    ts_time  DATETIME NOT NULL,
+    ts_value DOUBLE   NOT NULL
 );
 
 CREATE TABLE tTimeSeriesArray (
-    ts_array_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    ts_array_data BLOB
+    ts_array_id   INT  NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    ts_array_data BLOB NOT NULL
 );
 
 CREATE TABLE tEquallySpacedTimeSeries (
-    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    start_time DATETIME,
-    frequency FLOAT,
-    ts_array_id INT,
+    data_id     INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    start_time  DATETIME NOT NULL,
+    frequency   DOUBLE   NOT NULL,
+    ts_array_id INT      NOT NULL,
     FOREIGN KEY (ts_array_id) REFERENCES tTimeSeriesArray(ts_array_id)
 );
 
 CREATE TABLE tScalar (
-    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    param_value DOUBLE
+    data_id     INT    NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    param_value DOUBLE NOT NULL
 );
 
 CREATE TABLE tArray (
-    data_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    arr_x_dim INT,
-    arr_y_dim INT,
-    arr_z_dim INt,
-    arr_precision VARCHAR(45),
-    arr_endianness VARCHAR(45),
-    arr_data BLOB
+    data_id        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    arr_x_dim      INT NOT NULL,
+    arr_y_dim      INT NOT NULL,
+    arr_z_dim      INT NOT NULL,
+    arr_precision  VARCHAR(45) NOT NULL,
+    arr_endianness VARCHAR(45) NOT NULL,
+    arr_data       BLOB        NOT NULL
 );
 
 CREATE TABLE tDataAttr (
-    d_attr_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    data_id INT,
-    data_type VARCHAR(45),
-    d_attr_name VARCHAR(45),
-    d_attr_val DOUBLE
+    d_attr_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    data_id     INT         NOT NULL,
+    data_type   VARCHAR(45) NOT NULL,
+    d_attr_name VARCHAR(45) NOT NULL,
+    d_attr_val  DOUBLE      NOT NULL
 );
 
 CREATE TABLE tScenarioData (
-    data_id INT,
-    data_type VARCHAR(45),
-    data_units VARCHAR(45),
-    data_name VARCHAR(45),
-    data_dimen VARCHAR(45),
+    data_id     INT         NOT NULL,
+    data_type   VARCHAR(45) NOT NULL,
+    data_units  VARCHAR(45) NOT NULL,
+    data_name   VARCHAR(45) NOT NULL,
+    data_dimen  VARCHAR(45) NOT NULL,
     PRIMARY KEY (data_id, data_type)
 );
 
 CREATE TABLE tResourceScenario (
-    data_id INT,
-    scenario_id INT,
-    resource_attr_id INT,
+    data_id          INT NOT NULL,
+    scenario_id      INT NOT NULL,
+    resource_attr_id INT NOT NULL,
     PRIMARY KEY (data_id, scenario_id),
     FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
     FOREIGN KEY (data_id) REFERENCES tScenarioData(data_id),
@@ -195,33 +195,33 @@ CREATE TABLE tResourceScenario (
 /* User permission management                                                */
 
 CREATE TABLE tUser (
-    user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    username varchar(45),
-    cr_date TIMESTAMP
+    user_id  INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    username varchar(45) NOT NULL,
+    cr_date  TIMESTAMP
 );
 
 CREATE TABLE tRole (
-    role_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    role_name VARCHAR(45),
-    cr_date TIMESTAMP
+    role_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    role_name VARCHAR(45) NOT NULL,
+    cr_date   TIMESTAMP
 );
 
 CREATE TABLE tPerm (
-    perm_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    perm_name VARCHAR(45),
-    cr_date TIMESTAMP
+    perm_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    perm_name VARCHAR(45) NOT NULL,
+    cr_date   TIMESTAMP
 );
 
 CREATE TABLE tRoleUser (
-    user_id INT,
-    role_id INT,
+    user_id INT NOT NULL,
+    role_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES tUser(user_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
 );
 
 CREATE TABLE tRolePerm (
-    perm_id INT,
-    role_id INT,
+    perm_id INT NOT NULL,
+    role_id INT NOT NULL,
     FOREIGN KEY (perm_id) REFERENCES tPerm(perm_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
 );
