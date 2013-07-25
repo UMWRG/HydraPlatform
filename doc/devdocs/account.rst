@@ -1,8 +1,8 @@
 How to set up your account for SVN+SSH and Trac
 ===============================================
 
-Windows users
--------------
+SVN+SSH for Windows users
+-------------------------
 
 #. Install PuTTY and friends: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.62-installer.exe
 
@@ -15,7 +15,7 @@ Windows users
 #. Send the public key and a username you'd like to have to the system
    administrator (currently `p.meier@ucl.ac.uk <mailto:p.meier@ucl.ac.uk>`_) 
 
-#. Once your account is created
+#. Once your account is created it's time to test it:
 
     a. Start up  PuTTY.
            
@@ -31,24 +31,24 @@ Windows users
 
     f. A window will ask you for your username and private key passphrase
 
-#. Register as a new user to Trac (top right on the Trac main page)
-
-   #. Enter your email address in the "General" tab of the preferences
-
-   The Trac page can be found at:
-    
-   http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
+    g. If you see no error messages, your account is created successfully.
+       **Congratulations!**
 
 It is highly recommended for Windows users to install TortoiseSVN. The URL of
 the SVN repository is::
 
     svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/home/svn/svnrepository/HYDRA
 
+.. note::
 
-Linux users
------------
+    If you connect the first time to the SVN server, TortoiseSVN might ask you
+    for the password multiple times (usually twice).
 
-Creating an account is analogous to the procedure for Windows users. A few
+
+SVN+SSH for Linux users
+-----------------------
+
+Creating an account is pretty much the same as the procedure for Windows users. A few
 helpful commands are listed below.
 
 #. Generate a key pair::
@@ -69,4 +69,12 @@ helpful commands are listed below.
         ssh <username>@ec2hydra
  
 
+
+Trac
+----
+
+#. Register as a new user to Trac (top right on the Trac main page)
+   The Trac page can be found at:
+    
+   http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
 

@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'HYDRA'
-copyright = u'2013, S. Knox, P. Meier'
+copyright = u'2013, Halcrow and University College London'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
