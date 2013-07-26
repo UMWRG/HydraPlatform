@@ -70,6 +70,7 @@ CREATE TABLE tResourceTemplate(
 CREATE TABLE tResourceTemplateItem (
     attr_id INT,
     template_id INT,
+    PRIMARY KEY (attr_id, template_id),
     FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id),
     FOREIGN KEY (template_id) REFERENCES tResourceTemplate(template_id)
 );
@@ -77,6 +78,7 @@ CREATE TABLE tResourceTemplateItem (
 CREATE TABLE tAttrMap (
     attr_id_a INT,
     attr_id_b INT,
+    PRIMARY KEY (attr_id_a, attr_id_b),
     FOREIGN KEY (attr_id_a) REFERENCES tAttr(attr_id),
     FOREIGN KEY (attr_id_b) REFERENCES tAttr(attr_id)
 );
