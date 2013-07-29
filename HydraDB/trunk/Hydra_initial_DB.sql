@@ -185,7 +185,7 @@ CREATE TABLE tResourceScenario (
     dataset_id          INT NOT NULL,
     scenario_id      INT NOT NULL,
     resource_attr_id INT NOT NULL,
-    PRIMARY KEY (dataset_id, scenario_id),
+    PRIMARY KEY (resource_attr_id,scenario_id),
     FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
     FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id),
     FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id)
