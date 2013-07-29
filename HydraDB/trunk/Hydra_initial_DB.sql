@@ -136,17 +136,11 @@ CREATE TABLE tTimeSeries (
     ts_value DOUBLE   NOT NULL
 );
 
-CREATE TABLE tTimeSeriesArray (
-    ts_array_id   INT  NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    ts_array_data BLOB NOT NULL
-);
-
 CREATE TABLE tEquallySpacedTimeSeries (
-    data_id     INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    start_time  DATETIME NOT NULL,
-    frequency   DOUBLE   NOT NULL,
-    ts_array_id INT      NOT NULL,
-    FOREIGN KEY (ts_array_id) REFERENCES tTimeSeriesArray(ts_array_id)
+    data_id       INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    start_time    DATETIME NOT NULL,
+    frequency     DOUBLE   NOT NULL,
+    arr_data      BLOB     NOT NULL
 );
 
 CREATE TABLE tScalar (
@@ -178,14 +172,16 @@ CREATE TABLE tScenarioData (
     data_type   VARCHAR(45) NOT NULL,
     data_units  VARCHAR(45) NOT NULL,
     data_name   VARCHAR(45) NOT NULL,
-    data_dimen  VARCHAR(45) NOT NULL
+    data_dimen  VARCHAR(45) NOT NULL,
+    constraint chk_type check (data_type in ('descriptor', 'timeseries',
+    'eqtimeseries', 'scalar', 'array'))
 );
 
 CREATE TABLE tResourceScenario (
     dataset_id          INT NOT NULL,
     scenario_id      INT NOT NULL,
     resource_attr_id INT NOT NULL,
-    PRIMARY KEY (resource_attr_id,scenario_id),
+    PRIMARY KEY (resource_attr_id, scenario_id),
     FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
     FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id),
     FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id)
