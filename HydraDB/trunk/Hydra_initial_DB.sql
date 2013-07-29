@@ -173,21 +173,21 @@ CREATE TABLE tDataAttr (
 );
 
 CREATE TABLE tScenarioData (
+    dataset_id  INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     data_id     INT         NOT NULL,
     data_type   VARCHAR(45) NOT NULL,
     data_units  VARCHAR(45) NOT NULL,
     data_name   VARCHAR(45) NOT NULL,
-    data_dimen  VARCHAR(45) NOT NULL,
-    PRIMARY KEY (data_id, data_type)
+    data_dimen  VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE tResourceScenario (
-    data_id          INT NOT NULL,
+    dataset_id          INT NOT NULL,
     scenario_id      INT NOT NULL,
     resource_attr_id INT NOT NULL,
-    PRIMARY KEY (data_id, scenario_id),
+    PRIMARY KEY (dataset_id, scenario_id),
     FOREIGN KEY (scenario_id) REFERENCES tScenario(scenario_id),
-    FOREIGN KEY (data_id) REFERENCES tScenarioData(data_id),
+    FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id),
     FOREIGN KEY (resource_attr_id) REFERENCES tResourceAttr(resource_attr_id)
 );
 
