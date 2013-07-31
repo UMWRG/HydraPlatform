@@ -156,11 +156,6 @@ CREATE TABLE tScalar (
 
 CREATE TABLE tArray (
     data_id        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    arr_x_dim      INT NOT NULL,
-    arr_y_dim      INT NOT NULL,
-    arr_z_dim      INT NOT NULL,
-    arr_precision  VARCHAR(45) NOT NULL,
-    arr_endianness VARCHAR(45) NOT NULL,
     arr_data       BLOB        NOT NULL
 );
 
@@ -178,7 +173,6 @@ CREATE TABLE tScenarioData (
 CREATE TABLE tDataAttr (
     d_attr_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     dataset_id  INT         NOT NULL,
-    data_type   VARCHAR(45) NOT NULL,
     d_attr_name VARCHAR(45) NOT NULL,
     d_attr_val  DOUBLE      NOT NULL,
     FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id)
