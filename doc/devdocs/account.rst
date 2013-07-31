@@ -12,7 +12,7 @@ SVN+SSH for Windows users
 
 #. Save both keys (private and public).
 
-#. Send the public key and a username you'd like to have to the system
+#. Send the **public** key and a username you'd like to have to the system
    administrator (currently `p.meier@ucl.ac.uk <mailto:p.meier@ucl.ac.uk>`_) 
 
 #. Once your account is created it's time to test it:
@@ -25,7 +25,8 @@ SVN+SSH for Windows users
     c. Go to the "SSH -> Auth" tab and load your private key file generated
        before.
 
-    d. Go back to the "Session" tab, give the connection a name and hit "Save"
+    d. Go back to the "Session" tab, give the connection a name (it is best if
+       you use the domain name as session name) and hit "Save"
 
     e. Select the connection just created and hit "Open"
 
@@ -38,6 +39,7 @@ It is highly recommended for Windows users to install TortoiseSVN. The URL of
 the SVN repository is::
 
     svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/home/svn/svnrepository/HYDRA
+
 
 .. note::
 

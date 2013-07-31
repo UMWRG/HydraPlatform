@@ -131,9 +131,15 @@ CREATE TABLE tDescriptor (
 );
 
 CREATE TABLE tTimeSeries (
-    data_id  INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    data_id  INT      NOT NULL PRIMARY KEY AUTO_INCREMENT
+);
+
+CREATE TABLE tTimeSeriesData(
+    data_id  INT      NOT NULL,
     ts_time  DATETIME NOT NULL,
-    ts_value DOUBLE   NOT NULL
+    ts_value DOUBLE   NOT NULL,
+    PRIMARY KEY (data_id, ts_time),
+    FOREIGN KEY (data_id) REFERENCES tTimeSeries(data_id)
 );
 
 CREATE TABLE tEquallySpacedTimeSeries (
@@ -158,14 +164,6 @@ CREATE TABLE tArray (
     arr_data       BLOB        NOT NULL
 );
 
-CREATE TABLE tDataAttr (
-    d_attr_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    data_id     INT         NOT NULL,
-    data_type   VARCHAR(45) NOT NULL,
-    d_attr_name VARCHAR(45) NOT NULL,
-    d_attr_val  DOUBLE      NOT NULL
-);
-
 CREATE TABLE tScenarioData (
     dataset_id  INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     data_id     INT         NOT NULL,
@@ -175,6 +173,15 @@ CREATE TABLE tScenarioData (
     data_dimen  VARCHAR(45) NOT NULL,
     constraint chk_type check (data_type in ('descriptor', 'timeseries',
     'eqtimeseries', 'scalar', 'array'))
+);
+
+CREATE TABLE tDataAttr (
+    d_attr_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    dataset_id  INT         NOT NULL,
+    data_type   VARCHAR(45) NOT NULL,
+    d_attr_name VARCHAR(45) NOT NULL,
+    d_attr_val  DOUBLE      NOT NULL,
+    FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id)
 );
 
 CREATE TABLE tResourceScenario (
