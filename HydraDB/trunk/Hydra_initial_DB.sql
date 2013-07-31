@@ -139,7 +139,7 @@ CREATE TABLE tTimeSeriesData(
     ts_time  DATETIME NOT NULL,
     ts_value DOUBLE   NOT NULL,
     PRIMARY KEY (data_id, ts_time),
-    FOREIGN KEY (data_id) REFERENCES tTimeSeries(data_id)
+    FOREIGN KEY (data_id) references tTimeSeries(data_id)
 );
 
 CREATE TABLE tEquallySpacedTimeSeries (
