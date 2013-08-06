@@ -118,8 +118,6 @@ CREATE TABLE tConstraintGroup (
     ref_key_2     VARCHAR(45),
     ref_id_2      INT,
     op            VARCHAR(10),
-    FOREIGN KEY (ref_id_1) REFERENCES tConstraintItem(item_id),
-    FOREIGN KEY (ref_id_2) REFERENCES tConstraintItem(item_id),
     FOREIGN KEY (constraint_id) REFERENCES tConstraint(constraint_id)
 );
 
