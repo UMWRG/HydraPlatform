@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS hydra_initial;
-CREATE DATABASE hydra_initial;
+DROP DATABASE IF EXISTS hydradb;
+CREATE DATABASE hydradb;
 
-USE hydra_initial;
+USE hydradb;
 
 /* Project network and scenearios */
 
@@ -137,12 +137,12 @@ CREATE TABLE tTimeSeries (
 CREATE TABLE tTimeSeriesData(
     data_id  INT      NOT NULL,
     ts_time  DATETIME NOT NULL,
-    ts_value DOUBLE   NOT NULL,
+    ts_value BLOB     NOT NULL,
     PRIMARY KEY (data_id, ts_time),
     FOREIGN KEY (data_id) references tTimeSeries(data_id)
 );
 
-CREATE TABLE tEquallySpacedTimeSeries (
+CREATE TABLE tEqTimeSeries (
     data_id       INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
     start_time    DATETIME NOT NULL,
     frequency     DOUBLE   NOT NULL,
