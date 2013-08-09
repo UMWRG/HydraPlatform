@@ -42,7 +42,7 @@ CREATE TABLE tScenario (
     scenario_id          INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
     scenario_name        VARCHAR(45)   NOT NULL,
     scenario_description VARCHAR(1000),
-    network_id           INT           NOT NULL,
+    network_id           INT,
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
