@@ -10,10 +10,10 @@ Network definition
   ====================== ================================================================
   **Table**              **Description**
   ---------------------- ----------------------------------------------------------------
-  tProject               
-  tNetwork               
-  tNode                  
-  tLink                  
+  tProject               A project is a high level container for networks.
+  tNetwork               A network contains nodes, links and scenarios
+  tNode                  Nodes are independent of networks
+  tLink                  Links belong inside a network and link two nodes. Links essentially define the network's topology.
   ====================== ================================================================
 
 Attributes
