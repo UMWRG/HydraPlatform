@@ -8,7 +8,8 @@ USE hydradb;
 CREATE TABLE tProject (
     project_id          INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
     project_name        VARCHAR(45)   NOT NULL,
-    project_description VARCHAR(1000)
+    project_description VARCHAR(1000),
+    status              VARCHAR(1) default 'A' NOT NULL
 );
 
 CREATE TABLE tNetwork (
@@ -16,6 +17,7 @@ CREATE TABLE tNetwork (
     network_name        VARCHAR(45)  NOT NULL,
     network_description VARCHAR(1000),
     project_id          INT          NOT NULL,
+    status              VARCHAR(1) default 'A' NOT NULL,
     FOREIGN KEY (project_id) REFERENCES tProject(project_id)
 );
 
@@ -23,6 +25,7 @@ CREATE TABLE tNode (
     node_id          INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     node_description VARCHAR(45),
     node_name        VARCHAR(45) NOT NULL,
+    status           VARCHAR(1) default 'A' NOT NULL,
     node_x           DOUBLE,
     node_y           DOUBLE
 );
@@ -30,6 +33,7 @@ CREATE TABLE tNode (
 CREATE TABLE tLink (
     link_id         INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
     network_id      INT          NOT NULL,
+    status          VARCHAR(1) default 'A' NOT NULL,
     node_1_id       INT          NOT NULL,
     node_2_id       INT          NOT NULL,
     link_name       VARCHAR(45),
@@ -42,6 +46,7 @@ CREATE TABLE tScenario (
     scenario_id          INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
     scenario_name        VARCHAR(45)   NOT NULL,
     scenario_description VARCHAR(1000),
+    status               VARCHAR(1) default 'A' NOT NULL,
     network_id           INT,
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
@@ -192,6 +197,7 @@ CREATE TABLE tResourceScenario (
 CREATE TABLE tUser (
     user_id  INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username varchar(45) NOT NULL,
+    password varchar(45) NOT NULL,
     cr_date  TIMESTAMP
 );
 
