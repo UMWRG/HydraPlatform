@@ -4,7 +4,7 @@ How to set up your account for SVN+SSH and Trac
 SVN+SSH for Windows users
 -------------------------
 
-#. Install PuTTY and friends: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.62-installer.exe
+#. Install PuTTY and friends: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.63-installer.exe
 
 #. Start PuTTYgen (puttygen.exe) and generate a new SSH-2/RSA key.
 
