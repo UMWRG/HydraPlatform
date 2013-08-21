@@ -4,6 +4,9 @@ How to set up your account for SVN+SSH and Trac
 SVN+SSH for Windows users
 -------------------------
 
+SSH
+***
+
 #. Install PuTTY and friends: http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.63-installer.exe
 
 #. Start PuTTYgen (puttygen.exe) and generate a new SSH-2/RSA key.
@@ -35,10 +38,27 @@ SVN+SSH for Windows users
     g. If you see no error messages, your account is created successfully.
        **Congratulations!**
 
-It is highly recommended for Windows users to install TortoiseSVN. The URL of
-the SVN repository is::
+#. Start *Pageant*, which is part of the PuTTY installation. A new icon will
+   appear in the notification toolbar (bottom right). 
 
-    svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/home/svn/svnrepository/HYDRA
+#. Right click on this icon and select *Add key ...*.
+
+#. Locate your private key file and load it. You will have to provide your key
+   pass phrase.
+
+You are now ready to checkout the source code from the repository.
+
+SVN
+***
+
+#. Install TortoiseSVN, you can get it from here: http://sourceforge.net/projects/tortoisesvn/?source=pdlp
+
+#. Create a folder where the code should be checked out to. Right click that
+   folder and select *SVN Checkout...*.
+
+   The URL of the SVN repository is::
+
+        svn+ssh://<username>@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/home/svn/svnrepository/HYDRA
 
 
 .. note::
