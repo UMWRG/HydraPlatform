@@ -1,7 +1,6 @@
 Hydra server
 ============
 
-
 .. automodule:: db.HydraIface
    :members: 
 

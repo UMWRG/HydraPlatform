@@ -23,11 +23,13 @@ CREATE TABLE tNetwork (
 
 CREATE TABLE tNode (
     node_id          INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    network_id       INT         NOT NULL,
     node_description VARCHAR(45),
     node_name        VARCHAR(45) NOT NULL,
     status           VARCHAR(1) default 'A' NOT NULL,
     node_x           DOUBLE,
-    node_y           DOUBLE
+    node_y           DOUBLE,
+    FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
 CREATE TABLE tLink (

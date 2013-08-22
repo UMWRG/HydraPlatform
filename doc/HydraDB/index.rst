@@ -32,11 +32,11 @@ A network also contains scenarios, which are containers for network data.
 
 **tNode**
 
-Nodes are independent of network. This means the same node can be reused
-across several networks. Along with the standard id, name, description
+Along with the standard id, name, description
 and status, a Node has an X, Y coordinate.
 
  * node_id: Unique identifier
+ * network_id: The network in which this link resides.
  * node_name: Node name
  * node_description: non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
