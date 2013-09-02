@@ -13,22 +13,36 @@ Projects
    :members:
 
 Networks (Inc nodes & links)
---------
+----------------------------
+
+General remarks
+***************
+
+Generally speaking, a network consists of nodes and links. Each node can be
+connected to other one or several nodes through one or several links. Each link
+connects exactly two nodes. 
+
+API documentation
+*****************
+
 .. automodule:: soap_server.network
    :members:
 
 Attributes
 ----------
+
 .. automodule:: soap_server.attributes
    :members:
 
 Scenarios
 ---------
+
 .. automodule:: soap_server.scenario
    :members:
 
 Plugins
 -------
+
 .. automodule:: soap_server.plugins
    :members:
 

@@ -95,8 +95,8 @@ helpful commands are listed below.
 Trac
 ----
 
-#. Register as a new user to Trac (top right on the Trac main page)
-   The Trac page can be found at:
-    
-   http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/trac/
+.. note:: 
 
+   Trac accouts are created on request. If you don't need access to the SVN
+   repository, you can still get an account for Trac. A user account will allow
+   you to view the source code, file bugs, etc.

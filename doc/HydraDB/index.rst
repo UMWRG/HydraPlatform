@@ -9,7 +9,8 @@ Network definition
 These tables are referred to in the schema as 'resources'. A resource
 is something to which data can be assigned, through attributes.
 
-**tProject**
+tProject
+^^^^^^^^
 
 A project is a high level container for networks. A project can contain
 multiple networks.
@@ -19,7 +20,8 @@ multiple networks.
  * project_description: A non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
 
-**tNetwork**
+tNetwork
+^^^^^^^^
 
 A network contains links and scenarios, not no nodes directly. The topology
 of a network is defined through its links -- a link connects two nodes.
@@ -27,10 +29,13 @@ A network also contains scenarios, which are containers for network data.
 
  * network_id: Unique identifier
  * network_name: The name of the network
- * network_descriptio: A non-mandatory description
+ * network_description: A non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
+ * projection: A string describing the map projection of the coordinates in the
+   network.
 
-**tNode**
+tNode
+^^^^^
 
 Along with the standard id, name, description
 and status, a Node has an X, Y coordinate.
@@ -42,8 +47,10 @@ and status, a Node has an X, Y coordinate.
  * status: A character, which can be A (active) or X (deleted)
  * node_x: The node's X-coordinate on a standard plane
  * node_y: The node's Y-coordinate on a standard plane
+ * node_layout: A string describing layout parameters.
 
-**tLink**
+tLink
+^^^^^
 
 Links belong inside a network and link two nodes. Links define the topology of the network. Along with the standard id, name and status, a link has two node ids
 and a network_id.
@@ -54,11 +61,14 @@ and a network_id.
  * node_1_id: Link from node 1...
  * node_2_id: ...to node 2
  * link_name: Name of the link.
+ * link_layout: A string describing layout parameters. The layout includes
+   intermediate points.
 
 Attributes
 **********
 
-**tAttr**                  
+tAttr
+^^^^^
 
 A basic attribute definition, with just a name and dimension.
 For example: A reservoir might have this attribute: Name: 'Capacity' Dimension 'Volume'
@@ -68,7 +78,8 @@ For example: A reservoir might have this attribute: Name: 'Capacity' Dimension '
  * attr_dimen: Dimension of the value that will be stored against this attribute. 
 
 
-**tResourceTemplate**
+tResourceTemplate
+^^^^^^^^^^^^^^^^^
 
 A resource template defines a grouping for attributes. This allows a 'type' of
 resource to be defined. For example, a simple reservoir template would
@@ -78,7 +89,8 @@ contain two attributes: Flow and Capacity (each of which were defined in tattr)
  * template_name: Template Name ('Reservoir' for example)
  * group_id: The group to which this template belongs (For example: "EBSD Nodes")
 
-**tResourceTemplateGroup** 
+tResourceTemplateGroup
+^^^^^^^^^^^^^^^^^^^^^^
 
 A grouping for resource templates. Used to categorise resource types into a single
 group -- for example, the 'GAMS Nodes' Group might contain two resource templates:
@@ -88,7 +100,8 @@ a GAMS plugin.
  * group_id: Unique Identifier
  * group_name: Name
 
-**tResourceTemplateItem**  
+tResourceTemplateItem
+^^^^^^^^^^^^^^^^^^^^^
 
 This links attributes to their template. An attribute can be in several templates.
 Both attr_id and template_id make up the PK.
@@ -96,7 +109,8 @@ Both attr_id and template_id make up the PK.
  * attr_id: The attribute
  * template_id: The template that this attribute is in.
 
-**tResourceAttr**
+tResourceAttr
+^^^^^^^^^^^^^
 
 A 'resource' can be a Project, Network, Node, Link or Scenario.
 A resource attribute is an attribute associated with a specific resource.
@@ -110,7 +124,8 @@ table that data can be associated with a resource.
  * ref_id: The identifer for the resource.
  * attr_is_var: Either 'Y' or 'N' -- This flag indicates whether data should be assigned to the resource attribute. If not, it is assumed this will be done by an app.
 
-**tAttrMap**
+tAttrMap
+^^^^^^^^
 
 This maps two attributes, meaning they are equivalent. For example, 'Capacity' in one app might be the same as and 'Size' in another.
 
@@ -120,7 +135,8 @@ This maps two attributes, meaning they are equivalent. For example, 'Capacity' i
 Scenarios
 *********
  
-**tScenario**
+tScenario
+^^^^^^^^^
 
 A scenario is a set of data associated with a network. Let's say there is a
 network with some node and links, all of which have been assigned some resource attributes. A scenario is what contains the data for those resource attributes. Several scenarios
@@ -133,7 +149,8 @@ same network.
  * scenario_description: Non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
 
-**tResourceScenario**
+tResourceScenario
+^^^^^^^^^^^^^^^^^
 
 This connects a piece of data, a scenario and a resource attribute.
 The data itself is not accessed directly from this table, but through 
@@ -147,7 +164,8 @@ tScenarioData, which stores what type the data its, its units and other informat
 Datasets
 ********
 
-**tScenarioData**
+tScenarioData
+^^^^^^^^^^^^^
 
 Links a scenario to a single piece of data. This table references the data
 in the appropriate data table using data_id. It knows which table to access
@@ -161,34 +179,39 @@ look in tDescriptor for data_id 1.
  * data_name: A name for this data
  * data_dimen: Dimension -- for comparison with dimension in tAttr.
 
-**tDescriptor**
+tDescriptor
+^^^^^^^^^^^
 
-A string: "I am a value"
+A string: ``"I am a value"``
 
  * data_id: unique identifier
  * desc_val: Value (string)
 
-**tScalar**
+tScalar
+^^^^^^^
 
 A single numeric value: 10.5
 
  * data_id: Unique identifier
  * param_value: value (double)
 
-**tArray**
+tArray
+^^^^^^
 
 A multi-dimensional array, stored as a BLOB.
 
  * data_id: Unique identifier
  * arr_data: Value (BLOB)
 
-**tTimeSeries**
+tTimeSeries
+^^^^^^^^^^^
 
 A container for time series data.
 
  * data_id: Unique identifier
 
-**tTimeSeriesData**
+tTimeSeriesData
+^^^^^^^^^^^^^^^
 
 Time series data, stored as multiple time - value pairs, all associated with
 a single data_id, which is contained in tTimeSeries.
@@ -197,7 +220,8 @@ a single data_id, which is contained in tTimeSeries.
  * ts_time: Timestamp
  * ts_value: a multi-dimensional array, stored as a blob. Can also just be a single value.
 
-**tEqTimeSeries**
+tEqTimeSeries
+^^^^^^^^^^^^^
 
 Equally spaced time series. Starting at a specified time, and with a given
 frequency (measured in seconds), there is a multi-dimensional array, stored as a BLOB.
@@ -207,7 +231,8 @@ frequency (measured in seconds), there is a multi-dimensional array, stored as a
  * frequency: measured in seconds
  * arr_data: multi-dimensional array, stored as a BLOB.
 
-**tDataAttr**
+tDataAttr
+^^^^^^^^^
 
 Auxiliary information about the data, in name / value pairs.
 
@@ -223,7 +248,8 @@ equation. Think of the constraint as the container, the groups as parenteses (),
 items as the values within the parentheses. Constraints are logically contained within
 scenarios.
 
-**tConstraint**
+tConstraint
+^^^^^^^^^^^
 
 A constraint exists within a scenario and essentially looks like this:
 (some equation) = Value. There's a left-hand-side, which contains the actual
@@ -236,7 +262,8 @@ be related.
     constant: The value to which the left hand side is campared.
     op: The operation used to compare the left and right hand side.
 
-**tConstraintGroup**
+tConstraintGroup
+^^^^^^^^^^^^^^^^
 
 A constraint group can be thought of as the inside of a pair of parentheses in
 a mathematical equation. For example, in the condition (A + B) = 1, the group
@@ -255,7 +282,8 @@ In a more complex example: ((A + B) - C) = 1, (A + B) - C is one group containin
     contains only a single entity.
 
 
-**tConstraintItem**
+tConstraintItem
+^^^^^^^^^^^^^^^
 
 The atomic part of a constraint. This must link to a resource attribute -- and 
 therefore to a piece of data. 
@@ -264,12 +292,13 @@ therefore to a piece of data.
  * constraint_id: Reference to constraint
  * resource_attr_id: Reference to the resource attribute, through which we can access the data used in the constraint equation.
 
-User and permission managment
------------------------------
+User and permission management
+******************************
 
 These tables are not connected to the ones containing network information.
 
-**tUser**
+tUser
+^^^^^
 
 Save access credentials for each user
 
@@ -278,7 +307,8 @@ Save access credentials for each user
  * password: Password
  * cr_date: Creation date
 
-**tRole**
+tRole
+^^^^^
   
 Define roles
   
@@ -286,7 +316,8 @@ Define roles
  * role_name: Role name
  * cr_date: Creation date
 
-**tPerm**
+tPerm
+^^^^^
   
 Define particular permissions
 
@@ -294,14 +325,16 @@ Define particular permissions
  * perm_name: Permission Name
  * cr_date: Creation date
 
-**tRoleUser**
+tRoleUser
+^^^^^^^^^
   
 Assign each user to specific roles
  
  * user_id: Reference to user
  * role_id: Reference to role
 
-**tRolePerm**
+tRolePerm
+^^^^^^^^^
   
 Assign particular permissions to a role
   
