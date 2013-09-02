@@ -18,6 +18,7 @@ CREATE TABLE tNetwork (
     network_description VARCHAR(1000),
     project_id          INT          NOT NULL,
     status              VARCHAR(1) default 'A' NOT NULL,
+    projection          VARCHAR(1000),
     FOREIGN KEY (project_id) REFERENCES tProject(project_id)
 );
 
@@ -29,6 +30,7 @@ CREATE TABLE tNode (
     status           VARCHAR(1) default 'A' NOT NULL,
     node_x           DOUBLE,
     node_y           DOUBLE,
+    node_layout      VARCHAR(1000),
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
@@ -39,6 +41,7 @@ CREATE TABLE tLink (
     node_1_id       INT          NOT NULL,
     node_2_id       INT          NOT NULL,
     link_name       VARCHAR(45),
+    link_layout     VARCHAR(1000),
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id),
     FOREIGN KEY (node_1_id) REFERENCES tNode(node_id),
     FOREIGN KEY (node_2_id) REFERENCES tNode(node_id)
