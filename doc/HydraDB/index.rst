@@ -19,6 +19,7 @@ multiple networks.
  * project_name: The name of the project
  * project_description: A non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
+ * cr_date: Creation date
 
 tNetwork
 ^^^^^^^^
@@ -33,6 +34,7 @@ A network also contains scenarios, which are containers for network data.
  * status: A character, which can be A (active) or X (deleted)
  * projection: A string describing the map projection of the coordinates in the
    network.
+ * cr_date: Creation date
 
 tNode
 ^^^^^
@@ -48,6 +50,7 @@ and status, a Node has an X, Y coordinate.
  * node_x: The node's X-coordinate on a standard plane
  * node_y: The node's Y-coordinate on a standard plane
  * node_layout: A string describing layout parameters.
+ * cr_date: Creation date
 
 tLink
 ^^^^^
@@ -63,6 +66,7 @@ and a network_id.
  * link_name: Name of the link.
  * link_layout: A string describing layout parameters. The layout includes
    intermediate points.
+ * cr_date: Creation date
 
 Attributes
 **********
@@ -148,6 +152,7 @@ same network.
  * scenario_name: The name of this scenario
  * scenario_description: Non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
+ * cr_date: Creation date
 
 tResourceScenario
 ^^^^^^^^^^^^^^^^^
@@ -178,6 +183,7 @@ look in tDescriptor for data_id 1.
  * data_units: What is this data type measured in?
  * data_name: A name for this data
  * data_dimen: Dimension -- for comparison with dimension in tAttr.
+ * cr_date: Creation date
 
 tDescriptor
 ^^^^^^^^^^^
@@ -340,3 +346,24 @@ Assign particular permissions to a role
   
  * perm_id: Reference to permission
  * role_id: Reference to role
+
+Ownership
+******************************
+
+These tables define what belongs to which users.
+
+tProjectOwner
+^^^^^^^^^^^^^
+
+Ownership of a project
+
+ * project_id: Project ID
+ * user_id   : User's ID
+
+tDatsetOwner
+^^^^^^^^^^^^
+
+Ownership of apiece of data.
+
+ * dataset_id: Dataset ID. References tScenarioData
+ * user_id   : User's ID

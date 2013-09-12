@@ -9,7 +9,8 @@ CREATE TABLE tProject (
     project_id          INT           NOT NULL PRIMARY KEY AUTO_INCREMENT,
     project_name        VARCHAR(45)   NOT NULL,
     project_description VARCHAR(1000),
-    status              VARCHAR(1) default 'A' NOT NULL
+    status              VARCHAR(1) default 'A' NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp
 );
 
 CREATE TABLE tNetwork (
@@ -18,6 +19,7 @@ CREATE TABLE tNetwork (
     network_description VARCHAR(1000),
     project_id          INT          NOT NULL,
     status              VARCHAR(1) default 'A' NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
     projection          VARCHAR(1000),
     FOREIGN KEY (project_id) REFERENCES tProject(project_id)
 );
@@ -31,6 +33,7 @@ CREATE TABLE tNode (
     node_x           DOUBLE,
     node_y           DOUBLE,
     node_layout      VARCHAR(1000),
+    cr_date  TIMESTAMP default localtimestamp,
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
@@ -42,6 +45,7 @@ CREATE TABLE tLink (
     node_2_id       INT          NOT NULL,
     link_name       VARCHAR(45),
     link_layout     VARCHAR(1000),
+    cr_date  TIMESTAMP default localtimestamp,
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id),
     FOREIGN KEY (node_1_id) REFERENCES tNode(node_id),
     FOREIGN KEY (node_2_id) REFERENCES tNode(node_id)
@@ -53,6 +57,7 @@ CREATE TABLE tScenario (
     scenario_description VARCHAR(1000),
     status               VARCHAR(1) default 'A' NOT NULL,
     network_id           INT,
+    cr_date  TIMESTAMP default localtimestamp,
     FOREIGN KEY (network_id) REFERENCES tNetwork(network_id)
 );
 
@@ -61,7 +66,8 @@ CREATE TABLE tScenario (
 CREATE TABLE tAttr (
     attr_id    INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     attr_name  VARCHAR(45) NOT NULL,
-    attr_dimen VARCHAR(45)
+    attr_dimen VARCHAR(45),
+    cr_date  TIMESTAMP default localtimestamp
 );
 
 CREATE TABLE tResourceTemplateGroup (
@@ -174,6 +180,7 @@ CREATE TABLE tScenarioData (
     data_units  VARCHAR(45) NOT NULL,
     data_name   VARCHAR(45) NOT NULL,
     data_dimen  VARCHAR(45) NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
     constraint chk_type check (data_type in ('descriptor', 'timeseries',
     'eqtimeseries', 'scalar', 'array'))
 );
@@ -203,24 +210,25 @@ CREATE TABLE tUser (
     user_id  INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username varchar(45) NOT NULL,
     password varchar(1000) NOT NULL,
-    cr_date  TIMESTAMP
+    cr_date  TIMESTAMP default localtimestamp
 );
 
 CREATE TABLE tRole (
     role_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     role_name VARCHAR(45) NOT NULL,
-    cr_date   TIMESTAMP
+    cr_date  TIMESTAMP default localtimestamp
 );
 
 CREATE TABLE tPerm (
     perm_id   INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     perm_name VARCHAR(45) NOT NULL,
-    cr_date   TIMESTAMP
+    cr_date  TIMESTAMP default localtimestamp
 );
 
 CREATE TABLE tRoleUser (
     user_id INT NOT NULL,
     role_id INT NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
     PRIMARY KEY (user_id, role_id),
     FOREIGN KEY (user_id) REFERENCES tUser(user_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
@@ -229,7 +237,26 @@ CREATE TABLE tRoleUser (
 CREATE TABLE tRolePerm (
     perm_id INT NOT NULL,
     role_id INT NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
     PRIMARY KEY (perm_id, role_id),
     FOREIGN KEY (perm_id) REFERENCES tPerm(perm_id),
     FOREIGN KEY (role_id) REFERENCES tRole(role_id)
+);
+
+CREATE TABLE tProjectOwner (
+    user_id INT NOT NULL,
+    project_id INT NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
+    PRIMARY KEY (user_id, project_id),
+    FOREIGN KEY (user_id) REFERENCES tUser(user_id),
+    FOREIGN KEY (project_id) REFERENCES tProject(project_id)
+);
+
+CREATE TABLE tDatasetOwner (
+    user_id INT NOT NULL,
+    dataset_id INT NOT NULL,
+    cr_date  TIMESTAMP default localtimestamp,
+    PRIMARY KEY (user_id, dataset_id),
+    FOREIGN KEY (user_id) REFERENCES tUser(user_id),
+    FOREIGN KEY (dataset_id) REFERENCES tScenarioData(dataset_id)
 );
