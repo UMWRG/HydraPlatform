@@ -51,6 +51,7 @@ and status, a Node has an X, Y coordinate.
  * node_x: The node's X-coordinate on a standard plane
  * node_y: The node's Y-coordinate on a standard plane
  * node_layout: A string describing layout parameters.
+ * node_type: The name of the template to which this node belongs. For example, the 'reservoir' node_type refers to the 'reservoir' templates which may reside in multiple groups.
  * cr_date: Creation date
 
 tLink
