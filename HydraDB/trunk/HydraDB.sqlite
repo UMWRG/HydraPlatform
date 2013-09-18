@@ -9,7 +9,9 @@ CREATE TABLE tProject (
     project_id          INTEGER       NOT NULL PRIMARY KEY AUTOINCREMENT,
     project_name        VARCHAR(45)   NOT NULL,
     project_description VARCHAR(1000),
-    status              VARCHAR(1) default 'A' NOT NULL
+    status              VARCHAR(1) default 'A' NOT NULL,
+    cr_date             DATETIME   default LOCALTIMESTAMP,
+    created_by          INTEGER
 );
 
 CREATE TABLE tNetwork (

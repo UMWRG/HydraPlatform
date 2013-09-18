@@ -10,7 +10,8 @@ CREATE TABLE tProject (
     project_name        VARCHAR(45)   NOT NULL,
     project_description VARCHAR(1000),
     status              VARCHAR(1) default 'A' NOT NULL,
-    cr_date  TIMESTAMP default localtimestamp
+    cr_date  TIMESTAMP default localtimestamp,
+    created_by          INT
 );
 
 CREATE TABLE tNetwork (
