@@ -20,6 +20,7 @@ multiple networks.
  * project_description: A non-mandatory description
  * status: A character, which can be A (active) or X (deleted)
  * cr_date: Creation date
+ * created_by: The user_id of the user who created the project 
 
 tNetwork
 ^^^^^^^^
