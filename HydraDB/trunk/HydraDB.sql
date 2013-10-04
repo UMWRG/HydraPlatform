@@ -150,18 +150,18 @@ CREATE TABLE tTimeSeries (
 );
 
 CREATE TABLE tTimeSeriesData(
-    data_id  INT      NOT NULL,
-    ts_time  DATETIME NOT NULL,
-    ts_value BLOB     NOT NULL,
+    data_id  INT         NOT NULL,
+    ts_time  DATETIME    NOT NULL,
+    ts_value BLOB        NOT NULL,
     PRIMARY KEY (data_id, ts_time),
     FOREIGN KEY (data_id) references tTimeSeries(data_id)
 );
 
 CREATE TABLE tEqTimeSeries (
-    data_id       INT      NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    start_time    DATETIME NOT NULL,
-    frequency     DOUBLE   NOT NULL,
-    arr_data      BLOB     NOT NULL
+    data_id       INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    start_time    DATETIME    NOT NULL,
+    frequency     DOUBLE      NOT NULL,
+    arr_data      BLOB        NOT NULL
 );
 
 CREATE TABLE tScalar (
