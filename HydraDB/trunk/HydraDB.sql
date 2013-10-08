@@ -18,6 +18,7 @@ CREATE TABLE tNetwork (
     network_id          INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
     network_name        VARCHAR(45)  NOT NULL,
     network_description VARCHAR(1000),
+    network_layout      VARCHAR(1000),
     project_id          INT          NOT NULL,
     status              VARCHAR(1) default 'A' NOT NULL,
     cr_date  TIMESTAMP default localtimestamp,
@@ -68,7 +69,8 @@ CREATE TABLE tAttr (
     attr_id    INT         NOT NULL PRIMARY KEY AUTO_INCREMENT,
     attr_name  VARCHAR(45) NOT NULL,
     attr_dimen VARCHAR(45),
-    cr_date  TIMESTAMP default localtimestamp
+    cr_date  TIMESTAMP default localtimestamp,
+    UNIQUE (attr_name)
 );
 
 CREATE TABLE tResourceTemplateGroup (
@@ -107,6 +109,8 @@ CREATE TABLE tResourceAttr (
     attr_is_var      VARCHAR(1)  NOT NULL default 'N',
     FOREIGN KEY (attr_id) REFERENCES tAttr(attr_id)
 );
+CREATE UNIQUE INDEX iResourceAttr_1 ON tResourceAttr (attr_id, ref_key, ref_id);
+CREATE INDEX iResourceAttr_2 ON tResourceAttr (ref_key, ref_id);
 
 /* Constraints */
 

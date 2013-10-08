@@ -18,6 +18,7 @@ CREATE TABLE tNetwork (
     network_id          INTEGER      NOT NULL PRIMARY KEY AUTOINCREMENT,
     network_name        VARCHAR(45)  NOT NULL,
     network_description VARCHAR(1000),
+    network_layout      VARCHAR(1000),
     project_id          INTEGER      NOT NULL,
     status              VARCHAR(1) default 'A' NOT NULL,
     projection          VARCHAR(1000),
