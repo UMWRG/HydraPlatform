@@ -19,9 +19,23 @@ Main packages
    HydraDB/index
    HydraUI/index
    HydraServer/index
-   HydraPlugins/index
    HydraLib/index
 
+Hydra plug-ins
+--------------
+
+.. toctree::
+   :maxdepth: 2
+
+   HydraPlugins/index
+
+Technical documents
+-------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   techdocs/units_and_dimensions
 
 Tests
 -----
@@ -35,15 +49,25 @@ Tests
 Miscellaneous
 -------------
 
+SVN and Trac
+~~~~~~~~~~~~
+
 .. toctree::
    :maxdepth: 2
 
    devdocs/account
 
+Server maintenance
+~~~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 2
+
+   devdocs/server
+
 ______________________________________________________________________________________
 
-Indices and tables
-******************
+**Indices and tables**
 
 * :ref:`genindex`
 * :ref:`modindex`
