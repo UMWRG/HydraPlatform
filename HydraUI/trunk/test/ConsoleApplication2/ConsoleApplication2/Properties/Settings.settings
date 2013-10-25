@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ConsoleApplication2.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ConsoleApplication2_com_amazonaws_compute_eu_west_1_ec2_54_229_95_247_AuthenticationService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/hydra-server/</Value>
+    </Setting>
+    <Setting Name="ConsoleApplication2_HYDRA_LOCAL_AuthenticationService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:12345/</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
