@@ -18,8 +18,7 @@ namespace ConsoleApplication2
             Console.Write(session.loginResult);
 
             HYDRA_LOCAL.RequestHeader header = new HYDRA_LOCAL.RequestHeader();
-            header.session_id = session.loginResult;
-            header.username = l.username;
+            header.session_id = session.loginResult.session_id;
 
             hd.RequestHeaderValue = header;
 
@@ -74,12 +73,37 @@ namespace ConsoleApplication2
             net.scenarios = new HYDRA_LOCAL.Scenario[] { scenario };
 
             HYDRA_LOCAL.add_network add_net = new HYDRA_LOCAL.add_network();
-            HYDRA_LOCAL.get_node_data();
-            add_net.network = net;
+            add_net.net = net;
 
-            HYDRA_LOCAL.add_networkResponse n = hd.add_network(add_net);
-            
-            Console.Write("ID of new network is: " + n.add_networkResult.id);
+//          HYDRA_LOCAL.add_networkResponse n = hd.add_network(add_net);
+
+            HYDRA_LOCAL.get_all_node_data nd = new HYDRA_LOCAL.get_all_node_data();
+            nd.network_id = "16";
+            nd.scenario_id = "8";
+            string[] x = { "16", "8" };
+            nd.node_ids = null;
+            HYDRA_LOCAL.get_all_node_dataResponse node_resp = hd.get_all_node_data(nd);
+            for (int i=0; i<node_resp.get_all_node_dataResult.Length; i++){
+                HYDRA_LOCAL.ResourceAttr node_data = node_resp.get_all_node_dataResult[i];
+                HYDRA_LOCAL.Dataset d = node_data.resourcescenario.value;
+                Console.WriteLine(node_data.resourcescenario.value.type);
+                if (d.type == "timeseries"){
+                    Console.WriteLine(d.value);
+                    HYDRA_LOCAL.update_resourcedata upd = new HYDRA_LOCAL.update_resourcedata();
+                    HYDRA_LOCAL.ResourceScenario[] upd_rs = { node_data.resourcescenario };
+                    upd.resource_scenarios = upd_rs;
+                    upd.scenario_id = "8";
+                    HYDRA_LOCAL.update_resourcedataResponse upd_resp = hd.update_resourcedata(upd);
+                    break;
+                }
+            }
+            HYDRA_LOCAL.test_get_all_node_data test_nd = new HYDRA_LOCAL.test_get_all_node_data();
+            test_nd.network_id = "16";
+            test_nd.scenario_id = "8";
+            test_nd.node_ids = null;
+            HYDRA_LOCAL.test_get_all_node_dataResponse test_node_resp = hd.test_get_all_node_data(test_nd);
+
+            Console.WriteLine("Finished");
         }
 
         private HYDRA_LOCAL.Scenario create_scenario(string name, HYDRA_LOCAL.ResourceScenario[] rs)

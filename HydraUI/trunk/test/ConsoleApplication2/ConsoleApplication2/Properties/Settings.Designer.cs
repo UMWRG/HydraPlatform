@@ -26,18 +26,7 @@ namespace ConsoleApplication2.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://ec2-54-229-95-247.eu-west-1.compute.amazonaws.com/hydra-server/")]
-        public string ConsoleApplication2_com_amazonaws_compute_eu_west_1_ec2_54_229_95_247_AuthenticationService {
-            get {
-                return ((string)(this["ConsoleApplication2_com_amazonaws_compute_eu_west_1_ec2_54_229_95_247_Authenticat" +
-                    "ionService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:12345/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://127.0.0.1:8080/soap")]
         public string ConsoleApplication2_HYDRA_LOCAL_AuthenticationService {
             get {
                 return ((string)(this["ConsoleApplication2_HYDRA_LOCAL_AuthenticationService"]));
