@@ -2,14 +2,41 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace ConsoleApplication2
 {
     class hydra_test
     {
+
+        public class Timeseries{
+            public IDictionary<string, string> columns { get; set; }
+        }
+
+        public class Column{
+            public List<Row> rows {get;set;}
+        }
+
+        public class Row{
+            public string timestep { get; set; }
+            public string value    {get;set;}
+        }
+
         static void Main(string[] args)
         {
-            Console.Write("test");
+            string test_value = @"{""0"":{""2011-01-04T12:11:00.000000000Z"":8,""2012-01-04T00:00:00.000000000Z"":8.5},""1"":{""2011-01-04T12:11:00.000000000Z"":9,""2012-01-04T00:00:00.000000000Z"":9.5}}";
+            dynamic blah = JsonConvert.DeserializeObject<dynamic>(test_value);
+            Console.WriteLine("Testing: " + blah["0"]);
+            IDictionary<int, IDictionary<string,dynamic>> x = JsonConvert.DeserializeObject<IDictionary<int, IDictionary<string, dynamic>>>(test_value);
+
+            foreach (int r in x.Keys)
+            {
+                foreach (string key in x[r].Keys)
+                {
+                    Console.WriteLine(key + " " + x[r][key]);
+                }
+            }
+
             HYDRA_LOCAL.AuthenticationService hd = new HYDRA_LOCAL.AuthenticationService();
             HYDRA_LOCAL.login l = new HYDRA_LOCAL.login();
             l.username = "root";
@@ -78,31 +105,46 @@ namespace ConsoleApplication2
 //          HYDRA_LOCAL.add_networkResponse n = hd.add_network(add_net);
 
             HYDRA_LOCAL.get_all_node_data nd = new HYDRA_LOCAL.get_all_node_data();
-            nd.network_id = "16";
-            nd.scenario_id = "8";
-            string[] x = { "16", "8" };
+            nd.network_id = "2";
+            nd.scenario_id = "2";
             nd.node_ids = null;
             HYDRA_LOCAL.get_all_node_dataResponse node_resp = hd.get_all_node_data(nd);
             for (int i=0; i<node_resp.get_all_node_dataResult.Length; i++){
                 HYDRA_LOCAL.ResourceAttr node_data = node_resp.get_all_node_dataResult[i];
                 HYDRA_LOCAL.Dataset d = node_data.resourcescenario.value;
-                Console.WriteLine(node_data.resourcescenario.value.type);
                 if (d.type == "timeseries"){
                     Console.WriteLine(d.value);
                     HYDRA_LOCAL.update_resourcedata upd = new HYDRA_LOCAL.update_resourcedata();
                     HYDRA_LOCAL.ResourceScenario[] upd_rs = { node_data.resourcescenario };
+                    System.Xml.XmlNode[] j = (System.Xml.XmlNode[])d.value;
+                    j[1].InnerXml = "<ts_time>2011-01-04 12:11:00</ts_time><ts_value><array><item>1</item><item>2</item><item>3</item><item></item></array></ts_value>";
                     upd.resource_scenarios = upd_rs;
-                    upd.scenario_id = "8";
+                    upd.scenario_id = "2"; 
+                    DateTime dtu1 = DateTime.Now;
                     HYDRA_LOCAL.update_resourcedataResponse upd_resp = hd.update_resourcedata(upd);
+                    DateTime dtu2 = DateTime.Now;
+                    Console.WriteLine(dtu2 - dtu1);
                     break;
                 }
             }
-            HYDRA_LOCAL.test_get_all_node_data test_nd = new HYDRA_LOCAL.test_get_all_node_data();
-            test_nd.network_id = "16";
-            test_nd.scenario_id = "8";
-            test_nd.node_ids = null;
-            HYDRA_LOCAL.test_get_all_node_dataResponse test_node_resp = hd.test_get_all_node_data(test_nd);
 
+            HYDRA_LOCAL.test_get_all_node_data test_nd = new HYDRA_LOCAL.test_get_all_node_data();
+            test_nd.network_id = "2";
+            test_nd.scenario_id = "2";
+            test_nd.node_ids = null;
+            DateTime dt1 = DateTime.Now;
+            Console.WriteLine(dt1);
+            HYDRA_LOCAL.test_get_all_node_dataResponse test_node_resp = hd.test_get_all_node_data(test_nd);
+            for (int i = 0; i < test_node_resp.test_get_all_node_dataResult.Length; i++)
+            {
+                HYDRA_LOCAL.ResourceData test_d = test_node_resp.test_get_all_node_dataResult[i];
+                if (test_d.dataset_type == "timeseries"){
+                    Console.WriteLine(test_d.dataset_value);
+                    break;
+                }
+            }
+            DateTime dt2 = DateTime.Now;
+            Console.WriteLine(dt2-dt1);
             Console.WriteLine("Finished");
         }
 
