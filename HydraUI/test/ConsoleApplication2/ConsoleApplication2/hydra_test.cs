@@ -51,10 +51,17 @@ namespace ConsoleApplication2
             HYDRA_LOCAL.RequestHeader header = new HYDRA_LOCAL.RequestHeader();
             header.session_id = session.loginResult.session_id;
 
-            HYDRA_LOCAL.get_network hmmm = new HYDRA_LOCAL.get_network();
-            hmmm.network_id = "2";
-            HYDRA_LOCAL.get_networkResponse resp = cli.get_network(header, hmmm);
-            HYDRA_LOCAL.Dataset d = resp.get_networkResult.scenarios[0].resourcescenarios[0].value;
+        //    HYDRA_LOCAL.get_network hmmm = new HYDRA_LOCAL.get_network();
+        //    hmmm.network_id = "2";
+        //    HYDRA_LOCAL.get_networkResponse resp = cli.get_network(header, hmmm);
+        //    for (int i = 0; i < resp.get_networkResult.scenarios[0].resourcescenarios.Length; i++)
+        //    {
+        //        HYDRA_LOCAL.Dataset d = resp.get_networkResult.scenarios[0].resourcescenarios[i].value;   
+        //        if (d.type == "timeseries"){
+        //             Console.WriteLine(d);
+        //        }
+        //    }
+            //HYDRA_LOCAL.Dataset d = resp.get_networkResult.scenarios[0].resourcescenarios[0].value;
             hydra_test p = new hydra_test();
 
             p.add_network(cli, header);
@@ -94,7 +101,7 @@ namespace ConsoleApplication2
 
             HYDRA_LOCAL.Network net = new HYDRA_LOCAL.Network();
             net.project_id  = project_id;
-            net.name        = "Test Windows Network";
+            net.name = "Test Windows Network" + DateTime.Now.ToString();
             net.description = "A network build on windows";
 
             HYDRA_LOCAL.Node[] nodes = new HYDRA_LOCAL.Node[3];
@@ -106,6 +113,7 @@ namespace ConsoleApplication2
 
             HYDRA_LOCAL.ResourceScenario[] data = new HYDRA_LOCAL.ResourceScenario[3];
             data[0] = create_timeseries(nodes[0].attributes[0]);
+            //data[0] = create_descriptor(nodes[0].attributes[0], "d1");
             data[1] = create_descriptor(nodes[0].attributes[1], "d2");
             data[2] = create_descriptor(nodes[0].attributes[2], "d3");
 
@@ -124,8 +132,8 @@ namespace ConsoleApplication2
             HYDRA_LOCAL.add_networkResponse n = hd.add_network(header, add_net);
 
             HYDRA_LOCAL.get_all_node_data nd = new HYDRA_LOCAL.get_all_node_data();
-            nd.network_id = "2";
-            nd.scenario_id = "2";
+            nd.network_id = n.add_networkResult.id;
+            nd.scenario_id = n.add_networkResult.scenarios[0].id;
             nd.node_ids = null;
             HYDRA_LOCAL.get_all_node_dataResponse node_resp = hd.get_all_node_data(header, nd);
             for (int i=0; i<node_resp.get_all_node_dataResult.Length; i++){
@@ -247,10 +255,13 @@ namespace ConsoleApplication2
 
             //XmlNode test = new XmlNode();
             //test.
-            HYDRA_LOCAL.Descriptor val = new HYDRA_LOCAL.Descriptor();
-            val.desc_val = descriptor;
-
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
+
+            System.Xml.XmlNode[] val = new XmlNode[1];
+            XmlDocument doc = new XmlDocument();
+            XmlNode n = doc.CreateElement("desc_val");
+            n.InnerText = descriptor;
+            val[0] = n;
             dataset.value = val;
 
             dataset.unit = "string";
@@ -291,19 +302,18 @@ namespace ConsoleApplication2
         private HYDRA_LOCAL.ResourceScenario create_timeseries(HYDRA_LOCAL.ResourceAttr ra)
         {
             string format = "yyyy-MM-dd hh:mm:ss.0";
-            HYDRA_LOCAL.TimeSeriesData val_1 = new HYDRA_LOCAL.TimeSeriesData();
-            val_1.ts_value = 1;
-            val_1.ts_time = DateTime.Now.ToString(format);
-
-            HYDRA_LOCAL.TimeSeriesData val_2 = new HYDRA_LOCAL.TimeSeriesData();
-            val_2.ts_value = 2;
-            val_2.ts_time = DateTime.Now.ToString(format);
-
-            HYDRA_LOCAL.TimeSeries ts = new HYDRA_LOCAL.TimeSeries();
-            ts.ts_values = new HYDRA_LOCAL.TimeSeriesData[] { val_1, val_2 };
-
+            XmlDocument doc = new XmlDocument();
+            DateTime n = DateTime.Now;
+            
+            XmlNode val1 = doc.CreateElement("ts_values");
+            val1.InnerXml = "<ts_time>" + n.ToString(format) + "</ts_time><ts_value>1</ts_value>";
+            XmlNode val2 = doc.CreateElement("ts_values");
+           DateTime n2 = n.AddHours(1);
+            val2.InnerXml = "<ts_time>" + n2.ToString(format) + "</ts_time><ts_value>2</ts_value>";
+            System.Xml.XmlNode[] val = new XmlNode[] {val1, val2};
+            
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
-            dataset.value = ts;
+            dataset.value = val;
 
             dataset.unit = "m3";
             dataset.name = "A windows time series";
