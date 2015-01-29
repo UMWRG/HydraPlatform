@@ -6,3 +6,11 @@ C:\Users\steve\Documents\svn\HYDRA\HydraUI\trunk\test\ConsoleApplication2\Consol
 C:\Users\steve\Documents\svn\HYDRA\HydraUI\trunk\test\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb
 C:\Users\steve\Documents\svn\HYDRA\HydraUI\trunk\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\Newtonsoft.Json.dll
 C:\Users\steve\Documents\svn\HYDRA\HydraUI\trunk\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.exe
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.pdb
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\Newtonsoft.Json.dll
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\Newtonsoft.Json.xml
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\obj\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
+C:\Users\steve\git\HydraPlatform\HydraUI\test\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe.config

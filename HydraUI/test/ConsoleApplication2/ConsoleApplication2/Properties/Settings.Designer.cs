@@ -22,15 +22,5 @@ namespace ConsoleApplication2.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://127.0.0.1:8080/soap")]
-        public string ConsoleApplication2_HYDRA_LOCAL_AuthenticationService {
-            get {
-                return ((string)(this["ConsoleApplication2_HYDRA_LOCAL_AuthenticationService"]));
-            }
-        }
     }
 }
