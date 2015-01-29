@@ -1,9 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ConsoleApplication2.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="ConsoleApplication2_HYDRA_LOCAL_AuthenticationService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://127.0.0.1:8080/soap</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>
