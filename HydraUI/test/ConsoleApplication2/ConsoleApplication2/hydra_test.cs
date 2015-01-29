@@ -115,7 +115,7 @@ namespace ConsoleApplication2
             data[0] = create_timeseries(nodes[0].attributes[0]);
             //data[0] = create_descriptor(nodes[0].attributes[0], "d1");
             data[1] = create_descriptor(nodes[0].attributes[1], "d2");
-            data[2] = create_descriptor(nodes[0].attributes[2], "d3");
+            data[2] = create_array(nodes[0].attributes[2]);
 
             links[0] = create_link("link X", "link A to B", nodes[0].id, nodes[1].id, new HYDRA_LOCAL.Attr[0]);
             links[1] = create_link("link Y", "link B to C", nodes[1].id, nodes[2].id, new HYDRA_LOCAL.Attr[0]);
@@ -279,12 +279,15 @@ namespace ConsoleApplication2
 
         private HYDRA_LOCAL.ResourceScenario create_array(HYDRA_LOCAL.ResourceAttr ra)
         {
-            HYDRA_LOCAL.Array val = new HYDRA_LOCAL.Array();
-            object a;
-            a = 1;
-            val.arr_data = a;// "[[[1, 2, 3], [5, 4, 6]],[[10, 20, 30], [40, 50, 60]]]";
 
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
+
+            System.Xml.XmlNode[] val = new XmlNode[1];
+            XmlDocument doc = new XmlDocument();
+            XmlNode n = doc.CreateElement("arr_data");
+            n.InnerXml = "<array><item>1</item><item>2</item><item>3</item><item>4</item></array>";
+            val[0] = n;
+
             dataset.value = val;
 
             dataset.unit = "metres";
