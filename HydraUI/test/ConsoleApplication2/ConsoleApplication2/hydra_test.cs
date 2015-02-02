@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
+using System.Xml;
 using Newtonsoft.Json;
+using ConsoleApplication2.HYDRA_LOCAL;
 
 namespace ConsoleApplication2
 {
     class hydra_test
     {
 
-        public class Timeseries{
-            public IDictionary<string, string> columns { get; set; }
+        public class Descriptor : object
+        {
+
+            public string desc_val;
         }
 
         public class Column{
@@ -36,46 +40,68 @@ namespace ConsoleApplication2
                     Console.WriteLine(key + " " + x[r][key]);
                 }
             }
+            HydraSoapApplicationClient cli = new HydraSoapApplicationClient("HydraSoapApplication");
 
-            HYDRA_LOCAL.AuthenticationService hd = new HYDRA_LOCAL.AuthenticationService();
             HYDRA_LOCAL.login l = new HYDRA_LOCAL.login();
             l.username = "root";
             l.password = "";
-            HYDRA_LOCAL.loginResponse session = hd.login(l);
+            HYDRA_LOCAL.loginResponse session = cli.login(l);
             Console.Write(session.loginResult);
 
             HYDRA_LOCAL.RequestHeader header = new HYDRA_LOCAL.RequestHeader();
             header.session_id = session.loginResult.session_id;
 
-            hd.RequestHeaderValue = header;
-
+        //    HYDRA_LOCAL.get_network hmmm = new HYDRA_LOCAL.get_network();
+        //    hmmm.network_id = "2";
+        //    HYDRA_LOCAL.get_networkResponse resp = cli.get_network(header, hmmm);
+        //    for (int i = 0; i < resp.get_networkResult.scenarios[0].resourcescenarios.Length; i++)
+        //    {
+        //        HYDRA_LOCAL.Dataset d = resp.get_networkResult.scenarios[0].resourcescenarios[i].value;   
+        //        if (d.type == "timeseries"){
+        //             Console.WriteLine(d);
+        //        }
+        //    }
+            //HYDRA_LOCAL.Dataset d = resp.get_networkResult.scenarios[0].resourcescenarios[0].value;
             hydra_test p = new hydra_test();
 
-            p.add_network(hd);
+            p.add_network(cli, header);
 
             Console.Read();
         }
 
-        public void add_network(HYDRA_LOCAL.AuthenticationService hd){
+        public void add_network(HYDRA_LOCAL.HydraSoapApplicationClient hd, HYDRA_LOCAL.RequestHeader header)
+        {
 
-            HYDRA_LOCAL.Project proj = new HYDRA_LOCAL.Project();
-            proj.name = "Windows project";
-            proj.description = "Project created by windows";
+            string project_id = "2";
+            try
+            {
+                HYDRA_LOCAL.get_project_by_name proj_req = new HYDRA_LOCAL.get_project_by_name();
+                proj_req.project_name = "Windows project";
+                HYDRA_LOCAL.get_project_by_nameResponse p = hd.get_project_by_name(header, proj_req);
+                project_id = p.get_project_by_nameResult.id;
+            }
+            catch (Exception e)
+            {
+                HYDRA_LOCAL.Project proj = new HYDRA_LOCAL.Project();
+                proj.name = "Windows project";
+                proj.description = "Project created by windows";
 
-            HYDRA_LOCAL.add_project add_proj = new HYDRA_LOCAL.add_project();
-            add_proj.project = proj;
-            HYDRA_LOCAL.add_projectResponse p = hd.add_project(add_proj);
+                HYDRA_LOCAL.add_project add_proj = new HYDRA_LOCAL.add_project();
+                add_proj.project = proj;
+                HYDRA_LOCAL.add_projectResponse p = hd.add_project(header, add_proj);
+                project_id = p.add_projectResult.id;
+            }
 
             HYDRA_LOCAL.Attr[] attrs = new HYDRA_LOCAL.Attr[3];
 
-            attrs[0] = create_attr(hd, "windows attribute 1");
-            attrs[1] = create_attr(hd, "windows attribute 2");
-            attrs[2] = create_attr(hd, "windows attribute 3");
+            attrs[0] = create_attr(hd, "windows attribute 1", header);
+            attrs[1] = create_attr(hd, "windows attribute 2", header);
+            attrs[2] = create_attr(hd, "windows attribute 3", header);
 
 
             HYDRA_LOCAL.Network net = new HYDRA_LOCAL.Network();
-            net.project_id  = p.add_projectResult.id;
-            net.name        = "Test Windows Network";
+            net.project_id  = project_id;
+            net.name = "Test Windows Network" + DateTime.Now.ToString();
             net.description = "A network build on windows";
 
             HYDRA_LOCAL.Node[] nodes = new HYDRA_LOCAL.Node[3];
@@ -86,9 +112,10 @@ namespace ConsoleApplication2
             nodes[2] = create_node("-3", "node C", "windows node 3", (decimal)0.3, (decimal)0.3, new HYDRA_LOCAL.Attr[0]);
 
             HYDRA_LOCAL.ResourceScenario[] data = new HYDRA_LOCAL.ResourceScenario[3];
-            data[0] = create_descriptor(nodes[0].attributes[0]);
-            data[1] = create_array(nodes[0].attributes[1]);
-            data[2] = create_timeseries(nodes[0].attributes[2]);
+            data[0] = create_timeseries(nodes[0].attributes[0]);
+            //data[0] = create_descriptor(nodes[0].attributes[0], "d1");
+            data[1] = create_descriptor(nodes[0].attributes[1], "d2");
+            data[2] = create_array(nodes[0].attributes[2]);
 
             links[0] = create_link("link X", "link A to B", nodes[0].id, nodes[1].id, new HYDRA_LOCAL.Attr[0]);
             links[1] = create_link("link Y", "link B to C", nodes[1].id, nodes[2].id, new HYDRA_LOCAL.Attr[0]);
@@ -102,13 +129,13 @@ namespace ConsoleApplication2
             HYDRA_LOCAL.add_network add_net = new HYDRA_LOCAL.add_network();
             add_net.net = net;
 
-//          HYDRA_LOCAL.add_networkResponse n = hd.add_network(add_net);
+            HYDRA_LOCAL.add_networkResponse n = hd.add_network(header, add_net);
 
             HYDRA_LOCAL.get_all_node_data nd = new HYDRA_LOCAL.get_all_node_data();
-            nd.network_id = "2";
-            nd.scenario_id = "2";
+            nd.network_id = n.add_networkResult.id;
+            nd.scenario_id = n.add_networkResult.scenarios[0].id;
             nd.node_ids = null;
-            HYDRA_LOCAL.get_all_node_dataResponse node_resp = hd.get_all_node_data(nd);
+            HYDRA_LOCAL.get_all_node_dataResponse node_resp = hd.get_all_node_data(header, nd);
             for (int i=0; i<node_resp.get_all_node_dataResult.Length; i++){
                 HYDRA_LOCAL.ResourceAttr node_data = node_resp.get_all_node_dataResult[i];
                 HYDRA_LOCAL.Dataset d = node_data.resourcescenario.value;
@@ -121,7 +148,7 @@ namespace ConsoleApplication2
                     upd.resource_scenarios = upd_rs;
                     upd.scenario_id = "2"; 
                     DateTime dtu1 = DateTime.Now;
-                    HYDRA_LOCAL.update_resourcedataResponse upd_resp = hd.update_resourcedata(upd);
+                    HYDRA_LOCAL.update_resourcedataResponse upd_resp = hd.update_resourcedata(header, upd);
                     DateTime dtu2 = DateTime.Now;
                     Console.WriteLine(dtu2 - dtu1);
                     break;
@@ -134,7 +161,7 @@ namespace ConsoleApplication2
             test_nd.node_ids = null;
             DateTime dt1 = DateTime.Now;
             Console.WriteLine(dt1);
-            HYDRA_LOCAL.test_get_all_node_dataResponse test_node_resp = hd.test_get_all_node_data(test_nd);
+            HYDRA_LOCAL.test_get_all_node_dataResponse test_node_resp = hd.test_get_all_node_data(header, test_nd);
             for (int i = 0; i < test_node_resp.test_get_all_node_dataResult.Length; i++)
             {
                 HYDRA_LOCAL.ResourceData test_d = test_node_resp.test_get_all_node_dataResult[i];
@@ -160,11 +187,11 @@ namespace ConsoleApplication2
         
         }
 
-        private HYDRA_LOCAL.Attr create_attr(HYDRA_LOCAL.AuthenticationService hd, string name)
+        private HYDRA_LOCAL.Attr create_attr(HYDRA_LOCAL.HydraSoapApplicationClient hd, string name, HYDRA_LOCAL.RequestHeader header)
         {
             HYDRA_LOCAL.get_attribute get_attr = new HYDRA_LOCAL.get_attribute();
             get_attr.name = name;
-            HYDRA_LOCAL.get_attributeResponse attr_resp = hd.get_attribute(get_attr);
+            HYDRA_LOCAL.get_attributeResponse attr_resp = hd.get_attribute(header, get_attr);
 
             HYDRA_LOCAL.Attr attr = new HYDRA_LOCAL.Attr();
             if (attr_resp.get_attributeResult != null)
@@ -179,7 +206,7 @@ namespace ConsoleApplication2
                 attr.name = name;
                 HYDRA_LOCAL.add_attribute add_attr_wrapper = new HYDRA_LOCAL.add_attribute();
                 add_attr_wrapper.attr = attr;
-                HYDRA_LOCAL.add_attributeResponse add_attr_resp = hd.add_attribute(add_attr_wrapper);
+                HYDRA_LOCAL.add_attributeResponse add_attr_resp = hd.add_attribute(header, add_attr_wrapper);
                 attr.id = add_attr_resp.add_attributeResult.id;
             }
             return attr;
@@ -223,12 +250,18 @@ namespace ConsoleApplication2
             return link;
         }
 
-        private HYDRA_LOCAL.ResourceScenario create_descriptor(HYDRA_LOCAL.ResourceAttr ra)
+        private HYDRA_LOCAL.ResourceScenario create_descriptor(HYDRA_LOCAL.ResourceAttr ra, string descriptor)
         {
-            HYDRA_LOCAL.Descriptor val = new HYDRA_LOCAL.Descriptor();
-            val.desc_val = "I am a windows descriptor";
 
+            //XmlNode test = new XmlNode();
+            //test.
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
+
+            System.Xml.XmlNode[] val = new XmlNode[1];
+            XmlDocument doc = new XmlDocument();
+            XmlNode n = doc.CreateElement("desc_val");
+            n.InnerText = descriptor;
+            val[0] = n;
             dataset.value = val;
 
             dataset.unit = "string";
@@ -246,12 +279,15 @@ namespace ConsoleApplication2
 
         private HYDRA_LOCAL.ResourceScenario create_array(HYDRA_LOCAL.ResourceAttr ra)
         {
-            HYDRA_LOCAL.Array val = new HYDRA_LOCAL.Array();
-            object a;
-            a = 1;
-            val.arr_data = a;// "[[[1, 2, 3], [5, 4, 6]],[[10, 20, 30], [40, 50, 60]]]";
 
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
+
+            System.Xml.XmlNode[] val = new XmlNode[1];
+            XmlDocument doc = new XmlDocument();
+            XmlNode n = doc.CreateElement("arr_data");
+            n.InnerXml = "<array><item>1</item><item>2</item><item>3</item><item>4</item></array>";
+            val[0] = n;
+
             dataset.value = val;
 
             dataset.unit = "metres";
@@ -269,19 +305,18 @@ namespace ConsoleApplication2
         private HYDRA_LOCAL.ResourceScenario create_timeseries(HYDRA_LOCAL.ResourceAttr ra)
         {
             string format = "yyyy-MM-dd hh:mm:ss.0";
-            HYDRA_LOCAL.TimeSeriesData val_1 = new HYDRA_LOCAL.TimeSeriesData();
-            val_1.ts_value = "[1, 2, 3]";
-            val_1.ts_time = DateTime.Now.ToString(format);
-
-            HYDRA_LOCAL.TimeSeriesData val_2 = new HYDRA_LOCAL.TimeSeriesData();
-            val_2.ts_value = "[10, 20, 30]";
-            val_2.ts_time = DateTime.Now.ToString(format);
-
-            HYDRA_LOCAL.TimeSeries ts = new HYDRA_LOCAL.TimeSeries();
-            ts.ts_values = new HYDRA_LOCAL.TimeSeriesData[] { val_1, val_2 };
-
+            XmlDocument doc = new XmlDocument();
+            DateTime n = DateTime.Now;
+            
+            XmlNode val1 = doc.CreateElement("ts_values");
+            val1.InnerXml = "<ts_time>" + n.ToString(format) + "</ts_time><ts_value>1</ts_value>";
+            XmlNode val2 = doc.CreateElement("ts_values");
+           DateTime n2 = n.AddHours(1);
+            val2.InnerXml = "<ts_time>" + n2.ToString(format) + "</ts_time><ts_value>2</ts_value>";
+            System.Xml.XmlNode[] val = new XmlNode[] {val1, val2};
+            
             HYDRA_LOCAL.Dataset dataset = new HYDRA_LOCAL.Dataset();
-            dataset.value = ts;
+            dataset.value = val;
 
             dataset.unit = "m3";
             dataset.name = "A windows time series";

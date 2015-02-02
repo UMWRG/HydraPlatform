@@ -46,6 +46,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -57,539 +59,1262 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Web References\HYDRA_LOCAL\Reference.cs">
+    <Compile Include="Service References\HYDRA\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\HYDRA_LOCAL\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\activate_groupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\activate_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\activate_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\activate_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\activate_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_attributeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.activate_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_attributesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_dataset_groupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_attributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_data_to_attributeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_dimensionResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_dataset_collectionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_fileResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_data_to_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_groupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_imageResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_node_attrs_from_typeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_linksResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_permResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_link_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_resourcegroupitemResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_network_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_resourcegroupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_resource_attributeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_nodesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_node_attrs_from_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_node_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_templateResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_templatetypeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_typeattrResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_project_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_unitResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_resourcegroupitemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\add_userResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\apply_template_to_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_resourcegroup_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\assign_types_to_resourcesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_resource_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\assign_type_to_resourceResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\bulk_insert_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\check_consistencyResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\check_jsonResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_scenario_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\check_plugin_statusResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\clean_up_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\clone_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_typeattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\compare_scenariosResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\convert_datasetResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.add_userResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_attributeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.apply_template_to_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_datasetResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.assign_types_to_resourcesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_dimensionResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.assign_type_to_resourceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_groupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.bulk_insert_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.bulk_update_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.check_consistencyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.check_jsonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_permResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.check_plugin_statusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.clean_up_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_resourceattrResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.clone_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_resourcedataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.compare_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_resourcegroupitemResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.convert_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_resourcegroupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.copy_data_from_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_role_permResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_templateResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_templatetypeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_typeattrResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_unitResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_userResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\delete_user_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\echo_arrayResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_resourceattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\echo_descriptorResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\echo_eqtimeseriesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_resourcegroupitemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\echo_scalarResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\echo_timeseriesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_group_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_role_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_link_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_node_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_permsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_rolesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_all_usersResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_typeattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_attributeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_attributesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_userResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_attribute_by_idResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.delete_user_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_attribute_datasetsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.echo_arrayResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_datasetResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.echo_descriptorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_dataset_groupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.echo_eqtimeseriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_dataset_group_by_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.echo_scalarResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_dataset_scenariosResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.echo_timeseriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_dimensionResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_dataset_collectionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_dimensionsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_group_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_fileResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_groups_like_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_group_datasetsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_permsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_imageResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_rolesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_all_usersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_link_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_matching_resource_typesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_attributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_metadataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_attribute_by_idResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_attribute_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_networksResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_collections_like_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_network_as_xml_templateResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_collection_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_network_by_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_network_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_network_extentsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_dataset_collectionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_dataset_collection_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_node_attribute_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_dataset_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_node_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_permResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_dimensionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_perm_by_codeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_pluginsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_projectsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_resourcegroupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_link_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_resourcegroup_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_matching_resource_typesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_resources_of_typeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_metadataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_role_by_codeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_networksResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_as_xml_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_scenariosResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_scenario_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_templateResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_extentsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_templatesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_templatetypeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_network_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_templatetype_by_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_template_by_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_node_attribute_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_unitsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_usernameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_node_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_user_by_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_user_permissionsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_user_rolesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_perm_by_codeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_vals_between_timesResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_pluginsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\get_val_at_timeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\HydraSoapApplication.wsdl" />
-    <None Include="Web References\HYDRA_LOCAL\lock_datasetResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_projectsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\lock_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_project_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\loginResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_project_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\logoutResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\network_existsResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_resourcegroup_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\purge_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_resourcegroup_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\purge_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_resources_of_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\purge_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\purge_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_role_by_codeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Web References\HYDRA_LOCAL\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_rulesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_scenario_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_scenario_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_templatesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_templatetype_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_template_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_unitsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_usernameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_user_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_user_permissionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_user_rolesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_vals_between_timesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.get_val_at_timeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.hide_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.lock_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.loginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.logoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.network_existsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.purge_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.remove_attr_from_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.remove_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.remove_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.remove_template_from_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.remove_type_from_resourceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.run_pluginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.search_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.set_network_permissionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.set_project_permissionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.set_resourcescenario_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.set_role_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.set_user_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.share_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.share_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.test_get_all_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.test_get_all_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.unhide_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.unlock_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_user_display_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.update_user_passwordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.upload_template_xmlResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.validate_attrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.validate_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\ConsoleApplication2.HYDRA.validate_network_topologyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA\HydraSoapApplication.wsdl" />
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.activate_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_attributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_dataset_collectionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_data_to_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_linksResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_link_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_network_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_nodesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_node_attrs_from_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_node_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_project_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_resourcegroupitemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_resourcegroup_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_resource_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_scenario_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_typeattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.add_userResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.apply_template_to_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.assign_types_to_resourcesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.assign_type_to_resourceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.bulk_insert_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.bulk_update_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.check_consistencyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.check_jsonResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.check_plugin_statusResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.clean_up_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.clone_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.compare_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.convert_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.copy_data_from_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_groupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_resourceattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_resourcegroupitemResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_role_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_typeattrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_userResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.delete_user_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.echo_arrayResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.echo_descriptorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.echo_eqtimeseriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.echo_scalarResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.echo_timeseriesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_dataset_collectionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_group_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_permsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_rolesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_all_usersResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_attributeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_attributesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_attribute_by_idResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_attribute_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_collections_like_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_collection_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_dataset_collectionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_dataset_collection_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_dataset_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_dimensionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_dimensionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_link_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_matching_resource_typesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_metadataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_networksResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_as_xml_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_extentsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_network_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_node_attribute_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_node_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_perm_by_codeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_pluginsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_projectsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_project_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_project_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_resourcegroup_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_resourcegroup_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_resources_of_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_role_by_codeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_rulesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_scenariosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_scenario_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_scenario_notesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_templatesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_templatetype_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_template_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_unitsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_usernameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_user_by_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_user_permissionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_user_rolesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_vals_between_timesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.get_val_at_timeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.hide_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.lock_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.loginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.logoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.network_existsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.purge_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.remove_attr_from_typeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.remove_fileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.remove_imageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.remove_template_from_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.remove_type_from_resourceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.run_pluginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.search_datasetsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.set_network_permissionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.set_project_permissionResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.set_resourcescenario_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.set_role_permResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.set_user_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.share_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.share_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.test_get_all_link_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.test_get_all_node_dataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.unhide_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.unlock_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_datasetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_linkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_nodeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_noteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_projectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_resourcedataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_resourcegroupResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_roleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_ruleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_scenarioResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_templateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_templatetypeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_unitResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_user_display_nameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.update_user_passwordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.upload_template_xmlResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.validate_attrResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.validate_networkResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\ConsoleApplication2.HYDRA_LOCAL.validate_network_topologyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\HYDRA_LOCAL\HydraSoapApplication.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\HYDRA\" />
+    <WCFMetadataStorage Include="Service References\HYDRA_LOCAL\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HYDRA_LOCAL\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HYDRA_LOCAL\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HYDRA_LOCAL\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\remove_attr_from_typeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\remove_fileResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\remove_imageResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\remove_template_from_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\remove_type_from_resourceResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\run_pluginResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\set_network_permissionResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\set_project_permissionResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\set_role_permResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\set_user_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\share_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\share_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\test_get_all_link_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\test_get_all_node_dataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\unlock_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_datasetResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_linkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_networkResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_nodeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_projectResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_resourcedataResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_resourcegroupResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_roleResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_scenarioResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_templateResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_templatetypeResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_unitResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_user_display_nameResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\update_user_passwordResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\upload_template_xmlResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\validate_attrResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\HYDRA_LOCAL\validate_network_topologyResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://127.0.0.1:8080/soap%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\HYDRA_LOCAL\</RelPath>
-      <UpdateFromURL>http://127.0.0.1:8080/soap%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ConsoleApplication2_HYDRA_LOCAL_AuthenticationService</CachedSettingsPropName>
-    </WebReferenceUrl>
+    <None Include="Service References\HYDRA\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HYDRA\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\HYDRA\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
