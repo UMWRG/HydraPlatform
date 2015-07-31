@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Time Series &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="next" title="Libraries and templates" href="libraries_and_templates.html" />
+    <link rel="prev" title="Handling of units and dimensions" href="units_and_dimensions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="libraries_and_templates.html" title="Libraries and templates"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="units_and_dimensions.html" title="Handling of units and dimensions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Time Series</a><ul>
+<li><a class="reference internal" href="#saving-time-series-data-to-the-server">Saving time series data to the server</a><ul>
+<li><a class="reference internal" href="#normal-time-series-and-seasonal-time-series">&#8220;Normal&#8221; time series and seasonal time series</a><ul>
+<li><a class="reference internal" href="#an-example-in-python">An example in Python</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#retrieving-time-series-from-the-server">Retrieving time series from the server</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="units_and_dimensions.html"
+                        title="previous chapter">Handling of units and dimensions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="libraries_and_templates.html"
+                        title="next chapter">Libraries and templates</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/techdocs/timeseries.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="time-series">
+<h1>Time Series<a class="headerlink" href="#time-series" title="Permalink to this headline">¶</a></h1>
+<p>Hydra supports three types of time series: &#8220;normal&#8221; time series, equally spaced
+time series and seasonal time series. The SOAP interface provides methods to
+store data on the server and to retrieve them from the server.</p>
+<div class="section" id="saving-time-series-data-to-the-server">
+<h2>Saving time series data to the server<a class="headerlink" href="#saving-time-series-data-to-the-server" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="normal-time-series-and-seasonal-time-series">
+<h3>&#8220;Normal&#8221; time series and seasonal time series<a class="headerlink" href="#normal-time-series-and-seasonal-time-series" title="Permalink to this headline">¶</a></h3>
+<p>Time series are sent to the server as <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> objects. Every element of
+the time series added to the <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> object as a <tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt>
+object.</p>
+<p>A <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> object only has the field <tt class="docutils literal"><span class="pre">ts_values</span></tt> which holds an array of
+<tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt> objects. A <tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt> object has the fields <tt class="docutils literal"><span class="pre">ts_time</span></tt>
+and <tt class="docutils literal"><span class="pre">ts_value</span></tt>. While the value can be anything, a string, a number or an
+array, the time needs to follow a certain pattern:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M:%S.</span><span class="si">%f</span><span class="s">%z&#39;</span>
+</pre></div>
+</div>
+<p>following these specifications</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="73%" />
+<col width="16%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%Y</span></tt></td>
+<td>year, four digits</td>
+<td><tt class="docutils literal"><span class="pre">2013</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%m</span></tt></td>
+<td>month, two digits</td>
+<td><tt class="docutils literal"><span class="pre">10</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%d</span></tt></td>
+<td>day, two digits</td>
+<td><tt class="docutils literal"><span class="pre">03</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%H</span></tt></td>
+<td>hour, two digits</td>
+<td><tt class="docutils literal"><span class="pre">00</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%M</span></tt></td>
+<td>minute, two digits</td>
+<td><tt class="docutils literal"><span class="pre">49</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%S</span></tt></td>
+<td>seconds, two digits</td>
+<td><tt class="docutils literal"><span class="pre">17</span></tt></td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%f</span></tt></td>
+<td>fractional seconds</td>
+<td><tt class="docutils literal"><span class="pre">568</span></tt></td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%z</span></tt></td>
+<td>time zone offset, sign and four digits</td>
+<td><tt class="docutils literal"><span class="pre">-0400</span></tt></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;2013-10-03 00:49:17.568-0400&#39;</span>
+</pre></div>
+</div>
+<p>A time stamp can take any value from January 1st, year 2 (year 1 in reserved for
+seasonal time series). In a time stamp for a seasonal time series the year is
+replaced by either <tt class="docutils literal"><span class="pre">'0001'</span></tt> or <tt class="docutils literal"><span class="pre">'XXXX'</span></tt>. We recommend to use the latter,
+since using year 1 explicitly might not be supported in future versions of
+Hydra.</p>
+<div class="section" id="an-example-in-python">
+<h4>An example in Python<a class="headerlink" href="#an-example-in-python" title="Permalink to this headline">¶</a></h4>
+<p>In Python the code to generate a complete time series object could look like
+this:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">suds</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">&#39;http://localhost:8000?wsdl&#39;</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="c">#These should obviously be valid IDs</span>
+<span class="n">scenario_id</span> <span class="o">=</span> <span class="n">AAA</span>
+<span class="n">resource_attribute_id</span> <span class="o">=</span> <span class="n">BBB</span>
+
+<span class="n">dataset</span> <span class="o">=</span> <span class="p">[(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">4.0</span><span class="p">),</span> <span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mf">4.5</span><span class="p">)]</span>
+
+<span class="c">#In general, data sent to the server must be contained in a &#39;dataset&#39; obhect</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;ns1:Dataset&#39;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">type</span>      <span class="o">=</span> <span class="s">&#39;timeseries&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">name</span>      <span class="o">=</span> <span class="s">&#39;Max Capacity&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">unit</span>      <span class="o">=</span> <span class="s">&#39;metres cubed&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="s">&#39;Volume&#39;</span>
+
+
+<span class="c">#Create the timeseries object</span>
+<span class="n">timeseries</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;Header&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+<span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+     <span class="n">t</span> <span class="o">=</span> <span class="n">PluginLib</span><span class="o">.</span><span class="n">date_to_string</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+     <span class="n">timeseries</span><span class="p">[</span><span class="s">&quot;0&quot;</span><span class="p">][</span><span class="n">t</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<span class="n">timeseries</span><span class="o">.</span><span class="n">ts_values</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">timeseries</span><span class="p">)</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">timeseries</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">add_data_to_attribute</span><span class="p">(</span><span class="n">scenario_id</span><span class="p">,</span> <span class="n">resource_attribute_id</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>If you would like to save a seasonal time series to the server an optional
+parameter to <tt class="docutils literal"><span class="pre">PluginLib.date_to_string()</span></tt> should to the trick:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tsdata</span><span class="o">.</span><span class="n">ts_time</span> <span class="o">=</span> <span class="n">PluginLib</span><span class="o">.</span><span class="n">date_to_string</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="retrieving-time-series-from-the-server">
+<h2>Retrieving time series from the server<a class="headerlink" href="#retrieving-time-series-from-the-server" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="libraries_and_templates.html" title="Libraries and templates"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="units_and_dimensions.html" title="Handling of units and dimensions"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

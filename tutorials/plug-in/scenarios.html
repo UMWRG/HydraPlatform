@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>15. Working with scenarios &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
+    <link rel="next" title="Handling of units and dimensions" href="../../techdocs/units_and_dimensions.html" />
+    <link rel="prev" title="14. Working with datasets" href="datasets.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../techdocs/units_and_dimensions.html" title="Handling of units and dimensions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="datasets.html" title="14. Working with datasets"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">15. Working with scenarios</a><ul>
+<li><a class="reference internal" href="#creating-a-scenario">15.1. Creating a scenario</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="datasets.html"
+                        title="previous chapter">14. Working with datasets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../../techdocs/units_and_dimensions.html"
+                        title="next chapter">Handling of units and dimensions</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/scenarios.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="working-with-scenarios">
+<span id="scenarios"></span><h1>15. Working with scenarios<a class="headerlink" href="#working-with-scenarios" title="Permalink to this headline">¶</a></h1>
+<p>Scenarios are the mechanism Hydra uses to assign <tt class="docutils literal"><span class="pre">Data</span></tt> to <tt class="docutils literal"><span class="pre">Resource</span> <span class="pre">Attributes</span></tt>.</p>
+<p>The concept is simple: A network&#8217;s topology (the nodes and links and their locations)
+tend not to change much, but what does change are the properties of that network.</p>
+<p>Using scenarios, multiple permutations of a network&#8217;s properties can be set without
+altering its topology. The common example we use is a river network can have a
+&#8216;dry year&#8217; scenario and a &#8216;wet year&#8217; scenario.</p>
+<p>In both of these cases, the network stays the same, the attributes on all the nodes
+and links stay the same. THe only thing that changes is the data.</p>
+<p>A network can therefore have multiple scenarios and the consequently attributes of
+resources (nodes and links) and data are not directly linked.</p>
+<div class="section" id="creating-a-scenario">
+<h2>15.1. Creating a scenario<a class="headerlink" href="#creating-a-scenario" title="Permalink to this headline">¶</a></h2>
+<p>Scenarios can be created as part of network creation (see <a class="reference internal" href="networks.html#networks"><em>Working with networks</em></a> for details
+on how to create a network).</p>
+<p>Scenarios are added to a network in the samee way as nodes and links</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Create a project</span>
+<span class="o">...</span>
+<span class="c">#Define a basic network</span>
+<span class="o">...</span>
+<span class="c">#Add nodes to network</span>
+<span class="o">...</span>
+<span class="c">#Add links to network</span>
+<span class="o">...</span>
+<span class="c">#Add groups to network</span>
+<span class="o">...</span>
+
+<span class="c">#Now add a scenario</span>
+<span class="n">network_scenarios</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:ScenarioArray&#39;</span><span class="p">)</span>
+<span class="n">scenario1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:Scenario&#39;</span><span class="p">)</span>
+<span class="n">scenario1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Dry Year&quot;</span>
+<span class="n">scenario2</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&quot;Simulation of the data from a dry year in England.&quot;</span>
+</pre></div>
+</div>
+<p>Here we assume that a network with nodes and links has been defined. We then
+create an array of scenarios, into which we will put our &#8216;Dry year&#8217; scenario.</p>
+<p>The next step is to put data into the scenario and link this data to the attributes
+of the nodes and links in the network. This is done using &#8216;ResourceScenario&#8217; objects.
+These are simply objects which link Datasets with ResourceAttrs.</p>
+<p>First, we must create some data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dataset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:Dataset&#39;</span><span class="p">)</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="s">&#39;scalar&#39;</span> <span class="c">#This says that this dataset is a number</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Observed flow at hydro electric plant&#39;</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s">&#39;Ml day^-1&#39;</span> <span class="c"># Megalitres per day</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="s">&#39;Volumetric flow rate&#39;</span> <span class="c"># This dimension MUST match that of the attribute</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">value</span>     <span class="o">=</span> <span class="mf">1782.999</span>
+
+<span class="c">#get the node first</span>
+<span class="n">node</span> <span class="o">=</span> <span class="n">network</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">Node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c">#Next identify the attribute we are interested in:</span>
+<span class="n">res_attr</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">attribute</span><span class="o">.</span><span class="n">ResourceAttr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">resource_scenarios</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:ResourceScenarioArray&#39;</span><span class="p">)</span>
+<span class="n">resource_scenario1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:ResourceScenario&#39;</span><span class="p">)</span>
+<span class="n">resource_scenario1</span><span class="o">.</span><span class="n">resource_attr_id</span> <span class="o">=</span> <span class="n">res_attr</span><span class="o">.</span><span class="n">id</span>
+<span class="n">resource_scenario1</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">dataset</span>
+
+<span class="n">scenario</span><span class="o">.</span><span class="n">resourcescenarios</span><span class="o">.</span><span class="n">ResourceScenario</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resource_scenario1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Every piece of data is contained in a &#8216;Dataset&#8217; object. This holds not only the value
+itself, but also its unit, dimension and name. In order to be assigned to a ResourceAttr,
+a Dataset must have the same dimension as the Attr definition.. This stops users from setting
+a &#8216;speed&#8217; value on an attribute which is &#8216;capacity&#8217;.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../techdocs/units_and_dimensions.html" title="Handling of units and dimensions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="datasets.html" title="14. Working with datasets"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

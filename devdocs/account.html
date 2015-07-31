@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to set up your account for SVN+SSH and Trac &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to set up your account for SVN+SSH and Trac</a><ul>
+<li><a class="reference internal" href="#svn-ssh-for-windows-users">SVN+SSH for Windows users</a><ul>
+<li><a class="reference internal" href="#ssh">SSH</a></li>
+<li><a class="reference internal" href="#svn">SVN</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#svn-ssh-for-linux-users">SVN+SSH for Linux users</a></li>
+<li><a class="reference internal" href="#trac">Trac</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/devdocs/account.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-set-up-your-account-for-svn-ssh-and-trac">
+<h1>How to set up your account for SVN+SSH and Trac<a class="headerlink" href="#how-to-set-up-your-account-for-svn-ssh-and-trac" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="svn-ssh-for-windows-users">
+<h2>SVN+SSH for Windows users<a class="headerlink" href="#svn-ssh-for-windows-users" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="ssh">
+<h3>SSH<a class="headerlink" href="#ssh" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Install PuTTY and friends: <a class="reference external" href="http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.63-installer.exe">http://the.earth.li/~sgtatham/putty/latest/x86/putty-0.63-installer.exe</a></p>
+</li>
+<li><p class="first">Start PuTTYgen (puttygen.exe) and generate a new SSH-2/RSA key.</p>
+</li>
+<li><p class="first">Add a passphrase.</p>
+</li>
+<li><p class="first">Save both keys (private and public).</p>
+</li>
+<li><p class="first">Send the <strong>public</strong> key and a username you&#8217;d like to have to the system
+administrator (currently <a class="reference external" href="mailto:p&#46;meier&#37;&#52;&#48;ucl&#46;ac&#46;uk">p<span>&#46;</span>meier<span>&#64;</span>ucl<span>&#46;</span>ac<span>&#46;</span>uk</a>)</p>
+</li>
+<li><p class="first">Once your account is created it&#8217;s time to test it:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>Start up  PuTTY.</li>
+<li>In the &#8220;Session&#8221; tab enter the hostname
+(ec2-54-229-95-247.eu-west-1.compute.amazonaws.com), port 22 is fine.</li>
+<li>Go to the &#8220;SSH -&gt; Auth&#8221; tab and load your private key file generated
+before.</li>
+<li>Go back to the &#8220;Session&#8221; tab, give the connection a name (it is best if
+you use the domain name as session name) and hit &#8220;Save&#8221;</li>
+<li>Select the connection just created and hit &#8220;Open&#8221;</li>
+<li>A window will ask you for your username and private key passphrase</li>
+<li>If you see no error messages, your account is created successfully.
+<strong>Congratulations!</strong></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p class="first">Start <em>Pageant</em>, which is part of the PuTTY installation. A new icon will
+appear in the notification toolbar (bottom right).</p>
+</li>
+<li><p class="first">Right click on this icon and select <em>Add key ...</em>.</p>
+</li>
+<li><p class="first">Locate your private key file and load it. You will have to provide your key
+pass phrase.</p>
+</li>
+</ol>
+<p>You are now ready to checkout the source code from the repository.</p>
+</div>
+<div class="section" id="svn">
+<h3>SVN<a class="headerlink" href="#svn" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic">
+<li><p class="first">Install TortoiseSVN, you can get it from here: <a class="reference external" href="http://sourceforge.net/projects/tortoisesvn/?source=pdlp">http://sourceforge.net/projects/tortoisesvn/?source=pdlp</a></p>
+</li>
+<li><p class="first">Create a folder where the code should be checked out to. Right click that
+folder and select <em>SVN Checkout...</em>.</p>
+<p>The URL of the SVN repository is:</p>
+<div class="highlight-python"><div class="highlight"><pre>svn+ssh://&lt;user&gt;@ec2-54-229-95-247.eu-west-1.compute.amazonaws.com
+/home/svn/svnrepository/HYDRA
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="svn-ssh-for-linux-users">
+<h2>SVN+SSH for Linux users<a class="headerlink" href="#svn-ssh-for-linux-users" title="Permalink to this headline">¶</a></h2>
+<p>Creating an account is pretty much the same as the procedure for Windows users. A few
+helpful commands are listed below.</p>
+<ol class="arabic">
+<li><p class="first">Generate a key pair:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh-keygen -b 2048 -t rsa -N &lt;passphrase&gt; -f &lt;keyfile&gt;
+</pre></div>
+</div>
+</li>
+<li><p class="first">Let ssh know that you would like to use this key-file for connection with the
+Hydra server. Add the following to <tt class="docutils literal"><span class="pre">~/.ssh/config</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre>Host ec2-54-229-95-247.eu-west-1.compute.amazonaws.com ec2hydra
+    Hostname ec2-54-229-95-247.eu-west-1.compute.amazonaws.com
+    IdentityFile &lt;keyfile&gt;
+    User &lt;username&gt;
+    ForwardX11 no
+</pre></div>
+</div>
+<p>This will also provide a shortcut to the server which allows you to connect like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>ssh &lt;username&gt;@ec2hydra
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="trac">
+<h2>Trac<a class="headerlink" href="#trac" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Trac accouts are created on request. If you don&#8217;t need access to the SVN
+repository, you can still get an account for Trac. A user account will allow
+you to view the source code, file bugs, etc.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

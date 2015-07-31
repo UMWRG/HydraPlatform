@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Connecting to Hydra Platform &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
+    <link rel="next" title="4. Exporting the Network" href="export.html" />
+    <link rel="prev" title="2. Imports" href="imports.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="4. Exporting the Network"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="imports.html" title="2. Imports"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="imports.html"
+                        title="previous chapter">2. Imports</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="export.html"
+                        title="next chapter">4. Exporting the Network</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/connecting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="connecting-to-hydra-platform">
+<h1>3. Connecting to Hydra Platform<a class="headerlink" href="#connecting-to-hydra-platform" title="Permalink to this headline">¶</a></h1>
+<p>To start the Plugin, we create an <tt class="docutils literal"><span class="pre">ExportJSON</span></tt> class which will do our
+work for us.</p>
+<p>The constructor of this class, <tt class="docutils literal"><span class="pre">__init__</span></tt> takes two arguments:
+a URL and a session_id. The url tells the plugin where Hydra Platform is. If this is left as None, a default is found in config.</p>
+<p>The second parameter is session_id. If a user is already connected to Hydra, (through Hydra Modeller) they already have a session ID.
+By passing their existing session ID into the plugin,
+there is no need for the user to log in again.</p>
+<p>The connection is created by creating a new <tt class="docutils literal"><span class="pre">JsonConnection</span></tt> object, passing
+in the url and then calling <tt class="docutils literal"><span class="pre">login</span></tt> if necessary. This can take a username and password, but if not provided, these details are fetched from config.</p>
+<p>Finally <tt class="docutils literal"><span class="pre">self.num_steps</span></tt> is defined. This simply allows us to keep track of how many steps there are in the plugin, so that we can use it as a way to display to the user at what point in the process the plugin is currently operating.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ExportJSON</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">       Exporter of Hydra networks to JSON or XML files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="c">#Record the names of the files created by the plugin so we can</span>
+        <span class="c">#display them to the user.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">files</span>    <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">JsonConnection</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Connecting...&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">session_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Using existing session </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">session_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">session_id</span><span class="o">=</span><span class="n">session_id</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="4. Exporting the Network"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="imports.html" title="2. Imports"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

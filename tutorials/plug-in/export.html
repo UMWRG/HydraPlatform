@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>4. Exporting the Network &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
+    <link rel="next" title="5. Parsing the Arguments" href="parsing_arguments.html" />
+    <link rel="prev" title="3. Connecting to Hydra Platform" href="connecting.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parsing_arguments.html" title="5. Parsing the Arguments"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="connecting.html" title="3. Connecting to Hydra Platform"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="connecting.html"
+                        title="previous chapter">3. Connecting to Hydra Platform</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parsing_arguments.html"
+                        title="next chapter">5. Parsing the Arguments</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/export.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exporting-the-network">
+<h1>4. Exporting the Network<a class="headerlink" href="#exporting-the-network" title="Permalink to this headline">¶</a></h1>
+<p>To export the function, we need 1 pieces of information, the ID of the nework.
+The ID of the scenario within the network is not strictly necessary nor is the
+folder where you want the file to end up. If you do not specify either of these,
+all the scenarios will be exported, and the file will save to the desktop.</p>
+<p>As we are using a JSON connection, the network is returned as a JSON object.
+We can therefore just convert this to a string and send it to the file. No
+parsing needed!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network_id</span><span class="p">,</span> <span class="n">scenario_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">target_dir</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export a network in Hydra as a .json file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c">#Will print !!Output Retrieving Network</span>
+    <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Retrieving Network&quot;</span><span class="p">)</span>
+    <span class="c">#Will print !!Progress 2/3</span>
+    <span class="n">write_progress</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span><span class="p">)</span>
+
+    <span class="c">#Some basic error checking.</span>
+    <span class="k">if</span> <span class="n">network_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="c">#The network ID can be specified to get the network...</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c">#Get the nework using the connection&#39;s &#39;call&#39; function.</span>
+            <span class="c">#This returns the network as a JSON dictionary. Handy that!</span>
+            <span class="k">if</span> <span class="n">scenario_id</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;get_network&#39;</span><span class="p">,</span>
+                                              <span class="p">{</span><span class="s">&#39;network_id&#39;</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">network_id</span><span class="p">)})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s">&#39;get_network&#39;</span><span class="p">,</span>
+                                              <span class="p">{</span><span class="s">&#39;network_id&#39;</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">network_id</span><span class="p">),</span>
+                                              <span class="s">&#39;scenario_ids&#39;</span><span class="p">:[</span><span class="nb">int</span><span class="p">(</span><span class="n">scenario_id</span><span class="p">)]})</span>
+
+            <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Network retrieved&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HydraPluginError</span><span class="p">(</span><span class="s">&quot;Network </span><span class="si">%s</span><span class="s"> not found.&quot;</span><span class="o">%</span><span class="n">network_id</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HydraPluginError</span><span class="p">(</span><span class="s">&quot;A network ID must be specified!&quot;</span><span class="p">)</span>
+
+    <span class="c">#Default to $HOME/Desktop</span>
+    <span class="k">if</span> <span class="n">target_dir</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">target_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s">&#39;~&#39;</span><span class="p">),</span> <span class="s">&#39;Desktop&#39;</span><span class="p">)</span>
+
+    <span class="c">#If the target folder doesn&#39;t exist, create it.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">target_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">target_dir</span><span class="p">)</span>
+
+    <span class="c">#Write the network</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">write_network</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once we have the network retrieved, save it to a file:
+Note that the name of the file is derived from the name of the network.
+As the network is a JSON dictionary, its name is accessed by doing <tt class="docutils literal"><span class="pre">network['name']</span></tt>.
+All the properties of the network can be listed by doing <tt class="docutils literal"><span class="pre">network.keys()</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">write_network</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">network</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Write a JSON-based network to a file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Writing network to file&quot;</span><span class="p">)</span>
+    <span class="n">write_progress</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_steps</span><span class="p">)</span>
+
+    <span class="n">file_name</span> <span class="o">=</span> <span class="s">&quot;network_</span><span class="si">%s</span><span class="s">.json&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">network</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">])</span>
+
+    <span class="c">#To show to the user when the plugin is finished.</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">))</span>
+
+    <span class="c">#os.path.join ensures cross-platform compatibility.</span>
+    <span class="n">network_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">file_name</span><span class="p">),</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="c">#Json.dumps turns a JSON dict into a string</span>
+    <span class="c">#Put ins some formatting to make the file easier to read</span>
+    <span class="n">network_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">network</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;: &#39;</span><span class="p">)))</span>
+
+    <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Network Written to </span><span class="si">%s</span><span class="s"> &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">target_dir</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parsing_arguments.html" title="5. Parsing the Arguments"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="connecting.html" title="3. Connecting to Hydra Platform"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

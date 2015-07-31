@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to run the server natively on Windows Using python. &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="prev" title="Unit test suite for Hydra Platform" href="../HydraServer/unittests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to run the server natively on Windows Using python.</a><ul>
+<li><a class="reference internal" href="#running-the-server-and-client">Running the server and client</a></li>
+<li><a class="reference internal" href="#creating-the-windows-executable-using-cx-freeze-deprecated">Creating the windows executable using cx_Freeze (deprecated)</a></li>
+<li><a class="reference internal" href="#building-windows-execuatable-using-pyinstaller">Building windows execuatable using Pyinstaller</a></li>
+<li><a class="reference internal" href="#installing-python">Installing Python</a></li>
+<li><a class="reference internal" href="#additional-libraries">Additional Libraries</a><ul>
+<li><a class="reference internal" href="#spyne">Spyne</a></li>
+<li><a class="reference internal" href="#suds">Suds</a></li>
+<li><a class="reference internal" href="#bcrypt">Bcrypt</a></li>
+<li><a class="reference internal" href="#mysql-connector">MySql Connector</a></li>
+<li><a class="reference internal" href="#sqlalchemy">SqlAlchemy</a></li>
+<li><a class="reference internal" href="#zope-sqlalchemy">zope.sqlalchemy</a></li>
+<li><a class="reference internal" href="#pandas">Pandas</a></li>
+<li><a class="reference internal" href="#winpaths">winpaths</a></li>
+<li><a class="reference internal" href="#cherrypy">CherryPy</a></li>
+<li><a class="reference internal" href="#python-dateutil">python-dateutil</a></li>
+<li><a class="reference internal" href="#lxml">lxml</a></li>
+<li><a class="reference internal" href="#pywin32">pywin32:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../HydraServer/unittests.html"
+                        title="previous chapter">Unit test suite for Hydra Platform</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/devdocs/server.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="how-to-run-the-server-natively-on-windows-using-python">
+<h1>How to run the server natively on Windows Using python.<a class="headerlink" href="#how-to-run-the-server-natively-on-windows-using-python" title="Permalink to this headline">¶</a></h1>
+<p>The soap server runs in python (2.7), and requires some external
+libraries. The following lists all the istallations required to get
+the server up and running natively on Windows.</p>
+<p>First, you must install all the appropriate libraries, as described below.
+You will need to command prompt to do this.</p>
+<p>To open the command prommpt, click the &#8216;start button&#8217;, type &#8216;cmd&#8217; and hit enter.</p>
+<div class="section" id="running-the-server-and-client">
+<h2>Running the server and client<a class="headerlink" href="#running-the-server-and-client" title="Permalink to this headline">¶</a></h2>
+<p>Open two command promots, and in both, navigate to the directory containing both the server and test python files.</p>
+<p>To run the server, in the first command prompt, type &#8220;python server.py&#8221;
+To run the test client, in the second command promot, type &#8220;python test.py&#8221;</p>
+</div>
+<div class="section" id="creating-the-windows-executable-using-cx-freeze-deprecated">
+<h2>Creating the windows executable using cx_Freeze (deprecated)<a class="headerlink" href="#creating-the-windows-executable-using-cx-freeze-deprecated" title="Permalink to this headline">¶</a></h2>
+<p>To create a windows executable, in the same directory as the server and test,
+type <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></tt> This will create or update the
+build/exe.win23-2.7 directory.</p>
+<p>Thei server executable can be run by double-clicking on the server.bat file in
+the server directory from a windows explorer window.</p>
+</div>
+<div class="section" id="building-windows-execuatable-using-pyinstaller">
+<h2>Building windows execuatable using Pyinstaller<a class="headerlink" href="#building-windows-execuatable-using-pyinstaller" title="Permalink to this headline">¶</a></h2>
+<p>Make sure you have installed pip (<a class="reference internal" href="#pip"><em>Additional Libraries</em></a>).</p>
+<p>Install pyinstaller (if you haven&#8217;t done so already):</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install pyinstaller
+</pre></div>
+</div>
+<p>Build the server:</p>
+<div class="highlight-python"><div class="highlight"><pre>pyinstaller server.spec
+</pre></div>
+</div>
+<p>The server can now be run in the commandline:</p>
+<div class="highlight-python"><div class="highlight"><pre>dist\server\server.exe
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-python">
+<h2>Installing Python<a class="headerlink" href="#installing-python" title="Permalink to this headline">¶</a></h2>
+<p>Several installations of python are available.
+The one we recommend is <a class="reference external" href="http://code.google.com/p/pythonxy/wiki/Downloads">PythonXY</a></p>
+<p>Some of the libraries may require you to install them from source. This means
+running a setup python file in a zip file you have downloaded. To ensure you can unzip the files correctly, make sure you have an unzip program installed like <a class="reference external" href="http://peazip.sourceforge.net/">PeaZip</a></p>
+<p>For the moment, we recommend installing the 32 bit version of python, even
+if your operating system is 64 bit. This ensures maximum compatability, particularly
+if you need to build the server as an exe.</p>
+</div>
+<div class="section" id="additional-libraries">
+<span id="pip"></span><h2>Additional Libraries<a class="headerlink" href="#additional-libraries" title="Permalink to this headline">¶</a></h2>
+<p>First off, you need to install Pip. This is a tool which downloads and installs python libraries for you.</p>
+<ul class="simple">
+<li>Navigate to <a class="reference external" href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">pythonlibs</a></li>
+<li>Search for Pip</li>
+<li>Download and install this exe: pip-2.4.1.win32-py2.7.exe</li>
+</ul>
+<p>To use Pip, open the command prompt.</p>
+<p>To check if Pip is working, type &#8216;pip&#8217;. It should print out some documentation.</p>
+<div class="section" id="spyne">
+<h3>Spyne<a class="headerlink" href="#spyne" title="Permalink to this headline">¶</a></h3>
+<p>Spyne is the SOAP server library.</p>
+<p><em>edit</em>: The spyne library has a small bug, which needs to be fixed in order
+to work with plugins. The fixed version is available here. To install it, you
+need to download the zip file on the right hand side of this page: <a class="reference external" href="https://github.com/knoxsp/spyne">https://github.com/knoxsp/spyne</a></p>
+<p>Open up this zip file somewhere and navigate to this directory in the command line.
+Then type <cite>python setup.py install</cite> or read the Read me.</p>
+<p>If this does not work and you want to install the base version of spyne, do the
+following:</p>
+<p>In the command prompt, type:</p>
+<p><cite>pip install spyne</cite></p>
+<p>Should this fail, you must install it from source. Don&#8217;t worry. It&#8217;s easy.
+The source is available at: www.spyne.io</p>
+<ul class="simple">
+<li>Click on <cite>Download</cite> at the top.</li>
+<li>This will download a file called something like: spyne-2.10.9.tar.gz</li>
+<li>Once done, unzip the file.
+(If you are using peazip, right-click on the downloaded spyne file and click PeaZIp &gt; ExtractHere.
+This will create a new file to which you can navigate. Perform the same procedure on the tar
+file in the new directory. This will again create a new directory containing the source.)</li>
+<li>Navigate to the file containing the source. Something like:</li>
+<li><cite>cd Downloadsspyne-2.10.9.tardistspyne-2.10.9spyne</cite></li>
+<li><cite>python setup.py install</cite></li>
+</ul>
+<p>The screen should fill with logging and after about 5 seconds, you are done.</p>
+</div>
+<div class="section" id="suds">
+<h3>Suds<a class="headerlink" href="#suds" title="Permalink to this headline">¶</a></h3>
+<p>Suds is the soap client library. This is not needed for the server to run, but is needed to build the server executable as the test is built into this process.</p>
+<p>first try:
+<cite>pip install suds</cite></p>
+<p>If this fails, you must install it from source. This process is identical to that of installing spyne.</p>
+<ul class="simple">
+<li>Download the SUDS source at: <a class="reference external" href="https://fedorahosted.org/releases/s/u/suds/python-suds-0.4.tar.gz">https://fedorahosted.org/releases/s/u/suds/python-suds-0.4.tar.gz</a></li>
+<li>Once downloaded navigate to the file and unzip it (See above on how to do this).</li>
+<li>Open up a command prompt</li>
+<li>Navigate to the file containing the source. Something like:</li>
+<li>cd Downloadspython-suds-0.4.tarpython-suds-0.4</li>
+<li>Type <cite>python setup.py install</cite></li>
+</ul>
+<p>The screen should fill with logging and after about 5 seconds, you are done.</p>
+</div>
+<div class="section" id="bcrypt">
+<h3>Bcrypt<a class="headerlink" href="#bcrypt" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install bcrypt</cite></p>
+<p>If you see some errors referring to &#8216;vcvarsall.bat&#8217;, then download and install the executable, located here:</p>
+<p><a class="reference external" href="https://bitbucket.org/alexandrul/py-bcrypt/downloads/">https://bitbucket.org/alexandrul/py-bcrypt/downloads/</a></p>
+<p>If the file extention ends with a <cite>.whl</cite>, then do the following:
+<cite>pip install wheel</cite>
+<cite>wheel install py-bcrypt_my_version.whl</cite></p>
+</div>
+<div class="section" id="mysql-connector">
+<h3>MySql Connector<a class="headerlink" href="#mysql-connector" title="Permalink to this headline">¶</a></h3>
+<p>Navigate to: <a class="reference external" href="http://dev.mysql.com/downloads/connector/python/">http://dev.mysql.com/downloads/connector/python/</a></p>
+<p>Click on &#8216;Download&#8217; of the MSI installer appropriate for your windows installation.</p>
+</div>
+<div class="section" id="sqlalchemy">
+<h3>SqlAlchemy<a class="headerlink" href="#sqlalchemy" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install sqlalchemy</cite></p>
+<p>We use sqlalchemy to provide database connections and manage the database communication.</p>
+</div>
+<div class="section" id="zope-sqlalchemy">
+<h3>zope.sqlalchemy<a class="headerlink" href="#zope-sqlalchemy" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install zope.sqlalchemy</cite></p>
+<p>The aim of this package is to unify the plethora of existing packages integrating
+SQLAlchemy with Zope&#8217;s transaction management. As such it seeks only to provide
+a data manager and makes no attempt to define a zopeish way to configure engines.</p>
+</div>
+<div class="section" id="pandas">
+<h3>Pandas<a class="headerlink" href="#pandas" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install pandas</cite></p>
+<p>Pandas allows us to manipulate and store timeseries and arrays in a very efficient and flexible way.</p>
+</div>
+<div class="section" id="winpaths">
+<h3>winpaths<a class="headerlink" href="#winpaths" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install winpaths</cite></p>
+<p>winpaths is a python module that retrieves the names of common Windows folders.</p>
+</div>
+<div class="section" id="cherrypy">
+<h3>CherryPy<a class="headerlink" href="#cherrypy" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install cherrypy</cite></p>
+<p>CherryPy allows developers to build web applications in much the same way they would build any other object-oriented Python program.</p>
+</div>
+<div class="section" id="python-dateutil">
+<h3>python-dateutil<a class="headerlink" href="#python-dateutil" title="Permalink to this headline">¶</a></h3>
+<p>Try:
+<cite>pip install python-dateutil</cite></p>
+<p>The dateutil module provides powerful extensions to the standard datetime module.</p>
+</div>
+<div class="section" id="lxml">
+<h3>lxml<a class="headerlink" href="#lxml" title="Permalink to this headline">¶</a></h3>
+<p><cite>pip install lxml</cite>
+Lxml is an efficient library for parsing XML content.</p>
+</div>
+<div class="section" id="pywin32">
+<h3>pywin32:<a class="headerlink" href="#pywin32" title="Permalink to this headline">¶</a></h3>
+<p>If you plan on building the server into an exe, you will need this:
+<a class="reference external" href="http://sourceforge.net/projects/pywin32/">http://sourceforge.net/projects/pywin32/</a></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

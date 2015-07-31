@@ -1,0 +1,554 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hydra database schema &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="next" title="Hydra user interface" href="../HydraUI/index.html" />
+    <link rel="prev" title="Welcome to HYDRA’s documentation!" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../HydraUI/index.html" title="Hydra user interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to HYDRA’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hydra database schema</a><ul>
+<li><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
+<li><a class="reference internal" href="#network-definition">Network definition</a><ul>
+<li><a class="reference internal" href="#tproject">tProject</a></li>
+<li><a class="reference internal" href="#tnetwork">tNetwork</a></li>
+<li><a class="reference internal" href="#tnode">tNode</a></li>
+<li><a class="reference internal" href="#tlink">tLink</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#tattr">tAttr</a></li>
+<li><a class="reference internal" href="#ttype">tType</a></li>
+<li><a class="reference internal" href="#ttemplate">tTemplate</a></li>
+<li><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
+<li><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
+<li><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scenarios">Scenarios</a><ul>
+<li><a class="reference internal" href="#tscenario">tScenario</a></li>
+<li><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datasets">Datasets</a><ul>
+<li><a class="reference internal" href="#tdataset">tDataset</a></li>
+<li><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
+<li><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
+<li><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
+<li><a class="reference internal" href="#tmetadata">tMetaData</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
+<li><a class="reference internal" href="#tuser">tUser</a></li>
+<li><a class="reference internal" href="#trole">tRole</a></li>
+<li><a class="reference internal" href="#tperm">tPerm</a></li>
+<li><a class="reference internal" href="#troleuser">tRoleUser</a></li>
+<li><a class="reference internal" href="#troleperm">tRolePerm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ownership">Ownership</a><ul>
+<li><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
+<li><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
+<li><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Welcome to HYDRA&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../HydraUI/index.html"
+                        title="next chapter">Hydra user interface</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraDB/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="hydra-database-schema">
+<h1>Hydra database schema<a class="headerlink" href="#hydra-database-schema" title="Permalink to this headline">¶</a></h1>
+<p>The database schema can be found <a class="reference download internal" href="../_downloads/Hydra_DB_ERD.png"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+<div class="section" id="hydra-data">
+<h2>Hydra data<a class="headerlink" href="#hydra-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="network-definition">
+<h3>Network definition<a class="headerlink" href="#network-definition" title="Permalink to this headline">¶</a></h3>
+<p>These tables are referred to in the schema as &#8216;resources&#8217;. A resource
+is something to which data can be assigned, through attributes.</p>
+<div class="section" id="tproject">
+<h4>tProject<a class="headerlink" href="#tproject" title="Permalink to this headline">¶</a></h4>
+<p>A project is a high level container for networks. A project can contain
+multiple networks.</p>
+<blockquote>
+<div><ul class="simple">
+<li>project_id: Unique identifier for the project</li>
+<li>project_name: The name of the project</li>
+<li>project_description: A non-mandatory description</li>
+<li>status: A character, which can be A (active) or X (deleted)</li>
+<li>cr_date: Creation date</li>
+<li>created_by: The user_id of the user who created the project</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tnetwork">
+<h4>tNetwork<a class="headerlink" href="#tnetwork" title="Permalink to this headline">¶</a></h4>
+<p>A network contains links and scenarios, not no nodes directly. The topology
+of a network is defined through its links &#8211; a link connects two nodes.
+A network also contains scenarios, which are containers for network data.</p>
+<blockquote>
+<div><ul class="simple">
+<li>project_id: THe project in which this network resides.</li>
+<li>network_id: Unique identifier</li>
+<li>network_name: The name of the network. This is UNIQUE within a project.</li>
+<li>network_description: A non-mandatory description</li>
+<li>network_layout: Layout parameters for the network.</li>
+<li>status: A character, which can be A (active) or X (deleted)</li>
+<li>projection: A string describing the map projection of the coordinates in the
+network.</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tnode">
+<h4>tNode<a class="headerlink" href="#tnode" title="Permalink to this headline">¶</a></h4>
+<p>Along with the standard id, name, description
+and status, a Node has an X, Y coordinate.</p>
+<blockquote>
+<div><ul class="simple">
+<li>node_id: Unique identifier</li>
+<li>network_id: The network in which this link resides.</li>
+<li>node_name: Node name. This is UNIQUE within a network.</li>
+<li>node_description: non-mandatory description</li>
+<li>status: A character, which can be A (active) or X (deleted)</li>
+<li>node_x: The node&#8217;s X-coordinate on a standard plane</li>
+<li>node_y: The node&#8217;s Y-coordinate on a standard plane</li>
+<li>node_layout: A string describing layout parameters.</li>
+<li>node_type: The name of the template to which this node belongs. For example, the &#8216;reservoir&#8217; node_type refers to the &#8216;reservoir&#8217; templates which may reside in multiple groups.</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tlink">
+<h4>tLink<a class="headerlink" href="#tlink" title="Permalink to this headline">¶</a></h4>
+<p>Links belong inside a network and link two nodes. Links define the topology of the network. Along with the standard id, name and status, a link has two node ids
+and a network_id.</p>
+<blockquote>
+<div><ul class="simple">
+<li>link_id: Unique identifier</li>
+<li>network_id: The network in which this link resides.</li>
+<li>status: A character, which can be A (active) or X (deleted)</li>
+<li>node_1_id: Link from node 1...</li>
+<li>node_2_id: ...to node 2</li>
+<li>link_name: Name of the link. This is UNIQUE for links between the same 2 nodes.</li>
+<li>link_description: Description of the link..</li>
+<li>link_layout: A string describing layout parameters. The layout includes
+intermediate points.</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tattr">
+<h4>tAttr<a class="headerlink" href="#tattr" title="Permalink to this headline">¶</a></h4>
+<p>A basic attribute definition, with just a name and dimension.
+For example: A reservoir might have this attribute: Name: &#8216;Capacity&#8217; Dimension &#8216;Volume&#8217;</p>
+<blockquote>
+<div><ul class="simple">
+<li>attr_id: Unique identifier</li>
+<li>attr_name: Name (Capacity, Flow)</li>
+<li>attr_dimen: Dimension of the value that will be stored against this attribute.</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ttype">
+<h4>tType<a class="headerlink" href="#ttype" title="Permalink to this headline">¶</a></h4>
+<p>A resource type defines a grouping for attributes. This allows a &#8216;type&#8217; of
+resource to be defined. For example, a simple reservoir template would
+contain two attributes: Flow and Capacity (each of which were defined in tattr)</p>
+<blockquote>
+<div><ul class="simple">
+<li>type_id: Unique identifier</li>
+<li>type_name: Template Name (&#8216;Reservoir&#8217; for example)</li>
+<li>alias: This is a non-functional string used for display purposes.</li>
+<li>layout: Default display parameters for a type &#8211; colour, shape etc.</li>
+<li>template_id: The template to which this type belongs (For example: &#8220;EBSD Nodes&#8221;)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ttemplate">
+<h4>tTemplate<a class="headerlink" href="#ttemplate" title="Permalink to this headline">¶</a></h4>
+<p>A grouping for resource types. Used to categorise resource types into a single
+group &#8211; for example, the &#8216;GAMS Nodes&#8217; Group might contain two resource templates:
+&#8216;Reservoir&#8217; and &#8216;Refinery&#8217;. This grouping should define what is required by
+a GAMS plugin.</p>
+<blockquote>
+<div><ul class="simple">
+<li>template_id: Unique Identifier</li>
+<li>template_name: Name</li>
+<li>layout: Default display parameters for a template &#8211; colour, shape etc.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ttypeattr">
+<h4>tTypeattr<a class="headerlink" href="#ttypeattr" title="Permalink to this headline">¶</a></h4>
+<p>This links attributes to their template. An attribute can be in several templates.
+Both attr_id and template_id make up the PK.</p>
+<blockquote>
+<div><ul class="simple">
+<li>attr_id: The attribute</li>
+<li>type_id: The type that this attribute is in.</li>
+<li>default_dataset_id: Id of a dataset which can be used as a default.</li>
+<li>attr_is_var: Flag to indicate whether, in this type, the attribute is a variable</li>
+<li>data_type:   The expected data type for the attribute in this type</li>
+<li>data_dimension: The expeted dimension of the data</li>
+<li>data_restriction: A python dictionary, which looks something like:{&#8216;NUMPLACES&#8217;: &#8216;1&#8217;, &#8216;LESSTHAN&#8217;: &#8216;10&#8217;}</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tresourceattr">
+<h4>tResourceAttr<a class="headerlink" href="#tresourceattr" title="Permalink to this headline">¶</a></h4>
+<p>A &#8216;resource&#8217; can be a Project, Network, Node, Link or Scenario.
+A resource attribute is an attribute associated with a specific resource.
+For example, given an attribute (attr_id = 1) a node (node_id = 100), the
+resource attribute states that node 100 has attribute 1. It is through this
+table that data can be associated with a resource.</p>
+<blockquote>
+<div><ul class="simple">
+<li>resource_attr_id: Unique identifier</li>
+<li>attr_id: The attribute being assigned to this resource</li>
+<li>ref_key: The type of resource. Can be one of: (&#8216;NODE&#8217;, &#8216;LINK&#8217;, &#8216;NETWORK&#8217;, &#8216;PROJECT&#8217;, &#8216;SCENARIO&#8217;)</li>
+<li>network_id: The identifer for the network (can only be not-null if ref_key is &#8216;NETWORK&#8217;).</li>
+<li>project_id: The identifer for the project (can only be not-null if ref_key is &#8216;PROJECT&#8217;).</li>
+<li>node_id: The identifer for the node.      (can only be not-null if ref_key is &#8216;NODE&#8217;)</li>
+<li>link_id: The identifer for the link.      (can only be not-null if ref_key is &#8216;LINK&#8217;)</li>
+<li>group_id: The identifer for the resource group. (can only be not-null if ref_key is &#8216;GROUP&#8217;)</li>
+<li>attr_is_var: Either &#8216;Y&#8217; or &#8216;N&#8217; &#8211; This flag indicates whether data should be assigned to the resource attribute. If not, it is assumed this will be done by an app.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tattrmap">
+<h4>tAttrMap<a class="headerlink" href="#tattrmap" title="Permalink to this headline">¶</a></h4>
+<p>This maps two attributes, meaning they are equivalent. For example, &#8216;Capacity&#8217; in one app might be the same as and &#8216;Size&#8217; in another.</p>
+<blockquote>
+<div><ul class="simple">
+<li>attr_id_a: Attribute a is the same as ...</li>
+<li>attr_id_b: ... attribute b.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="scenarios">
+<h3>Scenarios<a class="headerlink" href="#scenarios" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tscenario">
+<h4>tScenario<a class="headerlink" href="#tscenario" title="Permalink to this headline">¶</a></h4>
+<p>A scenario is a set of data associated with a network. Let&#8217;s say there is a
+network with some node and links, all of which have been assigned some resource attributes. A scenario is what contains the data for those resource attributes. Several scenarios
+can be created per network, meaning multiple different datasets can be used on the
+same network.</p>
+<blockquote>
+<div><ul class="simple">
+<li>scenario_id: Unique identifier</li>
+<li>network_id: The network to which this scenario applies</li>
+<li>scenario_name: The name of this scenario</li>
+<li>scenario_description: Non-mandatory description</li>
+<li>scenario_layout: Used to store layout information for the UI</li>
+<li>start_time: Scenario start time (required for some models)</li>
+<li>end_time: Scenario end time</li>
+<li>time_step: Scenario time step</li>
+<li>locked: Flag to indicate whether the scenario is editable</li>
+<li>status: A character, which can be A (active) or X (deleted)</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tresourcescenario">
+<h4>tResourceScenario<a class="headerlink" href="#tresourcescenario" title="Permalink to this headline">¶</a></h4>
+<p>This connects a piece of data, a scenario and a resource attribute.
+The data itself is not accessed directly from this table, but through
+tDataset, which stores what type the data its, its units and other information.</p>
+<blockquote>
+<div><ul class="simple">
+<li>dataset_id: A reference to the scenario data table.</li>
+<li>scenario_id: A reference to the scenario</li>
+<li>resource_attr_id: A reference to the resource attribute.</li>
+<li>source: An varchar describing which app this dataset came from.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="datasets">
+<h3>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tdataset">
+<h4>tDataset<a class="headerlink" href="#tdataset" title="Permalink to this headline">¶</a></h4>
+<p>Links a scenario to a single piece of data. This table references the data
+in the appropriate data table using data_id. It knows which table to access
+using the data_type column. Ex: data_id = 1 and data_type = &#8216;descriptor&#8217; means
+look in tDescriptor for data_id 1.</p>
+<blockquote>
+<div><ul class="simple">
+<li>dataset_id: Unique identifier</li>
+<li>data_id: Reference to a row in one of the data tables.</li>
+<li>data_type: Defines which data table to look in. Must be one of: (&#8216;descriptor&#8217;, &#8216;timeseries&#8217;, &#8216;eqtimeseries&#8217;, &#8216;scalar&#8217;, &#8216;array&#8217;)</li>
+<li>data_units: What is this data type measured in?</li>
+<li>data_name: A name for this data</li>
+<li>data_dimen: Dimension &#8211; for comparison with dimension in tAttr.</li>
+<li>data_hash: The hash of the datum. This hash is generated using python&#8217;s hash() function, as used in hash tables. Allows for easy comparison of data.</li>
+<li>hidden: Flag to indicate whether this dataset has been hidden by its owner.</li>
+<li>value: Contains the actual value. This will usually be a single value or a JSON string.</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tdatasetcollection">
+<h4>tDatasetCollection<a class="headerlink" href="#tdatasetcollection" title="Permalink to this headline">¶</a></h4>
+<p>Collections datasets into named sets for easy &amp; convenient categorisation.</p>
+<blockquote>
+<div><ul class="simple">
+<li>collection_name: The human-readable name of the collection or category</li>
+<li>collection_id  : Unique identifier for the collection. PK.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tdatasetcollectionitem">
+<h4>tDatasetCollectionItem<a class="headerlink" href="#tdatasetcollectionitem" title="Permalink to this headline">¶</a></h4>
+<p>Keeps track of which piece of data is in which collection.</p>
+<blockquote>
+<div><ul class="simple">
+<li>dataset_id : refers to the piece of data in tDataset that is in the collection</li>
+<li>collection_id   : refers to the collection_id in tDatasetCollection.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ttimeseriesdata">
+<h4>tTimeSeriesData<a class="headerlink" href="#ttimeseriesdata" title="Permalink to this headline">¶</a></h4>
+<p>Time series data, stored as multiple time - value pairs, all associated with
+a single data_id, which is contained in tTimeSeries.</p>
+<blockquote>
+<div><ul class="simple">
+<li>dataset_id: Reference to data_id in tTimeSeries</li>
+<li>ts_time: Timestamp</li>
+<li>ts_value: a multi-dimensional array, stored as a blob. Can also just be a single value.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tmetadata">
+<h4>tMetaData<a class="headerlink" href="#tmetadata" title="Permalink to this headline">¶</a></h4>
+<p>Auxiliary information about the data, in name / value pairs.</p>
+<blockquote>
+<div><ul class="simple">
+<li>dataset_id: Reference to the data about which this info is stored.</li>
+<li>metadata_name: Name of the auxiliary piece of data</li>
+<li>metadata_val: Value</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="user-and-permission-management">
+<h3>User and permission management<a class="headerlink" href="#user-and-permission-management" title="Permalink to this headline">¶</a></h3>
+<p>These tables are not connected to the ones containing network information.</p>
+<div class="section" id="tuser">
+<h4>tUser<a class="headerlink" href="#tuser" title="Permalink to this headline">¶</a></h4>
+<p>Save access credentials for each user</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_id: unique identifier</li>
+<li>username: Username</li>
+<li>password: Password</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="trole">
+<h4>tRole<a class="headerlink" href="#trole" title="Permalink to this headline">¶</a></h4>
+<p>Define roles</p>
+<blockquote>
+<div><ul class="simple">
+<li>role_id: Unique identifier</li>
+<li>role_name: Role name</li>
+<li>role_code: Role code. Unique. Used for easier identification</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tperm">
+<h4>tPerm<a class="headerlink" href="#tperm" title="Permalink to this headline">¶</a></h4>
+<p>Define particular permissions</p>
+<blockquote>
+<div><ul class="simple">
+<li>perm_id: Unique identifier</li>
+<li>perm_name: Permission Name</li>
+<li>perm_code: Permission code. Unique. Used for easier identification</li>
+<li>cr_date: Creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="troleuser">
+<h4>tRoleUser<a class="headerlink" href="#troleuser" title="Permalink to this headline">¶</a></h4>
+<p>Assign each user to specific roles</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_id: Reference to user</li>
+<li>role_id: Reference to role</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="troleperm">
+<h4>tRolePerm<a class="headerlink" href="#troleperm" title="Permalink to this headline">¶</a></h4>
+<p>Assign particular permissions to a role</p>
+<blockquote>
+<div><ul class="simple">
+<li>perm_id: Reference to permission</li>
+<li>role_id: Reference to role</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="ownership">
+<h3>Ownership<a class="headerlink" href="#ownership" title="Permalink to this headline">¶</a></h3>
+<p>These tables define what belongs to which users.</p>
+<div class="section" id="tprojectowner">
+<h4>tProjectOwner<a class="headerlink" href="#tprojectowner" title="Permalink to this headline">¶</a></h4>
+<p>Ownership of a resource</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_id   : User&#8217;s ID</li>
+<li>project_id   : Reference to the project</li>
+<li>view      : Flag to indicate read permissions (read is a reserved word, hence &#8216;view).</li>
+<li>edit      : Flag to indicate write permissions (write is a reserved word, hence &#8216;edit&#8217;).</li>
+<li>share     : Flag to indicate share permissions</li>
+<li>cr_date   : creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tnetworkowner">
+<h4>tNetworkOwner<a class="headerlink" href="#tnetworkowner" title="Permalink to this headline">¶</a></h4>
+<p>Ownership of a resource</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_id   : User&#8217;s ID</li>
+<li>network_id    : Reference to the Network.</li>
+<li>view      : Flag to indicate read permissions (read is a reserved word, hence &#8216;view).</li>
+<li>edit      : Flag to indicate write permissions (write is a reserved word, hence &#8216;edit&#8217;).</li>
+<li>share     : Flag to indicate share permissions</li>
+<li>cr_date   : creation date</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="tdatasetowner">
+<h4>tDatasetOwner<a class="headerlink" href="#tdatasetowner" title="Permalink to this headline">¶</a></h4>
+<p>Ownership of a resource</p>
+<blockquote>
+<div><ul class="simple">
+<li>user_id   : User&#8217;s ID</li>
+<li>dataset_id    : Reference to the dataset</li>
+<li>view      : Flag to indicate read permissions (read is a reserved word, hence &#8216;view).</li>
+<li>edit      : Flag to indicate write permissions (write is a reserved word, hence &#8216;edit&#8217;).</li>
+<li>share     : Flag to indicate share permissions</li>
+<li>cr_date   : creation date</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../HydraUI/index.html" title="Hydra user interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to HYDRA’s documentation!"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

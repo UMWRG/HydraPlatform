@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Developing an app in Python &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="next" title="1. Setup" href="setup.html" />
+    <link rel="prev" title="Working with scenarios" href="../../HydraPlugins/scenarios.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="1. Setup"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../../HydraPlugins/scenarios.html" title="Working with scenarios"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../../HydraPlugins/scenarios.html"
+                        title="previous chapter">Working with scenarios</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="setup.html"
+                        title="next chapter">1. Setup</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/simple_plugin_in_python.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="developing-an-app-in-python">
+<span id="plugin-step-by-step"></span><h1>Developing an app in Python<a class="headerlink" href="#developing-an-app-in-python" title="Permalink to this headline">¶</a></h1>
+<div class="sidebar">
+<p class="first sidebar-title">Concepts introduced in this tutorial are:</p>
+<div class="toctree-wrapper last compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">1. Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="imports.html">2. Imports</a></li>
+<li class="toctree-l1"><a class="reference internal" href="connecting.html">3. Connecting to Hydra Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="export.html">4. Exporting the Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parsing_arguments.html">5. Parsing the Arguments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">6. Running the Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation.html">7. Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templates.html">8. Working with templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integration.html">9. Integrating the plug-in into Hydra Modeller</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="integration.html#plugin-xml">9.1. Plugin XML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="integration.html#folder-structure">9.2. Folder Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="integration.html#session-id-and-server-url">9.3. Session ID and Server URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="integration.html#creating-an-executable-of-your-code">9.4. Creating an executable of your code</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>This tutorial shows how a simple Hydra app is developed in Python. It takes you
+step-by-step through a plugin which retrieves a network from Hydra and saves it to a file.
+This is a simple example plugin, but
+it is &#8216;real&#8217; and performs a very useful task. It allows network data to be easily
+retrieved, edited and shared in a common format.</p>
+<p>Hydra apps connect to Hydra Platform through a HTTP interface, using <a class="reference external" href="http://www.json.org/">JSON</a> to encode the data.
+Developing a app in any other programming language that provides HTTP libraries should be similar to the
+code presented here.</p>
+<p>It is assumed that the reader is familiar with Python or any other programming
+language.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="setup.html" title="1. Setup"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../../HydraPlugins/scenarios.html" title="Working with scenarios"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
