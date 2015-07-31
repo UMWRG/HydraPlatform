@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Attributes &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="up" title="Hydra Apps" href="index.html" />
+    <link rel="next" title="Working with datasets" href="datasets.html" />
+    <link rel="prev" title="Working with networks" href="networks.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datasets.html" title="Working with datasets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="networks.html" title="Working with networks"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Attributes</a></li>
+<li><a class="reference internal" href="#resource-attributes">Resource Attributes</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="networks.html"
+                        title="previous chapter">Working with networks</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="datasets.html"
+                        title="next chapter">Working with datasets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraPlugins/attributes.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="attributes">
+<span id="id1"></span><h1>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h1>
+<p>As well as having a topological structure (nodes connected by links), a network
+can also have associated information. For example, in a river network, a node
+representing a hydro electric plant might have information such as its annual
+cost of running measured in pounds sterling, maximum capacity measured in megawatts,
+and daily throughput of water measured in megalitres per second.</p>
+<p>An <em>Attr</em> in hydra is the definition of an attribute which can be assigned
+to a resource.
+Attributes are then linked to resources (nodes or links) using <tt class="docutils literal"><span class="pre">ResourceAttributes</span></tt>.
+ResourceAttributes can then be linked to a specific value through a scenario (see <a class="reference internal" href="scenarios.html#scenarios"><em>Working with scenarios</em></a>).</p>
+<p>An attribute is uniquely identified by its name and dimension.</p>
+<p>Before resources can be given attributes, the Attributes must be defined.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">attr</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:Attr&#39;</span><span class="p">)</span>
+<span class="n">attr</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Daily Throughput&quot;</span>
+<span class="n">attr</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="s">&quot;Volumetric flow rate&quot;</span>
+
+<span class="n">daily_throughput</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">add_attr</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">daily_throughput</span><span class="o">.</span><span class="n">id</span> <span class="c">#Will print an ID</span>
+</pre></div>
+</div>
+<p>All the valid dimensions are valid :download:&#8217;here ../../../HydraLib/trunk/HydraLib/static/unit_definitions.xml`.</p>
+</div>
+<div class="section" id="resource-attributes">
+<h1>Resource Attributes<a class="headerlink" href="#resource-attributes" title="Permalink to this headline">¶</a></h1>
+<p>Should a nodei (or lots of nodes) in your network need a &#8216;Daily Throughput&#8217;, then first the attribute needs
+to be defined (see above). Next, the node(s) needs to be linked to the attribute.</p>
+<p>This can be done when creating the network for the first time or retrospectively.
+This example shows Daily Throughput from above being assigned to a node before the network
+is added:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Create the project</span>
+<span class="o">...</span>
+<span class="c">#Define the network</span>
+<span class="o">...</span>
+<span class="c">#Now define the network nodes.</span>
+<span class="n">node1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:Node&#39;</span><span class="p">)</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;Node 1&quot;</span><span class="p">,</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="s">&quot;A node representing a water resource&quot;</span><span class="p">,</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">node1_throughput</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:ResourceAttr&#39;</span><span class="p">)</span>
+<span class="n">node1_throughput</span><span class="o">.</span><span class="n">attr_id</span> <span class="o">=</span> <span class="n">daily_throughput</span><span class="o">.</span><span class="n">id</span>
+<span class="n">node1_throughput</span><span class="o">.</span><span class="n">ref_key</span> <span class="o">=</span> <span class="s">&#39;NODE&#39;</span>
+<span class="n">node1_throughput</span><span class="o">.</span><span class="n">ref_id</span>  <span class="o">=</span> <span class="bp">None</span>
+<span class="n">node1_throughput</span><span class="o">.</span><span class="n">attr_is_var</span> <span class="o">=</span> <span class="s">&#39;N&#39;</span>
+<span class="n">node1_throughput</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">node1</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">ResourceAttr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node1_throughput</span><span class="p">)</span>
+
+<span class="c">#Add more nodes</span>
+<span class="o">...</span>
+<span class="c">#Add some links</span>
+<span class="o">...</span>
+<span class="c">#Create the network</span>
+<span class="n">net_with_nodes_and_attributes</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">add_network</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>There are a few interesting things to investigate here. For example, what is
+<cite>ref key</cite> and why do we need to define it?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">node1_throughput</span><span class="o">.</span><span class="n">ref_key</span> <span class="o">=</span> <span class="s">&#39;NODE&#39;</span>
+</pre></div>
+</div>
+<p>A ResourceAttr is a general object which can be applied to several different
+types of resource: A network, a node, a link, a group and even a project.
+In order to keep track of which resource this ResourceAttr belongs to, a ref_key is
+used. This is particularly interesting later, where many attributes can be loaded
+from the server at once, so knowing which one points where is necessary.</p>
+<p>Next, what is <cite>attr_is_var</cite>?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">node1_throughpyt</span><span class="o">.</span><span class="n">attr_is_var</span> <span class="o">=</span> <span class="s">&#39;N&#39;</span>
+</pre></div>
+</div>
+<p>This indicates whether data should be assigned to this resource attr or not. If
+set to &#8216;N&#8217;, then we would expect data to be assigned to it in a scenario. If it is
+set to &#8216;Y&#8217;, then it is expected that a model or some external entity should fill in
+this data.</p>
+<p>Let&#8217;s take an example:
+If your work involves finding the model which optimises cost from several proposals
+for a water company. First you would create a network and add lots of attributes to the nodes, including &#8216;cost&#8217;.
+All attributes except &#8216;cost&#8217; would then be filled with data for your model to work with, but &#8216;cost&#8217;
+is left blank. The network can then be exported and run inside your cost saving model.
+At this stage, the &#8216;cost&#8217; attribute is calculated in the app and these attributes
+can be filled in.</p>
+<p>Finally, why is the id -1?</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">node1_throughput</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p><strong>Negative IDs</strong> are the way Hydra deals with objects referencing each other but
+whihout yet having permenant IDS.
+When data is assigned to this ResourceAttr through a scenario, the scenario
+must identify the ResourceAttr somehow. By giving the resourceAttr a temporary
+negative ID, referencing becomes possible.
+When the network is added, all ResourceAttrs will be given permenant, positive IDS.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="datasets.html" title="Working with datasets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="networks.html" title="Working with networks"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hydra Apps &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="next" title="Import CSV files" href="importcsv.html" />
+    <link rel="prev" title="Hydra utility library" href="../HydraLib/index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="importcsv.html" title="Import CSV files"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../HydraLib/index.html" title="Hydra utility library"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hydra Apps</a><ul>
+<li><a class="reference internal" href="#current-apps">Current Apps</a></li>
+<li><a class="reference internal" href="#app-development">App development</a><ul>
+<li><a class="reference internal" href="#general-concepts">General concepts</a></li>
+<li><a class="reference internal" href="#common-tasks">Common Tasks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../HydraLib/index.html"
+                        title="previous chapter">Hydra utility library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="importcsv.html"
+                        title="next chapter">Import CSV files</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraPlugins/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="hydra-apps">
+<h1>Hydra Apps<a class="headerlink" href="#hydra-apps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="current-apps">
+<h2>Current Apps<a class="headerlink" href="#current-apps" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="importcsv.html">Import CSV files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="importcsv.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importcsv.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importcsv.html#file-structure">File structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importcsv.html#building-a-windows-executable">Building a windows executable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importcsv.html#api-docs">API docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="exportcsv.html">Export to CSV files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exportcsv.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exportcsv.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exportcsv.html#file-structure">File structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exportcsv.html#api-docs">API docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="importwml.html">Import Water ML Timeseries files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="importwml.html#basics">Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importwml.html#options">Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importwml.html#file-structure">File structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importwml.html#building-a-windows-executable">Building a windows executable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="importwml.html#api-docs">API docs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="app-development">
+<h2>App development<a class="headerlink" href="#app-development" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="general-concepts">
+<h3>General concepts<a class="headerlink" href="#general-concepts" title="Permalink to this headline">¶</a></h3>
+<p>The client - server based architecture of Hydra allows very flexible plug-in
+development. A plug-in is a stand-alone executable which connects to
+the server. The connection to the server is established using either SOAP or JSON.
+This implies that a plug-in can be written in any programming language that is
+capable of implementing a client to a SOAP service.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_json.html">Developing a app using JSON</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_json.html#creating-a-client">Creating a client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_json.html#connect-to-the-server">Connect to the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_json.html#creating-a-network-instance">Creating a network instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_json.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_json.html#scenarios-and-data">Scenarios and Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_soap.html">Developing a app using SOAP</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_soap.html#creating-a-client">Creating a client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_soap.html#connect-to-the-server">Connect to the server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_soap.html#creating-a-network-instance">Creating a network instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_soap.html#attributes">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_soap.html#scenarios-and-data">Scenarios and Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial_xml.html">App XML</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="common-tasks">
+<h3>Common Tasks<a class="headerlink" href="#common-tasks" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Working with projects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="projects.html#creating-a-project">Creating a project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="projects.html#accessing-projects">Accessing projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="projects.html#deleting-projects">Deleting projects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="projects.html#sharing-projects">Sharing projects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="networks.html">Working with networks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="networks.html#adding-networks">Adding networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html#retrieving-networks">Retrieving Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html#deleting-networks">Deleting Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html#sharing-networks">Sharing Networks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html#nodes-links-and-groups">Nodes, Links and Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="attributes.html">Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="attributes.html#resource-attributes">Resource Attributes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Working with datasets</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#searching-for-datasets">Searching for Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#scalars-and-descriptors">Scalars and descriptors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#arrays">Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#time-series">Time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#timeseries-json-format">Timeseries JSON format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html#dataset-collections">Dataset Collections</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scenarios.html">Working with scenarios</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="scenarios.html#creating-a-scenario">Creating a scenario</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="importcsv.html" title="Import CSV files"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../HydraLib/index.html" title="Hydra utility library"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

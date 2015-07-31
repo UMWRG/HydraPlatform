@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Import Water ML Timeseries files &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="up" title="Hydra Apps" href="index.html" />
+    <link rel="next" title="Developing a app using JSON" href="tutorial_json.html" />
+    <link rel="prev" title="Export to CSV files" href="exportcsv.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial_json.html" title="Developing a app using JSON"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="exportcsv.html" title="Export to CSV files"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Import Water ML Timeseries files</a><ul>
+<li><a class="reference internal" href="#basics">Basics</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#file-structure">File structure</a></li>
+<li><a class="reference internal" href="#building-a-windows-executable">Building a windows executable</a></li>
+<li><a class="reference internal" href="#api-docs">API docs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="exportcsv.html"
+                        title="previous chapter">Export to CSV files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial_json.html"
+                        title="next chapter">Developing a app using JSON</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraPlugins/importwml.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-ImportWML">
+<span id="import-water-ml-timeseries-files"></span><span id="importwml"></span><h1>Import Water ML Timeseries files<a class="headerlink" href="#module-ImportWML" title="Permalink to this headline">¶</a></h1>
+<p>A Hydra plug-in for importing WML timeseries files.</p>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>This app allows one or multiple WaterML timeseries files to be imported into Hydra.</p>
+<p>The app assumes that you have downloaded timeseries files
+from the cuahsi web service. A single file can be passed to the app or a directory.
+If a directory is passed, the app will find the appropriate timeseries files and import
+all the data it can.</p>
+<p>Basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>ImportWML.py [-h] [-f Timeseries file]
+</pre></div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="6%" />
+<col width="19%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Short</th>
+<th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--help</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">-h</span></tt></td>
+<td>&nbsp;</td>
+<td>show help message and exit.</td>
+</tr>
+<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">--file</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">-t</span></tt></td>
+<td>Timeseries</td>
+<td>File  XML file containing a WaterML timeseries</td>
+</tr>
+<tr class="row-even"><td><tt class="docutils literal"><span class="pre">--datacollectionname</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">-n</span></tt></td>
+<td>Dataset Collection</td>
+<td>Name Name of the dataset grouping</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="file-structure">
+<h2>File structure<a class="headerlink" href="#file-structure" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="building-a-windows-executable">
+<h2>Building a windows executable<a class="headerlink" href="#building-a-windows-executable" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Use pyinstaller (pip install pyisntaller) to build a windows executable.</li>
+<li>cd to the $PATH_TO_HYDRA/HydraPlugins/WaterMLPlugin/trunk</li>
+<li>pyinstaller -F ImportWML.py :</li>
+<li>If you want more compression (a smaller exe), install upx and run: pyinstaller -F &#8211;upx-dir=/path/to/upx/dir ExportWML.py</li>
+<li>An executable file will appear in the dist folder</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="api-docs">
+<h2>API docs<a class="headerlink" href="#api-docs" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ImportWML.ImportWML">
+<em class="property">class </em><tt class="descclassname">ImportWML.</tt><tt class="descname">ImportWML</tt><big>(</big><em>url=None</em>, <em>session_id=None</em><big>)</big><a class="headerlink" href="#ImportWML.ImportWML" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="ImportWML.ImportWML.read_timeseries_data">
+<tt class="descname">read_timeseries_data</tt><big>(</big><em>targets</em>, <em>dataset_collection_name</em><big>)</big><a class="headerlink" href="#ImportWML.ImportWML.read_timeseries_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Water ML timeseries data.
+&#64;target Can be either a directory containing multiple timeseries                files or a single timeseries file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportWML.ImportWML.read_timeseries_file">
+<tt class="descname">read_timeseries_file</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#ImportWML.ImportWML.read_timeseries_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Taking a wml file as an argument,
+return an array where each element is a line in the wml.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial_json.html" title="Developing a app using JSON"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="exportcsv.html" title="Export to CSV files"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

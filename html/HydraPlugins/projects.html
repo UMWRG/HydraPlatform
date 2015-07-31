@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Working with projects &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="up" title="Hydra Apps" href="index.html" />
+    <link rel="next" title="Working with networks" href="networks.html" />
+    <link rel="prev" title="App XML" href="tutorial_xml.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="networks.html" title="Working with networks"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_xml.html" title="App XML"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Working with projects</a><ul>
+<li><a class="reference internal" href="#creating-a-project">Creating a project</a></li>
+<li><a class="reference internal" href="#accessing-projects">Accessing projects</a></li>
+<li><a class="reference internal" href="#deleting-projects">Deleting projects</a></li>
+<li><a class="reference internal" href="#sharing-projects">Sharing projects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial_xml.html"
+                        title="previous chapter">App XML</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="networks.html"
+                        title="next chapter">Working with networks</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraPlugins/projects.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="working-with-projects">
+<span id="projects"></span><h1>Working with projects<a class="headerlink" href="#working-with-projects" title="Permalink to this headline">¶</a></h1>
+<p>A project is the most fundamental structure in Hydra. Without
+a project, users cannot create networks. A project acts as a
+container for multiple projects. Users can create as many projects
+as they wish, and within a project can create as many networks as they wish.</p>
+<p>Projects do not perform any special functions other than acting as a container.</p>
+<p>A project must be created before a network, so this is commonly the very first
+thing one would do in Hydra.</p>
+<div class="section" id="creating-a-project">
+<h2>Creating a project<a class="headerlink" href="#creating-a-project" title="Permalink to this headline">¶</a></h2>
+<p>Creating an empty project is very simple..</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#create a new project object</span>
+<span class="n">proj</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#39;hyd:Project&#39;</span><span class="p">)</span>
+<span class="c">#give your project a name</span>
+<span class="n">proj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;SOAP test </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+<span class="c">#add the project</span>
+<span class="n">project</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">add_project</span><span class="p">(</span><span class="n">proj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-projects">
+<h2>Accessing projects<a class="headerlink" href="#accessing-projects" title="Permalink to this headline">¶</a></h2>
+<p>Once a project has been created, a user can access it using <tt class="docutils literal"><span class="pre">get_project</span></tt> and
+passing the project ID. The user must be logged in in order to access their
+project.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#...connect..</span>
+<span class="n">project_id</span> <span class="o">=</span> <span class="mi">1232</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_project</span><span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+
+<span class="c">#All a user&#39;s projects can be accessed also</span>
+<span class="n">my_user_id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_projects</span><span class="p">(</span><span class="n">my_user_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="deleting-projects">
+<h2>Deleting projects<a class="headerlink" href="#deleting-projects" title="Permalink to this headline">¶</a></h2>
+<p>If a user no longer has any need for their project, they can delete it.
+<tt class="docutils literal"><span class="pre">deleting</span></tt> does not remove the project from the databaset. To do this,
+the user must <tt class="docutils literal"><span class="pre">purge</span></tt> the database. <strong>WARNING</strong> As a project is the top of the
+hierarchy, purging it will purge ALL its networks!</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#...connect...</span>
+
+<span class="n">project_id</span> <span class="o">=</span> <span class="mi">1232</span>
+<span class="n">my_projects</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">delete_project</span><span class="p">(</span><span class="n">my_user_id</span><span class="p">)</span>
+
+<span class="c">#..or..</span>
+<span class="c">#WARNING: This will remove a project and ALL the networks inside it!</span>
+<span class="n">my_projects</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">purge_project</span><span class="p">(</span><span class="n">my_user_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sharing-projects">
+<h2>Sharing projects<a class="headerlink" href="#sharing-projects" title="Permalink to this headline">¶</a></h2>
+<p>It is not uncommon for multiple people to be working on the same project. To
+facilitate this, the owner of a project can share the project with other users.
+The owner can control whether the sharee can only see the project, see and edit
+the project or see, edit and share the project. To avoid sharing getting out of control, only the creator (owner) of a project has control over the re-share
+permission. In other words, if user A shares with user B, who shares with
+user C, user C cannot share with anyone.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">my_user_id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">my_friends_user_id</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">my_project_id</span> <span class="o">=</span> <span class="mi">123</span>
+
+<span class="c">#Allow my friend to access and edit my project, but do not let him share it</span>
+<span class="c">#with others.</span>
+<span class="n">client</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">share_project</span><span class="p">(</span><span class="n">my_project_id</span><span class="p">,</span> <span class="n">my_friends_user_id</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">,</span> <span class="s">&#39;Y&#39;</span><span class="p">,</span> <span class="s">&#39;N&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="networks.html" title="Working with networks"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_xml.html" title="App XML"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

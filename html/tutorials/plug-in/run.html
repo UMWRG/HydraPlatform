@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>6. Running the Code &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
+    <link rel="next" title="7. Documentation" href="documentation.html" />
+    <link rel="prev" title="5. Parsing the Arguments" href="parsing_arguments.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="documentation.html" title="7. Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parsing_arguments.html" title="5. Parsing the Arguments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parsing_arguments.html"
+                        title="previous chapter">5. Parsing the Arguments</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="documentation.html"
+                        title="next chapter">7. Documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/run.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="running-the-code">
+<h1>6. Running the Code<a class="headerlink" href="#running-the-code" title="Permalink to this headline">¶</a></h1>
+<p>The code now needs to be run, and this is best done inside a &#8216;main&#8217;, done
+in python like so:</p>
+<dl class="docutils">
+<dt>The basic flow of the plugin is:</dt>
+<dd><ul class="first last simple">
+<li>Parse the arguments</li>
+<li>Instantiate the exporter object (connect)</li>
+<li>Run &#8216;export&#8217;</li>
+<li>Catch any errors</li>
+<li>Print out a message of success or failure (done here in XML)</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#Parse the command line arguments</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">commandline_parser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="c">#Create the json exporter</span>
+    <span class="n">json_exporter</span> <span class="o">=</span> <span class="n">ExportJSON</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">server_url</span><span class="p">,</span> <span class="n">session_id</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">session_id</span><span class="p">)</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c">#It is always adviseable to put your code inside a try:catch so that</span>
+    <span class="c">#errors can be caught and displayed to user in a sensible way. THis will</span>
+    <span class="c">#save the user time and frustration as well as you, who has to fix the problem!</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">write_output</span><span class="p">(</span><span class="s">&quot;Starting App&quot;</span><span class="p">)</span>
+        <span class="n">write_progress</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">json_exporter</span><span class="o">.</span><span class="n">num_steps</span><span class="p">)</span>
+
+        <span class="c">#Call the export function</span>
+        <span class="n">json_exporter</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">network_id</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">scenario_id</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">target_dir</span><span class="p">)</span>
+
+        <span class="c">#The final message to be displayed to the user.</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Export complete&quot;</span>
+    <span class="k">except</span> <span class="n">HydraPluginError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">=</span><span class="s">&quot;An error has occurred&quot;</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">message</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">=</span><span class="s">&quot;An error has occurred&quot;</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span>
+
+    <span class="c">#This creates an XML string which is parsed by Hydra Modeller and displayed</span>
+    <span class="c">#to the user in a nice pop-up box.</span>
+    <span class="n">xml_response</span> <span class="o">=</span> <span class="n">create_xml_response</span><span class="p">(</span><span class="s">&#39;ExportJSON&#39;</span><span class="p">,</span>
+                                                 <span class="n">args</span><span class="o">.</span><span class="n">network_id</span><span class="p">,</span>
+                                                 <span class="p">[],</span>
+                                                 <span class="n">errors</span><span class="p">,</span>
+                                                 <span class="p">[],</span>
+                                                 <span class="n">message</span><span class="p">,</span>
+                                                 <span class="n">json_exporter</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="c">#Print is used here as all the stuff parsed by Hydra Modeller (including</span>
+    <span class="c">#write_progress &amp; write_output) need to be sent to sdtout, not stderr (which</span>
+    <span class="c">#is where logging goes).</span>
+    <span class="k">print</span> <span class="n">xml_response</span>
+</pre></div>
+</div>
+<p>Now the code can be run.
+First make sure the HydraPlatform server is running. For the purposes of this
+test, it will be running locally and we won&#8217;t be using Hydra Modeller so there
+is no need to pass in a URL or session ID.</p>
+<p>Export the network with all it&#8217;s scenarios</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt;&gt; python ExportJSON.py -n 2
+</pre></div>
+</div>
+<p>Export the network with one of its scenarios</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt;&gt; python ExportJSON.py -n 2 -s 2
+</pre></div>
+</div>
+<p>Export the network to /tmp</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt;&gt; python ExportJSON.py -n 2 -s 2 -d /tmp
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="documentation.html" title="7. Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parsing_arguments.html" title="5. Parsing the Arguments"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

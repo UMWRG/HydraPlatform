@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>App XML &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <link rel="up" title="Hydra Apps" href="index.html" />
+    <link rel="next" title="Working with projects" href="projects.html" />
+    <link rel="prev" title="Developing a app using SOAP" href="tutorial_soap.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="projects.html" title="Working with projects"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_soap.html" title="Developing a app using SOAP"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial_soap.html"
+                        title="previous chapter">Developing a app using SOAP</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="projects.html"
+                        title="next chapter">Working with projects</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/HydraPlugins/tutorial_xml.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="app-xml">
+<span id="xml-example"></span><h1>App XML<a class="headerlink" href="#app-xml" title="Permalink to this headline">¶</a></h1>
+<p>Each app must be accompanied by an XML file defining its basic information and
+its inputs. This XML file can be used by a UI or another plugin to help format
+inputs.</p>
+<p>The &lt;plugin_info&gt; tag is the base.
+Next, <tt class="docutils literal"><span class="pre">&lt;plugin_name&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;plugin_description&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;plugin_dir&gt;</span></tt> describe the name
+of the plugin to display, a description of what it does, and the location of the
+actual executable file, if necessary.
+For example</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;plugin_info&gt;</span>
+    <span class="nt">&lt;plugin_name&gt;</span>Test Plugin<span class="nt">&lt;/plugin_name&gt;</span>
+    <span class="nt">&lt;plugin_dir&gt;</span>TestPlugin/trunk/TestPlugin.py<span class="nt">&lt;/plugin_dir&gt;</span>
+    <span class="nt">&lt;plugin_description&gt;</span>Check for the existance of a network in hydra
+            Written by Stephen Knox stephen.knox--at--manchester.ac.uk
+            (c) Copyright 2013, University College London.
+    <span class="nt">&lt;/plugin_description&gt;</span>
+    <span class="nt">&lt;plugin_epilog&gt;</span>For more information visit www.hydraplatform.com<span class="nt">&lt;/plugin_epilog&gt;</span>
+...
+<span class="nt">&lt;/plugin_info&gt;</span>
+</pre></div>
+</div>
+<p>Immediately after this, the app&#8217;s inputs are defined.</p>
+<p>There are three category of input: <tt class="docutils literal"><span class="pre">&lt;mandatory_args&gt;</span></tt>, <tt class="docutils literal"><span class="pre">&lt;non_mandatory_args&gt;</span></tt> and <tt class="docutils literal"><span class="pre">&lt;switches&gt;</span></tt></p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;mandatory_args&gt;</span>
+    <span class="nt">&lt;arg&gt;</span>
+        <span class="nt">&lt;name&gt;</span>network_name<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;switch&gt;</span>-t<span class="nt">&lt;/switch&gt;</span>
+        <span class="nt">&lt;multiple&gt;</span>N<span class="nt">&lt;/multiple&gt;</span>
+        <span class="nt">&lt;argtype&gt;</span>string<span class="nt">&lt;/argtype&gt;</span>
+        <span class="nt">&lt;help&gt;</span>The name of the network you are creating<span class="nt">&lt;/help&gt;</span>
+    <span class="nt">&lt;/arg&gt;</span>
+<span class="nt">&lt;/mandatory_args&gt;</span>
+<span class="nt">&lt;non_mandatory_args&gt;</span>
+    <span class="nt">&lt;arg&gt;</span>
+        <span class="nt">&lt;name&gt;</span>num_nodes<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;switch&gt;</span>-n<span class="nt">&lt;/switch&gt;</span>
+        <span class="nt">&lt;multiple&gt;</span>N<span class="nt">&lt;/multiple&gt;</span>
+        <span class="nt">&lt;argtype&gt;</span>integer<span class="nt">&lt;/argtype&gt;</span>
+        <span class="nt">&lt;help&gt;</span>The number of nodes to create in the network<span class="nt">&lt;/help&gt;</span>
+    <span class="nt">&lt;/arg&gt;</span>
+    <span class="nt">&lt;arg&gt;</span>
+        <span class="nt">&lt;name&gt;</span>scenario_name<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;switch&gt;</span>-s<span class="nt">&lt;/switch&gt;</span>
+        <span class="nt">&lt;multiple&gt;</span>N<span class="nt">&lt;/multiple&gt;</span>
+        <span class="nt">&lt;argtype&gt;</span>string<span class="nt">&lt;/argtype&gt;</span>
+        <span class="nt">&lt;help&gt;</span>The name of the scenario to create. If none is specified, a default is used.<span class="nt">&lt;/help&gt;</span>
+    <span class="nt">&lt;/arg&gt;</span>
+<span class="nt">&lt;/non_mandatory_args&gt;</span>
+<span class="nt">&lt;switches&gt;</span>
+    <span class="nt">&lt;arg&gt;</span>
+        <span class="nt">&lt;switch&gt;</span>-d<span class="nt">&lt;/switch&gt;</span>
+        <span class="nt">&lt;name&gt;</span>include-data<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;help&gt;</span>If you want data in your network, use this switch.<span class="nt">&lt;/help&gt;</span>
+    <span class="nt">&lt;/arg&gt;</span>
+<span class="nt">&lt;/switches&gt;</span>
+</pre></div>
+</div>
+<p>Within each category there is an <tt class="docutils literal"><span class="pre">&lt;arg&gt;</span></tt>, inside which is defined a <tt class="docutils literal"><span class="pre">&lt;name&gt;</span></tt>, command line <tt class="docutils literal"><span class="pre">&lt;switch&gt;</span></tt>, whether <tt class="docutils literal"><span class="pre">&lt;multiple&gt;</span></tt> inputs
+can be expected, what type input can be expected and a help string to describe
+what it is.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="projects.html" title="Working with projects"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial_soap.html" title="Developing a app using SOAP"
+             >previous</a> |</li>
+        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="index.html" >Hydra Apps</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

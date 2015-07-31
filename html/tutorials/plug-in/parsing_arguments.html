@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>5. Parsing the Arguments &mdash; HYDRA  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="HYDRA  documentation" href="../../index.html" />
+    <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
+    <link rel="next" title="6. Running the Code" href="run.html" />
+    <link rel="prev" title="4. Exporting the Network" href="export.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="run.html" title="6. Running the Code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="4. Exporting the Network"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="export.html"
+                        title="previous chapter">4. Exporting the Network</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="run.html"
+                        title="next chapter">6. Running the Code</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/tutorials/plug-in/parsing_arguments.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="parsing-the-arguments">
+<h1>5. Parsing the Arguments<a class="headerlink" href="#parsing-the-arguments" title="Permalink to this headline">¶</a></h1>
+<p>All Hydra plugins must run as command-line processes. They therefore must
+parse the arguments and provide help functions to help uses figure out what
+kind of arguments are needed. Luckily, Python provides a simple mechanism to
+do this, using the <cite>ArgumentParser</cite> class.</p>
+<p>This allows you to put in a short description of your plugin and define the
+arguments using <cite>add_argument</cite>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">commandline_parser</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse the arguments passed in from the command line</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">ap</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s">&quot;&quot;&quot;Export a network in to a file in JSON format.</span>
+<span class="s">                    Written by Stephen Knox &lt;stephen.knox@manchester.ac.uk&gt;</span>
+<span class="s">                    (c) Copyright 2015, University of Manchester.</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">epilog</span><span class="o">=</span><span class="s">&quot;For more information visit www.hydraplatform.org&quot;</span><span class="p">,</span>
+       <span class="n">formatter_class</span><span class="o">=</span><span class="n">ap</span><span class="o">.</span><span class="n">RawDescriptionHelpFormatter</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-n&#39;</span><span class="p">,</span> <span class="s">&#39;--network-id&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;&#39;&#39;Specify the network_id of the network to be exported.&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="s">&#39;--scenario-id&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;&#39;&#39;Specify the ID of the scenario to be exported. If no</span>
+<span class="s">                        scenario is specified, all scenarios in the network will be</span>
+<span class="s">                        exported.</span>
+<span class="s">                        &#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--target-dir&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;&#39;&#39;Target directory&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-u&#39;</span><span class="p">,</span> <span class="s">&#39;--server-url&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;&#39;&#39;Specify the URL of the server to which this</span>
+<span class="s">                        plug-in connects.&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--session-id&#39;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;&#39;&#39;Session ID. If this does not exist, a login will be</span>
+<span class="s">                        attempted based on details in config.&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span>
+</pre></div>
+</div>
+<p>When you run <tt class="docutils literal"><span class="pre">python</span> <span class="pre">ExportJSON.py</span> <span class="pre">-h</span></tt> to get some help, this will be printed:</p>
+<div class="highlight-python"><div class="highlight"><pre>&gt;&gt; python ExportJSON.py -h
+
+usage: ExportJSON.py [-h] [-n NETWORK_ID] [-s SCENARIO_ID] [-d TARGET_DIR]
+                     [-u SERVER_URL] [-c SESSION_ID]
+
+Export a network in to a file in JSON format. Written by Stephen Knox
+&lt;stephen.knox@manchester.ac.uk&gt; (c) Copyright 2015, University of Manchester.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -n NETWORK_ID, --network-id NETWORK_ID
+                        Specify the network_id of the network to be exported.
+  -s SCENARIO_ID, --scenario-id SCENARIO_ID
+                        Specify the ID of the scenario to be exported. If no
+                        scenario is specified, all scenarios in the network
+                        will be exported.
+  -d TARGET_DIR, --target-dir TARGET_DIR
+                        Target directory
+  -u SERVER_URL, --server-url SERVER_URL
+                        Specify the URL of the server to which this plug-in
+                        connects.
+  -c SESSION_ID, --session-id SESSION_ID
+                        Session ID. If this does not exist, a login will be
+                        attempted based on details in config.
+
+For more information visit www.hydraplatform.org
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="run.html" title="6. Running the Code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="export.html" title="4. Exporting the Network"
+             >previous</a> |</li>
+        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
+          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Halcrow and University College London.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
