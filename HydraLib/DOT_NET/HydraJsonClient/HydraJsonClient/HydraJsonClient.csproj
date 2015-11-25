@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{31252FDA-B973-417F-8330-4CF353A7BE2C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HydraJsonClient</RootNamespace>
+    <AssemblyName>HydraJsonClient</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\Microsoft.Office.Interop.Excel\15.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Vbe.Interop, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\Microsoft.Vbe.Interop\15.0.0.0__71e9bce111e9429c\Microsoft.Vbe.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="hAttribute.cs" />
+    <Compile Include="Lib\HydraNetworkUtil.cs" />
+    <Compile Include="Hydra_Project\ArrayInsider.cs" />
+    <Compile Include="Hydra_Project\ArrayItem.cs" />
+    <Compile Include="Hydra_Project\Dimension.cs" />
+    <Compile Include="Hydra_Project\HydraArray.cs" />
+    <Compile Include="Hydra_Project\AttributeData.cs" />
+    <Compile Include="Hydra_Project\Hydra_Attr.cs" />
+    <Compile Include="Hydra_Project\Layout.cs" />
+    <Compile Include="Hydra_Project\Link.cs" />
+    <Compile Include="Hydra_Project\Rule.cs" />
+    <Compile Include="Lib\logWriter.cs" />
+    <Compile Include="Lib\MessagesWriter.cs" />
+    <Compile Include="Lib\NetworkExporter.cs" />
+    <Compile Include="Lib\NetworkImporter.cs" />
+    <Compile Include="Hydra_Project\ResourceType.cs" />
+    <Compile Include="Lib\Hydra_Utilities.cs" />
+    <Compile Include="Hydra_Project\Metadata.cs" />
+    <Compile Include="Hydra_Project\Network.cs" />
+    <Compile Include="Hydra_Project\Node.cs" />
+    <Compile Include="Hydra_Project\Project.cs" />
+    <Compile Include="Hydra_Project\RecourseAttribute.cs" />
+    <Compile Include="Hydra_Project\Resourcegroup.cs" />
+    <Compile Include="Hydra_Project\Resourcegroupitem.cs" />
+    <Compile Include="Hydra_Project\Resourcescenario.cs" />
+    <Compile Include="Hydra_Project\Scenario.cs" />
+    <Compile Include="Hydra_Project\Res_Type.cs" />
+    <Compile Include="Hydra_Project\Value.cs" />
+    <Compile Include="hydra_user.cs" />
+    <Compile Include="JSONClient.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
