@@ -8,7 +8,7 @@
     
     <title>EBSD constraints &mdash; HYDRA  documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,80 +25,18 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="HYDRA  documentation" href="../index.html" />
     <link rel="next" title="Unit test suite for Hydra Platform" href="../HydraServer/unittests.html" />
-    <link rel="prev" title="Libraries and templates" href="libraries_and_templates.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="libraries_and_templates.html" title="Libraries and templates"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">EBSD constraints</a><ul>
-<li><a class="reference internal" href="#general-remarks">General remarks</a></li>
-<li><a class="reference internal" href="#environmental-demand">Environmental demand</a></li>
-<li><a class="reference internal" href="#water-treatment-works-constraints">Water treatment works constraints</a></li>
-<li><a class="reference internal" href="#negative-do">Negative DO</a></li>
-<li><a class="reference internal" href="#capacity-constraints">Capacity constraints</a></li>
-<li><a class="reference internal" href="#ratchet-constraints">Ratchet constraints</a></li>
-<li><a class="reference internal" href="#start-date-constraints">Start date constraints</a></li>
-<li><a class="reference internal" href="#continuity-constraints">Continuity constraints</a></li>
-<li><a class="reference internal" href="#mutually-exclusive-constraints">Mutually exclusive constraints</a></li>
-<li><a class="reference internal" href="#prerequisite-constraints-and-or-lag-time">Prerequisite constraints (AND / OR / Lag time)</a></li>
-<li><a class="reference internal" href="#mutually-dependent-constraints">Mutually dependent constraints</a></li>
-<li><a class="reference internal" href="#flow-constraints">Flow constraints</a></li>
-<li><a class="reference internal" href="#demand-management-constraints">Demand management constraints</a></li>
-</ul>
-</li>
-</ul>
+    <link rel="prev" title="Libraries and templates" href="libraries_and_templates.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="libraries_and_templates.html"
-                        title="previous chapter">Libraries and templates</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../HydraServer/unittests.html"
-                        title="next chapter">Unit test suite for Hydra Platform</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/techdocs/EBSD_constraints.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  </head>
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="ebsd-constraints">
 <h1>EBSD constraints<a class="headerlink" href="#ebsd-constraints" title="Permalink to this headline">¶</a></h1>
@@ -116,7 +54,7 @@ groups that are used in each constraint type.</p>
 <dl class="docutils">
 <dt>Implementation in GAMS:</dt>
 <dd>Environmental demands are demands on a node or on a link. They are
-implemented as a normal group (named <tt class="docutils literal"><span class="pre">envDEM</span></tt>) summarising all nodes or
+implemented as a normal group (named <code class="docutils literal"><span class="pre">envDEM</span></code>) summarising all nodes or
 links where environmental demands are necessary. Currently they are
 proportional to total supply from a source to a user. The values are chosen
 on a &#8216;scenario&#8217; basis (Note: a scenario in EBSD is not the same as a
@@ -142,7 +80,7 @@ hard-coded in the GAMS code.</dd>
 <span id="id3"></span><h2>Capacity constraints<a class="headerlink" href="#capacity-constraints" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Implementation in GAMS:</dt>
-<dd><p class="first">The set of existing capacity constraints is defined using the <tt class="docutils literal"><span class="pre">capSET</span></tt>
+<dd><p class="first">The set of existing capacity constraints is defined using the <code class="docutils literal"><span class="pre">capSET</span></code>
 variable:</p>
 <div class="highlight-python"><div class="highlight"><pre>capSET /
 CAP14001
@@ -197,7 +135,7 @@ CAP14002  30       30       15      30
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>From the EBSD code at hand, the implementation of these constraints is not
-entirely clear. There is a constraint group (<tt class="docutils literal"><span class="pre">CAP14010</span></tt>) that translates
+entirely clear. There is a constraint group (<code class="docutils literal"><span class="pre">CAP14010</span></code>) that translates
 to the following equation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Supply</span><span class="p">[</span><span class="n">CAP14010</span><span class="p">])</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Flow</span><span class="p">[</span><span class="n">CAP14010</span><span class="p">])</span> <span class="o">+</span> <span class="mi">110</span>
 </pre></div>
@@ -229,18 +167,18 @@ position. This can only be achieved with hierarchical groups:</p>
 <col width="53%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td colspan="2"><strong>Group:</strong> <tt class="docutils literal"><span class="pre">Example</span> <span class="pre">capacity</span> <span class="pre">constraint</span></tt></td>
+<tr class="row-odd"><td colspan="2"><strong>Group:</strong> <code class="docutils literal"><span class="pre">Example</span> <span class="pre">capacity</span> <span class="pre">constraint</span></code></td>
 </tr>
 <tr class="row-even"><td colspan="2"><strong>Attributes:</strong></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">Constant</span> <span class="pre">value</span></tt>:</td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">Constant</span> <span class="pre">value</span></code>:</td>
 <td>Number</td>
 </tr>
 <tr class="row-even"><td colspan="2"><strong>Members:</strong></td>
 </tr>
-<tr class="row-odd"><td colspan="2"><tt class="docutils literal"><span class="pre">left</span></tt> <em>(group)</em></td>
+<tr class="row-odd"><td colspan="2"><code class="docutils literal"><span class="pre">left</span></code> <em>(group)</em></td>
 </tr>
-<tr class="row-even"><td colspan="2"><tt class="docutils literal"><span class="pre">right</span></tt> <em>(group)</em></td>
+<tr class="row-even"><td colspan="2"><code class="docutils literal"><span class="pre">right</span></code> <em>(group)</em></td>
 </tr>
 </tbody>
 </table>
@@ -249,7 +187,7 @@ position. This can only be achieved with hierarchical groups:</p>
 <col width="100%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>Group:</strong> <tt class="docutils literal"><span class="pre">left</span></tt></td>
+<tr class="row-odd"><td><strong>Group:</strong> <code class="docutils literal"><span class="pre">left</span></code></td>
 </tr>
 <tr class="row-even"><td><strong>Members:</strong></td>
 </tr>
@@ -264,7 +202,7 @@ position. This can only be achieved with hierarchical groups:</p>
 <col width="100%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><strong>Group:</strong> <tt class="docutils literal"><span class="pre">right</span></tt></td>
+<tr class="row-odd"><td><strong>Group:</strong> <code class="docutils literal"><span class="pre">right</span></code></td>
 </tr>
 <tr class="row-even"><td><strong>Members:</strong></td>
 </tr>
@@ -287,12 +225,12 @@ position. This can only be achieved with hierarchical groups:</p>
 there are no ratchet constraints in the EBSD code which was available at the
 time of writing of this document. But it can be inferred from the code that
 a flag determines, whether a ratchet constraint is active on a node or not.
-The flag is called <tt class="docutils literal"><span class="pre">SO_Flg_RC</span></tt> for options and <tt class="docutils literal"><span class="pre">SE_Flg_RC</span></tt> for existing
+The flag is called <code class="docutils literal"><span class="pre">SO_Flg_RC</span></code> for options and <code class="docutils literal"><span class="pre">SE_Flg_RC</span></code> for existing
 nodes.</dd>
 <dt>Implementation in Hydra:</dt>
 <dd>Since a ratchet constraint only acts on one single node, a simple attribute
-to a node or a link is sufficient. Attribute names are <tt class="docutils literal"><span class="pre">SO_Flg_RC</span></tt> and
-<tt class="docutils literal"><span class="pre">SO_Flg_RC</span></tt>, respectively.</dd>
+to a node or a link is sufficient. Attribute names are <code class="docutils literal"><span class="pre">SO_Flg_RC</span></code> and
+<code class="docutils literal"><span class="pre">SO_Flg_RC</span></code>, respectively.</dd>
 </dl>
 </div>
 <div class="section" id="start-date-constraints">
@@ -330,8 +268,8 @@ LmutexclSet(mutset,i,j) &quot;Assign links to group&quot; /
 </div>
 </dd>
 <dt>Implementation in Hydra:</dt>
-<dd>Nodes and links need to be assigned to a group of the type <tt class="docutils literal"><span class="pre">Mutually</span>
-<span class="pre">exclusive</span> <span class="pre">constraint</span></tt>. This group does not need any attributes.</dd>
+<dd>Nodes and links need to be assigned to a group of the type <code class="docutils literal"><span class="pre">Mutually</span>
+<span class="pre">exclusive</span> <span class="pre">constraint</span></code>. This group does not need any attributes.</dd>
 </dl>
 </div>
 <div class="section" id="prerequisite-constraints-and-or-lag-time">
@@ -374,25 +312,25 @@ prer001.Node3.Node4
 </dd>
 <dt>Implementation in Hydra:</dt>
 <dd>The structure of groups needed for prerequisite constraints is equivalent
-to the structure needed for <a class="reference internal" href="#capacity-constraints"><em>Capacity constraints</em></a>. Each constraint uses a
+to the structure needed for <a class="reference internal" href="#capacity-constraints"><span>Capacity constraints</span></a>. Each constraint uses a
 constraint group and two sub-groups. The constraint group has an attribute
-<tt class="docutils literal"><span class="pre">lagyear</span></tt> and. The two sub-groups determine whether a resource (node or
+<code class="docutils literal"><span class="pre">lagyear</span></code> and. The two sub-groups determine whether a resource (node or
 link) is on the left or the right hand side of the equation.</dd>
 </dl>
 </div>
 <div class="section" id="mutually-dependent-constraints">
 <span id="id7"></span><h2>Mutually dependent constraints<a class="headerlink" href="#mutually-dependent-constraints" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference internal" href="#mutually-exclusive"><em>Mutually exclusive constraints</em></a>.</p>
+<p>See <a class="reference internal" href="#mutually-exclusive"><span>Mutually exclusive constraints</span></a>.</p>
 </div>
 <div class="section" id="flow-constraints">
 <span id="id8"></span><h2>Flow constraints<a class="headerlink" href="#flow-constraints" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference internal" href="#capacity-constraints"><em>Capacity constraints</em></a>.</p>
+<p>See <a class="reference internal" href="#capacity-constraints"><span>Capacity constraints</span></a>.</p>
 </div>
 <div class="section" id="demand-management-constraints">
 <span id="id9"></span><h2>Demand management constraints<a class="headerlink" href="#demand-management-constraints" title="Permalink to this headline">¶</a></h2>
 <dl class="docutils">
 <dt>Implemenation in GAMS:</dt>
-<dd>There is one group (<tt class="docutils literal"><span class="pre">DMLR</span></tt>) that defines which nodes are subject to demand
+<dd>There is one group (<code class="docutils literal"><span class="pre">DMLR</span></code>) that defines which nodes are subject to demand
 management constraints. There are time series associated with each single
 node.</dd>
 <dt>Implementation in Hydra:</dt>
@@ -406,29 +344,74 @@ attribute needed are attached to each node.</dd>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">EBSD constraints</a><ul>
+<li><a class="reference internal" href="#general-remarks">General remarks</a></li>
+<li><a class="reference internal" href="#environmental-demand">Environmental demand</a></li>
+<li><a class="reference internal" href="#water-treatment-works-constraints">Water treatment works constraints</a></li>
+<li><a class="reference internal" href="#negative-do">Negative DO</a></li>
+<li><a class="reference internal" href="#capacity-constraints">Capacity constraints</a></li>
+<li><a class="reference internal" href="#ratchet-constraints">Ratchet constraints</a></li>
+<li><a class="reference internal" href="#start-date-constraints">Start date constraints</a></li>
+<li><a class="reference internal" href="#continuity-constraints">Continuity constraints</a></li>
+<li><a class="reference internal" href="#mutually-exclusive-constraints">Mutually exclusive constraints</a></li>
+<li><a class="reference internal" href="#prerequisite-constraints-and-or-lag-time">Prerequisite constraints (AND / OR / Lag time)</a></li>
+<li><a class="reference internal" href="#mutually-dependent-constraints">Mutually dependent constraints</a></li>
+<li><a class="reference internal" href="#flow-constraints">Flow constraints</a></li>
+<li><a class="reference internal" href="#demand-management-constraints">Demand management constraints</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="libraries_and_templates.html" title="previous chapter">Libraries and templates</a></li>
+      <li>Next: <a href="../HydraServer/unittests.html" title="next chapter">Unit test suite for Hydra Platform</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/techdocs/EBSD_constraints.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="libraries_and_templates.html" title="Libraries and templates"
-             >previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2013, Halcrow and University College London.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2015, Halcrow and University College London.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/techdocs/EBSD_constraints.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>

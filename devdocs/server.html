@@ -8,7 +8,7 @@
     
     <title>How to run the server natively on Windows Using python. &mdash; HYDRA  documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,80 +24,18 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="HYDRA  documentation" href="../index.html" />
-    <link rel="prev" title="Unit test suite for Hydra Platform" href="../HydraServer/unittests.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">How to run the server natively on Windows Using python.</a><ul>
-<li><a class="reference internal" href="#running-the-server-and-client">Running the server and client</a></li>
-<li><a class="reference internal" href="#creating-the-windows-executable-using-cx-freeze-deprecated">Creating the windows executable using cx_Freeze (deprecated)</a></li>
-<li><a class="reference internal" href="#building-windows-execuatable-using-pyinstaller">Building windows execuatable using Pyinstaller</a></li>
-<li><a class="reference internal" href="#installing-python">Installing Python</a></li>
-<li><a class="reference internal" href="#additional-libraries">Additional Libraries</a><ul>
-<li><a class="reference internal" href="#spyne">Spyne</a></li>
-<li><a class="reference internal" href="#suds">Suds</a></li>
-<li><a class="reference internal" href="#bcrypt">Bcrypt</a></li>
-<li><a class="reference internal" href="#mysql-connector">MySql Connector</a></li>
-<li><a class="reference internal" href="#sqlalchemy">SqlAlchemy</a></li>
-<li><a class="reference internal" href="#zope-sqlalchemy">zope.sqlalchemy</a></li>
-<li><a class="reference internal" href="#pandas">Pandas</a></li>
-<li><a class="reference internal" href="#winpaths">winpaths</a></li>
-<li><a class="reference internal" href="#cherrypy">CherryPy</a></li>
-<li><a class="reference internal" href="#python-dateutil">python-dateutil</a></li>
-<li><a class="reference internal" href="#lxml">lxml</a></li>
-<li><a class="reference internal" href="#pywin32">pywin32:</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+    <link rel="prev" title="Unit test suite for Hydra Platform" href="../HydraServer/unittests.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../HydraServer/unittests.html"
-                        title="previous chapter">Unit test suite for Hydra Platform</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/devdocs/server.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  </head>
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="how-to-run-the-server-natively-on-windows-using-python">
 <h1>How to run the server natively on Windows Using python.<a class="headerlink" href="#how-to-run-the-server-natively-on-windows-using-python" title="Permalink to this headline">¶</a></h1>
@@ -116,14 +54,14 @@ To run the test client, in the second command promot, type &#8220;python test.py
 <div class="section" id="creating-the-windows-executable-using-cx-freeze-deprecated">
 <h2>Creating the windows executable using cx_Freeze (deprecated)<a class="headerlink" href="#creating-the-windows-executable-using-cx-freeze-deprecated" title="Permalink to this headline">¶</a></h2>
 <p>To create a windows executable, in the same directory as the server and test,
-type <tt class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></tt> This will create or update the
+type <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code> This will create or update the
 build/exe.win23-2.7 directory.</p>
 <p>Thei server executable can be run by double-clicking on the server.bat file in
 the server directory from a windows explorer window.</p>
 </div>
 <div class="section" id="building-windows-execuatable-using-pyinstaller">
 <h2>Building windows execuatable using Pyinstaller<a class="headerlink" href="#building-windows-execuatable-using-pyinstaller" title="Permalink to this headline">¶</a></h2>
-<p>Make sure you have installed pip (<a class="reference internal" href="#pip"><em>Additional Libraries</em></a>).</p>
+<p>Make sure you have installed pip (<a class="reference internal" href="#pip"><span>Additional Libraries</span></a>).</p>
 <p>Install pyinstaller (if you haven&#8217;t done so already):</p>
 <div class="highlight-python"><div class="highlight"><pre>pip install pyinstaller
 </pre></div>
@@ -270,26 +208,79 @@ Lxml is an efficient library for parsing XML content.</p>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How to run the server natively on Windows Using python.</a><ul>
+<li><a class="reference internal" href="#running-the-server-and-client">Running the server and client</a></li>
+<li><a class="reference internal" href="#creating-the-windows-executable-using-cx-freeze-deprecated">Creating the windows executable using cx_Freeze (deprecated)</a></li>
+<li><a class="reference internal" href="#building-windows-execuatable-using-pyinstaller">Building windows execuatable using Pyinstaller</a></li>
+<li><a class="reference internal" href="#installing-python">Installing Python</a></li>
+<li><a class="reference internal" href="#additional-libraries">Additional Libraries</a><ul>
+<li><a class="reference internal" href="#spyne">Spyne</a></li>
+<li><a class="reference internal" href="#suds">Suds</a></li>
+<li><a class="reference internal" href="#bcrypt">Bcrypt</a></li>
+<li><a class="reference internal" href="#mysql-connector">MySql Connector</a></li>
+<li><a class="reference internal" href="#sqlalchemy">SqlAlchemy</a></li>
+<li><a class="reference internal" href="#zope-sqlalchemy">zope.sqlalchemy</a></li>
+<li><a class="reference internal" href="#pandas">Pandas</a></li>
+<li><a class="reference internal" href="#winpaths">winpaths</a></li>
+<li><a class="reference internal" href="#cherrypy">CherryPy</a></li>
+<li><a class="reference internal" href="#python-dateutil">python-dateutil</a></li>
+<li><a class="reference internal" href="#lxml">lxml</a></li>
+<li><a class="reference internal" href="#pywin32">pywin32:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../HydraServer/unittests.html" title="previous chapter">Unit test suite for Hydra Platform</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/devdocs/server.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraServer/unittests.html" title="Unit test suite for Hydra Platform"
-             >previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2013, Halcrow and University College London.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2015, Halcrow and University College London.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/devdocs/server.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>

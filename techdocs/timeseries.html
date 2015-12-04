@@ -8,7 +8,7 @@
     
     <title>Time Series &mdash; HYDRA  documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,75 +25,18 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="HYDRA  documentation" href="../index.html" />
     <link rel="next" title="Libraries and templates" href="libraries_and_templates.html" />
-    <link rel="prev" title="Handling of units and dimensions" href="units_and_dimensions.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="libraries_and_templates.html" title="Libraries and templates"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="units_and_dimensions.html" title="Handling of units and dimensions"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Time Series</a><ul>
-<li><a class="reference internal" href="#saving-time-series-data-to-the-server">Saving time series data to the server</a><ul>
-<li><a class="reference internal" href="#normal-time-series-and-seasonal-time-series">&#8220;Normal&#8221; time series and seasonal time series</a><ul>
-<li><a class="reference internal" href="#an-example-in-python">An example in Python</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#retrieving-time-series-from-the-server">Retrieving time series from the server</a></li>
-</ul>
-</li>
-</ul>
+    <link rel="prev" title="Handling of units and dimensions" href="units_and_dimensions.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="units_and_dimensions.html"
-                        title="previous chapter">Handling of units and dimensions</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="libraries_and_templates.html"
-                        title="next chapter">Libraries and templates</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/techdocs/timeseries.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  </head>
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="time-series">
 <h1>Time Series<a class="headerlink" href="#time-series" title="Permalink to this headline">¶</a></h1>
@@ -104,12 +47,12 @@ store data on the server and to retrieve them from the server.</p>
 <h2>Saving time series data to the server<a class="headerlink" href="#saving-time-series-data-to-the-server" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="normal-time-series-and-seasonal-time-series">
 <h3>&#8220;Normal&#8221; time series and seasonal time series<a class="headerlink" href="#normal-time-series-and-seasonal-time-series" title="Permalink to this headline">¶</a></h3>
-<p>Time series are sent to the server as <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> objects. Every element of
-the time series added to the <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> object as a <tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt>
+<p>Time series are sent to the server as <code class="docutils literal"><span class="pre">TimeSeries</span></code> objects. Every element of
+the time series added to the <code class="docutils literal"><span class="pre">TimeSeries</span></code> object as a <code class="docutils literal"><span class="pre">TimeSeriesData</span></code>
 object.</p>
-<p>A <tt class="docutils literal"><span class="pre">TimeSeries</span></tt> object only has the field <tt class="docutils literal"><span class="pre">ts_values</span></tt> which holds an array of
-<tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt> objects. A <tt class="docutils literal"><span class="pre">TimeSeriesData</span></tt> object has the fields <tt class="docutils literal"><span class="pre">ts_time</span></tt>
-and <tt class="docutils literal"><span class="pre">ts_value</span></tt>. While the value can be anything, a string, a number or an
+<p>A <code class="docutils literal"><span class="pre">TimeSeries</span></code> object only has the field <code class="docutils literal"><span class="pre">ts_values</span></code> which holds an array of
+<code class="docutils literal"><span class="pre">TimeSeriesData</span></code> objects. A <code class="docutils literal"><span class="pre">TimeSeriesData</span></code> object has the fields <code class="docutils literal"><span class="pre">ts_time</span></code>
+and <code class="docutils literal"><span class="pre">ts_value</span></code>. While the value can be anything, a string, a number or an
 array, the time needs to follow a certain pattern:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;%Y-%m-</span><span class="si">%d</span><span class="s"> %H:%M:%S.</span><span class="si">%f</span><span class="s">%z&#39;</span>
 </pre></div>
@@ -123,37 +66,37 @@ array, the time needs to follow a certain pattern:</p>
 <col width="16%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%Y</span></tt></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">%Y</span></code></td>
 <td>year, four digits</td>
-<td><tt class="docutils literal"><span class="pre">2013</span></tt></td>
+<td><code class="docutils literal"><span class="pre">2013</span></code></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%m</span></tt></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">%m</span></code></td>
 <td>month, two digits</td>
-<td><tt class="docutils literal"><span class="pre">10</span></tt></td>
+<td><code class="docutils literal"><span class="pre">10</span></code></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%d</span></tt></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">%d</span></code></td>
 <td>day, two digits</td>
-<td><tt class="docutils literal"><span class="pre">03</span></tt></td>
+<td><code class="docutils literal"><span class="pre">03</span></code></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%H</span></tt></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">%H</span></code></td>
 <td>hour, two digits</td>
-<td><tt class="docutils literal"><span class="pre">00</span></tt></td>
+<td><code class="docutils literal"><span class="pre">00</span></code></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%M</span></tt></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">%M</span></code></td>
 <td>minute, two digits</td>
-<td><tt class="docutils literal"><span class="pre">49</span></tt></td>
+<td><code class="docutils literal"><span class="pre">49</span></code></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%S</span></tt></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">%S</span></code></td>
 <td>seconds, two digits</td>
-<td><tt class="docutils literal"><span class="pre">17</span></tt></td>
+<td><code class="docutils literal"><span class="pre">17</span></code></td>
 </tr>
-<tr class="row-odd"><td><tt class="docutils literal"><span class="pre">%f</span></tt></td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">%f</span></code></td>
 <td>fractional seconds</td>
-<td><tt class="docutils literal"><span class="pre">568</span></tt></td>
+<td><code class="docutils literal"><span class="pre">568</span></code></td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">%z</span></tt></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">%z</span></code></td>
 <td>time zone offset, sign and four digits</td>
-<td><tt class="docutils literal"><span class="pre">-0400</span></tt></td>
+<td><code class="docutils literal"><span class="pre">-0400</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -164,7 +107,7 @@ array, the time needs to follow a certain pattern:</p>
 </div>
 <p>A time stamp can take any value from January 1st, year 2 (year 1 in reserved for
 seasonal time series). In a time stamp for a seasonal time series the year is
-replaced by either <tt class="docutils literal"><span class="pre">'0001'</span></tt> or <tt class="docutils literal"><span class="pre">'XXXX'</span></tt>. We recommend to use the latter,
+replaced by either <code class="docutils literal"><span class="pre">'0001'</span></code> or <code class="docutils literal"><span class="pre">'XXXX'</span></code>. We recommend to use the latter,
 since using year 1 explicitly might not be supported in future versions of
 Hydra.</p>
 <div class="section" id="an-example-in-python">
@@ -233,7 +176,7 @@ this:</p>
 </pre></div>
 </td></tr></table></div>
 <p>If you would like to save a seasonal time series to the server an optional
-parameter to <tt class="docutils literal"><span class="pre">PluginLib.date_to_string()</span></tt> should to the trick:</p>
+parameter to <code class="docutils literal"><span class="pre">PluginLib.date_to_string()</span></code> should to the trick:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">tsdata</span><span class="o">.</span><span class="n">ts_time</span> <span class="o">=</span> <span class="n">PluginLib</span><span class="o">.</span><span class="n">date_to_string</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">seasonal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -249,29 +192,69 @@ parameter to <tt class="docutils literal"><span class="pre">PluginLib.date_to_st
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Time Series</a><ul>
+<li><a class="reference internal" href="#saving-time-series-data-to-the-server">Saving time series data to the server</a><ul>
+<li><a class="reference internal" href="#normal-time-series-and-seasonal-time-series">&#8220;Normal&#8221; time series and seasonal time series</a><ul>
+<li><a class="reference internal" href="#an-example-in-python">An example in Python</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#retrieving-time-series-from-the-server">Retrieving time series from the server</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="units_and_dimensions.html" title="previous chapter">Handling of units and dimensions</a></li>
+      <li>Next: <a href="libraries_and_templates.html" title="next chapter">Libraries and templates</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/techdocs/timeseries.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="libraries_and_templates.html" title="Libraries and templates"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="units_and_dimensions.html" title="Handling of units and dimensions"
-             >previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2013, Halcrow and University College London.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2015, Halcrow and University College London.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/techdocs/timeseries.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>

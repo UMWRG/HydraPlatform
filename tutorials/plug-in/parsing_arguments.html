@@ -8,7 +8,7 @@
     
     <title>5. Parsing the Arguments &mdash; HYDRA  documentation</title>
     
-    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,61 +26,18 @@
     <link rel="top" title="HYDRA  documentation" href="../../index.html" />
     <link rel="up" title="Developing an app in Python" href="simple_plugin_in_python.html" />
     <link rel="next" title="6. Running the Code" href="run.html" />
-    <link rel="prev" title="4. Exporting the Network" href="export.html" /> 
+    <link rel="prev" title="4. Exporting the Network" href="export.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="run.html" title="6. Running the Code"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="export.html" title="4. Exporting the Network"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
-          <li><a href="simple_plugin_in_python.html" accesskey="U">Developing an app in Python</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="export.html"
-                        title="previous chapter">4. Exporting the Network</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="run.html"
-                        title="next chapter">6. Running the Code</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/tutorials/plug-in/parsing_arguments.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="parsing-the-arguments">
 <h1>5. Parsing the Arguments<a class="headerlink" href="#parsing-the-arguments" title="Permalink to this headline">¶</a></h1>
@@ -119,7 +76,7 @@ arguments using <cite>add_argument</cite>.</p>
     <span class="k">return</span> <span class="n">parser</span>
 </pre></div>
 </div>
-<p>When you run <tt class="docutils literal"><span class="pre">python</span> <span class="pre">ExportJSON.py</span> <span class="pre">-h</span></tt> to get some help, this will be printed:</p>
+<p>When you run <code class="docutils literal"><span class="pre">python</span> <span class="pre">ExportJSON.py</span> <span class="pre">-h</span></code> to get some help, this will be printed:</p>
 <div class="highlight-python"><div class="highlight"><pre>&gt;&gt; python ExportJSON.py -h
 
 usage: ExportJSON.py [-h] [-n NETWORK_ID] [-s SCENARIO_ID] [-d TARGET_DIR]
@@ -154,30 +111,56 @@ For more information visit www.hydraplatform.org
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="simple_plugin_in_python.html">Developing an app in Python</a><ul>
+      <li>Previous: <a href="export.html" title="previous chapter">4. Exporting the Network</a></li>
+      <li>Next: <a href="run.html" title="next chapter">6. Running the Code</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/tutorials/plug-in/parsing_arguments.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="run.html" title="6. Running the Code"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="export.html" title="4. Exporting the Network"
-             >previous</a> |</li>
-        <li><a href="../../index.html">HYDRA  documentation</a> &raquo;</li>
-          <li><a href="simple_plugin_in_python.html" >Developing an app in Python</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2013, Halcrow and University College London.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2015, Halcrow and University College London.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../../_sources/tutorials/plug-in/parsing_arguments.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>

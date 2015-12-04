@@ -8,7 +8,7 @@
     
     <title>Hydra database schema &mdash; HYDRA  documentation</title>
     
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,117 +25,22 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="HYDRA  documentation" href="../index.html" />
     <link rel="next" title="Hydra user interface" href="../HydraUI/index.html" />
-    <link rel="prev" title="Welcome to HYDRA’s documentation!" href="../index.html" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraUI/index.html" title="Hydra user interface"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to HYDRA’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Hydra database schema</a><ul>
-<li><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
-<li><a class="reference internal" href="#network-definition">Network definition</a><ul>
-<li><a class="reference internal" href="#tproject">tProject</a></li>
-<li><a class="reference internal" href="#tnetwork">tNetwork</a></li>
-<li><a class="reference internal" href="#tnode">tNode</a></li>
-<li><a class="reference internal" href="#tlink">tLink</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#attributes">Attributes</a><ul>
-<li><a class="reference internal" href="#tattr">tAttr</a></li>
-<li><a class="reference internal" href="#ttype">tType</a></li>
-<li><a class="reference internal" href="#ttemplate">tTemplate</a></li>
-<li><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
-<li><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
-<li><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#scenarios">Scenarios</a><ul>
-<li><a class="reference internal" href="#tscenario">tScenario</a></li>
-<li><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#datasets">Datasets</a><ul>
-<li><a class="reference internal" href="#tdataset">tDataset</a></li>
-<li><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
-<li><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
-<li><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
-<li><a class="reference internal" href="#tmetadata">tMetaData</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
-<li><a class="reference internal" href="#tuser">tUser</a></li>
-<li><a class="reference internal" href="#trole">tRole</a></li>
-<li><a class="reference internal" href="#tperm">tPerm</a></li>
-<li><a class="reference internal" href="#troleuser">tRoleUser</a></li>
-<li><a class="reference internal" href="#troleperm">tRolePerm</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#ownership">Ownership</a><ul>
-<li><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
-<li><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
-<li><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+    <link rel="prev" title="Welcome to HYDRA’s documentation!" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">Welcome to HYDRA&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../HydraUI/index.html"
-                        title="next chapter">Hydra user interface</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/HydraDB/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  </head>
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="hydra-database-schema">
 <h1>Hydra database schema<a class="headerlink" href="#hydra-database-schema" title="Permalink to this headline">¶</a></h1>
-<p>The database schema can be found <a class="reference download internal" href="../_downloads/Hydra_DB_ERD.png"><tt class="xref download docutils literal"><span class="pre">here</span></tt></a>.</p>
+<p>The database schema can be found <a class="reference download internal" href="../_downloads/Hydra_DB_ERD.png"><code class="xref download docutils literal"><span class="pre">here</span></code></a>.</p>
 <div class="section" id="hydra-data">
 <h2>Hydra data<a class="headerlink" href="#hydra-data" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="network-definition">
@@ -526,29 +431,107 @@ a single data_id, which is contained in tTimeSeries.</p>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hydra database schema</a><ul>
+<li><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
+<li><a class="reference internal" href="#network-definition">Network definition</a><ul>
+<li><a class="reference internal" href="#tproject">tProject</a></li>
+<li><a class="reference internal" href="#tnetwork">tNetwork</a></li>
+<li><a class="reference internal" href="#tnode">tNode</a></li>
+<li><a class="reference internal" href="#tlink">tLink</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#tattr">tAttr</a></li>
+<li><a class="reference internal" href="#ttype">tType</a></li>
+<li><a class="reference internal" href="#ttemplate">tTemplate</a></li>
+<li><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
+<li><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
+<li><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#scenarios">Scenarios</a><ul>
+<li><a class="reference internal" href="#tscenario">tScenario</a></li>
+<li><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#datasets">Datasets</a><ul>
+<li><a class="reference internal" href="#tdataset">tDataset</a></li>
+<li><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
+<li><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
+<li><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
+<li><a class="reference internal" href="#tmetadata">tMetaData</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
+<li><a class="reference internal" href="#tuser">tUser</a></li>
+<li><a class="reference internal" href="#trole">tRole</a></li>
+<li><a class="reference internal" href="#tperm">tPerm</a></li>
+<li><a class="reference internal" href="#troleuser">tRoleUser</a></li>
+<li><a class="reference internal" href="#troleperm">tRolePerm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ownership">Ownership</a><ul>
+<li><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
+<li><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
+<li><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to HYDRA&#8217;s documentation!</a></li>
+      <li>Next: <a href="../HydraUI/index.html" title="next chapter">Hydra user interface</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/HydraDB/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../HydraUI/index.html" title="Hydra user interface"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Welcome to HYDRA’s documentation!"
-             >previous</a> |</li>
-        <li><a href="../index.html">HYDRA  documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2013, Halcrow and University College London.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2015, Halcrow and University College London.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="../_sources/HydraDB/index.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>
