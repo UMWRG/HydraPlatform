@@ -6,26 +6,28 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Hydra database schema &mdash; HYDRA  documentation</title>
+    <title>Hydra database schema &mdash; HydraPlatform  documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="HydraPlatform  documentation" href="../../index.html" />
+    <link rel="up" title="Developers documentation" href="../index.html" />
     <link rel="next" title="Hydra user interface" href="../HydraUI/index.html" />
-    <link rel="prev" title="Welcome to HydraPlatform" href="../index.html" />
+    <link rel="prev" title="Developers documentation" href="../index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -40,7 +42,7 @@
             
   <div class="section" id="hydra-database-schema">
 <h1>Hydra database schema<a class="headerlink" href="#hydra-database-schema" title="Permalink to this headline">¶</a></h1>
-<p>The database schema can be found <a class="reference download internal" href="../_downloads/Hydra_DB_ERD.png"><code class="xref download docutils literal"><span class="pre">here</span></code></a>.</p>
+<p>The database schema can be found <a class="reference download internal" href="../../_downloads/Hydra_DB_ERD.png"><code class="xref download docutils literal"><span class="pre">here</span></code></a>.</p>
 <div class="section" id="hydra-data">
 <h2>Hydra data<a class="headerlink" href="#hydra-data" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="network-definition">
@@ -69,7 +71,7 @@ of a network is defined through its links &#8211; a link connects two nodes.
 A network also contains scenarios, which are containers for network data.</p>
 <blockquote>
 <div><ul class="simple">
-<li>project_id: THe project in which this network resides.</li>
+<li>project_id: The project in which this network resides.</li>
 <li>network_id: Unique identifier</li>
 <li>network_name: The name of the network. This is UNIQUE within a project.</li>
 <li>network_description: A non-mandatory description</li>
@@ -432,78 +434,89 @@ a single data_id, which is contained in tTimeSeries.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Hydra database schema</a><ul>
-<li><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
-<li><a class="reference internal" href="#network-definition">Network definition</a><ul>
-<li><a class="reference internal" href="#tproject">tProject</a></li>
-<li><a class="reference internal" href="#tnetwork">tNetwork</a></li>
-<li><a class="reference internal" href="#tnode">tNode</a></li>
-<li><a class="reference internal" href="#tlink">tLink</a></li>
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Design principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation/index.html">Implementation of HydraPlatform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webapi/index.html">Documentation of the web API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developers documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Hydra database schema</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#network-definition">Network definition</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tproject">tProject</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tnetwork">tNetwork</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tnode">tNode</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tlink">tLink</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#attributes">Attributes</a><ul>
-<li><a class="reference internal" href="#tattr">tAttr</a></li>
-<li><a class="reference internal" href="#ttype">tType</a></li>
-<li><a class="reference internal" href="#ttemplate">tTemplate</a></li>
-<li><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
-<li><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
-<li><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tattr">tAttr</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ttype">tType</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ttemplate">tTemplate</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#scenarios">Scenarios</a><ul>
-<li><a class="reference internal" href="#tscenario">tScenario</a></li>
-<li><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#scenarios">Scenarios</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tscenario">tScenario</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#datasets">Datasets</a><ul>
-<li><a class="reference internal" href="#tdataset">tDataset</a></li>
-<li><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
-<li><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
-<li><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
-<li><a class="reference internal" href="#tmetadata">tMetaData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tdataset">tDataset</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tmetadata">tMetaData</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
-<li><a class="reference internal" href="#tuser">tUser</a></li>
-<li><a class="reference internal" href="#trole">tRole</a></li>
-<li><a class="reference internal" href="#tperm">tPerm</a></li>
-<li><a class="reference internal" href="#troleuser">tRoleUser</a></li>
-<li><a class="reference internal" href="#troleperm">tRolePerm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tuser">tUser</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#trole">tRole</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tperm">tPerm</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#troleuser">tRoleUser</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#troleperm">tRolePerm</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#ownership">Ownership</a><ul>
-<li><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
-<li><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
-<li><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
-</ul>
-</li>
+<li class="toctree-l4"><a class="reference internal" href="#ownership">Ownership</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraUI/index.html">Hydra user interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html">Database Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#soap-objects">Soap Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#api-functions">API functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#id1">Soap Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraLib/index.html">Hydra utility library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraServer/unittests.html">Unit test suite for Hydra Platform</a></li>
+</ul>
+</li>
+</ul>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to HydraPlatform</a></li>
-      <li>Next: <a href="../HydraUI/index.html" title="next chapter">Hydra user interface</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HydraPlugins/index.html">Hydra Apps</a></li>
 </ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/HydraDB/index.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/units_and_dimensions.html">Handling of units and dimensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/timeseries.html">Time Series</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/libraries_and_templates.html">Libraries and templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/EBSD_constraints.html">EBSD constraints</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../server.html">How to run the server natively on Windows Using python.</a></li>
+</ul>
+
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -526,7 +539,7 @@ a single data_id, which is contained in tTimeSeries.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
-      <a href="../_sources/HydraDB/index.txt"
+      <a href="../../_sources/devdocs/HydraDB/index.txt"
           rel="nofollow">Page source</a>
     </div>
 

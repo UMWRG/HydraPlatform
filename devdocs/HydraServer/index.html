@@ -6,24 +6,26 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Database Objects &mdash; HYDRA  documentation</title>
+    <title>Database Objects &mdash; HydraPlatform  documentation</title>
     
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    '../../',
         VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="HYDRA  documentation" href="../index.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="HydraPlatform  documentation" href="../../index.html" />
+    <link rel="up" title="Developers documentation" href="../index.html" />
     <link rel="next" title="Hydra utility library" href="../HydraLib/index.html" />
     <link rel="prev" title="Hydra user interface" href="../HydraUI/index.html" />
    
@@ -89,47 +91,55 @@ connects exactly two nodes.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Database Objects</a></li>
-<li><a class="reference internal" href="#soap-objects">Soap Objects</a></li>
-<li><a class="reference internal" href="#api-functions">API functions</a></li>
-<li><a class="reference internal" href="#id1">Soap Objects</a><ul>
-<li><a class="reference internal" href="#projects">Projects</a></li>
-<li><a class="reference internal" href="#networks-inc-nodes-links">Networks (Inc nodes &amp; links)</a><ul>
-<li><a class="reference internal" href="#general-remarks">General remarks</a></li>
+        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Design principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation/index.html">Implementation of HydraPlatform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webapi/index.html">Documentation of the web API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developers documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../HydraDB/index.html">Hydra database schema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraUI/index.html">Hydra user interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Database Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#soap-objects">Soap Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-functions">API functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Soap Objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#projects">Projects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#networks-inc-nodes-links">Networks (Inc nodes &amp; links)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#general-remarks">General remarks</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#attributes">Attributes</a></li>
-<li><a class="reference internal" href="#scenarios">Scenarios</a></li>
-<li><a class="reference internal" href="#user-management">User Management</a></li>
-<li><a class="reference internal" href="#plugins">Plugins</a></li>
-<li><a class="reference internal" href="#resource-templates">Resource Templates</a></li>
-<li><a class="reference internal" href="#units-and-dimensions">Units and Dimensions</a></li>
-<li><a class="reference internal" href="#static-files">Static Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scenarios">Scenarios</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-management">User Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resource-templates">Resource Templates</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#units-and-dimensions">Units and Dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#static-files">Static Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../HydraLib/index.html">Hydra utility library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unittests.html">Unit test suite for Hydra Platform</a></li>
 </ul>
 </li>
 </ul>
-<div class="relations">
-<h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../HydraUI/index.html" title="previous chapter">Hydra user interface</a></li>
-      <li>Next: <a href="../HydraLib/index.html" title="next chapter">Hydra utility library</a></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HydraPlugins/index.html">Hydra Apps</a></li>
 </ul>
-</div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/HydraServer/index.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/units_and_dimensions.html">Handling of units and dimensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/timeseries.html">Time Series</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/libraries_and_templates.html">Libraries and templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../techdocs/EBSD_constraints.html">EBSD constraints</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../server.html">How to run the server natively on Windows Using python.</a></li>
+</ul>
+
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
@@ -152,7 +162,7 @@ connects exactly two nodes.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
       
       |
-      <a href="../_sources/HydraServer/index.txt"
+      <a href="../../_sources/devdocs/HydraServer/index.txt"
           rel="nofollow">Page source</a>
     </div>
 
