@@ -32,9 +32,12 @@ namespace HydraJsonClient.Lib
 
        static public void writeMessage(string message)       
        {
-           Console.WriteLine(DateTime.Now+": "+message);
            logWriter.Writelog(message, "Informal");
+           Console.WriteLine("!!Output " + DateTime.Now + ": " + message);       
        }
+
+       
+
        // add message to the current line
        static public void addMessage(string message)
        {
@@ -49,35 +52,44 @@ namespace HydraJsonClient.Lib
        static public void writeErrorMessage(string error_message, string network_id, string scenario_id)
        {
            if (!is_error_reporter)
-           {             
+           {
+               writeMessage("Error is encountered: " + error_message);
                error_message = createXmlResultMessage(error_message, "", "", network_id, scenario_id);
                is_error_reporter = true;
-               Console.ForegroundColor = ConsoleColor.Red;
-               Console.Error.WriteLine(DateTime.Now + ": Error: " + error_message);
                logWriter.Writelog(error_message, "Error");
-               //Console.ReadKey();
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.WriteLine(error_message);              
                Environment.Exit(0);
            }
+       }
+
+       static public void writeXMLOutputMessage (string xml_message)
+       {
+           logWriter.Writelog(xml_message, "Outputtput");
+           Console.SetOut(Console.Out);
+           Console.WriteLine(xml_message);
+
+
        }
 
        static public void writeErrorMessage(string error_message)
        {
            if (!is_error_reporter)
            {
+               writeMessage("Error is encountered: " + error_message);
                error_message = createXmlResultMessage(error_message, "", "", "", "");
                is_error_reporter = true;
-               Console.ForegroundColor = ConsoleColor.Red;
-               Console.Error.WriteLine(DateTime.Now + ": Error: " + error_message);
                logWriter.Writelog(error_message, "Error");
-               //Console.ReadKey();             
+               Console.ForegroundColor = ConsoleColor.Red;
+               Console.WriteLine(error_message);               
                Environment.Exit(0);
            }
        }
 
        static public void writeWarningMessage(string warning_message)
        {
-           Console.WriteLine(DateTime.Now + ": Warning: " + warning_message);
            logWriter.Writelog(warning_message, "Warning");
+           Console.WriteLine("!!Output " +DateTime.Now + ": Warning: " + warning_message);           
        }
 
        // create xml message which contains the plugin run result
@@ -85,7 +97,7 @@ namespace HydraJsonClient.Lib
        {
            if (is_error_reporter)
                return "";
-           
+
            XmlDocument doc = new XmlDocument();
            XmlElement element = (XmlElement)doc.AppendChild(doc.CreateElement("plugin_result"));
            element.AppendChild(doc.CreateElement("message")).InnerText = message;

@@ -43,6 +43,7 @@ namespace HydraJsonClient.Hydra_Project
          public Resourcegroup()
         {
             attributes = new object[0];
+            status = "A";
         }
     }
 }
