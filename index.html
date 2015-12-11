@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="top" title="HydraPlatform  documentation" href="#" />
-    <link rel="next" title="Design principles" href="design/index.html" />
+    <link rel="next" title="Apps" href="HydraPlugins/index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -68,26 +68,21 @@ chapter.</dd>
 <dd>Documentation for HydraPlatform developers.</dd>
 </dl>
 </div>
-<div class="section" id="hydroplatform-apps">
-<h2>HydroPlatform Apps<a class="headerlink" href="#hydroplatform-apps" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="HydraPlugins/index.html">Hydra Apps</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="HydraPlugins/index.html#current-apps">Current Apps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="HydraPlugins/index.html#app-development">App development</a></li>
-</ul>
-</li>
-</ul>
-</div>
+<div class="section" id="apps">
+<h2>Apps<a class="headerlink" href="#apps" title="Permalink to this headline">¶</a></h2>
+<p>HydraPlatform provides a set of selected Apps for importing and exporting
+datasets. Currently network topology and data can be exported to and imported
+from CSV files (<a class="reference internal" href="HydraPlugins/exportcsv.html#exportcsv"><span>Export to CSV files</span></a> and <a class="reference internal" href="HydraPlugins/importcsv.html#importcsv"><span>Import from CSV files</span></a>). We also provide an App
+to <a class="reference internal" href="HydraPlugins/importwml.html"><em>Import and export WaterML timeseries files</em></a>.</p>
 </div>
 <div class="section" id="development-team">
 <h2>Development team<a class="headerlink" href="#development-team" title="Permalink to this headline">¶</a></h2>
-<dl class="docutils">
-<dt>Stephen Knox</dt>
-<dd>some description.</dd>
-<dt><a class="reference external" href="http://www.eawag.ch/de/ueberuns/portraet/organisation/mitarbeitende/profile/philipp-meier/show/">Philipp Meier</a></dt>
-<dd>some description.</dd>
-</dl>
+<p>Stephen Knox is a computer scientist and currently the main developer of
+HydraPlatform at the University of Manchester.</p>
+<p><a class="reference external" href="http://www.eawag.ch/de/ueberuns/portraet/organisation/mitarbeitende/profile/philipp-meier/show/">Philipp Meier</a>
+currently works as a PostDoc at the Department of Surface Waters Research and
+Management at <a class="reference external" href="http://www.eawag.ch">Eawag</a>. He is involved in developing
+HydraPlatform from the very beginning in early 2013.</p>
 </div>
 <div class="section" id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
@@ -99,40 +94,6 @@ California, USA; 06/2014 <a class="reference external" href="http://www.iemss.or
 models to an open data management platform. 7th Intl. Congress on Env. Modelling
 and Software, San Diego, California, USA; 06/2014 <a class="reference external" href="http://www.iemss.org/sites/iemss2014/papers/iemss2014_submission_276.pdf">[PDF]</a></p>
 </div>
-<hr class="docutils" />
-<div class="section" id="technical-documents">
-<h2>Technical documents<a class="headerlink" href="#technical-documents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/units_and_dimensions.html">Handling of units and dimensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/timeseries.html">Time Series</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/libraries_and_templates.html">Libraries and templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/EBSD_constraints.html">EBSD constraints</a></li>
-</ul>
-</div>
-<div class="section" id="server-maintenance">
-<h3>Server maintenance<a class="headerlink" href="#server-maintenance" title="Permalink to this headline">¶</a></h3>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="devdocs/server.html">How to run the server natively on Windows Using python.</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="devdocs/server.html#running-the-server-and-client">Running the server and client</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devdocs/server.html#creating-the-windows-executable-using-cx-freeze-deprecated">Creating the windows executable using cx_Freeze (deprecated)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devdocs/server.html#building-windows-execuatable-using-pyinstaller">Building windows execuatable using Pyinstaller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devdocs/server.html#installing-python">Installing Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devdocs/server.html#additional-libraries">Additional Libraries</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<hr class="docutils" />
-<p><strong>Indices and tables</strong></p>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span>Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
-</ul>
-</div>
-</div>
 </div>
 
 
@@ -140,25 +101,34 @@ and Software, San Diego, California, USA; 06/2014 <a class="reference external" 
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">HydraPlatform</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=UMWRG&repo=HydraPlatform&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<div class="relations">
+<h3>Related Topics</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="design/index.html">Design principles</a></li>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="HydraPlugins/index.html" title="next chapter">Apps</a></li>
+  </ul></li>
+</ul>
+</div><h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="HydraPlugins/index.html">Apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design/index.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementation/index.html">Implementation of HydraPlatform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="webapi/index.html">Documentation of the web API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation/index.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="webapi/index.html">Web API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devdocs/index.html">Developers documentation</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="HydraPlugins/index.html">Hydra Apps</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/units_and_dimensions.html">Handling of units and dimensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/timeseries.html">Time Series</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/libraries_and_templates.html">Libraries and templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="techdocs/EBSD_constraints.html">EBSD constraints</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="devdocs/server.html">How to run the server natively on Windows Using python.</a></li>
 </ul>
 
 

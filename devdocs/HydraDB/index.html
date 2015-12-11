@@ -27,7 +27,7 @@
     <link rel="top" title="HydraPlatform  documentation" href="../../index.html" />
     <link rel="up" title="Developers documentation" href="../index.html" />
     <link rel="next" title="Hydra user interface" href="../HydraUI/index.html" />
-    <link rel="prev" title="Developers documentation" href="../index.html" />
+    <link rel="prev" title="Libraries and templates" href="../techdocs/libraries_and_templates.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
@@ -434,83 +434,99 @@ a single data_id, which is contained in tTimeSeries.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><h3>Navigation</h3>
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">HydraPlatform</a></h1>
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=UMWRG&repo=HydraPlatform&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Developers documentation</a><ul>
+      <li>Previous: <a href="../techdocs/libraries_and_templates.html" title="previous chapter">Libraries and templates</a></li>
+      <li>Next: <a href="../HydraUI/index.html" title="next chapter">Hydra user interface</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div><h3>Navigation</h3>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Design principles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HydraPlugins/index.html">Apps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design/index.html">Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../implementation/index.html">Implementation of HydraPlatform</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../webapi/index.html">Documentation of the web API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../implementation/index.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webapi/index.html">Web API</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Developers documentation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Hydra database schema</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#network-definition">Network definition</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tproject">tProject</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tnetwork">tNetwork</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tnode">tNode</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tlink">tLink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#technical-documents">Technical documents</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#api-doumentation">API doumentation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">Hydra database schema</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hydra-data">Hydra data</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#network-definition">Network definition</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tproject">tProject</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tnetwork">tNetwork</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tnode">tNode</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tlink">tLink</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tattr">tAttr</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#ttype">tType</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#ttemplate">tTemplate</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tattr">tAttr</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#ttype">tType</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#ttemplate">tTemplate</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#ttypeattr">tTypeattr</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tresourceattr">tResourceAttr</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tattrmap">tAttrMap</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#scenarios">Scenarios</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tscenario">tScenario</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#scenarios">Scenarios</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tscenario">tScenario</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tresourcescenario">tResourceScenario</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#datasets">Datasets</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tdataset">tDataset</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tmetadata">tMetaData</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#datasets">Datasets</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tdataset">tDataset</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tdatasetcollection">tDatasetCollection</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tdatasetcollectionitem">tDatasetCollectionItem</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#ttimeseriesdata">tTimeSeriesData</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tmetadata">tMetaData</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tuser">tUser</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#trole">tRole</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tperm">tPerm</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#troleuser">tRoleUser</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#troleperm">tRolePerm</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#user-and-permission-management">User and permission management</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tuser">tUser</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#trole">tRole</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tperm">tPerm</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#troleuser">tRoleUser</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#troleperm">tRolePerm</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="#ownership">Ownership</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraUI/index.html">Hydra user interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html">Database Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#soap-objects">Soap Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#api-functions">API functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraServer/index.html#id1">Soap Objects</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraLib/index.html">Hydra utility library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../HydraServer/unittests.html">Unit test suite for Hydra Platform</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#ownership">Ownership</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#tprojectowner">tProjectOwner</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tnetworkowner">tNetworkOwner</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#tdatasetowner">tDatasetOwner</a></li>
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../HydraPlugins/index.html">Hydra Apps</a></li>
+</li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../techdocs/units_and_dimensions.html">Handling of units and dimensions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../techdocs/timeseries.html">Time Series</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../techdocs/libraries_and_templates.html">Libraries and templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../techdocs/EBSD_constraints.html">EBSD constraints</a></li>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraUI/index.html">Hydra user interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraServer/index.html">Database Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraServer/index.html#soap-objects">Soap Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraServer/index.html#api-functions">API functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraLib/index.html">Hydra utility library</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../HydraServer/unittests.html">Unit test suite for Hydra Platform</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../server.html">How to run the server natively on Windows Using python.</a></li>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#server-maintenance">Server maintenance</a></li>
+</ul>
+</li>
 </ul>
 
 
