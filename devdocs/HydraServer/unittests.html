@@ -40,8 +40,207 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="unit-test-suite-for-hydra-platform">
-<h1>Unit test suite for Hydra Platform<a class="headerlink" href="#unit-test-suite-for-hydra-platform" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-server">
+<span id="unit-test-suite-for-hydra-platform"></span><h1>Unit test suite for Hydra Platform<a class="headerlink" href="#module-server" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-test_network"></span><dl class="class">
+<dt id="test_network.NetworkTest">
+<em class="property">class </em><code class="descclassname">test_network.</code><code class="descname">NetworkTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for network-based functionality</p>
+<dl class="method">
+<dt id="test_network.NetworkTest.test_add_nodes">
+<code class="descname">test_add_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_add_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test add new nodes to network</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_network.NetworkTest.test_consistency_of_update">
+<code class="descname">test_consistency_of_update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_consistency_of_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to ensure that updating a network which has not changed
+does not cause any changes to the network.
+Procedure:
+1 Create a network.
+2 Immediately update the network without changing it.
+3 Check that the original network and the updated network are identical.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_network.NetworkTest.test_get_extents">
+<code class="descname">test_get_extents</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_get_extents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extents test: Test that the min X, max X, min Y and max Y of a
+network are retrieved correctly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_network.NetworkTest.test_get_network">
+<code class="descname">test_get_network</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_get_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for the potentially likely case of creating a network with two
+scenarios, then querying for the network without data to identify
+the scenarios, then querying for the network with data but in only
+a select few scenarios.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_network.NetworkTest.test_get_network_with_template">
+<code class="descname">test_get_network_with_template</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_get_network_with_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for the potentially likely case of creating a network with two
+scenarios, then querying for the network without data to identify
+the scenarios, then querying for the network with data but in only
+a select few scenarios.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_network.NetworkTest.test_get_resources_of_type">
+<code class="descname">test_get_resources_of_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_network.NetworkTest.test_get_resources_of_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for the retrieval of all the resources of a specified
+type within a network.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-test_scenario"></span><span class="target" id="module-test_data"></span><dl class="class">
+<dt id="test_data.TimeSeriesTest">
+<em class="property">class </em><code class="descclassname">test_data.</code><code class="descname">TimeSeriesTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_data.TimeSeriesTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for timeseries-based functionality</p>
+<dl class="method">
+<dt id="test_data.TimeSeriesTest.create_arbitrary_timeseries">
+<code class="descname">create_arbitrary_timeseries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_data.TimeSeriesTest.create_arbitrary_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timeseries which has relative timesteps:
+1, 2, 3 as opposed to timestamps</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_data.TimeSeriesTest.create_relative_timeseries">
+<code class="descname">create_relative_timeseries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_data.TimeSeriesTest.create_relative_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timeseries which has relative timesteps:
+1, 2, 3 as opposed to timestamps</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_data.TimeSeriesTest.create_seasonal_timeseries">
+<code class="descname">create_seasonal_timeseries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_data.TimeSeriesTest.create_seasonal_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a timeseries which has relative timesteps:
+1, 2, 3 as opposed to timestamps</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test_data.TimeSeriesTest.test_relative_timeseries">
+<code class="descname">test_relative_timeseries</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_data.TimeSeriesTest.test_relative_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for relative timeseries for example, x number of hours from hour 0.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-test_plugins"></span><dl class="class">
+<dt id="test_plugins.PluginsTest">
+<em class="property">class </em><code class="descclassname">test_plugins.</code><code class="descname">PluginsTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_plugins.PluginsTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test which runs a number of plugins</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test_plugins.ServerPluginsTest">
+<em class="property">class </em><code class="descclassname">test_plugins.</code><code class="descname">ServerPluginsTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_plugins.ServerPluginsTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests for server-side plugins.</p>
+<dl class="method">
+<dt id="test_plugins.ServerPluginsTest.call_advanced_dataset_search">
+<code class="descname">call_advanced_dataset_search</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_plugins.ServerPluginsTest.call_advanced_dataset_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call the advanced dataset retrieval function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-test_units"></span><dl class="class">
+<dt id="test_units.UnitsTest">
+<em class="property">class </em><code class="descclassname">test_units.</code><code class="descname">UnitsTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_units.UnitsTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for working with units.</p>
+</dd></dl>
+
+<span class="target" id="module-test_attributes"></span><dl class="class">
+<dt id="test_attributes.AttributeTest">
+<em class="property">class </em><code class="descclassname">test_attributes.</code><code class="descname">AttributeTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_attributes.AttributeTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for attribute-based functionality</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test_attributes.ResourceAttributeCollectionTest">
+<em class="property">class </em><code class="descclassname">test_attributes.</code><code class="descname">ResourceAttributeCollectionTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_attributes.ResourceAttributeCollectionTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for attribute-based functionality</p>
+</dd></dl>
+
+<span class="target" id="module-test_image"></span><dl class="class">
+<dt id="test_image.ImageTest">
+<em class="property">class </em><code class="descclassname">test_image.</code><code class="descname">ImageTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_image.ImageTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests for the basic image storage in hydra</p>
+</dd></dl>
+
+<span class="target" id="module-test_notes"></span><dl class="class">
+<dt id="test_notes.NoteTest">
+<em class="property">class </em><code class="descclassname">test_notes.</code><code class="descname">NoteTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_notes.NoteTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for notes in Hydra</p>
+<dl class="method">
+<dt id="test_notes.NoteTest.test_add_note">
+<code class="descname">test_add_note</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_notes.NoteTest.test_add_note" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-test_project"></span><dl class="class">
+<dt id="test_project.ProjectTest">
+<em class="property">class </em><code class="descclassname">test_project.</code><code class="descname">ProjectTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_project.ProjectTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for working with projects in Hydra</p>
+</dd></dl>
+
+<span class="target" id="module-test_templates"></span><dl class="class">
+<dt id="test_templates.TemplatesTest">
+<em class="property">class </em><code class="descclassname">test_templates.</code><code class="descname">TemplatesTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_templates.TemplatesTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for templates</p>
+<dl class="method">
+<dt id="test_templates.TemplatesTest.test_type_compatibility">
+<code class="descname">test_type_compatibility</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test_templates.TemplatesTest.test_type_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check function that thests whether two types are compatible &#8211; the
+overlapping attributes are specified with the same unit.
+Change the unit associated with an attribute for types in two idencical
+templates, and test. There should be 1 error returned.
+THen test comparison of identical types. No errors should return.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-test_users"></span><dl class="class">
+<dt id="test_users.UsersTest">
+<em class="property">class </em><code class="descclassname">test_users.</code><code class="descname">UsersTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_users.UsersTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for working with units</p>
+</dd></dl>
+
+<span class="target" id="module-test_concurrency"></span><dl class="class">
+<dt id="test_concurrency.ConcurrencyTest">
+<em class="property">class </em><code class="descclassname">test_concurrency.</code><code class="descname">ConcurrencyTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_concurrency.ConcurrencyTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for concurrency in Hydra</p>
+</dd></dl>
+
+<span class="target" id="module-test_load"></span><dl class="class">
+<dt id="test_load.NetworkTest">
+<em class="property">class </em><code class="descclassname">test_load.</code><code class="descname">NetworkTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_load.NetworkTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for large loads (adding a large network).</p>
+</dd></dl>
+
+<span class="target" id="module-test_permissions"></span><dl class="class">
+<dt id="test_permissions.LoginTest">
+<em class="property">class </em><code class="descclassname">test_permissions.</code><code class="descname">LoginTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_permissions.LoginTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for logins &amp; logouts etc.</p>
+</dd></dl>
+
+<span class="target" id="module-test_rules"></span><dl class="class">
+<dt id="test_rules.RuleTest">
+<em class="property">class </em><code class="descclassname">test_rules.</code><code class="descname">RuleTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_rules.RuleTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for rules</p>
+</dd></dl>
+
+<span class="target" id="module-test_timeseries"></span><dl class="class">
+<dt id="test_timeseries.TimeSeriesTest">
+<em class="property">class </em><code class="descclassname">test_timeseries.</code><code class="descname">TimeSeriesTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#test_timeseries.TimeSeriesTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test for working with timeseries</p>
+</dd></dl>
+
 </div>
 
 
