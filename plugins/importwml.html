@@ -42,113 +42,8 @@
             
   <div class="section" id="import-and-export-waterml-timeseries-files">
 <span id="importwml"></span><h1>Import and export WaterML timeseries files<a class="headerlink" href="#import-and-export-waterml-timeseries-files" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-ImportWML">
-<span id="import-waterml"></span><h2>Import WaterML<a class="headerlink" href="#module-ImportWML" title="Permalink to this headline">¶</a></h2>
-<p>A Hydra plug-in for importing WML timeseries files.</p>
-<dl class="class">
-<dt id="ImportWML.ImportWML">
-<em class="property">class </em><code class="descclassname">ImportWML.</code><code class="descname">ImportWML</code><span class="sig-paren">(</span><em>url=None</em>, <em>session_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportWML.ImportWML" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="ImportWML.ImportWML.read_timeseries_data">
-<code class="descname">read_timeseries_data</code><span class="sig-paren">(</span><em>targets</em>, <em>dataset_collection_name</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportWML.ImportWML.read_timeseries_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Water ML timeseries data.
-&#64;target Can be either a directory containing multiple timeseries                files or a single timeseries file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportWML.ImportWML.read_timeseries_file">
-<code class="descname">read_timeseries_file</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportWML.ImportWML.read_timeseries_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Taking a wml file as an argument,
-return an array where each element is a line in the wml.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-ExportWML">
-<span id="export-waterml"></span><h2>Export WaterML<a class="headerlink" href="#module-ExportWML" title="Permalink to this headline">¶</a></h2>
-<p>A Hydra plug-in for importing WML timeseries files.</p>
-<div class="section" id="basics">
-<h3>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h3>
-<p>This app allows one or multiple WaterML timeseries files to be imported into Hydra.</p>
-<p>The app assumes that you have downloaded timeseries files
-from the cuahsi web service. A single file can be passed to the app or a directory.
-If a directory is passed, the app will find the appropriate timeseries files and import
-all the data it can.</p>
-<p>Basic usage:</p>
-<div class="highlight-python"><div class="highlight"><pre>ExportWML.py [-h] [-g Group ID] [-d Dataset ID] [-n Filename]
-</pre></div>
-</div>
-</div>
-<div class="section" id="options">
-<h3>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
-<table border="1" class="docutils">
-<colgroup>
-<col width="20%" />
-<col width="8%" />
-<col width="14%" />
-<col width="58%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Option</th>
-<th class="head">Short</th>
-<th class="head">Parameter</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">--help</span></code></td>
-<td><code class="docutils literal"><span class="pre">-h</span></code></td>
-<td>&nbsp;</td>
-<td>show help message and exit.</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--group</span></code></td>
-<td><code class="docutils literal"><span class="pre">-g</span></code></td>
-<td>Group ID</td>
-<td>ID of the dataset group from which to retrieve
-the datasets. (Not required if dataset ID
-is specified. Dataset ID takes precedence
-if both are specified.)&#8217;</td>
-</tr>
-<tr class="row-even"><td><code class="docutils literal"><span class="pre">--dataset</span></code></td>
-<td><code class="docutils literal"><span class="pre">-d</span></code></td>
-<td>Dataset ID</td>
-<td>ID of the dataset to be exported.
-(Not required if groupID is specified.
-This takes precedence if both are specified.)</td>
-</tr>
-<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--filename</span></code></td>
-<td><code class="docutils literal"><span class="pre">-n</span></code></td>
-<td>File Name</td>
-<td>Name of the export file.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="file-structure">
-<h3>File structure<a class="headerlink" href="#file-structure" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="building-a-windows-executable">
-<h3>Building a windows executable<a class="headerlink" href="#building-a-windows-executable" title="Permalink to this headline">¶</a></h3>
-<blockquote>
-<div><ul class="simple">
-<li>Use pyinstaller (pip install pyisntaller) to build a windows executable.</li>
-<li>cd to the $PATH_TO_HYDRA/HydraPlugins/WaterMLPlugin/trunk</li>
-<li>pyinstaller -F ExportWML.py</li>
-</ul>
-<p>or if you want more compression (a smaller exe), install upx
-- pyinstaller -F &#8211;upx-dir=/path/to/upx/dir ExportWML.py
-- An executable file will appear in the dist folder</p>
-</div></blockquote>
-</div>
-<div class="section" id="api-docs">
-<h3>API docs<a class="headerlink" href="#api-docs" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
-<dt id="ExportWML.ExportWML">
-<em class="property">class </em><code class="descclassname">ExportWML.</code><code class="descname">ExportWML</code><span class="sig-paren">(</span><em>url=None</em>, <em>session_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportWML.ExportWML" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
+<div class="section" id="import-waterml">
+<h2>Import WaterML<a class="headerlink" href="#import-waterml" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -186,15 +81,7 @@ This takes precedence if both are specified.)</td>
 <li class="toctree-l2"><a class="reference internal" href="importcsv.html">Import CSV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="exportcsv.html">Export CSV</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">WaterML</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-ImportWML">Import WaterML</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-ExportWML">Export WaterML</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#basics">Basics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#options">Options</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#file-structure">File structure</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#building-a-windows-executable">Building a windows executable</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#api-docs">API docs</a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#import-waterml">Import WaterML</a></li>
 </ul>
 </li>
 </ul>
@@ -224,8 +111,9 @@ This takes precedence if both are specified.)</td>
       </div>
       <div class="clearer"></div>
     </div>
+
     <div class="footer">
-      &copy;2015, CH2M Hill Halcrow and The University of Manchester.
+      &copy;.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
@@ -243,5 +131,16 @@ This takes precedence if both are specified.)</td>
     
 
     
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-71439863-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
   </body>
 </html>
