@@ -40,8 +40,168 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="export-to-csv-files">
-<span id="exportcsv"></span><h1>Export to CSV files<a class="headerlink" href="#export-to-csv-files" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-ExportCSV">
+<span id="export-to-csv-files"></span><span id="exportcsv"></span><h1>Export to CSV files<a class="headerlink" href="#module-ExportCSV" title="Permalink to this headline">¶</a></h1>
+<p>A Hydra plug-in for exporting a hydra network to CSV files.</p>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>The plug-in for exporting CSV files exports a network to a collection of CSV files,
+one file per node / link type, one file for network, one file for scenario.
+Time series and array values will each have its own file also.</p>
+<p>Basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>ExportCSV.py [-h] [-t NETWORK] [-z TIMEZONE]
+</pre></div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="7%" />
+<col width="14%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Short</th>
+<th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--help</span></code></td>
+<td><code class="docutils literal"><span class="pre">-h</span></code></td>
+<td>&nbsp;</td>
+<td>show help message and exit.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--network_id</span></code></td>
+<td><code class="docutils literal"><span class="pre">-t</span></code></td>
+<td>NETWORK</td>
+<td>Specify the file containing network
+information. If no file is specified, a
+new network will be created using
+default values.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--scenario_id</span></code></td>
+<td><code class="docutils literal"><span class="pre">-s</span></code></td>
+<td>SCENARIO</td>
+<td>The scenario to be exported. If not specified
+all the scenarios in the network will be
+exported.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--output_folder</span></code></td>
+<td><code class="docutils literal"><span class="pre">-o</span></code></td>
+<td>OUTPUT</td>
+<td>The folder where the exported network
+is to be put. Defaults to Desktop.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--timezone</span></code></td>
+<td><code class="docutils literal"><span class="pre">-z</span></code></td>
+<td>TIMEZONE</td>
+<td>Specify a timezone as a string
+following the Area/Loctation pattern
+(e.g.  Europe/London). This timezone
+will be used for all timeseries data
+that is exported. If you don&#8217;t specify
+a timezone, it defaults to UTC.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--server-url</span></code></td>
+<td><code class="docutils literal"><span class="pre">-u</span></code></td>
+<td>SERVER-URL</td>
+<td>Url of the server the plugin will
+connect to.
+Defaults to localhost.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--session-id</span></code></td>
+<td><code class="docutils literal"><span class="pre">-c</span></code></td>
+<td>SESSION-ID</td>
+<td>Session ID used by the callig software.
+If left empty, the plugin will attempt
+to log in itself.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="file-structure">
+<h2>File structure<a class="headerlink" href="#file-structure" title="Permalink to this headline">¶</a></h2>
+<p>For nodes, the following is an example of what will be exported:</p>
+<div class="highlight-python"><div class="highlight"><pre>Name , x, y, attribute_1, attribute_2, ..., attribute_n, description
+Units,  ,  ,           m,    m^3 s^-1, ...,           -,
+node1, 2, 1,         4.0,      3421.9, ...,  Crop: corn, Irrigation node 1
+node2, 2, 3,         2.4,       988.4, ...,  Crop: rice, Irrigation node 2
+</pre></div>
+</div>
+<p>For links, the following will be and example of what will be exported:</p>
+<div class="highlight-python"><div class="highlight"><pre>Name ,       from,       to, attribute_1, ..., attribute_n, description
+Units,           ,         ,           m, ...,    m^2 s^-1,
+link1,      node1,    node2,         453, ...,        0.34, Water transfer
+</pre></div>
+</div>
+<p>The following network file will be exported:</p>
+<blockquote>
+<div>ID, Name            , attribute_1, ..., Description
+1 , My first network, test       ,    , A network create from CSV files</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Add any other information here...</p>
+</div>
+<dl class="class">
+<dt id="ExportCSV.ExportCSV">
+<em class="property">class </em><code class="descclassname">ExportCSV.</code><code class="descname">ExportCSV</code><span class="sig-paren">(</span><em>url=None</em>, <em>session_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="ExportCSV.ExportCSV.export">
+<code class="descname">export</code><span class="sig-paren">(</span><em>network_id</em>, <em>scenario_id</em>, <em>output_folder</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export a network (and possibly a scenario) to a folder. If the
+scenario and output folders are not specified, all the scenarios
+will be exported and the output location will be the desktop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.export_network">
+<code class="descname">export_network</code><span class="sig-paren">(</span><em>network</em>, <em>scenario</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.export_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the output files based on the given network and scenario.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.export_resourcegroupitems">
+<code class="descname">export_resourcegroupitems</code><span class="sig-paren">(</span><em>scenario</em>, <em>group_map</em>, <em>node_map</em>, <em>link_map</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.export_resourcegroupitems" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the members of a group in a given scenario.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.export_resourcegroups">
+<code class="descname">export_resourcegroups</code><span class="sig-paren">(</span><em>scenario</em>, <em>resourcegroups</em>, <em>node_map</em>, <em>link_map</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.export_resourcegroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export resource groups into two files.
+1:groups.csv defining the group name, description and any attributes.
+2:group_members.csv defining the contents of each group for this scenario</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.export_rules">
+<code class="descname">export_rules</code><span class="sig-paren">(</span><em>scenario</em>, <em>node_map</em>, <em>link_map</em>, <em>group_map</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.export_rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export rules, which are chunks of text associated with resources and a scenario.
+:param scenario object to retrive the ID
+:param node map to get the name of a node from its id
+:param link map to get the name of a link from its id
+:param group map to get the name of a group from its id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.get_attr_unit">
+<code class="descname">get_attr_unit</code><span class="sig-paren">(</span><em>scenario</em>, <em>attr_id</em>, <em>attr_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.get_attr_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the unit of a given resource attribute within a scenario</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ExportCSV.ExportCSV.get_attr_value">
+<code class="descname">get_attr_value</code><span class="sig-paren">(</span><em>scenario</em>, <em>resource_attr</em>, <em>attr_name</em>, <em>resource_name</em><span class="sig-paren">)</span><a class="headerlink" href="#ExportCSV.ExportCSV.get_attr_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of a given resource attribute within a scenario</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -76,7 +236,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Apps</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="importcsv.html">Import CSV</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Export CSV</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Export CSV</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-structure">File structure</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="importwml.html">WaterML</a></li>
 </ul>
 </li>
