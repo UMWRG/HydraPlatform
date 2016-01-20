@@ -42,6 +42,273 @@
             
   <div class="section" id="import-from-csv-files">
 <span id="importcsv"></span><h1>Import from CSV files<a class="headerlink" href="#import-from-csv-files" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>The plug-in for importing CSV files assumes that you have a collection of files
+ready. You need one or several files for nodes (usually one file per node type)
+and files for links (usually on file per link type). One node file and one link
+file are mandatory, additional files are optional. The plug-in also allows you
+to import network attributes.</p>
+<p>Basic usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>ImportCSV.py [-h] [-p PROJECT] [-s SCENARIO] [-t NETWORK] [-i NETWORK_ID]
+             [-z TIMEZONE]
+             [-t TEMPLATE]
+             [-u SERVER-URL] [-c SESSION-ID]
+             [-x]
+</pre></div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="8%" />
+<col width="15%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Short</th>
+<th class="head">Parameter</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--help</span></code></td>
+<td><code class="docutils literal"><span class="pre">-h</span></code></td>
+<td>&nbsp;</td>
+<td>show help message and exit.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--project</span></code></td>
+<td><code class="docutils literal"><span class="pre">-p</span></code></td>
+<td>PROJECT</td>
+<td>The ID of an existing project. If no
+project is specified or if the ID
+provided does not belong to an existing
+project, a new one will be created.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--scenario</span></code></td>
+<td><code class="docutils literal"><span class="pre">-s</span></code></td>
+<td>SCENARIO</td>
+<td>Specify the name of the scenario
+created by the import function. Every
+import creates a new scenario. If no
+name is provided a default name will be
+assigned.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--network</span></code></td>
+<td><code class="docutils literal"><span class="pre">-t</span></code></td>
+<td>NETWORK</td>
+<td>Specify the file containing network
+information. If no file is specified, a
+new network will be created using
+default values.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--network_id</span></code></td>
+<td><code class="docutils literal"><span class="pre">-i</span></code></td>
+<td>NETWORK_ID</td>
+<td>Specify the ID of the network to be
+updated, if not specified,a new network
+will be created.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--template</span></code></td>
+<td><code class="docutils literal"><span class="pre">-m</span></code></td>
+<td>TEMPLATE</td>
+<td>XML file defining the types for the
+network. Required if types are set.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--timezone</span></code></td>
+<td><code class="docutils literal"><span class="pre">-z</span></code></td>
+<td>TIMEZONE</td>
+<td>Specify a timezone as a string
+following the Area/Loctation pattern
+(e.g.  Europe/London). This timezone
+will be used for all timeseries data
+that is imported. If you don&#8217;t specify
+a timezone, it defaults to UTC.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--expand-filenames</span></code></td>
+<td><code class="docutils literal"><span class="pre">-x</span></code></td>
+<td>&nbsp;</td>
+<td>If the import function encounters
+something that looks like a filename,
+it tries to read the file.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">--server-url</span></code></td>
+<td><code class="docutils literal"><span class="pre">-u</span></code></td>
+<td>SERVER-URL</td>
+<td>Url of the server the plugin will
+connect to.
+Defaults to localhost.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">--session-id</span></code></td>
+<td><code class="docutils literal"><span class="pre">-c</span></code></td>
+<td>SESSION-ID</td>
+<td>Session ID used by the callig software.
+If left empty, the plugin will attempt
+to log in itself.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="file-structure">
+<h2>File structure<a class="headerlink" href="#file-structure" title="Permalink to this headline">¶</a></h2>
+<p>In the node and link file a minimum of information has to be provided in order
+to be able to import a complete network. Optionally the files can define any
+number of attributes for nodes and links.</p>
+<p>For nodes a valid file looks like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>Name , x, y, type, attribute_1, attribute_2, ..., attribute_n, description
+Units,  ,  ,     ,           m,    m^3 s^-1, ...,           -,
+node1, 2, 1, irr ,         4.0,      3421.9, ...,  Crop: corn, Irrigation 1
+node2, 2, 3, irr ,         2.4,       988.4, ...,  Crop: rice, Irrigation 2
+</pre></div>
+</div>
+<p>For links, the following is a valid file:</p>
+<div class="highlight-python"><div class="highlight"><pre>Name ,       from,       to, type, attre_1, ...,  attre_n, description
+Units,           ,         ,     ,       m, ..., m^2 s^-1,
+link1,      node1,    node2, tran,     453, ...,     0.34, Water transfer
+</pre></div>
+</div>
+<p>It is optional to supply a network file. If you decide to do so, it needs to
+follow this structure:</p>
+<div class="highlight-python"><div class="highlight"><pre># A test network created as a set of CSV files
+ID, Name            , type, nodes    , links    , groups    , rules    , attribute_1, ..., Description
+Units,              ,     ,          ,          ,           ,          ,            ,    ,
+1 , My first network, net , nodes.csv, links.csv, groups.csv, rules.csv, test       ,    , Network created from CSV files
+</pre></div>
+</div>
+<p>Constraint groups come in 2 files.
+The first file defines the name, description and attributes of a file  as well as the file
+which contains all of the group&#8217;s members. If a single file contains all membership information,
+then simply specify the same name in each row. The file should look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>Name  , members        , attribute_1, attribute_2..., Description
+Units ,                , hm^3       , m             ,
+stor  , grp_members.csv, totalCap   , maxSize       , Storage nodes
+...   , ...            , ...        , ...           , ...
+</pre></div>
+</div>
+<p>The second file defines the members of the groups.
+The group name, the type of the member (node, link or another group) and the name
+of that other member are needed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Name</span>  <span class="p">,</span> <span class="n">Type</span>  <span class="p">,</span> <span class="n">Member</span>
+<span class="n">stor</span>  <span class="p">,</span> <span class="n">NODE</span>  <span class="p">,</span> <span class="n">node1</span>
+<span class="n">stor</span>  <span class="p">,</span> <span class="n">NODE</span>  <span class="p">,</span> <span class="n">node2</span>
+<span class="n">stor</span>  <span class="p">,</span> <span class="n">LINK</span>  <span class="p">,</span> <span class="n">link1</span>
+</pre></div>
+</div>
+<p>Metadata can also be included in separate files, which are <strong>named the same
+as the node/link file, but with _metadata at the end.</strong></p>
+<dl class="docutils">
+<dt>For example:</dt>
+<dd>nodes.csv becomes nodes_metadata.csv
+network.csv becomes network_metadata.csv
+my_urban_links.csv becomes my_urban_links_metadata.csv</dd>
+</dl>
+<p>Metadata files are structured as follows:</p>
+<blockquote>
+<div>Name  , attribute_1             , attribute_2             , attribute_3
+link1 , (key1:val1) (key2:val2) , (key3:val3) (key4:val4) , (key5:val5)</div></blockquote>
+<p>In this case, key1 and key2 are metadata items for attribute 1 and so on.
+The deliminator for the key-val can be &#8216;;&#8217; or &#8216;:&#8217;. Note that all key-val
+pairs are contained within &#8216;(...)&#8217;, with a space between each one. This way
+you can have several metadata items per attribute.</p>
+<p>Lines starting with the <code class="docutils literal"><span class="pre">#</span></code> character are ignored.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you specify a header line using the keywords <code class="docutils literal"><span class="pre">name</span></code>, <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code> and
+<code class="docutils literal"><span class="pre">description</span></code> (<code class="docutils literal"><span class="pre">name</span></code>, <code class="docutils literal"><span class="pre">from</span></code>, <code class="docutils literal"><span class="pre">to</span></code> and <code class="docutils literal"><span class="pre">description</span></code> for links)
+the order of the columns does not matter. If you don&#8217;t specify these
+keywords, the plug-in will assume that the first column specifies the name,
+the second X, the third Y and the last the description (name, from, to and
+description for links).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">type</span></code> column is optional.</p>
+</div>
+<p>Please also consider the following:</p>
+<ul class="simple">
+<li>A link references to start and end node by name. This also implies that thenode names defined in the file need to be unique.</li>
+<li>The description should be in the last column. This will lead to more readablefiles, since the description is usually free form text.</li>
+<li>If you specify more than one file containing nodes, common attributes (i.e.with the same name) will be considered the same. This results in a uniqueattribute set for nodes. The same applies for links.</li>
+<li>An attribute to a node or link is only added if there is a value for thatspecific attribute in the line specifying a node (or link). If an attributeshould be added as a variable, you need to enter <code class="docutils literal"><span class="pre">NULL</span></code>.</li>
+<li>If you use a tmplate during import, missing attributes will be added to eachnode or link according to its type.</li>
+</ul>
+<div class="section" id="todo">
+<h3>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Implement updating of existing scenario.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="building-a-windows-executable">
+<h2>Building a windows executable<a class="headerlink" href="#building-a-windows-executable" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Use pyinstaller (pip install pyisntaller) to build a windows executable.</li>
+<li>cd to the $PATH_TO_HYDRA/HydraPlugins/CSVPlugin/trunk</li>
+<li>pyinstaller -F ImportCSV.py</li>
+<li>If you want more compression (a smaller exe), install upx and run pyinstaller -F &#8211;upx-dir=/path/to/upx/dir ExportCSV.py</li>
+<li>An executable file will appear in the dist folder</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="module-ImportCSV">
+<span id="api-docs"></span><h2>API docs<a class="headerlink" href="#module-ImportCSV" title="Permalink to this headline">¶</a></h2>
+<p>A Hydra plug-in for importing CSV files.</p>
+<dl class="class">
+<dt id="ImportCSV.ImportCSV">
+<em class="property">class </em><code class="descclassname">ImportCSV.</code><code class="descname">ImportCSV</code><span class="sig-paren">(</span><em>url=None</em>, <em>session_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="ImportCSV.ImportCSV.add_data">
+<code class="descname">add_data</code><span class="sig-paren">(</span><em>resource</em>, <em>attrs</em>, <em>data</em>, <em>metadata</em>, <em>units=None</em>, <em>restrictions={}</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.add_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the data read for each resource to the resource. This requires
+creating the attributes, resource attributes and a scenario which holds
+the data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportCSV.ImportCSV.create_attribute">
+<code class="descname">create_attribute</code><span class="sig-paren">(</span><em>name</em>, <em>unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.create_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create attribute locally. It will get added in bulk later.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportCSV.ImportCSV.get_metadata_as_dict">
+<code class="descname">get_metadata_as_dict</code><span class="sig-paren">(</span><em>keys</em>, <em>metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.get_metadata_as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a list of metadata values into a dictionary structure.
+&#64;parameter keys to describe the attribte to which this metadata refers
+&#64;parameter list of metadata. in the structure: [&#8220;(key;val) (key;val)&#8221;, &#8220;(key;val) (key;val)&#8221;,...]
+&#64;returns dictionary in the format: {attr1 : {key:val, key:val}, attr2: {key:val, key:val}...}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportCSV.ImportCSV.read_group_members">
+<code class="descname">read_group_members</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.read_group_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>The heading of a group file looks like:
+name, type, member.</p>
+<p>name : Name of the group
+type : Type of the member (node, link or group)
+member: name of the node, link or group in question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportCSV.ImportCSV.read_groups">
+<code class="descname">read_groups</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.read_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>The heading of a group file looks like:
+name, attr1, attr2..., description</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ImportCSV.ImportCSV.return_xml">
+<code class="descname">return_xml</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.return_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a fist version of a possible XML output.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -75,7 +342,17 @@
 </div><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Apps</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Import CSV</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Import CSV</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basics">Basics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#options">Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-structure">File structure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#todo">TODO</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#building-a-windows-executable">Building a windows executable</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ImportCSV">API docs</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="exportcsv.html">Export CSV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="importwml.html">WaterML</a></li>
 </ul>
