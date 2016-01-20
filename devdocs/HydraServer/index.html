@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Database Objects &mdash; HydraPlatform  documentation</title>
+    <title>Web Objects (Complex Models) &mdash; HydraPlatform  documentation</title>
     
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -40,27 +40,72 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="database-objects">
-<h1>Database Objects<a class="headerlink" href="#database-objects" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="module-HydraServer.soap_server.hydra_complexmodels">
-<span id="soap-objects"></span><h1>Soap Objects<a class="headerlink" href="#module-HydraServer.soap_server.hydra_complexmodels" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-HydraServer.soap_server.hydra_complexmodels">
+<span id="web-objects-complex-models"></span><h1>Web Objects (Complex Models)<a class="headerlink" href="#module-HydraServer.soap_server.hydra_complexmodels" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Attr">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Attr</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Attr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong> Integer(default=None)</li>
+<li><strong>name</strong> Unicode(default=None)</li>
+<li><strong>dimen</strong> Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(default=None)</li>
+<li><strong>cr_date</strong> Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.AttributeData">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">AttributeData</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.AttributeData" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class which is returned by the server when a request is made
-for the data associated with an attribute.</p>
+<dd><blockquote>
+<div>A class which is returned by the server when a request is made
+for the data associated with an attribute.</div></blockquote>
+<ul class="simple">
+<li><strong>resourceattrs</strong> SpyneArray(ResourceAttr)</li>
+<li><strong>resourcescenarios</strong> SpyneArray(ResourceScenario)</li>
+</ul>
 </dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Dataset">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Dataset</code><span class="sig-paren">(</span><em>parent=None</em>, <em>include_metadata=True</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Dataset" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><ul class="simple">
+<li><strong>id</strong>               Integer(min_occurs=0, default=None)</li>
+<li><strong>type</strong>             Unicode</li>
+<li><strong>dimension</strong>        Unicode(min_occurs=1, default=&#8217;dimensionless&#8217;)</li>
+<li><strong>unit</strong>             Unicode(min_occurs=1, default=None)</li>
+<li><strong>name</strong>             Unicode(min_occurs=1, default=None)</li>
+<li><strong>value</strong>            Unicode(min_occurs=1, default=None)</li>
+<li><strong>hidden</strong>           Unicode(min_occurs=0, default=&#8217;N pattern=&#8221;[YN]&#8221;)</li>
+<li><strong>created_by</strong>       Integer(min_occurs=0, default=None)</li>
+<li><strong>cr_date</strong>          Unicode(min_occurs=0, default=None)</li>
+<li><strong>metadata</strong>         Unicode(min_occurs=0, default=&#8217;{}&#8217;)</li>
+</ul>
+<dl class="method">
+<dt id="HydraServer.soap_server.hydra_complexmodels.Dataset.get_metadata_as_dict">
+<code class="descname">get_metadata_as_dict</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>source=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Dataset.get_metadata_as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a metadata json string into a dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_id</strong> (<em>int</em>) &#8211; Optional: Insert user_id into the metadata if specified</li>
+<li><strong>source</strong> (<em>string</em>) &#8211; Optional: Insert source (the name of the app typically) into the metadata if necessary.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">THe metadata as a python dictionary</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Dataset.parse_value">
 <code class="descname">parse_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Dataset.parse_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turn the value of an incoming dataset into a hydra-friendly value.</p>
@@ -69,20 +114,62 @@ for the data associated with an attribute.</p>
 </dd></dl>
 
 <dl class="class">
+<dt id="HydraServer.soap_server.hydra_complexmodels.DatasetCollection">
+<em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">DatasetCollection</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.DatasetCollection" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><strong>name</strong> Unicode(default=None)</li>
+<li><strong>id</strong> Integer(default=None)</li>
+<li><strong>dataset_ids</strong> SpyneArray(Integer)</li>
+<li><strong>cr_date</strong> Unicode(default=None)</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.DatasetOwner">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">DatasetOwner</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.DatasetOwner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>dataset_id</strong>   Integer</li>
+<li><strong>user_id</strong>  Integer</li>
+<li><strong>edit</strong>     Unicode</li>
+<li><strong>view</strong>     Unicode)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Dimension">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Dimension</code><span class="sig-paren">(</span><em>name</em>, <em>units</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p>A dimension, with name and units</p>
+<dd><blockquote>
+<div>A dimension, with name and units</div></blockquote>
+<ul class="simple">
+<li><strong>name</strong> Unicode</li>
+<li><strong>units</strong> SpyneArray(Unicode)</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="HydraServer.soap_server.hydra_complexmodels.HydraComplexModel">
+<em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">HydraComplexModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.HydraComplexModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the superclass from which most hydra complex models inherit.
+It contains the namespace &#8216;soap_server.hydra_complexmodels&#8217;, which all
+hydra complex models need.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Link">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Link</code><span class="sig-paren">(</span><em>parent=None</em>, <em>summary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Link" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(min_occurs=1, default=&#8221;&#8221;)</li>
+<li><strong>layout</strong>      AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>node_1_id</strong>   Integer(default=None)</li>
+<li><strong>node_2_id</strong>   Integer(default=None))</li>
+<li><strong>status</strong>      Unicode(default=&#8217;A** pattern=&#8221;[AX]&#8221;)</li>
+<li><strong>attributes</strong>  SpyneArray(ResourceAttr)</li>
+<li><strong>types</strong>       SpyneArray(TypeSummary)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.LoginResponse">
@@ -92,67 +179,194 @@ for the data associated with an attribute.</p>
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Network">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Network</code><span class="sig-paren">(</span><em>parent=None</em>, <em>summary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Network" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>project_id</strong>          Integer(default=None)</li>
+<li><strong>id</strong>                  Integer(default=None)</li>
+<li><strong>name</strong>                Unicode(default=None)</li>
+<li><strong>description</strong>         Unicode(min_occurs=1, default=None)</li>
+<li><strong>created_by</strong>          Integer(default=None)</li>
+<li><strong>cr_date</strong>             Unicode(default=None)</li>
+<li><strong>layout</strong>              AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>status</strong>              Unicode(default=&#8217;A&#8217;)</li>
+<li><strong>attributes</strong>          SpyneArray(ResourceAttr)</li>
+<li><strong>scenarios</strong>           SpyneArray(Scenario)</li>
+<li><strong>nodes</strong>               SpyneArray(Node)</li>
+<li><strong>links</strong>               SpyneArray(Link)</li>
+<li><strong>resourcegroups</strong>      SpyneArray(ResourceGroup)</li>
+<li><strong>types</strong>               SpyneArray(TypeSummary)</li>
+<li><strong>projection</strong>          Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.NetworkExtents">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">NetworkExtents</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.NetworkExtents" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>network_id</strong> Integer(default=None)</li>
+<li><strong>min_x</strong>      Decimal(default=0)</li>
+<li><strong>min_y</strong>      Decimal(default=0)</li>
+<li><strong>max_x</strong>      Decimal(default=0)</li>
+<li><strong>max_y</strong>      Decimal(default=0)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.NetworkOwner">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">NetworkOwner</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.NetworkOwner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>network_id</strong>   Integer</li>
+<li><strong>user_id</strong>  Integer</li>
+<li><strong>edit</strong>     Unicode</li>
+<li><strong>view</strong>     Unicode)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Node">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>parent=None</em>, <em>summary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Node" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(min_occurs=1, default=&#8221;&#8221;)</li>
+<li><strong>layout</strong>      AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>x</strong>           Decimal(min_occurs=1, default=0)</li>
+<li><strong>y</strong>           Decimal(min_occurs=1, default=0)</li>
+<li><strong>status</strong>      Unicode(default=&#8217;A** pattern=&#8221;[AX]&#8221;)</li>
+<li><strong>attributes</strong>  SpyneArray(ResourceAttr)</li>
+<li><strong>types</strong>       SpyneArray(TypeSummary)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Note">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Note</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Note" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong> Integer</li>
+<li><strong>ref_key</strong> Unicode</li>
+<li><strong>ref_id</strong> Integer</li>
+<li><strong>text</strong> Unicode</li>
+<li><strong>created_by</strong> Integer</li>
+<li><strong>cr_date</strong> Unicode</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Perm">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Perm</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Perm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>   Integer</li>
+<li><strong>name</strong> Unicode</li>
+<li><strong>code</strong> Unicode</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Plugin">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Plugin</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Plugin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>name</strong>        Unicode</li>
+<li><strong>location</strong>    Unicode</li>
+<li><strong>params</strong>      SpyneArray(PluginParam)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.PluginParam">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">PluginParam</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.PluginParam" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>name</strong>        Unicode</li>
+<li><strong>value</strong>       Unicode</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Project">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Project</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Project" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(default=None)</li>
+<li><strong>status</strong>      Unicode(default=&#8217;A&#8217;)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+<li><strong>created_by</strong>  Integer(default=None)</li>
+<li><strong>attributes</strong>  SpyneArray(ResourceAttr)</li>
+<li><strong>attribute_data</strong> SpyneArray(ResourceScenario)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ProjectOwner">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ProjectOwner</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ProjectOwner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>project_id</strong>   Integer</li>
+<li><strong>user_id</strong>  Integer</li>
+<li><strong>edit</strong>     Unicode</li>
+<li><strong>view</strong>     Unicode)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ProjectSummary">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ProjectSummary</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ProjectSummary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(default=None)</li>
+<li><strong>status</strong>      Unicode(default=None)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+<li><strong>created_by</strong>  Integer(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Resource">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Resource</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Resource" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="docutils">
+<dt>Superclass for anything which has a layout field:</dt>
+<dd><ul class="first last simple">
+<li>nodes</li>
+<li>links</li>
+<li>network</li>
+<li>scenario</li>
+<li>project</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceAttr">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceAttr</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceAttr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>      Integer(min_occurs=0, default=None)</li>
+<li><strong>attr_id</strong> Integer(default=None)</li>
+<li><strong>ref_id</strong>  Integer(min_occurs=0, default=None)</li>
+<li><strong>ref_key</strong> Unicode(min_occurs=0, default=None)</li>
+<li><strong>attr_is_var</strong> Unicode(min_occurs=0, default=&#8217;N&#8217;)</li>
+<li><strong>resourcescenario</strong> ResourceScenario</li>
+<li><strong>cr_date</strong> Unicode(default=None)</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="HydraServer.soap_server.hydra_complexmodels.ResourceAttrMap">
+<em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceAttrMap</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceAttrMap" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li><strong>resource_attr_id_a</strong> Integer(default=None)</li>
+<li><strong>resource_attr_id_b</strong> Integer(default=None)</li>
+<li><strong>attr_a_name</strong>        Unicode(default=None)</li>
+<li><strong>attr_b_name</strong>        Unicode(default=None)</li>
+<li><strong>ref_key_a</strong>          Unicode(default=None)</li>
+<li><strong>ref_key_b</strong>          Unicode(default=None)</li>
+<li><strong>ref_id_a</strong>           Integer(default=None)</li>
+<li><strong>ref_id_b</strong>           Integer(default=None)</li>
+<li><strong>resource_a_name</strong>    Unicode(default=None)</li>
+<li><strong>resource_b_name</strong>    Unicode(default=None)</li>
+<li><strong>network_a_id</strong>       Integer(default=None)</li>
+<li><strong>network_b_id</strong>       Integer(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceData">
@@ -238,102 +452,256 @@ For a timeseries for example, the datasset_value looks like:</p>
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceGroup">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceGroup</code><span class="sig-paren">(</span><em>parent=None</em>, <em>summary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceGroup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>network_id</strong>  Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(min_occurs=1, default=&#8221;&#8221;)</li>
+<li><strong>status</strong>      Unicode(default=&#8217;A** pattern=&#8221;[AX]&#8221;)</li>
+<li><strong>attributes</strong>  SpyneArray(ResourceAttr)</li>
+<li><strong>types</strong>       SpyneArray(TypeSummary)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceGroupDiff">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceGroupDiff</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceGroupDiff" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>scenario_1_items</strong> SpyneArray(ResourceGroupItem)</li>
+<li><strong>scenario_2_items</strong> SpyneArray(ResourceGroupItem))</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceGroupItem">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceGroupItem</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceGroupItem" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>       Integer(default=None)</li>
+<li><strong>ref_id</strong>   Integer(default=None)</li>
+<li><strong>ref_key</strong>  Unicode(default=None)</li>
+<li><strong>group_id</strong> Integer(default=None)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceScenario">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceScenario</code><span class="sig-paren">(</span><em>parent=None</em>, <em>attr_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceScenario" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>resource_attr_id</strong> Integer(default=None)</li>
+<li><strong>attr_id</strong>          Integer(default=None)</li>
+<li><strong>dataset_id</strong>       Integer(default=None)</li>
+<li><strong>value</strong>            Dataset</li>
+<li><strong>source</strong>           Unicode</li>
+<li><strong>cr_date</strong>          Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceScenarioDiff">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceScenarioDiff</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceScenarioDiff" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>resource_attr_id</strong>     Integer(default=None)</li>
+<li><strong>scenario_1_dataset</strong>   Dataset</li>
+<li><strong>scenario_2_dataset</strong>   Dataset</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceSummary">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceSummary</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceSummary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>ref_key</strong>     Unicode(default=None)</li>
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>description</strong> Unicode(min_occurs=1, default=&#8221;&#8221;)</li>
+<li><strong>attributes</strong>  SpyneArray(ResourceAttr)),</li>
+<li><strong>types</strong>       SpyneArray(TypeSummary)),</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ResourceTypeDef">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ResourceTypeDef</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ResourceTypeDef" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>ref_key</strong> Unicode(default=None)</li>
+<li><strong>ref_id</strong>  Integer(default=None)</li>
+<li><strong>type_id</strong> Integer(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Role">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Role</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Role" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>     Integer</li>
+<li><strong>name</strong>   Unicode</li>
+<li><strong>code</strong>   Unicode</li>
+<li><strong>roleperms</strong> SpyneArray(RolePerm)</li>
+<li><strong>roleusers</strong> SpyneArray(RoleUser)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.RolePerm">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">RolePerm</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.RolePerm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>perm_id</strong>   Integer</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.RoleUser">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">RoleUser</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.RoleUser" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>user_id</strong>  Integer</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Rule">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Rule</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Rule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong> Integer</li>
+<li><strong>name</strong> Unicode</li>
+<li><strong>description</strong> Unicode</li>
+<li><strong>scenario_id</strong> Integer</li>
+<li><strong>ref_key</strong> Unicode</li>
+<li><strong>ref_id</strong> Integer</li>
+<li><strong>text</strong> Unicode</li>
+<li><strong>cr_date</strong> Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Scenario">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Scenario</code><span class="sig-paren">(</span><em>parent=None</em>, <em>summary=False</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Scenario" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>                   Integer(default=None)</li>
+<li><strong>name</strong>                 Unicode(default=None)</li>
+<li><strong>description</strong>          Unicode(min_occurs=1, default=&#8221;&#8221;)</li>
+<li><strong>network_id</strong>           Integer(default=None)</li>
+<li><strong>layout</strong>               AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>status</strong>               Unicode(default=&#8217;A** pattern=&#8221;[AX]&#8221;)</li>
+<li><strong>locked</strong>               Unicode(default=&#8217;N** pattern=&#8221;[YN]&#8221;)</li>
+<li><strong>start_time</strong>           Unicode(default=None)</li>
+<li><strong>end_time</strong>             Unicode(default=None)</li>
+<li><strong>created_by</strong>           Integer(default=None)</li>
+<li><strong>cr_date</strong>              Unicode(default=None)</li>
+<li><strong>time_step</strong>            Unicode(default=None)</li>
+<li><strong>resourcescenarios</strong>    SpyneArray(ResourceScenario, default=None)</li>
+<li><strong>resourcegroupitems</strong>   SpyneArray(ResourceGroupItem, default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ScenarioDiff">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ScenarioDiff</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ScenarioDiff" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>resourcescenarios</strong>    SpyneArray(ResourceScenarioDiff)</li>
+<li><strong>groups</strong>               ResourceGroupDiff</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Template">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Template</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Template" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>        Integer(default=None)</li>
+<li><strong>name</strong>      Unicode(default=None)</li>
+<li><strong>layout</strong>    AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>types</strong>     SpyneArray(TemplateType)</li>
+<li><strong>cr_date</strong>   Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.TemplateType">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">TemplateType</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.TemplateType" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>          Integer(default=None)</li>
+<li><strong>name</strong>        Unicode(default=None)</li>
+<li><strong>resource_type</strong> Unicode(values=[&#8216;GROUP&#8217;, &#8216;NODE&#8217;, &#8216;LINK&#8217;, &#8216;NETWORK&#8217;], default=None)</li>
+<li><strong>alias</strong>       Unicode(default=None)</li>
+<li><strong>layout</strong>      AnyDict(min_occurs=0, max_occurs=1, default=None)</li>
+<li><strong>template_id</strong> Integer(min_occurs=1, default=None)</li>
+<li><strong>typeattrs</strong>   SpyneArray(TypeAttr)</li>
+<li><strong>cr_date</strong>     Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.TypeAttr">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">TypeAttr</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.TypeAttr" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>attr_id</strong>            Integer(min_occurs=1, max_occurs=1)</li>
+<li><strong>attr_name</strong>          Unicode(default=None)</li>
+<li><strong>type_id</strong>            Integer(default=None)</li>
+<li><strong>data_type</strong>          Unicode(default=None)</li>
+<li><strong>dimension</strong>          Unicode(default=None)</li>
+<li><strong>unit</strong>               Unicode(default=None)</li>
+<li><strong>default_dataset_id</strong> Integer(default=None)</li>
+<li><strong>data_restriction</strong>   AnyDict(default=None)</li>
+<li><strong>is_var</strong>             Unicode(default=None)</li>
+<li><strong>description</strong>        Unicode(default=None)</li>
+<li><strong>properties</strong>         AnyDict(default=None)</li>
+<li><strong>cr_date</strong>            Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.TypeSummary">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">TypeSummary</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.TypeSummary" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>name</strong>    Unicode</li>
+<li><strong>id</strong>      Integer</li>
+<li><strong>template_name</strong> Unicode</li>
+<li><strong>template_id</strong> Integer</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.Unit">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">Unit</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.Unit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>name</strong> Unicode</li>
+<li><strong>abbr</strong> Unicode</li>
+<li><strong>cf</strong> Double</li>
+<li><strong>lf</strong> Double</li>
+<li><strong>info</strong> Unicode</li>
+<li><strong>dimension</strong> Unicode</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.User">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">User</code><span class="sig-paren">(</span><em>parent=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.User" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>id</strong>  Integer</li>
+<li><strong>username</strong> Unicode(default=None)</li>
+<li><strong>display_name</strong> Unicode(default=None)</li>
+<li><strong>password</strong> Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 <dl class="class">
 <dt id="HydraServer.soap_server.hydra_complexmodels.ValidationError">
 <em class="property">class </em><code class="descclassname">HydraServer.soap_server.hydra_complexmodels.</code><code class="descname">ValidationError</code><span class="sig-paren">(</span><em>error_text</em>, <em>scenario_id=None</em>, <em>ref_key=None</em>, <em>ref_id=None</em>, <em>ref_name=None</em>, <em>attr_name=None</em>, <em>attr_id=None</em>, <em>template_id=None</em>, <em>type_id=None</em>, <em>resource_attr_id=None</em>, <em>dataset_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#HydraServer.soap_server.hydra_complexmodels.ValidationError" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><ul class="simple">
+<li><strong>scenario_id</strong>      Integer(default=None)</li>
+<li><strong>ref_key</strong>          Unicode(default=None)</li>
+<li><strong>ref_id</strong>           Integer(default=None)</li>
+<li><strong>ref_name</strong>         Unicode(default=None)</li>
+<li><strong>attr_name</strong>        Unicode(default=None)</li>
+<li><strong>attr_id</strong>          Integer(default=None)</li>
+<li><strong>template_id</strong>      Integer(default=None)</li>
+<li><strong>type_id</strong>          Integer(defult=None)</li>
+<li><strong>resource_attr_id</strong> Integer(default=None)</li>
+<li><strong>dataset_id</strong>       Integer(default=None)</li>
+<li><strong>error_text</strong>       Unicode(default=None)</li>
+</ul>
+</dd></dl>
 
 </div>
 <div class="section" id="api-functions">
@@ -413,8 +781,7 @@ connects exactly two nodes.</p>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#api-doumentation">API doumentation</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../HydraDB/index.html">Hydra database schema</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../HydraUI/index.html">Hydra user interface</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="">Database Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-HydraServer.soap_server.hydra_complexmodels">Soap Objects</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Web Objects (Complex Models)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#api-functions">API functions</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#projects">Projects</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#networks-inc-nodes-links">Networks (Inc nodes &amp; links)</a><ul>

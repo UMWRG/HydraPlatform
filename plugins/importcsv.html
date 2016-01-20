@@ -40,60 +40,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-ImportCSV">
-<span id="import-from-csv-files"></span><span id="importcsv"></span><h1>Import from CSV files<a class="headerlink" href="#module-ImportCSV" title="Permalink to this headline">¶</a></h1>
-<p>A Hydra plug-in for importing CSV files.</p>
-<dl class="class">
-<dt id="ImportCSV.ImportCSV">
-<em class="property">class </em><code class="descclassname">ImportCSV.</code><code class="descname">ImportCSV</code><span class="sig-paren">(</span><em>url=None</em>, <em>session_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="ImportCSV.ImportCSV.add_data">
-<code class="descname">add_data</code><span class="sig-paren">(</span><em>resource</em>, <em>attrs</em>, <em>data</em>, <em>metadata</em>, <em>units=None</em>, <em>restrictions={}</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.add_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add the data read for each resource to the resource. This requires
-creating the attributes, resource attributes and a scenario which holds
-the data.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportCSV.ImportCSV.create_attribute">
-<code class="descname">create_attribute</code><span class="sig-paren">(</span><em>name</em>, <em>unit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.create_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create attribute locally. It will get added in bulk later.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportCSV.ImportCSV.get_metadata_as_dict">
-<code class="descname">get_metadata_as_dict</code><span class="sig-paren">(</span><em>keys</em>, <em>metadata</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.get_metadata_as_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Turn a list of metadata values into a dictionary structure.
-&#64;parameter keys to describe the attribte to which this metadata refers
-&#64;parameter list of metadata. in the structure: [&#8220;(key;val) (key;val)&#8221;, &#8220;(key;val) (key;val)&#8221;,...]
-&#64;returns dictionary in the format: {attr1 : {key:val, key:val}, attr2: {key:val, key:val}...}</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportCSV.ImportCSV.read_group_members">
-<code class="descname">read_group_members</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.read_group_members" title="Permalink to this definition">¶</a></dt>
-<dd><p>The heading of a group file looks like:
-name, type, member.</p>
-<p>name : Name of the group
-type : Type of the member (node, link or group)
-member: name of the node, link or group in question.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportCSV.ImportCSV.read_groups">
-<code class="descname">read_groups</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.read_groups" title="Permalink to this definition">¶</a></dt>
-<dd><p>The heading of a group file looks like:
-name, attr1, attr2..., description</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="ImportCSV.ImportCSV.return_xml">
-<code class="descname">return_xml</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ImportCSV.ImportCSV.return_xml" title="Permalink to this definition">¶</a></dt>
-<dd><p>This is a fist version of a possible XML output.</p>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="import-from-csv-files">
+<span id="importcsv"></span><h1>Import from CSV files<a class="headerlink" href="#import-from-csv-files" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
