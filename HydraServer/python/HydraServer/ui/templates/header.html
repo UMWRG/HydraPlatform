@@ -1,0 +1,27 @@
+<!-- Navbar -->
+<nav class="navbar navbar-default">
+<div class="navbar-header">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-content">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <a class="navbar-brand" href="/">
+      <img src="{{ url_for('static', filename='img/hydra_icon.png') }}" height="20" alt="Hydra Platform"/>
+      Hydra Platform
+  </a>
+</div>
+
+<div class="collapse navbar-collapse" id="navbar-content">
+  <ul class="nav navbar-nav">
+    <li class="index"><a href="/}">Welcome</a></li>
+    <li class="about"><a href="/about">About</a></li>
+  </ul>
+
+  <ul class="nav navbar-nav navbar-right">
+      <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
+      <!--<li><a href="/admin">Admin</a></li>-->
+  </ul>
+</div>
+</nav>

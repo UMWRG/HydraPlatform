@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Directed Graph Editor</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
+    {% include 'master.html' %}
+  </head>
+
+  <body>
+    {% include 'header.html' %}
+
+  <div id="container">
+
+  <div id="nodeproperties">
+      <table >
+          <tr><th>Property</th><th>Value</th></tr>
+      </table>
+  </div>
+
+  <div id="graph"></div>
+
+  <div>
+      <ul id="graph_list"></ul>
+  </div>
+  </div>
+
+  <div><h1>Instructions</h1>
+    <ul>
+        <li>Left-click to add a new node or select existing node.</li>
+        <li>Left-click and drag between nodes to create a new edge.</li>
+        <li>Ctrl + Left-click and drag to move a node.</li>
+        <li>Right-click to pan around the graph.</li>
+        <li>Wheel mouse to zoom.</li>
+        <li>Delete to remove node.</li>
+    </ul>
+  </div>
+
+    {% include 'footer.html' %}
+  </body>
+
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery-1.12.0.min.js')}}"></script>
+  <script src="{{url_for('static', filename='js/app.js')}}"></script>
+  <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
+</html>
