@@ -33,9 +33,9 @@
             {% for network in project.networks %}
                 <div id="network_{{network.network_id}}_scenarios" class="table-row hidden">
                     {% for scenario in network.scenarios%}
-                    <a href="{{ url_for('network', network_id=network.network_id, scenario_id=scenario.scenario_id) }}">
+                    <a href="{{ url_for('go_network', network_id=network.network_id, scenario_id=scenario.scenario_id) }}">
                             <div id="scenario_{{scenario.scenario_id}}}}">
-                                {{scenario.scenario_name}}}}
+                                {{scenario.scenario_name}}
                             </div>
                         </a>
                     {% endfor %}
@@ -48,4 +48,3 @@
       {% include "footer.html" %}
 </body>
 </html>
-

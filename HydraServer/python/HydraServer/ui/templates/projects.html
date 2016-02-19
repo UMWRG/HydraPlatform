@@ -20,8 +20,8 @@
           <tbody>
           {% for p in projects %}
             <tr>
-                <td><a href="{{ url_for('project', project_id=p.project_id, _external=True) }}">{{ p.project_name }}</a></td>
-                <td><a href="{{ url_for('project', project_id=p.project_id, _external=True) }}">{{ p.project_description }}</a></td>
+                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_name }}</a></td>
+                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_description }}</a></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -30,4 +30,3 @@
     {% include 'footer.html' %}
 </body>
 </html>
-

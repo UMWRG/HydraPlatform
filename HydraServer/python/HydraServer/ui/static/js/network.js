@@ -1,8 +1,5 @@
 
-sigma.renderers.def = sigma.renderers.canvas
-insert_node = function(data, x, y){
-    alert(data);
-};
+
 
 get_node = function(node_id){
     $.ajax({url:"/node/"+node_id,
@@ -52,22 +49,6 @@ $(document).ready(function(){
     }) ;
 
     $('#linktable_wrapper').addClass('hidden');
-    
-    sig.graph = json_net;
-    sig = new sigma(sig);
-    var dragListener = sigma.plugins.dragNodes(sig, sig.renderers[0]);
-    dragListener.bind('startdrag', function(event) {
-      console.log(event);
-    });
-    dragListener.bind('drag', function(event) {
-      console.log(event);
-    });
-    dragListener.bind('drop', function(event) {
-      console.log(event);
-    });
-    dragListener.bind('dragend', function(event) {
-      console.log(event);
-    });
 
     if (Cookies.get("tab_selected") == "list"){
         $("#listtab").click();
@@ -78,33 +59,33 @@ $(document).ready(function(){
 });
 
 $(document).on('click', '#linktab', function(){
-    $('#nodetable').addClass('hidden');           
-    $('#nodetable_wrapper').addClass('hidden');           
-    $('#linktable').removeClass('hidden');           
-    $('#linktable_wrapper').removeClass('hidden');           
+    $('#nodetable').addClass('hidden');
+    $('#nodetable_wrapper').addClass('hidden');
+    $('#linktable').removeClass('hidden');
+    $('#linktable_wrapper').removeClass('hidden');
     $('#nodetab').removeClass('selected');
     $(this).addClass('selected');
     Cookies.set("node_link_selected", "list")
 });
 
 $(document).on('click', '#nodetab', function(){
-    $('#linktable').addClass('hidden');           
-    $('#linktable_wrapper').addClass('hidden');           
-    $('#linktable_wrapper').removeClass('selected');           
-    $('#nodetable').removeClass('hidden');           
-    $('#nodetable_wrapper').removeClass('hidden');           
+    $('#linktable').addClass('hidden');
+    $('#linktable_wrapper').addClass('hidden');
+    $('#linktable_wrapper').removeClass('selected');
+    $('#nodetable').removeClass('hidden');
+    $('#nodetable_wrapper').removeClass('hidden');
     $('#linktab').removeClass('selected');
-    $(this).addClass('selected');           
+    $(this).addClass('selected');
     Cookies.set("node_link_selected", "node")
 });
 
 
 $(document).on('click', '.expand_table', function(){
-   
+
     var tbody = $(this).closest('thead').siblings('tbody')
 
     var hidden = tbody.is(':hidden');
-        
+
     tbody.toggle();
 
     if (hidden){
@@ -116,7 +97,7 @@ $(document).on('click', '.expand_table', function(){
 });
 
 $(document).on('click', '.graph_dataset', function(){
-   
+
     var tbody = $(this).siblings('.value');
 
     var win = window.open($(this).attr("url"), '_blank');
@@ -128,7 +109,7 @@ $(document).on('click', '.noderow', function(){
     var success = function(data){
         //add_overlay(data);
     }
-    
+
     var node_id = this.id.split('_')[1]
     $.ajax({
         url:'/node?node_id='+node_id+'&scenario_id='+scenario_id,
@@ -141,7 +122,7 @@ $(document).on('click', '.noderow', function(){
     var success = function(data){
         //add_overlay(data);
     }
-    
+
     var node_id = this.id.split('_')[1]
     $.ajax({
         url:'/node?node_id='+node_id+'&scenario_id='+scenario_id,
@@ -152,7 +133,7 @@ $(document).on('click', '.noderow', function(){
 
 $(document).on('click', '.attributes .attribute.timeseries', function(){
     var ts_data = $(".attrval .contents", this).html();
-    var js_data = jQuery.parseJSON(ts_data); 
+    var js_data = jQuery.parseJSON(ts_data);
     var index = [];
     for (t in js_data){
         index.push({"mData": t});
@@ -162,7 +143,7 @@ $(document).on('click', '.attributes .attribute.timeseries', function(){
     for (t in js_data[0]){
         data.push({'time':t, 'value':js_data[0][t]})
     }
-    
+
     $("table", this).dataTable({
         'aaData':data,
         "aoColumns": [{"mData": 'time'}, {"mData": 'value'}],
@@ -178,5 +159,3 @@ $(document).on('click', '.attributes .attribute.timeseries', function(){
     var x = $(".attrval", this);
     x.append(ts_table);*/
 });
-
-

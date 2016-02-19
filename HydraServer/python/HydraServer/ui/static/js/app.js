@@ -3,6 +3,29 @@ var width  = 960,
     height = 500,
     colors = d3.scale.category10();
 
+    //Transform functions, used to convert the Hydra coordinates
+    //to coodrinates on the d3 svg
+  var xScale = d3.scale.linear()
+                           .domain([min_y,max_y])
+                           .range([0,1000]);
+  var yScale = d3.scale.linear()
+                          .domain([min_x,max_x])
+                          .range([0,500]);
+
+
+
+for (i=0; i<nodes.length; i++){
+    nodes[i]['x'] = xScale(nodes[i]['x']);
+    nodes[i]['y'] = yScale(nodes[i]['y']);
+}
+
+var zoomScalex = d3.scale.linear()
+    .domain([0, width])
+    .range([0, width]);
+
+var zoomScaley = d3.scale.linear()
+    .domain([0, height])
+    .range([height, 0]);
 
 var drag = d3.behavior.drag()
     .origin(function(d) { return d; })
@@ -11,33 +34,27 @@ var drag = d3.behavior.drag()
     .on("dragend", dragended);
 
 var zoom = d3.behavior.zoom()
+
     .scaleExtent([1, 10])
-    .on("zoom", zoomed);
+    .on("zoom", function zoomed() {
+      if(d3.event.sourceEvent.buttons == 2 || d3.event.sourceEvent.type == 'wheel'){
+        container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+        circle.selectAll('circle').attr("transform", function circletrans(d) {
+          return "translate(" + zoomScalex(d.x) + "," + zoomScaley(d.y) + ")";
+        });
+    }
+    });
 
 var svg = d3.select('#graph')
   .append('svg')
   .attr('oncontextmenu', 'return false;')
   .attr('width', width)
   .attr('height', height)
+  //.call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
   .call(zoom);
 
 
 var container = svg.append("svg:g")
-
-// set up initial nodes and links
-//  - nodes are known by 'id', not by index in array.
-//  - reflexive edges are indicated on the node (as a bold black circle).
-//  - links are always source < target; edge directions are set by 'left' and 'right'.
-var nodes = [
-    {id: 0, reflexive: false, x: 200, y: 200, name: 'reservoir'},
-    {id: 1, reflexive: true, x: 500, y: 300, },
-    {id: 2, reflexive: false, x: 250, y: 50, }
-  ],
-  lastNodeId = 2,
-  links = [
-    {source: 0, target: 1, left: false, right: true },
-    {source: 1, target: 2, left: false, right: true }
-  ];
 
 // define arrow markers for graph links
 svg.append('svg:defs').append('svg:marker')
@@ -113,7 +130,7 @@ function tick() {
   });
 
   circle.attr('transform', function(d) {
-    return 'translate(' + d.x + ',' + d.y + ')';
+    return 'translate(' + zoomScalex(d.x) + ',' + zoomScaley(d.y) + ')';
   });
 }
 
@@ -319,7 +336,7 @@ function mouseup() {
     drag_line
       .classed('hidden', true)
       .style('marker-end', '');
-  }G
+  }
 
   // because :active only works in WebKit?
   svg.classed('active', false);
@@ -344,7 +361,7 @@ function keydown() {
 
   /*Allow the user to enter values into input boxes!*/
   if (d3.event.target.type){
-      return;  
+      return;
   }
 
   d3.event.preventDefault();
@@ -414,12 +431,6 @@ function keyup() {
   }
 }
 
-function zoomed() {
-  if(d3.event.sourceEvent.buttons == 2 || d3.event.sourceEvent.type == 'wheel'){
-    container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-  }
-}
-
 function dragstarted(d) {
   if(d3.event.sourceEvent.buttons == 1){
     d3.event.sourceEvent.stopPropagation();
@@ -442,52 +453,6 @@ function dragended(d) {
   }
 }
 
-function refresh_graph_list() {
-    d3.json("/ui/graphs", function(error, json) {
-      if (error) return console.warn(error);
-
-      li = d3.select('#graph_list').selectAll('li').data(json.graph_files)
-
-      li.enter().append('li')
-        .text(function(d) { return d;})
-        .on('mouseover', function(d) {
-          d3.select(this).classed("over", true);
-        })
-        .on('mouseout', function(d) {
-          d3.select(this).classed("over", false);
-        })
-        .on('click', function(d) {
-            load_graph(d)
-            d3.selectAll("li.loaded").classed("loaded", false)
-            d3.select(this).classed("loaded", true)
-
-        })
-
-      li.exit().remove()
-
-
-    });
-}
-
-function load_graph(graph_name) {
-    d3.json("/graphs/" + graph_name, function(error, json) {
-      if (error) return console.warn(error);
-
-      nodes = json.nodes
-      links = json.links
-      selected_graph = graph_name
-      restart()
-    })
-
-}
-
-function save_graph() {
-    if(selected_graph) {
-      d3.json("/graphs/" + selected_graph)
-        .post(JSON.stringify({nodes: nodes, links: links}))
-    }
-}
-
 // app starts here
 svg.on('mousedown', mousedown)
   .on('mousemove', mousemove)
@@ -496,5 +461,4 @@ d3.select(window)
   .on('keydown', keydown)
   .on('keyup', keyup);
 
-refresh_graph_list()
 restart();
