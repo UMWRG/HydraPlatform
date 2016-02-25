@@ -217,9 +217,9 @@ def go_network():
     for node in network.nodes:
         node_coords[node.node_id] = [node.node_y, node.node_x]
         node_name_map[node.node_id] = node.node_name
-    link_coords = {}
+    links = {}
     for link in network.links:
-        link_coords[link.link_id] = [node_coords[link.node_1_id], node_coords[link.node_2_id]]
+        links[link.link_id] = [link.node_1_id, link.node_2_id]
 
     #Get the min, max x and y coords
     extents = net.get_network_extents(network_id, **session)
@@ -230,9 +230,10 @@ def go_network():
     return render_template('network.html',\
                 scenario_id=scenario_id,
                 node_coords=node_coords,\
-                link_coords=link_coords,\
+                links=links,\
                 username=session['username'],\
                 display_name=session['username'],\
+                node_name_map=node_name_map,\
                 extents=extents,\
                 network=network)
 

@@ -15,12 +15,7 @@
     var min_y = {{extents['min_y']}};
     var max_y = {{extents['max_y']}};
 
-    var transform = function(x, A, B, C, D){
-        return C*( 1-(x-A/B-A)) + D*(x-A/B-A);
-    }
-
     var nodes = [];
-    var links = [];
     var node_coords = {};
     var lastNodeId = null;
     {% for id, coord in node_coords.items()%}
@@ -35,13 +30,13 @@
       lastNodeId={{id}};
       node_coords[{{id}}] = [{{coord[0]}}, {{coord[1]}}];
     {% endfor %}
-    var link_coords = {}
-    {% for id, coord in link_coords.items()%}
-        link_coords[{{id}}] = [[{{coord[0][0]}}, {{coord[0][1]}}], [{{coord[1][0]}}, {{coord[1][1]}}]];
+
+    var links = [];
+    {% for id, nodes in links.items()%}
         links.push(
           {
-            'source': {{coord[0][0]}},
-            'target': {{coord[0][1]}},
+            'source': {{nodes[0]}},
+            'target': {{nodes[1]}},
             'left'  : 'true',
             'right' : 'false',
           }
@@ -115,13 +110,14 @@
                 <div id="listtab" class="tab">List View</div>
             </div>
 
+
+
+        <div id="graph"></div>
         <div id="nodeproperties">
             <table >
                 <tr><th>Property</th><th>Value</th></tr>
             </table>
         </div>
-
-        <div id="graph"></div>
 
         <div>
             <ul id="graph_list"></ul>
@@ -177,16 +173,6 @@
         </table>
         </div>
         </div>
-    </div>
-    <table id="test" style="bgcolor=blue"></table>
-
-    <div id="nodeproperties">
-        <table >
-            <tr><th>Property</th><th>Value</th></tr>
-        </table>
-    </div>
-    <div id="container">
-      <div id="graph"></div>
     </div>
 
     <div><h1>Instructions</h1>
