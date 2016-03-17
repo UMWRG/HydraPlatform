@@ -55,10 +55,17 @@ namespace HydraJsonClient
             return callServer("get_all_attributes", new Hashtable());
         }
 
+        public string getAllProjetcs()
+        {
+            return callServer("get_projects", new Hashtable());
+        }
+
         public string getAllDimensions()
         {
             return callServer("get_all_dimensions", new Hashtable());
         }
+
+       
 
 
         /*
