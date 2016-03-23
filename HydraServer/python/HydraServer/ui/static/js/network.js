@@ -18,7 +18,7 @@ $(document).on("click", ".node", function(){
 });
 
 var sig = {
-        container: 'static_graph',
+        container: 'graph_container',
         type: 'canvas',
         settings: {
             enableEdgeHovering: true,
@@ -51,9 +51,9 @@ $(document).ready(function(){
     $('#linktable_wrapper').addClass('hidden');
 
     if (Cookies.get("tab_selected") == "list"){
-        $("#listtab").click();
-    } else if (Cookies.get("tab_selected") == "map"){
-        $("#mapstab").click();
+        $("#listtab a").click();
+    } else if (Cookies.get("tab_selected") == "static"){
+        $("#statictab a").click();
     }
 
 });
@@ -158,4 +158,47 @@ $(document).on('click', '.attributes .attribute.timeseries', function(){
     );
     var x = $(".attrval", this);
     x.append(ts_table);*/
+});
+
+$(document).on('click', '#statictab', function(){
+    //$('#googleMap').addClass('hidden');     
+    $('#graph_container').removeClass('hidden');
+    $('#nodesandlinks').addClass('hidden');
+    $('#nodetable').addClass('hidden');
+    $(this).addClass('active');
+    //$('#mapstab').removeClass('selected');        
+    $('#listtab').removeClass('active');        
+    Cookies.set("tab_selected", "static")
+});
+
+//$(document).on('click', '#mapstab', function(){
+//    $('#graph_container').addClass('hidden');   
+//    $('#googleMap').removeClass('hidden');
+//    $('#nodesandlinks').addClass('hidden');
+//    $('#nodetable').addClass('hidden');
+//    $(this).addClass('selected');
+//    $('#statictab').removeClass('selected');
+//    $('#listtab').removeClass('selected');        
+//    if (maps_initialized == false){
+//    	initialize();
+//    }
+//    Cookies.set("tab_selected", "map")
+//});
+//
+
+$(document).on('click', '#listtab', function(){
+    $('#graph_container').addClass('hidden');   
+    //$('#googleMap').addClass('hidden');
+    $('#nodesandlinks').removeClass('hidden');
+    $('#nodetable').removeClass('hidden');
+
+    $(this).addClass('selected');
+    //$('#mapstab').removeClass('active');
+    $('#statictab').removeClass('active');
+    Cookies.set("tab_selected", "list")
+});
+
+$('#network-tab div').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show');
 });

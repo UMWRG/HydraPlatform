@@ -1,6 +1,6 @@
 // set up SVG for D3
-var width  = 960,
-    height = 500,
+var width  = 1020,
+    height = 700,
     colors = d3.scale.category10();
 
     //Transform functions, used to convert the Hydra coordinates
@@ -179,12 +179,10 @@ function redraw_graph() {
     .style('stroke', function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
     .classed('reflexive', function(d) { return d.reflexive; })
     .on('mouseover', function(d) {
-//      if(!mousedown_node || d === mousedown_node) return;
       // enlarge target node
       d3.select(this).attr('r', '12').style('stroke', 'black');
     })
     .on('mouseout', function(d) {
- //     if(!mousedown_node || d === mousedown_node) return;
       // unenlarge target node
       d3.select(this).attr('r', '10').style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
     })
@@ -331,7 +329,7 @@ function mousemove() {
   // update drag line
   drag_line.attr('d', 'M' + x(mousedown_node.x) + ',' + y(mousedown_node.y) + 'L' + d3.mouse(container.select('svg').node())[0] + ',' + d3.mouse(container.select('svg').node())[1]);
   tick()
-  //redraw_graph();
+  redraw_graph();
 }
 
 function mouseup() {

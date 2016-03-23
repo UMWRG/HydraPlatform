@@ -184,34 +184,6 @@ def go_network():
 
         return prop_value
 
-    json_net = {'nodes':[], 'edges':[]}
-    for node in network.nodes:
-        colour = get_layout_property(node, 'colour', 'red')
-        size = get_layout_property(node, 'size', 1)
-        node_dict = {
-            'id' : str(node.node_id),
-            'label': node.node_name,
-            'x'    : float(node.node_x),
-            'y'    : float(node.node_y),
-            'size' : size,
-            'color': colour,
-        }
-        json_net['nodes'].append(node_dict)
-
-    for link in network.links:
-        colour = get_layout_property(link, 'colour', 'red')
-        width = get_layout_property(link, 'line_weight', 5)
-        link_dict = {
-            'id' : str(link.link_id),
-            'source': str(link.node_1_id),
-            'target' : str(link.node_2_id),
-            'color': colour,
-            'size':width,
-            'type':'curve',
-            'hover_color':'#ccc',
-        }
-        json_net['edges'].append(link_dict)
-
     node_coords = {}
     node_name_map = {}
     for node in network.nodes:

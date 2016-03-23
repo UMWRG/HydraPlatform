@@ -66,38 +66,4 @@ function initialize()
 
 //google.maps.event.addDomListener(window, 'load', initialize);
 
-$(document).on('click', '#statictab', function(){
-    $('#googleMap').addClass('hidden');     
-    $('#static_graph').removeClass('hidden');
-    $('#nodesandlinks').addClass('hidden');
-    $('#nodetable').addClass('hidden');
-    $(this).addClass('selected');
-    $('#mapstab').removeClass('selected');        
-    $('#listtab').removeClass('selected');        
-    Cookies.set("tab_selected", "static")
-});
 
-$(document).on('click', '#mapstab', function(){
-    $('#static_graph').addClass('hidden');   
-    $('#googleMap').removeClass('hidden');
-    $('#nodesandlinks').addClass('hidden');
-    $('#nodetable').addClass('hidden');
-    $(this).addClass('selected');
-    $('#statictab').removeClass('selected');
-    $('#listtab').removeClass('selected');        
-    if (maps_initialized == false){
-    	initialize();
-    }
-    Cookies.set("tab_selected", "map")
-});
-$(document).on('click', '#listtab', function(){
-    $('#static_graph').addClass('hidden');   
-    $('#googleMap').addClass('hidden');
-    $('#nodesandlinks').removeClass('hidden');
-    $('#nodetable').removeClass('hidden');
-
-    $(this).addClass('selected');
-    $('#mapstab').removeClass('selected');
-    $('#statictab').removeClass('selected');
-    Cookies.set("tab_selected", "list")
-});

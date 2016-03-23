@@ -1,0 +1,50 @@
+ <div id="network_details">
+        <table id="network_table" class="">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Projection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="network_{{network.network_id}}" class="tablerow networkrow">
+                <td>{{network.network_name}}</td>
+                <td>{{network.network_description}}</td>
+                <td>{{network.projection}}</td>
+            </tr>
+          </tbody>
+      </table>
+
+        <table class="table table-bordered table-striped">
+        <thead>
+            <th class="expand_table">&darr;</th>
+            <th class="graph_head"> </th><!--For the 'graph' column-->
+            <th>Attribute</th>
+            <th>Value</th>
+        </thead>
+        <tbody id='network_{{network.network_id}}_attributes' class='attributes' {{'x' if True else 'y'}}>
+            {% for attr in network.attributes %}
+                <tr class="attribute
+                        {{'isvar' if attr.is_var == 'Y' else 'notvar'}}
+                        {{attr.value.data_type if not attr.value else ''}}">
+                    <td class="expand_row">&rarr;</td>
+                    <td class="graph_dataset" url="url_for('graph')">
+                            <div><img src="{{url_for('static', filename='/img/graph.png')}}"/></div>
+                    </td>
+                    <td>{{attr.name}}</td>
+                    <py:if test="attr.value is not None">
+                        <td class="attrval">
+                            <div class="value contents">{{"%s..."%attr.value.value[:100] if len(attr.value.value) > 500 else attr.value.value}}</div>
+                            <div class="value hidden">{{attr.value.value}}</div>
+                            <table class="hidden ts_table"></table>
+                        </td>
+                    </py:if>
+                    <py:if test="attr.value is None">
+                        <td class="value nodata">-</td>
+                    </py:if>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>

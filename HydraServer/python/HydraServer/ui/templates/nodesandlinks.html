@@ -1,0 +1,59 @@
+<div id="nodesandlinks" class="hidden">
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="nodetab" class="tab active">
+            <a href="" role="tab" data-toggle="tab">
+                Nodes
+            </a>
+        </li>
+        <li id="linktab" class="tab">
+            <a href="" role="tab" data-toggle="tab">
+                Links
+            </a>
+        </li>
+    </ul>
+    
+    <!--NODES-->
+    <table id="nodetable" class="display hidden">
+          <thead>
+            <tr>
+              <th>Node Name</th>
+              <th>Node Description</th>
+              <th>X</th>
+              <th>Y</th>
+            </tr>
+          </thead>
+          <tbody id='nodes'>
+          {% for node in network.nodes %}
+            <tr id="node_{{node.node_id}}" class="tablerow noderow">
+                <td>{{node.node_name}}</td>
+                <td>{{node.node_description}}</td>
+                <td>{{node.node_x}}</td>
+                <td>{{node.node_y}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+
+      <!-- LINKS -->
+    <table id="linktable" class="display">
+          <thead>
+            <tr>
+              <th>Link Name</th>
+              <th>Link Description</th>
+              <th>Start Node</th>
+              <th>End Node</th>
+            </tr>
+          </thead>
+          <tbody id='links'>
+          {% for link in network.links %}
+            <tr id="link_{{link.link_id}}" class="tablerow linkrow">
+                <td>{{link.link_name}}</td>
+                <td>{{link.link_description}}</td>
+                <td>{{node_name_map[link.node_1_id]}}</td>
+                <td>{{node_name_map[link.node_2_id]}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+    </table>
+</div>
+

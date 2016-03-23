@@ -143,3 +143,8 @@ div.table-col{
 .column-label{
     width: 4em;
 }
+
+#tab-contents{
+    padding: 5px;
+    margin: 5px;
+}

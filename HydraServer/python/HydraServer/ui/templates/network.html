@@ -32,11 +32,11 @@
     {% endfor %}
 
     var links = [];
-    {% for id, nodes in links.items()%}
+    {% for id, connected_nodes in links.items()%}
         links.push(
           {
-            'source': {{nodes[0]}},
-            'target': {{nodes[1]}},
+            'source': {{connected_nodes[0]}},
+            'target': {{connected_nodes[1]}},
             'left'  : 'true',
             'right' : 'false',
           }
@@ -53,150 +53,57 @@
 
     <div class="main_content">
 
-      <div id="network_details">
-        <table id="network_table" class="">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Projection</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr id="network_{{network.network_id}}" class="tablerow networkrow">
-                <td>{{network.network_name}}</td>
-                <td>{{network.network_description}}</td>
-                <td>{{network.projection}}</td>
-            </tr>
-          </tbody>
-      </table>
+      {% include 'network_details.html' %}
 
-        <table class="table table-bordered table-striped">
-        <thead>
-            <th class="expand_table">&darr;</th>
-            <th class="graph_head"> </th><!--For the 'graph' column-->
-            <th>Attribute</th>
-            <th>Value</th>
-        </thead>
-        <tbody id='network_{{network.network_id}}_attributes' class='attributes' {{'x' if True else 'y'}}>
-            {% for attr in network.attributes %}
-                <tr class="attribute
-                        {{'isvar' if attr.is_var == 'Y' else 'notvar'}}
-                        {{attr.value.data_type if not attr.value else ''}}">
-                    <td class="expand_row">&rarr;</td>
-                    <td class="graph_dataset" url="url_for('graph')">
-                            <div><img src="{{url_for('static', filename='/img/graph.png')}}"/></div>
-                    </td>
-                    <td>{{attr.name}}</td>
-                    <py:if test="attr.value is not None">
-                        <td class="attrval">
-                            <div class="value contents">{{"%s..."%attr.value.value[:100] if len(attr.value.value) > 500 else attr.value.value}}</div>
-                            <div class="value hidden">{{attr.value.value}}</div>
-                            <table class="hidden ts_table"></table>
-                        </td>
-                    </py:if>
-                    <py:if test="attr.value is None">
-                        <td class="value nodata">-</td>
-                    </py:if>
-                </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+        <ul id="network-tabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" id="statictab">
+                <a data-toggle="tab">Graph View</a>
+            </li>
+            <li role="presentation" id="listtab">
+                <a data-toggle="tab">List View</a>
+            </li>
+        </ul>
+        
+        <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
+
       <div id="graph_container">
-            <div class="tabs">
-                <div id="statictab" class="tab selected">Graph View</div>
-                <div id="mapstab" class="tab">Map View</div>
-                <div id="listtab" class="tab">List View</div>
+            <div id="graph"></div>
+            <div id="nodeproperties">
+                <table >
+                    <tr><th>Property</th><th>Value</th></tr>
+                </table>
             </div>
+        </div> <!-- graph_container -->
 
+       {% include 'nodesandlinks.html' %}
 
+        </div> <!-- tab-contents -->
+        
+      </div> <!-- main_content -->
 
-        <div id="graph"></div>
-        <div id="nodeproperties">
-            <table >
-                <tr><th>Property</th><th>Value</th></tr>
-            </table>
+        <!-- this needs to be updated and turned into a tooltip that can be hidden -->
+        <div><h1>Instructions</h1>
+          <ul>
+              <li>Left-click to add a new node or select existing node.</li>
+              <li>Left-click and drag between nodes to create a new edge.</li>
+              <li>Ctrl + Left-click and drag to move a node.</li>
+              <li>Right-click to pan around the graph.</li>
+              <li>Wheel mouse to zoom.</li>
+              <li>Delete to remove node.</li>
+          </ul>
         </div>
 
-        <div>
-            <ul id="graph_list"></ul>
-        </div>
-        </div>
-      </div>
+        {% include 'footer.html' %}
 
-        <div id="nodesandlinks" class="hidden">
-            <div class="tabs">
-                <div id="nodetab" class="tab selected">Nodes</div>
-                <div id="linktab" class="tab">Links</div>
-            </div>
-        <div>
-        <table id="nodetable" class="display hidden">
-          <thead>
-            <tr>
-              <th>Node Name</th>
-              <th>Node Description</th>
-              <th>X</th>
-              <th>Y</th>
-            </tr>
-          </thead>
-          <tbody id='nodes'>
-          {% for node in network.nodes %}
-            <tr id="node_{{node.node_id}}" class="tablerow noderow">
-                <td>{{node.node_name}}</td>
-                <td>{{node.node_description}}</td>
-                <td>{{node.node_x}}</td>
-                <td>{{node.node_y}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-      </table>
-        <table id="linktable" class="display">
-          <thead>
-            <tr>
-              <th>Link Name</th>
-              <th>Link Description</th>
-              <th>Start Node</th>
-              <th>End Node</th>
-            </tr>
-          </thead>
-          <tbody id='links'>
-          {% for link in network.links %}
-            <tr id="link_{{link.link_id}}" class="tablerow linkrow">
-                <td>{{link.link_name}}</td>
-                <td>{{link.link_description}}</td>
-                <td>{{node_name_map[link.node_1_id]}}</td>
-                <td>{{node_name_map[link.node_2_id]}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        </div>
-        </div>
-    </div>
+        <!--Include css & javascript-->
+        {% include 'master.html' %}
 
-    <div><h1>Instructions</h1>
-      <ul>
-          <li>Left-click to add a new node or select existing node.</li>
-          <li>Left-click and drag between nodes to create a new edge.</li>
-          <li>Ctrl + Left-click and drag to move a node.</li>
-          <li>Right-click to pan around the graph.</li>
-          <li>Wheel mouse to zoom.</li>
-          <li>Delete to remove node.</li>
-      </ul>
-    </div>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
 
-    {% include 'footer.html' %}
+        <script src="{{url_for('static', filename='js/graph.js')}}"></script>
+        <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
+        <script src="{{url_for('static', filename='js/network.js')}}"></script>
 
-    <!--Include css & javascript-->
-    {% include 'master.html' %}
-
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-
-    <script src="{{url_for('static', filename='js/app.js')}}"></script>
-    <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
-    <script src="{{url_for('static', filename='js/network.js')}}"></script>
-
-    <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
-</body>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
+    </body>
 </html>
