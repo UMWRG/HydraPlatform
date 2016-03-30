@@ -29,9 +29,9 @@ namespace HydraJsonClient.Lib
 {
     public class NetworkExporter
     {
-        JSONClient client; 
+        public JSONClient client; 
 
-        public NetworkExporter(string server_addrs, string userName, string password, string sessionid)
+        public NetworkExporter(string server_addrs, string userName, string password, string sessionid=null)
         {
             User user = new User(userName, password, sessionid);
             client = new JSONClient(server_addrs, user);
