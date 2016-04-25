@@ -1,0 +1,27 @@
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+.node :hover {
+  fill: black ;
+}
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+.node text {
+  font: 9px helvetica;
+}
+
+d3-tip {
+    line-height: 1;
+    color: black;
+
+
+}
+
+d3-tip :hover {
+   fill: blue ;
+}
+

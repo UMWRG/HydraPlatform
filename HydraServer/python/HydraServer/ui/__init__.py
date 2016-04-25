@@ -185,19 +185,56 @@ def go_network():
         return prop_value
 
     node_coords = {}
-    node_name_map = {}
+    node_name_map = []
+
+    nodes_ = []
+    links_ = []
+    node_index = {}
+    links_types = []
+    links_types.append(None)
+    nodes_types = []
+    nodes_types.append(None)
+
     for node in network.nodes:
-        node_coords[node.node_id] = [node.node_y, node.node_x]
-        node_name_map[node.node_id] = node.node_name
+        try:
+            type = node.types[0].templatetype.type_name
+            if (type in nodes_types) == False:
+                nodes_types.append(type)
+        except:
+            type=None
+
+        node_index[node.node_id] = network.nodes.index(node)
+        #nodes_[node.node_id]=[1, node.node_x, node.node_y]
+        node_coords[node.node_id] = [node.node_x, node.node_y]
+        node_name_map.append({'id':node.node_id, 'name':node.node_name, 'name': node.node_name})
+
+        nodes_.append({'id':node.node_id, 'group': nodes_types.index(type) + 1, 'x':float(node.node_x),'y': float(node.node_y), 'name':node.node_name, 'type':type})
+
+
     links = {}
     for link in network.links:
         links[link.link_id] = [link.node_1_id, link.node_2_id]
+        #links_[link.link_id]=[nodes_.keys().index(link.node_1_id),nodes_.keys().index(link.node_2_id),1]
+        #print  "ids: ", links[link.link_id]
+        #print "positions: ", links_[link.link_id]
+        try:
+            type = link.types[0].templatetype.type_name
+            if (type in links_types) == False:
+                links_types.append(type)
+        except:
+            type = None
+
+        links_.append({'id': link.link_id,'source':node_index[link.node_1_id],'target':node_index[link.node_2_id],'value':links_types.index(type)+1, 'type':type, 'name':link.link_name})
+
+
+
 
     #Get the min, max x and y coords
     extents = net.get_network_extents(network_id, **session)
     app.logger.info(node_coords)
 
     app.logger.info("Network %s retrieved", network.network_name)
+
 
     return render_template('network.html',\
                 scenario_id=scenario_id,
@@ -207,7 +244,9 @@ def go_network():
                 display_name=session['username'],\
                 node_name_map=node_name_map,\
                 extents=extents,\
-                network=network)
+                network=network,\
+                           nodes_=nodes_,\
+                           links_=links_)
 
 
 if __name__ == "__main__":

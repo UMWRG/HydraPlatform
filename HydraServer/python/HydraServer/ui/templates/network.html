@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
+
 <head>
   <title>Network {{network.network_name}}</title>
 
@@ -9,6 +12,26 @@
   //  - reflexive edges are indicated on the node (as a bold black circle).
   //  - links are always source < target; edge directions are set by 'left' and 'right'.
     var scenario_id={{scenario_id}};
+    var data_={{node_name_map|tojson}};
+    function get_name(id)
+    {
+    value='None'
+    for (i in data_)
+    {
+        if(data_[i].id==id)
+        {
+            value=data_[i].name;
+            break;
+        }
+    }
+     return value;
+     }
+
+     var nodes_=[]
+     nodes_={{nodes_|tojson}}
+
+   var links_=[];
+   var links_={{links_|tojson}}
 
     var min_x = {{extents['min_x']}};
     var max_x = {{extents['max_x']}};
@@ -63,7 +86,7 @@
                 <a data-toggle="tab">List View</a>
             </li>
         </ul>
-        
+
         <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
       <div id="graph_container">
@@ -78,7 +101,7 @@
        {% include 'nodesandlinks.html' %}
 
         </div> <!-- tab-contents -->
-        
+
       </div> <!-- main_content -->
 
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
@@ -94,13 +117,14 @@
         </div>
 
         {% include 'footer.html' %}
-
+0
         <!--Include css & javascript-->
         {% include 'master.html' %}
 
         <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
 
-        <script src="{{url_for('static', filename='js/graph.js')}}"></script>
+        <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
         <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
         <script src="{{url_for('static', filename='js/network.js')}}"></script>
 

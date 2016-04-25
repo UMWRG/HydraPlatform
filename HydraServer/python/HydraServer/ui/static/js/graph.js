@@ -5,11 +5,11 @@ var width  = 1020,
 
     //Transform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
-  var x = d3.scale.linear()
-                           .domain([min_y,max_y])
-                           .range([0,1000]);
   var y = d3.scale.linear()
-                          .domain([max_x,min_x])
+                           .domain([min_y, max_y ])
+                           .range([1000,0]);
+  var x = d3.scale.linear()
+                          .domain([min_x, max_x])
                           .range([0,500]);
 
 var drag_line = null;
@@ -19,6 +19,8 @@ var drag = d3.behavior.drag()
     .on("dragstart", dragstarted)
     .on("drag", dragged)
     .on("dragend", dragended);
+
+
 
 var svg = d3.select('#graph')
   .append('svg')
