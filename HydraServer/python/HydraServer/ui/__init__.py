@@ -12,6 +12,7 @@ from HydraServer.soap_server.hydra_base import get_session_db
 
 from flask import render_template
 
+
 DATA_FOLDER = 'python/HydraServer/ui/data'
 
 app = Flask(__name__)
@@ -168,7 +169,9 @@ def go_network():
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
 
-    network = net.get_network(network_id, scenario_ids=[scenario_id], **session)
+    network = net.get_network(network_id, False, 'N', scenario_ids=[scenario_id], **session)
+
+
 
     def get_layout_property(resource, prop, default):
         layout = {}
@@ -194,8 +197,21 @@ def go_network():
     links_types.append(None)
     nodes_types = []
     nodes_types.append(None)
+    nodes_ids=[]
+    attr_id_name={}
+
+    for attr in network.attributes:
+        attr_id = attr_id = attr[len(attr) - 2]  # attr[0]
+        attr_name = attr[len(attr) - 1]
+        attr_id_name[attr_id] = attr_name
 
     for node in network.nodes:
+        nodes_ids.append(node.node_id)
+        for attr in node.attributes:
+            attr_id = attr_id=attr[len(attr)-2]#attr[0]
+            attr_name = attr[len(attr) - 1]
+            attr_id_name[attr_id] = attr_name
+
         try:
             type = node.types[0].templatetype.type_name
             if (type in nodes_types) == False:
@@ -208,15 +224,20 @@ def go_network():
         node_coords[node.node_id] = [node.node_x, node.node_y]
         node_name_map.append({'id':node.node_id, 'name':node.node_name, 'name': node.node_name})
 
-        nodes_.append({'id':node.node_id, 'group': nodes_types.index(type) + 1, 'x':float(node.node_x),'y': float(node.node_y), 'name':node.node_name, 'type':type})
+        nodes_.append({'id':node.node_id, 'group': nodes_types.index(type) + 1, 'x':float(node.node_x),'y': float(node.node_y), 'name':node.node_name, 'type':type,'res_type':'node'})
 
 
     links = {}
+    link_ids=[]
+
     for link in network.links:
         links[link.link_id] = [link.node_1_id, link.node_2_id]
-        #links_[link.link_id]=[nodes_.keys().index(link.node_1_id),nodes_.keys().index(link.node_2_id),1]
-        #print  "ids: ", links[link.link_id]
-        #print "positions: ", links_[link.link_id]
+        for attr in  link.attributes:
+            attr_id=attr[len(attr)-2]#attr[0]
+            attr_name=attr[len(attr)-1]
+            attr_id_name[attr_id]=attr_name
+
+        link_ids.append(link.link_id)
         try:
             type = link.types[0].templatetype.type_name
             if (type in links_types) == False:
@@ -224,17 +245,70 @@ def go_network():
         except:
             type = None
 
-        links_.append({'id': link.link_id,'source':node_index[link.node_1_id],'target':node_index[link.node_2_id],'value':links_types.index(type)+1, 'type':type, 'name':link.link_name})
+        links_.append({'id': link.link_id,'source':node_index[link.node_1_id],'target':node_index[link.node_2_id],'value':links_types.index(type)+1, 'type':type, 'name':link.link_name, 'res_type':'link'})
 
+    nodes_ras=[]
 
+    import sys
 
+    sys.path.insert(0, "F:\work\HydraPlatform\HydraServer\python\HydraServer\soap_server")
 
-    #Get the min, max x and y coords
+    from hydra_complexmodels import ResourceAttr, ResourceScenario
+
+    node_resourcescenarios = net.get_attributes_for_resource(network_id, scenario_id, "NODE", nodes_ids, 'N')
+
+    for nodes in node_resourcescenarios:
+        ra = ResourceAttr(nodes.resourceattr)
+        ra.resourcescenario = ResourceScenario(nodes, ra.attr_id)
+        nodes_ras.append(ra)
+
+    links_ras = []
+    link_resourcescenarios = net.get_attributes_for_resource(network_id, scenario_id, "LINK", link_ids, 'Y')
+    for linkrs in link_resourcescenarios:
+        ra = ResourceAttr(linkrs.resourceattr)
+        ra.resourcescenario = ResourceScenario(linkrs, ra.attr_id)
+        links_ras.append(ra)
+
+    nodes_attrs=[]
+    for res in nodes_ras:
+        #print "***===>",  res
+        for node in network.nodes:
+            if(node.node_id ==  res.ref_id):
+                attrr_name=attr_id_name[res.attr_id]
+                vv=json.loads(res.resourcescenario.value.value)
+                if(res.resourcescenario.value.type == "timeseries"):
+                    values_=[]
+                    for index in vv.keys():
+                        for date_ in vv[index].keys():
+                            value=vv[index][date_]
+                            values_.append({'date':date_, 'value': value})
+                    vv=values_
+
+                nodes_attrs.append({'id':node.node_id,'attr_id': res.attr_id ,'attrr_name': attrr_name, 'type':res.resourcescenario.value.type, 'values':vv})
+
+    links_attrs = []
+    for res in links_ras:
+        #print "***===>",  res
+        for link in network.links:
+            if (link.link_id == res.ref_id):
+                attrr_name = attr_id_name[res.attr_id]
+                vv = json.loads(res.resourcescenario.value.value)
+                if (res.resourcescenario.value.type == "timeseries"):
+                    values_ = []
+                    for index in vv.keys():
+                        for date_ in vv[index].keys():
+                            value = vv[index][date_]
+                            values_.append({'date': date_, 'value': value})
+                    vv = values_
+
+                    links_attrs.append({'id': link.link_id, 'attr_id': res.attr_id, 'attrr_name': attrr_name,
+                                    'type': res.resourcescenario.value.type, 'values': vv})
+
+            #Get the min, max x and y coords
     extents = net.get_network_extents(network_id, **session)
     app.logger.info(node_coords)
 
     app.logger.info("Network %s retrieved", network.network_name)
-
 
     return render_template('network.html',\
                 scenario_id=scenario_id,
@@ -246,7 +320,9 @@ def go_network():
                 extents=extents,\
                 network=network,\
                            nodes_=nodes_,\
-                           links_=links_)
+                           links_=links_, \
+                           nodes_attrs=nodes_attrs, \
+                           links_attrs=links_attrs)
 
 
 if __name__ == "__main__":

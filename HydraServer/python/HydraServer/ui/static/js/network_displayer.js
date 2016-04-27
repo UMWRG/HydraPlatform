@@ -3,15 +3,16 @@
 
 //var links_=[ {"source": 1,"target":0,"value":1},{"source":0,"target":2,"value":1}]
 
-
-
 //Constants for the SVG
 //var width = 500,
  //   height = 500;
+ alert('HEllo')
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
-    var width  = 1020- margin.left - margin.right,
-    height = 700-margin.top - margin.bottom;
+
+    var width  = (1020- margin.left - margin.right),
+    height = (700-margin.top - margin.bottom);
     colors = d3.scale.category10();
+ alert('HEllo 2')
 
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
@@ -25,8 +26,7 @@ var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 //Set up the colour scale
 var color = d3.scale.category20();
 
-
-//Set up the force layout
+ //Set up the force layout
 var force = d3.layout.force()
     .charge(-120)
     .linkDistance(30)
@@ -44,7 +44,8 @@ var tip = d3.tip()
 var svg = d3.select("#graph").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height+ margin.top + margin.bottom)
-    .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform","translate(" + margin.left + "," + margin.top + ")")
+    .attr("clsss", "left");
 
 svg.call(tip);
 
@@ -72,7 +73,8 @@ var link = svg.selectAll("links_")
     .attr('y2', function (d) { return self.y(d.target.y); })
     .on('mouseover', mouse_in) //Added
     .on('mouseout', link_mouse_out) //Added
-    ;
+    .on("click", links_mouse_click);
+
 //Do the same with the circles for the nodes - no
 var node = svg.selectAll("nodes_")
     .data(nodes_)
@@ -87,7 +89,7 @@ var node = svg.selectAll("nodes_")
     .call(force.drag)
     .on('mouseover', mouse_in) //Added
     .on('mouseout', node_mouse_out) //Added
-    .on("click", mouse_click);
+    .on("click", nodes_mouse_click);
 
 //giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
 force.on("tick", function () {
@@ -133,11 +135,56 @@ svg.append("defs").selectAll("marker")
     .style("opacity", "0.6");
 
 
- function mouse_click(d) {
+
+ function nodes_mouse_click(d) {
    // unenlarge target node
-   tip.show(d);
-      d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
+   //
+   $( "#data" ).empty();
+    var table = $('<table></table>').addClass('foo');
+
+
+   for (i in nodes_attrs)
+   {
+  var count=0;
+
+     if (d.id==nodes_attrs[i].id)
+     {
+     if(count==0)
+       $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
+       count+=1;
+     tableCreate(nodes_attrs[i]);
+        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
+     }
+   }
+   d3.select(this).style('stroke');
+
 }
+
+ function links_mouse_click(d) {
+   // unenlarge target node
+   //
+
+   // unenlarge target node
+   //
+   $( "#data" ).empty();
+   var count=0;
+
+   for (i in links_attrs)
+   {
+     if (d.id==links_attrs[i].id)
+     {
+     if(count==0)
+       $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
+       count+=1;
+     tableCreate(links_attrs[i]);
+        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
+     }
+   }
+   d3.select(this).style('stroke',  function(d) {get_node_attributes(d.id, d.node_name)});
+
+}
+
+
 
 function mouse_in(d) {
    // unenlarge target node
@@ -164,3 +211,61 @@ function link_mouse_out(d) {
 }
 
 
+function get_node_attributes(id, name){
+
+
+}
+
+function tableCreate(res) {
+        var table =  $('#data')
+        var table = $('<table></table>').addClass('foo');
+        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
+        var name_row = $("<tr/>");
+        var name_ = $('<th></th>').addClass('bar').text('Attribute name ' );
+        name_row.append(name_);
+
+        var res_name = $('<tr></tr>').addClass('bar').text(res.attrr_name);
+        name_row.append(res_name);
+        table.append(name_row);
+
+        var type_row = $("<tr/>");
+        var type_ = $('<th></th>').addClass('bar').text('Type ' );
+        type_row.append(type_);
+
+        var res_type = $('<tr></tr>').addClass('bar').text(res.type);
+        type_row.append(res_type);
+        table.append(type_row);
+
+        if(res.type == 'timeseries')
+        {
+          var date_row = $("<tr/>");
+           var date_ = $('<th ></th>').addClass('bar').text('Date ' );
+           var value_ = $('<th></th>').addClass('bar').text('Value ' );
+
+           date_row.append(date_);
+           date_row.append(value_);
+           table.append(date_row);
+         for (j in res.values)
+        {
+
+           //alert(res.values[j].date);
+            var value_row = $("<tr/>");
+
+           var date=new Date(res.values[j].date);
+           var formateddate=date.toLocaleFormat('%d-%m-%Y');
+
+           var thread=$ ('<tr></tr>');
+           var res_date = $('<td></td>').addClass('bar').text(formateddate);
+           var res_value = $('<td></td>').addClass('bar').text(res.values[j].value);
+
+           value_row.append(res_date);
+           value_row.append(res_value);
+
+           //value_row.append(res_value);
+           table.append(value_row);
+
+        }
+        }
+
+    $('#data').append(table);
+   }

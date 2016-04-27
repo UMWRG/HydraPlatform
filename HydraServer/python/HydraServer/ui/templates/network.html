@@ -7,6 +7,9 @@
   <title>Network {{network.network_name}}</title>
 
   <script>
+  nodes_attrs={{nodes_attrs|tojson}};
+  links_attrs={{links_attrs|tojson}}
+
   // set up initial nodes and links
   //  - nodes are known by 'id', not by index in array.
   //  - reflexive edges are indicated on the node (as a bold black circle).
@@ -28,10 +31,11 @@
      }
 
      var nodes_=[]
-     nodes_={{nodes_|tojson}}
+     nodes_={{nodes_|tojson}};
 
    var links_=[];
-   var links_={{links_|tojson}}
+   var links_={{links_|tojson}};
+
 
     var min_x = {{extents['min_x']}};
     var max_x = {{extents['max_x']}};
@@ -90,7 +94,8 @@
         <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
       <div id="graph_container">
-            <div id="graph"></div>
+            <div id="graph" class="left"></div>
+            <div id="data" class="right"></div>
             <div id="nodeproperties">
                 <table >
                     <tr><th>Property</th><th>Value</th></tr>
@@ -122,7 +127,7 @@
         {% include 'master.html' %}
 
         <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script type='text/javascript' src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"> </script>
+  <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
 
         <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
         <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
