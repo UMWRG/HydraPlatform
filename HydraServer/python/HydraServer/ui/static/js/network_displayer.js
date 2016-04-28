@@ -7,6 +7,10 @@
 //var width = 500,
  //   height = 500;
  alert('HEllo')
+
+
+
+var current_res=null;
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
     var width  = (1020- margin.left - margin.right),
@@ -60,6 +64,7 @@ force.nodes(nodes_)
     .links(links_)
     .start();
 
+
 //Create all the line svgs but without locations yet
 var link = svg.selectAll("links_")
     .data(links_)
@@ -86,10 +91,13 @@ var node = svg.selectAll("nodes_")
     .style("fill", function (d) {
     return color(d.group);
 })
+
+
     .call(force.drag)
     .on('mouseover', mouse_in) //Added
     .on('mouseout', node_mouse_out) //Added
     .on("click", nodes_mouse_click);
+
 
 //giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
 force.on("tick", function () {
@@ -140,23 +148,23 @@ svg.append("defs").selectAll("marker")
    // unenlarge target node
    //
    $( "#data" ).empty();
+   current_res=d;
     var table = $('<table></table>').addClass('foo');
+  var count=0;
 
 
    for (i in nodes_attrs)
    {
-  var count=0;
 
      if (d.id==nodes_attrs[i].id)
      {
      if(count==0)
-       $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
+       $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
        count+=1;
      tableCreate(nodes_attrs[i]);
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
      }
    }
-   d3.select(this).style('stroke');
 
 }
 
@@ -168,7 +176,7 @@ svg.append("defs").selectAll("marker")
    //
    $( "#data" ).empty();
    var count=0;
-
+   current_res=d;
    for (i in links_attrs)
    {
      if (d.id==links_attrs[i].id)
@@ -189,13 +197,18 @@ svg.append("defs").selectAll("marker")
 function mouse_in(d) {
    // unenlarge target node
    tip.show(d);
-      d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
+   d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
 }
 
 function node_mouse_out(d) {
    // unenlarge target node
-   tip.hide(d);
-      d3.select(this).style('stroke', '#fff' );
+   if(current_res == null || d!=current_res)
+   {
+      tip.hide(d);
+      d3.select(this).style('stroke', '#999');
+   }
+
+
 }
 
 function mouse_in(d) {
@@ -206,14 +219,22 @@ function mouse_in(d) {
 
 function link_mouse_out(d) {
    // hide resource tip and change border
+   if(current_res == null || d!=current_res)
+   {
+       tip.hide(d);
+       d3.select(this).style('stroke', '#999');
+   }
+}
+
+function hid_res(d)
+{
    tip.hide(d);
    d3.select(this).style('stroke', '#999');
+   alert('It is hidddn');
 }
 
 
 function get_node_attributes(id, name){
-
-
 }
 
 function tableCreate(res) {
@@ -266,6 +287,64 @@ function tableCreate(res) {
 
         }
         }
+        else
+
+        {
+
+        var v_row = $("<tr/>");
+        var v_title_ = $('<th></th>').addClass('bar').text('Value ' );
+        v_row.append(v_title_);
+
+        var vv_ = $('<tr></tr>').addClass('bar').text(res.values);
+        v_row.append(vv_);
+        table.append(v_row);
+        }
 
     $('#data').append(table);
    }
+
+function searchNode() {
+    //find the node
+    alert('HEllo from serach nodes ')
+    var selectedVal = document.getElementById('search').value;
+    var sel=null;
+    var node = svg.selectAll(".node");
+    if (selectedVal == "none") {
+        node.style("stroke", "white").style("stroke-width", "1");
+    } else {
+        var selected = node.filter(function (d, i) {
+         if(d.name == selectedVal)
+         {
+         nodes_mouse_click(d);
+         sel=d;
+         return true;
+         }
+         else
+            return false;
+        });
+        if(sel==null)
+        {
+        var link = svg.selectAll(".link");
+    if (selectedVal == "none") {
+        link.style("stroke", "white").style("stroke-width", "1");
+    } else {
+        var selected = link.filter(function (d, i) {
+         if(d.name == selectedVal)
+         {
+         links_mouse_click(d);
+         sel=d;
+         return true;
+         }
+         else
+            return false;
+        });
+
+        }
+        }
+         //var link = svg.selectAll(".link")
+        //link.style("opacity", "0");
+        //d3.selectAll(".node, .link").transition()
+        //  .duration(5000)
+        //.style("opacity", 1);
+    }
+}

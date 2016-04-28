@@ -7,6 +7,7 @@
   <title>Network {{network.network_name}}</title>
 
   <script>
+
   nodes_attrs={{nodes_attrs|tojson}};
   links_attrs={{links_attrs|tojson}}
 
@@ -72,12 +73,14 @@
 
     var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
 
-  </script>
 
+
+
+      </script>
+
+ {% include 'header.html' %}
 </head>
 <body>
-  {% include 'header.html' %}
-
     <div class="main_content">
 
       {% include 'network_details.html' %}
@@ -94,7 +97,12 @@
         <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
       <div id="graph_container">
-            <div id="graph" class="left"></div>
+            <div id="graph" class="left">
+                <div class="ui-widget">
+             <input id="search">
+    <button type="button" onclick="searchNode()">Search</button>
+    </div>
+            </div>
             <div id="data" class="right"></div>
             <div id="nodeproperties">
                 <table >
@@ -110,29 +118,44 @@
       </div> <!-- main_content -->
 
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
-        <div><h1>Instructions</h1>
-          <ul>
-              <li>Left-click to add a new node or select existing node.</li>
-              <li>Left-click and drag between nodes to create a new edge.</li>
-              <li>Ctrl + Left-click and drag to move a node.</li>
-              <li>Right-click to pan around the graph.</li>
-              <li>Wheel mouse to zoom.</li>
-              <li>Delete to remove node.</li>
-          </ul>
-        </div>
 
-        {% include 'footer.html' %}
+
+
 0
         <!--Include css & javascript-->
         {% include 'master.html' %}
 
         <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
-
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
         <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
         <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
         <script src="{{url_for('static', filename='js/network.js')}}"></script>
-
         <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
+
+
+       <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
+
+        <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+
+<script>
+         $(function() {
+            var res_names = [];
+            for ( i in nodes_)
+            {
+            res_names.push(nodes_[i].name);
+            }
+            for(i in links_)
+            {
+             res_names.push(links_[i].name);
+            }
+            $( "#search" ).autocomplete({
+               source: res_names
+            });
+         });
+      </script>
+
     </body>
+<footer>
+  {% include 'footer.html' %}
+</footer>
 </html>

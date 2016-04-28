@@ -1,5 +1,30 @@
+.network
+{
+width: 1500px;
+height 800px;
+}
+.graph
+{
+width: 1100px;
+height 750px;
+  float: left;
+}
+.data
+{
+  float: right;
+  width: 300px;
+  height: 700;
+  overflow-y:auto;
+}
+.right
+{
+float: right;
+}
 
-
+.left
+{
+float: left;
+}
 .node {
   stroke: #fff;
   stroke-width: 1.5px;
@@ -16,6 +41,10 @@
   font: 9px helvetica;
 }
 
+.node text {
+  font: 9px helvetica;
+}
+
 d3-tip {
     line-height: 1;
     color: black;
@@ -25,14 +54,7 @@ d3-tip :hover {
    fill: blue ;
 }
 
-.left {
-  float: left;
-}
 
-.right {
-  float: right;
-
-}
 
 
 table {
