@@ -1,6 +1,4 @@
 
-
-
 get_node = function(node_id){
     $.ajax({url:"/node/"+node_id,
            dataType:'json',
@@ -81,19 +79,14 @@ $(document).on('click', '#nodetab', function(){
 
 
 $(document).on('click', '.expand_table', function(){
-
     var tbody = $(this).closest('thead').siblings('tbody')
-
     var hidden = tbody.is(':hidden');
-
     tbody.toggle();
-
     if (hidden){
         $(this).html("&darr;");
     }else{
         $(this).html("&rarr;");
     }
-
 });
 
 $(document).on('click', '.graph_dataset', function(){

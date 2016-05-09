@@ -277,9 +277,10 @@ def go_network():
                 attrr_name=attr_id_name[res.attr_id]
                 vv=json.loads(res.resourcescenario.value.value)
                 if(res.resourcescenario.value.type == "timeseries"):
+
                     values_=[]
                     for index in vv.keys():
-                        for date_ in vv[index].keys():
+                        for date_ in sorted(vv[index].keys()):
                             value=vv[index][date_]
                             values_.append({'date':date_, 'value': value})
                     vv=values_

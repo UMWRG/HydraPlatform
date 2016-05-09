@@ -73,9 +73,6 @@
 
     var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
 
-
-
-
       </script>
 
  {% include 'header.html' %}
@@ -94,22 +91,22 @@
             </li>
         </ul>
 
-        <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
+      <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
-      <div id="graph_container">
+      <div id="graph_container" class="network_container">
             <div id="graph" class="left">
                 <div class="ui-widget">
              <input id="search">
-    <button type="button" onclick="searchNode()">Search</button>
-    </div>
+             <button type="button" onclick="searchNode()">Search</button>
             </div>
-            <div id="data" class="right"></div>
-            <div id="nodeproperties">
-                <table >
-                    <tr><th>Property</th><th>Value</th></tr>
-                </table>
             </div>
+            <div id="data" class="data_">
+             </div>
+            <div id="timeseries_g" class="timeseries_gr">
+             </div>
+
         </div> <!-- graph_container -->
+
 
        {% include 'nodesandlinks.html' %}
 

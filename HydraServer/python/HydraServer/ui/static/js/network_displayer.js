@@ -6,17 +6,18 @@
 //Constants for the SVG
 //var width = 500,
  //   height = 500;
- alert('HEllo')
+// alert('HEllo')
 
 
 
 var current_res=null;
+var cur_table=null;
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
-    var width  = (1020- margin.left - margin.right),
+    var width  = (900- margin.left - margin.right),
     height = (700-margin.top - margin.bottom);
     colors = d3.scale.category10();
- alert('HEllo 2')
+ //alert('HEllo 2')
 
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
@@ -148,6 +149,7 @@ svg.append("defs").selectAll("marker")
    // unenlarge target node
    //
    $( "#data" ).empty();
+   $( "#timeseries_g" ).empty();
    current_res=d;
     var table = $('<table></table>').addClass('foo');
   var count=0;
@@ -155,13 +157,12 @@ svg.append("defs").selectAll("marker")
 
    for (i in nodes_attrs)
    {
-
      if (d.id==nodes_attrs[i].id)
      {
      if(count==0)
        $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
        count+=1;
-     tableCreate(nodes_attrs[i]);
+     create_table(nodes_attrs[i]);
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
      }
    }
@@ -184,7 +185,7 @@ svg.append("defs").selectAll("marker")
      if(count==0)
        $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
        count+=1;
-     tableCreate(links_attrs[i]);
+     create_table(links_attrs[i]);
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
      }
    }
@@ -230,16 +231,15 @@ function hid_res(d)
 {
    tip.hide(d);
    d3.select(this).style('stroke', '#999');
-   alert('It is hidddn');
+   //alert('It is hidddn');
 }
 
 
 function get_node_attributes(id, name){
 }
 
-function tableCreate(res) {
-        var table =  $('#data')
-        var table = $('<table></table>').addClass('foo');
+function create_table(res) {
+        var table = $('<table></table>').addClass('attr_table');
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
         var name_row = $("<tr/>");
         var name_ = $('<th></th>').addClass('bar').text('Attribute name ' );
@@ -253,19 +253,27 @@ function tableCreate(res) {
         var type_ = $('<th></th>').addClass('bar').text('Type ' );
         type_row.append(type_);
 
-        var res_type = $('<tr></tr>').addClass('bar').text(res.type);
-        type_row.append(res_type);
+        var res_type = document.createElement("tr");
+
+        res_type.innerHTML ='<a href="#">'+res.type+'</a>';
+
+         type_row.append(res_type);
         table.append(type_row);
+        var graph_data={};
 
         if(res.type == 'timeseries')
         {
+        graph_data=[];
           var date_row = $("<tr/>");
            var date_ = $('<th ></th>').addClass('bar').text('Date ' );
            var value_ = $('<th></th>').addClass('bar').text('Value ' );
 
            date_row.append(date_);
            date_row.append(value_);
-           table.append(date_row);
+           
+         var t_table = $('<table></table>').addClass('attr_table');
+         t_table.append(date_row);
+
          for (j in res.values)
         {
 
@@ -279,13 +287,24 @@ function tableCreate(res) {
            var res_date = $('<td></td>').addClass('bar').text(formateddate);
            var res_value = $('<td></td>').addClass('bar').text(res.values[j].value);
 
+           graph_data.push(
+        {
+          'date': date,
+          'value':res.values[j].value,
+        }
+        )
            value_row.append(res_date);
            value_row.append(res_value);
 
            //value_row.append(res_value);
-           table.append(value_row);
+           t_table.append(value_row);
 
         }
+        res_type.innerHTML ='<a href="#">'+res.type+'</a>';
+        res_type.onclick =(function(){
+        draw_graph('../static/js/_timeseries_graph.js', graph_data, res.attrr_name, t_table);
+    });
+
         }
         else
 
@@ -299,13 +318,15 @@ function tableCreate(res) {
         v_row.append(vv_);
         table.append(v_row);
         }
-
     $('#data').append(table);
+     $('#data').append(t_table);
+     t_table.hide();
+
    }
 
 function searchNode() {
     //find the node
-    alert('HEllo from serach nodes ')
+    //alert('HEllo from serach nodes ')
     var selectedVal = document.getElementById('search').value;
     var sel=null;
     var node = svg.selectAll(".node");
@@ -331,7 +352,9 @@ function searchNode() {
         var selected = link.filter(function (d, i) {
          if(d.name == selectedVal)
          {
-         links_mouse_click(d);
+             d3.select(d);
+             links_mouse_click(d);
+
          sel=d;
          return true;
          }
@@ -341,10 +364,39 @@ function searchNode() {
 
         }
         }
+
+
+        if(current_res!=null)
+        {
+                    tip.hide(current_res);
+          }
+
          //var link = svg.selectAll(".link")
         //link.style("opacity", "0");
         //d3.selectAll(".node, .link").transition()
         //  .duration(5000)
         //.style("opacity", 1);
+        alert(d.name);
     }
+}
+
+function draw_graph(script, graph_data, attr_name, t_table) {
+    $.ajax({
+        url: script,
+        dataType: "script",
+        async: false,           // <-- This is the key
+        success: function () {
+            draw_timeseries(graph_data, attr_name);
+        },
+        error: function () {
+            alert("Could not load script " + script);
+        }
+    });
+
+if(cur_table!=null)
+    cur_table.hide();
+    cur_table=t_table;
+    cur_table.show();
+
+
 }
