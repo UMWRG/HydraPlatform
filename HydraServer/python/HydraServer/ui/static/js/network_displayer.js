@@ -1,3 +1,4 @@
+var toLocaleFormat = d3.time.format("%Y-%m-%d");
 
 //var nodes_= [{"name": "Myriel","group": 1, "x": 0, "y": 20}, {"name": "Napoleon","group": 1, "x":20, "y":30}, {"name": "Mlle.Baptistine", "group": 1, "x":40, "y":500 }];
 
@@ -101,11 +102,12 @@ var node = svg.selectAll("nodes_")
 
 
 //giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
-force.on("tick", function () {
- nodes.attr('cx', function (d) { return self.x(d.x); });
-  links.attr('x1', function (d) { return self.x(d.source.x); })
-    .attr('x2', function (d) { return self.x(d.target.x); });
-});
+//force.on("tick", function () {
+// node.attr('cx', function (d) { return self.x(d.x); });
+//  link.attr('x1', function (d) { return self.x(d.source.x); })
+ //   .attr('x2', function (d) { return self.x(d.target.x); });
+//});
+
 /*
     link.attr("x1", function (d) {
         return d.source.x;
@@ -239,13 +241,13 @@ function get_node_attributes(id, name){
 }
 
 function create_table(res) {
-        var table = $('<table></table>').addClass('attr_table');
+        var table = $('<table></table>').addClass('table');
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
         var name_row = $("<tr/>");
         var name_ = $('<th></th>').addClass('bar').text('Attribute name ' );
         name_row.append(name_);
 
-        var res_name = $('<tr></tr>').addClass('bar').text(res.attrr_name);
+        var res_name = $('<th></th>').addClass('bar').text(res.attrr_name);
         name_row.append(res_name);
         table.append(name_row);
 
@@ -253,9 +255,12 @@ function create_table(res) {
         var type_ = $('<th></th>').addClass('bar').text('Type ' );
         type_row.append(type_);
 
-        var res_type = document.createElement("tr");
+        var res_type = document.createElement("th");
 
-        res_type.innerHTML ='<a href="#">'+res.type+'</a>';
+         if(res.type == 'timeseries')
+               res_type.innerHTML ='<a href="#">'+res.type+'</a>';
+        else
+               res_type.innerHTML =res.type;
 
          type_row.append(res_type);
         table.append(type_row);
@@ -270,22 +275,21 @@ function create_table(res) {
 
            date_row.append(date_);
            date_row.append(value_);
-           
-         var t_table = $('<table></table>').addClass('attr_table');
+
+         var t_table = $('<table></table>').addClass('table');
          t_table.append(date_row);
 
          for (j in res.values)
         {
-
            //alert(res.values[j].date);
             var value_row = $("<tr/>");
 
            var date=new Date(res.values[j].date);
-           var formateddate=date.toLocaleFormat('%d-%m-%Y');
+           var formateddate=toLocaleFormat(date);
 
            var thread=$ ('<tr></tr>');
-           var res_date = $('<td></td>').addClass('bar').text(formateddate);
-           var res_value = $('<td></td>').addClass('bar').text(res.values[j].value);
+           var res_date = $('<th></th>').addClass('bar').text(formateddate);
+           var res_value = $('<th></th>').addClass('bar').text(res.values[j].value);
 
            graph_data.push(
         {
@@ -314,7 +318,7 @@ function create_table(res) {
         var v_title_ = $('<th></th>').addClass('bar').text('Value ' );
         v_row.append(v_title_);
 
-        var vv_ = $('<tr></tr>').addClass('bar').text(res.values);
+        var vv_ = $('<th></th>').addClass('bar').text(res.values);
         v_row.append(vv_);
         table.append(v_row);
         }
@@ -325,8 +329,13 @@ function create_table(res) {
    }
 
 function searchNode() {
-    //find the node
-    //alert('HEllo from serach nodes ')
+// to be deleted  later
+alert("HI ....")
+$.getJSON('/_add_numbers',{ "a": 15, "b": 30 }, function(data) {
+				   alert("HI ....22: "+data.result)
+				});
+// end of to be deleted
+    //find the node or links
     var selectedVal = document.getElementById('search').value;
     var sel=null;
     var node = svg.selectAll(".node");

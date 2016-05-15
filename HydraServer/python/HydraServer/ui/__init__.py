@@ -12,6 +12,18 @@ from HydraServer.soap_server.hydra_base import get_session_db
 
 from flask import render_template
 
+from werkzeug import secure_filename
+import zipfile
+import os
+import sys
+import importlib
+
+UPLOAD_FOLDER = 'uploaded_files'
+ALLOWED_EXTENSIONS = set(['zip'])
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 DATA_FOLDER = 'python/HydraServer/ui/data'
 
@@ -144,6 +156,12 @@ def check_session(req):
 
     return sess_info
 
+
+@app.route('/header', methods=['GET'])
+def go_create_network():
+    return render_template('create_network.html')
+
+
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
     """
@@ -158,6 +176,128 @@ def go_project(project_id):
                           username=session['username'],\
                           display_name=session['username'],\
                           project=project)
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_file_():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <form action="" method=post enctype=multipart/form-data>
+          <p><input type=file name=file>
+             <input type=submit value=Upload>
+        </form>
+        '''
+
+
+def allowed_file (filename):
+    ext=os.path.splitext(filename)[1][1:].lower()
+    if ext in ALLOWED_EXTENSIONS:
+        return True
+    else:
+        return False
+
+def create_network(zipfilename):
+    zip = zipfile.ZipFile(zipfilename)
+    zip.extractall()
+    import subprocess
+
+    directory=os.path.join(os.path.dirname(zipfilename), 'temp')
+    os.chdir(directory)
+    if os.path.exists('network.csv'):
+        pass
+    else:
+        return ["Network file (network.csv) is not found ..."]
+    print("Current folder: ",os.path.realpath(__file__))
+    basefolder=os.path.realpath(__file__).replace("\HydraServer\python\HydraServer\ui\__init__.py","");
+    print("basefolder folder: ", basefolder)
+    csv_import=os.path.join(basefolder,"HydraPlugins", "CSVplugin", "ImportCSV","ImportCSV.py")
+    mname = os.path.dirname(csv_import)
+    if os.path.exists('network.csv'):
+        cmd="python "+csv_import+" -t network.csv -m template.xml -x "
+    else:
+        cmd = "python " + csv_import + " -t network.csv -x "
+    proc = subprocess.Popen(cmd,stdout=subprocess.PIPE)
+    output=[]
+    while True:
+        line = proc.stdout.readline()
+        if line != '':
+            output.append(line.replace('\n','').strip())
+        else:
+            break
+    #print output
+    if("<message>Data import was successful.</message>" in output):
+        for line in output:
+            if line.startswith('<network_id>'):
+                network_id=(line.replace('<network_id>','').replace('</network_id>',''))
+            elif line.startswith('<scenario_id>'):
+                scenario_id=(line.replace('<scenario_id>','').replace('</scenario_id>',''))
+
+        return ["Data import was successful", network_id, scenario_id]
+
+
+    return ["Error"]
+    '''
+    #import ImportCSV
+    mm=importlib.import_module(os.path.basename(csv_import).split('.')[0])
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    os.chdir(directory)
+    args={};
+    args['-t']='network.csv'
+    args['-m']='template.xml'
+    args ['-x']=''
+    run = getattr(mm, 'run')
+    #ImportCSV(url=None , session_id=None)
+    sys.argv=args
+    run()
+    '''
+
+
+@app.route('/uploader', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+       file = request.files['file']
+       if allowed_file(file.filename):
+          filename = secure_filename(file.filename)
+          zipfilename=os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER, filename)
+          file.save(zipfilename)
+          output= create_network(zipfilename)
+          if(len(output))==1:
+              return output[0]
+          elif len(output)==3:
+              #return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
+              return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
+              #return output[0]+" networkId="+output[1]+" scenario_id= "+ output[2]
+
+
+          else:
+              return "Error"
+          #return 'file uploaded successfully'
+       else:
+           return "file is not uploaded, zip file is only allowed"
+
+
+
+#example of using ajax, will be needed in the future for network editing
+@app.route('/_add_numbers')
+def add_numbers():
+    a = request.args.get('a')
+    b = request.args.get('b')
+    zip_file="C:\\work\\zip\\data.zip"
+    zip = zipfile.ZipFile(zip_file)
+    zip.extractall("C:\\work\\zip")
+    return jsonify(result=int(a) + int(b))
+
+
+
 
 @app.route('/network', methods=['GET'])
 def go_network():
@@ -249,7 +389,7 @@ def go_network():
 
     nodes_ras=[]
 
-    import sys
+
 
     sys.path.insert(0, "F:\work\HydraPlatform\HydraServer\python\HydraServer\soap_server")
 
@@ -327,7 +467,7 @@ def go_network():
 
 
 if __name__ == "__main__":
-    import os
+
 
     # Create data folder if it doesn't exist
     try:
