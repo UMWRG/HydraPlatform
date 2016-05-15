@@ -1,0 +1,19 @@
+<html>
+
+      {% include "master.html" %}
+
+<head>
+     {% include 'header.html' %}
+
+    </head>
+<body>
+
+   <form action = "/uploader" method = "POST"  enctype = "multipart/form-data">
+                     <input type = "file" name = "file" />
+                     <input type = "submit"/>
+   </form>
+
+  {% include 'footer.html' %}
+
+</body>
+</html>
