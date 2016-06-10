@@ -8,11 +8,40 @@
     </head>
 <body>
 
-   <form action = "/uploader" method = "POST"  enctype = "multipart/form-data">
-                     <input type = "file" name = "file" />
-                     <input type = "submit"/>
-   </form>
 
+
+<div class="green">
+    Create network
+</div>
+
+ <a nohref class="links" id = "csv"
+    onClick="$(csv_importer).show(); $(pywr_importer).hide();  $(csv).addClass(selected_links);">Import from CSV</a>
+
+<div id="csv_importer" hidden="true"  class ="buttons">
+
+
+    <div class="blue">Please upload the network zip file which contains all the required csv files. The network file name needs to be “network.csv”
+    </div>
+
+   <form action = "/uploader" method = "POST"  enctype = "multipart/form-data" >
+                     <input type = "file" name = "file"  title="CSV file" class="bb"/>
+                     <input type = "submit" value="Upload" class="bb" />
+   </form>
+</div>
+<h2></h2>
+ <a nohref class="links"
+onClick="$(csv_importer).hide(); $(pywr_importer).show();">Import from Pywr</a>
+
+<div id="pywr_importer" hidden="true" class ="buttons">
+
+<div class="blue">Please upload  the network zip which contains the Json pywr file and data files. The json file name needs to be “pywr.json”
+    </div>
+
+<form action = "/uploader" method = "POST"  enctype = "multipart/form-data"  >
+                     <input type = "file" name = "file2"  class="bb" />
+                     <input type = "submit" value="Upload" class="bb"/>
+   </form>
+</div>
   {% include 'footer.html' %}
 
 </body>

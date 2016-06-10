@@ -241,18 +241,19 @@ function get_node_attributes(id, name){
 }
 
 function create_table(res) {
+        t_table=null;
         var table = $('<table></table>').addClass('table');
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
         var name_row = $("<tr/>");
-        var name_ = $('<th></th>').addClass('bar').text('Attribute name ' );
+        var name_ = $('<th></th>').text('Attribute name ' );
         name_row.append(name_);
 
-        var res_name = $('<th></th>').addClass('bar').text(res.attrr_name);
+        var res_name = $('<th></th>').text(res.attrr_name);
         name_row.append(res_name);
         table.append(name_row);
 
         var type_row = $("<tr/>");
-        var type_ = $('<th></th>').addClass('bar').text('Type ' );
+        var type_ = $('<th></th>').text('Type ' );
         type_row.append(type_);
 
         var res_type = document.createElement("th");
@@ -268,10 +269,11 @@ function create_table(res) {
 
         if(res.type == 'timeseries')
         {
+        //alert('Time series found')
         graph_data=[];
           var date_row = $("<tr/>");
-           var date_ = $('<th ></th>').addClass('bar').text('Date ' );
-           var value_ = $('<th></th>').addClass('bar').text('Value ' );
+           var date_ = $('<th ></th>').text('Date ' );
+           var value_ = $('<th></th>').text('Value ' );
 
            date_row.append(date_);
            date_row.append(value_);
@@ -288,8 +290,8 @@ function create_table(res) {
            var formateddate=toLocaleFormat(date);
 
            var thread=$ ('<tr></tr>');
-           var res_date = $('<th></th>').addClass('bar').text(formateddate);
-           var res_value = $('<th></th>').addClass('bar').text(res.values[j].value);
+           var res_date = $('<th></th>').text(formateddate);
+           var res_value = $('<th></th>').text(res.values[j].value);
 
            graph_data.push(
         {
@@ -315,24 +317,27 @@ function create_table(res) {
         {
 
         var v_row = $("<tr/>");
-        var v_title_ = $('<th></th>').addClass('bar').text('Value ' );
+        var v_title_ = $('<th></th>').text('Value ' );
         v_row.append(v_title_);
 
-        var vv_ = $('<th></th>').addClass('bar').text(res.values);
+        var vv_ = $('<th></th>').text(res.values);
         v_row.append(vv_);
         table.append(v_row);
         }
     $('#data').append(table);
-     $('#data').append(t_table);
-     t_table.hide();
+     if(t_table!=null)
+     {
+          $('#data').append(t_table);
+          t_table.hide();
+          }
 
    }
 
 function searchNode() {
 // to be deleted  later
-alert("HI ....")
+//alert("HI ....")
 $.getJSON('/_add_numbers',{ "a": 15, "b": 30 }, function(data) {
-				   alert("HI ....22: "+data.result)
+				   //alert("HI ....22: "+data.result)
 				});
 // end of to be deleted
     //find the node or links
@@ -385,7 +390,7 @@ $.getJSON('/_add_numbers',{ "a": 15, "b": 30 }, function(data) {
         //d3.selectAll(".node, .link").transition()
         //  .duration(5000)
         //.style("opacity", 1);
-        alert(d.name);
+        //alert(d.name);
     }
 }
 

@@ -16,6 +16,7 @@ from werkzeug import secure_filename
 import zipfile
 import os
 import sys
+import subprocess
 import importlib
 
 UPLOAD_FOLDER = 'uploaded_files'
@@ -47,7 +48,6 @@ def index():
                                display_name=username,
                                username=username,
                                projects=projects)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
@@ -196,7 +196,6 @@ def upload_file_():
         </form>
         '''
 
-
 def allowed_file (filename):
     ext=os.path.splitext(filename)[1][1:].lower()
     if ext in ALLOWED_EXTENSIONS:
@@ -204,22 +203,38 @@ def allowed_file (filename):
     else:
         return False
 
-def create_network(zipfilename):
-    zip = zipfile.ZipFile(zipfilename)
-    zip.extractall()
-    import subprocess
+def create_network_from_pywr_json(directory):
+    os.chdir(directory)
+    if os.path.exists('pywr.json'):
+        pass
+    else:
+        return ["pywr json file (pywr.json) is not found ..."]
+    pp = os.path.realpath(__file__).replace("\\HydraServer\\python\HydraServer\\ui", "").split('\\')
+    pp1 = pp[0: (len(pp) - 1)]
+    basefolder = '\\'.join(pp1)
+    pywr_import=os.path.join(basefolder,"HydraPlugins", "pywr_app", "Importer","PywrImporter.py")
+    cmd = "python " + pywr_import + " -f pywr.json "
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    output = []
+    while True:
+        line = proc.stdout.readline()
+        if line != '':
+            output.append(line.replace('\n', '').strip())
+        else:
+            break
+    return check_process_output(output)
 
-    directory=os.path.join(os.path.dirname(zipfilename), 'temp')
+def create_network_from_csv_files(directory):
     os.chdir(directory)
     if os.path.exists('network.csv'):
         pass
     else:
-        return ["Network file (network.csv) is not found ..."]
-    print("Current folder: ",os.path.realpath(__file__))
-    basefolder=os.path.realpath(__file__).replace("\HydraServer\python\HydraServer\ui\__init__.py","");
-    print("basefolder folder: ", basefolder)
+        return ["Network file (network.csv) is not found ...."]
+    pp=os.path.realpath(__file__).replace("\\HydraServer\\python\HydraServer\\ui","").split('\\')
+    pp1= pp[0: (len(pp)-1)]
+    basefolder='\\'.join(pp1)
     csv_import=os.path.join(basefolder,"HydraPlugins", "CSVplugin", "ImportCSV","ImportCSV.py")
-    mname = os.path.dirname(csv_import)
+    #mname = os.path.dirname(csv_import)
     if os.path.exists('network.csv'):
         cmd="python "+csv_import+" -t network.csv -m template.xml -x "
     else:
@@ -232,18 +247,9 @@ def create_network(zipfilename):
             output.append(line.replace('\n','').strip())
         else:
             break
-    #print output
-    if("<message>Data import was successful.</message>" in output):
-        for line in output:
-            if line.startswith('<network_id>'):
-                network_id=(line.replace('<network_id>','').replace('</network_id>',''))
-            elif line.startswith('<scenario_id>'):
-                scenario_id=(line.replace('<scenario_id>','').replace('</scenario_id>',''))
+    print output
+    return check_process_output(output)
 
-        return ["Data import was successful", network_id, scenario_id]
-
-
-    return ["Error"]
     '''
     #import ImportCSV
     mm=importlib.import_module(os.path.basename(csv_import).split('.')[0])
@@ -261,29 +267,53 @@ def create_network(zipfilename):
     '''
 
 
+def check_process_output(output):
+    if ("<message>Data import was successful.</message>" in output):
+        for line in output:
+            if line.startswith('<network_id>'):
+                network_id = (line.replace('<network_id>', '').replace('</network_id>', ''))
+            elif line.startswith('<scenario_id>'):
+                scenario_id = (line.replace('<scenario_id>', '').replace('</scenario_id>', ''))
+        return ["Data import was successful", network_id, scenario_id]
+    return ["Error"]
+
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-       file = request.files['file']
+       try:
+           file = request.files['file']
+           type='csv'
+       except Exception as e:
+           file = request.files['file2']
+           type='pywr'
        if allowed_file(file.filename):
-          filename = secure_filename(file.filename)
-          zipfilename=os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER, filename)
-          file.save(zipfilename)
-          output= create_network(zipfilename)
-          if(len(output))==1:
-              return output[0]
-          elif len(output)==3:
-              #return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
-              return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
-              #return output[0]+" networkId="+output[1]+" scenario_id= "+ output[2]
-
-
-          else:
-              return "Error"
-          #return 'file uploaded successfully'
+           filename = secure_filename(file.filename)
+           basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
+           zipfilename = os.path.join(basefolder, filename)
+           extractedfolder= os.path.join(basefolder, 'temp')
+           if not os.path.exists(extractedfolder):
+               os.makedirs(extractedfolder)
+           print zipfilename
+           file.save(zipfilename)
+           zip = zipfile.ZipFile(zipfilename)
+           zip.extractall(extractedfolder)
+           if type=='csv':
+              output= create_network_from_csv_files(extractedfolder)
+              if(len(output))==1:
+                  return output[0]
+              elif len(output)==3:
+                  return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
+              else:
+                  return "Error"
+           elif type =='pywr':
+               output =create_network_from_pywr_json(extractedfolder)
+               if (len(output)) == 1:
+                   return output[0]
+               elif len(output) == 3:
+                   # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
+                   return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
        else:
            return "file is not uploaded, zip file is only allowed"
-
 
 
 #example of using ajax, will be needed in the future for network editing
@@ -433,7 +463,10 @@ def go_network():
         for link in network.links:
             if (link.link_id == res.ref_id):
                 attrr_name = attr_id_name[res.attr_id]
-                vv = json.loads(res.resourcescenario.value.value)
+                try:
+                    vv = json.loads(res.resourcescenario.value.value)
+                except:
+                    vv=res.resourcescenario.value.value
                 if (res.resourcescenario.value.type == "timeseries"):
                     values_ = []
                     for index in vv.keys():

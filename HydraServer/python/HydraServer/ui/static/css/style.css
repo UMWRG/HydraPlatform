@@ -54,11 +54,13 @@
     height: 50px;
 }
 
+
+
 div.table {
-    display:-moz-box;         
-    display:flex;         
-    background-color:#fff;         
-    border:1px solid  #ddd;         
+    display:-moz-box;
+    display:flex;
+    background-color:#fff;
+    border:1px solid  #ddd;
     border-spacing:5px;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
@@ -84,7 +86,7 @@ div.table-col{
   -moz-box-flex: 1;
   flex: 1;
   float:left;/*fix for  buggy browsers*/
-  background-color:#fff;  
+  background-color:#fff;
 }
 
 .hidden{
@@ -212,7 +214,8 @@ tbody tr:hover {
 width:900px;
 height: 4ppx;
 }
-.main
+
+.main1
 {
 width:1000px;
 height: 800px;
@@ -221,7 +224,41 @@ padding-left: 50px;
 padding-top: 50 px;
 }
 
+.links
+{
+cursor:pointer;
+color:blue;
+text-decoration:underline;
+padding: 20px;
+}
 
+.buttons
+{
+padding: 30px;
+}
 
+.bb
+{
+color:green;
+text-decoration:underline;
+margin: 10px;
+width: 140 px;
+height: 30 px;
+padding: 5 px;
+}
 
+.green
+{
+padding: 20px;
+font-weight: bold;
+ font-size: large;
+color: blue;
+}
 
+.blue
+{
+padding: 10px;
+
+ font-size: large;
+color: green;
+}

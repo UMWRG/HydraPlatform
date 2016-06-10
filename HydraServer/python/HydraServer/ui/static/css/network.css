@@ -9,6 +9,7 @@
 height 800px;
 float: left;
 //border: 1px solid red;
+
 }
 
 .graph
@@ -21,11 +22,16 @@ float: left;
 .data_
 {
   width: 350px;
+  height 550px;
   float: left;
-  padding-top: 10px;
+  padding-top: 20px;
   padding-right: 30px;
   padding-bottom: 10px;
-  padding-left: 70px;
+  padding-left: 20px;
+  border: 1px;
+  margin: auto;
+  overflow-y:scroll;
+  display:block;
 }
 
 timeseries_gr
@@ -88,8 +94,10 @@ d3-tip :hover {
 
 table {
   border-collapse: collapse;
-  width: 100%;
+  width: 300px;
+  height: 600 px;
 }
+
 th, td {
   padding: 0.25rem;
   text-align: left;
@@ -108,10 +116,6 @@ tbody tr:hover {
 {
  align: center;
 }
-
-
-
-
 
 
 path {

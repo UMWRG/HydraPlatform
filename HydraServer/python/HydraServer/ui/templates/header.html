@@ -7,20 +7,30 @@
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
   </button>
-  <a class="navbar-brand" href="/">
+
+     <a class="navbar-brand" href="/">
       <img src="{{ url_for('static', filename='img/hydra_icon.png') }}" height="20" alt="Hydra Platform"/>
-      Hydra Platform
+      HydraPlatform
+  </a>
+
+  <a class="navbar-brand" href="/">
+      Projects
   </a>
   <a class="navbar-brand" href="{{url_for ('go_create_network')}}">
-      Create Network
+      Networks
+  </a>
+     <a class="navbar-brand">
+      Applications
+  </a>
+     <a class="navbar-brand">
+      Administration
+  </a>
+     <a class="navbar-brand">
+      About
   </a>
 </div>
 
 <div class="collapse navbar-collapse" id="navbar-content">
-  <ul class="nav navbar-nav">
-    <li class="index"><a href="/}">Welcome</a></li>
-    <li class="about"><a href="/about">About</a></li>
-  </ul>
 
   <ul class="nav navbar-nav navbar-right">
       <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
