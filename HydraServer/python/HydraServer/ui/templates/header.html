@@ -1,38 +1,50 @@
 <!-- Navbar -->
-<nav class="tnavbar navbar-defaul">
-<div class="navbar-header">
-  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-content">
-    <span class="sr-only">Toggle navigation</span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-    <span class="icon-bar"></span>
-  </button>
+ <nav role="navigation" class="navbar navbar-inverse">
+     <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">HydraPlatform</a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Projects<b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="/">Projects list</a></li>
+                    </ul>
+                </li>
 
-     <a class="navbar-brand" href="/">
-      <img src="{{ url_for('static', filename='img/hydra_icon.png') }}" height="20" alt="Hydra Platform"/>
-      HydraPlatform
-  </a>
 
-  <a class="navbar-brand" href="/">
-      Projects
-  </a>
-  <a class="navbar-brand" href="{{url_for ('go_create_network')}}">
-      Networks
-  </a>
-     <a class="navbar-brand">
-      Applications
-  </a>
-     <a class="navbar-brand">
-      Administration
-  </a>
-     <a class="navbar-brand">
-      About
-  </a>
-</div>
+     <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Networks<b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="{{url_for ('go_create_network')}}">Create network</a></li>
+                    </ul>
+                </li>
 
-<div class="collapse navbar-collapse" id="navbar-content">
+<li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Applications<b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#">GamsApp</a></li>
+                        <li><a href="#">MatlabApp</a></li>
+                        <li><a href="#">PywrApp</a></li>
+                         <li class="divider"></li>
+                        <li><a href="#">ExcelApp></a></li>
+                    </ul>
+         <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Addminstration<b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#">Add application</a></li>
+                        <li><a href="#">Users managment</a></li>
+                    </ul>
+                </li>
+                </li>      <li><a href="#">About</a></li>
 
-  <ul class="nav navbar-nav navbar-right">
+    </ul>
+    <form role="search" class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" placeholder="Search" class="form-control">
+                </div>
+      </form>
+    <ul class="nav navbar-nav navbar-right">
       <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
       <!--<li><a href="/admin">Admin</a></li>-->
   </ul>
