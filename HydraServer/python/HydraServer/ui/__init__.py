@@ -157,9 +157,14 @@ def check_session(req):
     return sess_info
 
 
-@app.route('/header', methods=['GET'])
-def go_create_network():
-    return render_template('create_network.html')
+
+@app.route('/header/<import_from>', methods=['GET'])
+def go_import_network(import_from):
+    if(import_from == 'csv'):
+        return render_template('import_from_csv.html')
+    elif (import_from=='pywr'):
+        return render_template('import_from_pywr.html')
+
 
 
 @app.route('/project/<project_id>', methods=['GET'])
