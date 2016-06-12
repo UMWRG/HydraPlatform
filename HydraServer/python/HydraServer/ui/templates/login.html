@@ -5,10 +5,19 @@
 
 <head>
   <title>Login Form</title>
+     {% include 'header.html' %}
 </head>
+<script>
+    $(document).ready(function() {
+    $("#log_").hide();
+   $("#main_menu").click(function() {
+     return false;
+   });
+});
 
+</script>
 <body >
-<h2 class="title">HydraPlatform</h2>
+<h2 class="title"></h2>
   <h3 class="sub_title">Login</h3>
   <div class="page_width">
     <div >

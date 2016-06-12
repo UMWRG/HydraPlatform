@@ -1,8 +1,9 @@
+
 <!-- Navbar -->
- <nav role="navigation" class="navbar navbar-inverse">
+<nav role="navigation" class="navbar navbar-inverse" id="main_menu">
      <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="http://hydraplatform.org/">HydraPlatform</a>
+      <a class="navbar-brand" href="http://hydraplatform.org/" target="_blank">HydraPlatform</a>
     </div>
     <ul class="nav navbar-nav">
         <li class="dropdown">
@@ -48,7 +49,7 @@
                     <input type="text" placeholder="Search" class="form-control">
                 </div>
       </form>
-    <ul class="nav navbar-nav navbar-right">
+    <ul class="nav navbar-nav navbar-right" id="log_">
       <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
       <!--<li><a href="/admin">Admin</a></li>-->
   </ul>
