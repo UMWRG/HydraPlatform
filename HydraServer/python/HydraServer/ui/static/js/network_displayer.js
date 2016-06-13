@@ -284,7 +284,7 @@ function create_table(res) {
          for (j in res.values)
         {
            //alert(res.values[j].date);
-            var value_row = $("<tr/>");
+           var value_row = $("<tr/>");
 
            var date=new Date(res.values[j].date);
            var formateddate=toLocaleFormat(date);

@@ -17,10 +17,13 @@
      <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Networks<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
-
                         <li><a href="{{url_for ('go_import_network', import_from='csv')}}">Import from CSV</a></li>
                         <li><a href="{{url_for ('go_import_network', import_from='pywr')}}">Import from Pywr</a></li>
-
+                         <li><a href="#">Import from GAMS</a></li>
+                         <li class="divider"></li>
+                        <li><a href="#">Export to CSV</a></li>
+                        <li><a href="#">Export to GAMS</a></li>
+                        <li><a href="#">Export to Pyomo</a></li>
 
                     </ul>
      </li>

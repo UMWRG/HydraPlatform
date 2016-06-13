@@ -184,8 +184,7 @@ td {
   vertical-align: middle;
 }
 thead {
-  background: #395870;
-  background: linear-gradient(#49708f, #293f50);
+  background: #A8A8A8 ;
   color: #fff;
   font-size: 11px;
   text-transform: uppercase;
@@ -198,7 +197,6 @@ th:last-child {
   border-top-right-radius: 5px;
 }
 tbody tr:nth-child(even) {
-  background: #f0f0f2;
 }
 td {
   border-bottom: 1px solid #cecfd5;
@@ -221,8 +219,7 @@ height: 4ppx;
 
 .main1
 {
-width:1000px;
-height: 800px;
+
 overflow-y: scroll;
 padding-left: 50px;
 padding-top: 50 px;
@@ -265,4 +262,11 @@ padding: 10px;
 
  font-size: large;
 color: green;
+}
+
+.container-fixed {
+  margin: 0 auto;
+  max-height: 970px;
+  overflow-y: scroll;
+  padding:5px;
 }

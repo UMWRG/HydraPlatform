@@ -5,11 +5,9 @@
 
 .network_container
 {
-    width: 1900px;
+width: 1900px;
 height 800px;
-float: left;
 //border: 1px solid red;
-
 }
 
 .graph
@@ -22,13 +20,13 @@ float: left;
 .data_
 {
   width: 350px;
-  height 550px;
+  height 750pxpx;
   float: left;
   padding-top: 20px;
   padding-right: 30px;
   padding-bottom: 10px;
   padding-left: 20px;
-  border: 1px;
+  border: 2px;
   margin: auto;
   overflow-y:scroll;
   display:block;
@@ -92,7 +90,7 @@ d3-tip :hover {
 }
 
 
-table {
+.table {
   border-collapse: collapse;
   width: 300px;
   height: 600 px;
