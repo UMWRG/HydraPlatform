@@ -1,4 +1,16 @@
 
+<script>
+    (function($){
+	$(document).ready(function(){
+		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			$(this).parent().siblings().removeClass('open');
+			$(this).parent().toggleClass('open');
+		});
+	});
+})(jQuery);
+</script>
 <!-- Navbar -->
 <nav role="navigation" class="navbar navbar-inverse" id="main_menu">
      <div class="container-fluid">
@@ -17,14 +29,22 @@
      <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Networks<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
-                        <li><a href="{{url_for ('go_import_network', import_from='csv')}}">Import from CSV</a></li>
-                        <li><a href="{{url_for ('go_import_network', import_from='pywr')}}">Import from Pywr</a></li>
-                         <li><a href="#">Import from GAMS</a></li>
-                         <li class="divider"></li>
-                        <li><a href="#">Export to CSV</a></li>
-                        <li><a href="#">Export to GAMS</a></li>
-                        <li><a href="#">Export to Pyomo</a></li>
-
+                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import</a>
+								<ul class="dropdown-menu">
+									<li><a href="{{url_for ('go_import_network', import_from='csv')}}">from CSV</a></li>
+									<li><a href="{{url_for ('go_import_network', import_from='pywr')}}">from pywr</a></li>
+									<li><a href="#">from GAMS</a></li>
+								</ul>
+							</li>
+                          <li class="divider"></li>
+                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export</a>
+								<ul class="dropdown-menu">
+									<li><a href="#">to CSV</a></li>
+									<li><a href="#">to pywr</a></li>
+									<li><a href="#">to GAMS</a></li>
+                                    <li><a href="#">to Pyomo</a></li>
+								</ul>
+							</li>
                     </ul>
      </li>
 
@@ -44,7 +64,7 @@
                         <li><a href="#">Users managment</a></li>
                     </ul>
                 </li>
-                </li>      <li><a href="#">About</a></li>
+                </li>      <li><a href="{{url_for ('go_about')}}">About</a></li>
 
     </ul>
     <form role="search" class="navbar-form navbar-left">

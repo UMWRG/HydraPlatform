@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-    {% include 'master.html' %}
-<head>
-  <title>Login Form</title>
-     {% include 'header.html' %}
-</head>
+{% extends "page_layout.html" %}
+{% block title %}Login Form{% endblock %}
+{% block content %}
 <script>
     $(document).ready(function() {
     $("#log_").hide();
@@ -12,7 +8,6 @@
      return false;
    });
 });
-
 </script>
 <body >
 <h2 class="title"></h2>
@@ -50,7 +45,5 @@
       </form>
     </div>
   </div>
-    {% include 'footer.html' %}
-</body>
-</html>
+{% endblock %}
 

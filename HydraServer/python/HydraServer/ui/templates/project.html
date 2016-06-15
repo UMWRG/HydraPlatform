@@ -1,16 +1,13 @@
-<html>
+{% extends "page_layout.html" %}
+{% block title %}Project {{project.project_name}}{% endblock %}
+{% block content %}
 
-      {% include "master.html" %}
 
-<head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
   <title>Project {{project.project_name}}</title>
 
   <script src="{{url_for('static', filename='js/project.js')}}"></script>
-</head>
 
-<body>
-      {% include "header.html" %}
 
     <div class="contianer">
         <div id="networks_and_scenarios" class="table table-hover">
@@ -44,7 +41,6 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
-      {% include "footer.html" %}
-</body>
-</html>
+

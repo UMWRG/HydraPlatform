@@ -158,6 +158,10 @@ def check_session(req):
 
 
 
+@app.route('/header', methods=['GET'])
+def go_about():
+    return render_template('about.html')
+
 @app.route('/header/<import_from>', methods=['GET'])
 def go_import_network(import_from):
     if(import_from == 'csv'):
@@ -165,19 +169,19 @@ def go_import_network(import_from):
     elif (import_from=='pywr'):
         return render_template('import_from_pywr.html')
 
-
-
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
     """
         Get a user's projects
     """
-
     project = proj.get_project(project_id, **session)
-
     app.logger.info("Project %s retrieved", project.project_name)
-
-    return render_template('project.html',\
+    '''
+    if the project has only one network and the network has only one scenario, it will display network '''
+    if len(project.networks)==1 and len(project.networks[0].scenarios)==1:
+        return redirect(url_for('go_network', network_id=project.networks[0].network_id, scenario_id=project.networks[0].scenarios[0].scenario_id))
+    else:
+        return render_template('project.html',\
                           username=session['username'],\
                           display_name=session['username'],\
                           project=project)
@@ -214,10 +218,10 @@ def create_network_from_pywr_json(directory):
         pass
     else:
         return ["pywr json file (pywr.json) is not found ..."]
-    pp = os.path.realpath(__file__).replace("\\HydraServer\\python\HydraServer\\ui", "").split('\\')
+    pp = os.path.realpath(__file__).split('\\')
     pp1 = pp[0: (len(pp) - 1)]
     basefolder = '\\'.join(pp1)
-    pywr_import=os.path.join(basefolder,"HydraPlugins", "pywr_app", "Importer","PywrImporter.py")
+    pywr_import=os.path.join(basefolder,"Apps","pywr_app", "Importer","PywrImporter.py")
     cmd = "python " + pywr_import + " -f pywr.json "
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     output = []

@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-
-<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
-
-<head>
-  <title>Network {{network.network_name}}</title>
+{% extends "page_layout.html" %}
+{% block title %}Network {{network.network_name}}{% endblock %}
+{% block content %}
+    <div class="main_content">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
 
   <script>
 
@@ -74,11 +72,6 @@
     var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
 
       </script>
-
- {% include 'header.html' %}
-</head>
-<body>
-    <div >
               {% include 'network_details.html' %}
 
         <ul id="network-tabs" class="nav nav-tabs" role="tablist">
@@ -116,8 +109,7 @@
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
 0
         <!--Include css & javascript-->
-        {% include 'master.html' %}
-
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
         <script src="http://d3js.org/d3.v3.min.js"></script>
         <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
         <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
@@ -147,8 +139,4 @@
          });
       </script>
 
-    </body>
-<footer>
-  {% include 'footer.html' %}
-</footer>
-</html>
+    {% endblock %}

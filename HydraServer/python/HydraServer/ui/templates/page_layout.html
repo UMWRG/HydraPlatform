@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %} - Hydraplatform</title>
+          {% include 'master.html' %}
+          {% include "header.html" %}
+
+  </head>
+  <body  {% block load %}{% endblock %}>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+          {% include 'footer.html' %}
+
+    </div>
+  </body>
+</html>
