@@ -31,8 +31,9 @@
                     <ul role="menu" class="dropdown-menu">
                          <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import</a>
 								<ul class="dropdown-menu">
-									<li><a href="{{url_for ('go_import_network', import_from='csv')}}">from CSV</a></li>
-									<li><a href="{{url_for ('go_import_network', import_from='pywr')}}">from pywr</a></li>
+									<li><a href="{{url_for ('go_import_network', import_from='csv', message='None')}}">from CSV</a></li>
+                                    <li><a href="{{url_for ('go_import_network', import_from='excel', message='None')}}">from Excel</a></li>
+									<li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
 									<li><a href="#">from GAMS</a></li>
 								</ul>
 							</li>
@@ -40,6 +41,7 @@
                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export</a>
 								<ul class="dropdown-menu">
 									<li><a href="#">to CSV</a></li>
+                                    <li><a href="#">to Excel</a></li>
 									<li><a href="#">to pywr</a></li>
 									<li><a href="#">to GAMS</a></li>
                                     <li><a href="#">to Pyomo</a></li>

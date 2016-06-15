@@ -73,7 +73,7 @@ var link = svg.selectAll("links_")
     .enter().append("line")
     .attr("class", "link")
     .style("marker-end",  "url(#suit)") // Modified line
-    .style("stroke-width", function (d) {return Math.sqrt(d.value) })
+    .style("stroke-width", 1.6)
     .attr('x1', function (d) { return self.x(d.source.x); })
     .attr('y1', function (d) { return self.y(d.source.y); })
     .attr('x2', function (d) { return self.x(d.target.x); })

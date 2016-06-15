@@ -10,12 +10,10 @@
          <p id= "error_message">None</p>
     </div>
 
-    <p class="blue">Please upload the network zip file which contains all the required csv files.
-        <br>
-        The network file name needs to be “network.csv”
-    </p>
+    <p class="blue">Please upload the zip file which contains Excel file and template file.
+   </p>
    <form action = "/uploader" method = "POST"  enctype = "multipart/form-data" >
-                     <input type = "file" name = "csv_file"  title="CSV file" class="bb" />
+                     <input type = "file" name = "excel_file"  title="CSV file" class="bb" />
                      <input type = "submit" value="Upload" class="bb" />
    </form>
 </div>

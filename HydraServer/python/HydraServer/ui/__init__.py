@@ -32,9 +32,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-
     app.logger.info("Index")
-
     app.logger.info("Session: %s", session)
     if 'username' not in session:
         app.logger.info("Going to login page.")
@@ -162,12 +160,14 @@ def check_session(req):
 def go_about():
     return render_template('about.html')
 
-@app.route('/header/<import_from>', methods=['GET'])
-def go_import_network(import_from):
+@app.route('/header/<import_from>, <message>', methods=['GET'])
+def go_import_network(import_from, message):
     if(import_from == 'csv'):
-        return render_template('import_from_csv.html')
+        return render_template('import_from_csv.html', message=message)
     elif (import_from=='pywr'):
-        return render_template('import_from_pywr.html')
+        return render_template('import_from_pywr.html', message=message)
+    elif (import_from == 'excel'):
+        return render_template('import_from_excel.html', message=message)
 
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
@@ -212,6 +212,70 @@ def allowed_file (filename):
     else:
         return False
 
+
+
+def create_network_from_excel(directory):
+    os.chdir(directory)
+    excel_file=None
+    for file in os.listdir(directory):
+        if file.endswith(".xls") or file.endswith(".xlsx"):
+            excel_file=file
+            break
+    if excel_file == None:
+        return ["Excel file is not found ..."]
+    pp = os.path.realpath(__file__).split('\\')
+    pp1 = pp[0: (len(pp) - 1)]
+    basefolder = '\\'.join(pp1)
+    excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
+    print "Excel file: ============>", excel_import
+    cmd =excel_import + " -i "+ directory+"\\"+ excel_file +" -m "+directory+"\\"+"template.xml"
+
+    '''
+    from subprocess import Popen, PIPE
+    process = Popen(cmd)
+    stdout, stderr = process.communicate()
+    process.wait()
+    print "Done ....."
+    '''
+
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    output = []
+    while True:
+        line = proc.stdout.readline()
+        if line != '':
+            output.append(line.replace('\n', '').strip())
+        else:
+            break
+    return check_process_output(output)
+
+
+def create_network_from_csv_files(directory):
+    os.chdir(directory)
+    if os.path.exists('network.csv'):
+        pass
+    else:
+        return ["Network file (network.csv) is not found ...."]
+    pp = os.path.realpath(__file__).replace("\\HydraServer\\python\HydraServer\\ui", "").split('\\')
+    pp1 = pp[0: (len(pp) - 1)]
+    basefolder = '\\'.join(pp1)
+    csv_import = os.path.join(basefolder, "HydraPlugins", "CSVplugin", "ImportCSV", "ImportCSV.py")
+    # mname = os.path.dirname(csv_import)
+    if os.path.exists('network.csv'):
+        cmd = "python " + csv_import + " -t network.csv -m template.xml -x "
+    else:
+        cmd = "python " + csv_import + " -t network.csv -x "
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    output = []
+    while True:
+        line = proc.stdout.readline()
+        if line != '':
+            output.append(line.replace('\n', '').strip())
+        else:
+            break
+    print output
+    return check_process_output(output)
+
+
 def create_network_from_pywr_json(directory):
     os.chdir(directory)
     if os.path.exists('pywr.json'):
@@ -252,11 +316,12 @@ def create_network_from_csv_files(directory):
     output=[]
     while True:
         line = proc.stdout.readline()
+        print line
         if line != '':
             output.append(line.replace('\n','').strip())
         else:
             break
-    print output
+
     return check_process_output(output)
 
     '''
@@ -277,7 +342,9 @@ def create_network_from_csv_files(directory):
 
 
 def check_process_output(output):
-    if ("<message>Data import was successful.</message>" in output):
+    line1="<message>Run successfully</message>"
+    line2 =r"<message>Data impot was successful.</message>"
+    if (line2 in output or line1 in output):
         for line in output:
             if line.startswith('<network_id>'):
                 network_id = (line.replace('<network_id>', '').replace('</network_id>', ''))
@@ -286,15 +353,41 @@ def check_process_output(output):
         return ["Data import was successful", network_id, scenario_id]
     return ["Error"]
 
+def delete_files_from_folder(path,maxdepth=1):
+    cpath=path.count(os.sep)
+    for r,d,f in os.walk(path):
+        if r.count(os.sep) - cpath <maxdepth:
+            for files in f:
+                try:
+                    print "Removing %s" % (os.path.join(r,files))
+                    os.remove(os.path.join(r,files))
+                except Exception,e:
+                    print e
+
+def get_uploaded_file_name(file_type):
+    try:
+        file = request.files[file_type]
+        return file
+    except Exception as e:
+        return None
+
+
+
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-       try:
-           file = request.files['file']
-           type='csv'
-       except Exception as e:
-           file = request.files['file2']
-           type='pywr'
+       if get_uploaded_file_name('csv_file') != None:
+           print "CSV from here"
+           file = request.files['csv_file']
+           type = 'csv'
+       elif get_uploaded_file_name('pywr_file') != None:
+           file = request.files['pywr_file']
+           type = 'pywr'
+       elif get_uploaded_file_name('excel_file') != None:
+           file = request.files['excel_file']
+           type = 'excel'
+       if file.filename == '':
+           return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
        if allowed_file(file.filename):
            filename = secure_filename(file.filename)
            basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
@@ -302,6 +395,8 @@ def upload_file():
            extractedfolder= os.path.join(basefolder, 'temp')
            if not os.path.exists(extractedfolder):
                os.makedirs(extractedfolder)
+           else:
+               delete_files_from_folder(extractedfolder)
            print zipfilename
            file.save(zipfilename)
            zip = zipfile.ZipFile(zipfilename)
@@ -309,20 +404,26 @@ def upload_file():
            if type=='csv':
               output= create_network_from_csv_files(extractedfolder)
               if(len(output))==1:
-                  return output[0]
+                  return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
+                  #return output[0]
               elif len(output)==3:
                   return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
               else:
-                  return "Error"
+                  return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
+
            elif type =='pywr':
                output =create_network_from_pywr_json(extractedfolder)
                if (len(output)) == 1:
-                   return output[0]
+                   return redirect(url_for('go_import_network', import_from=type, message=output[0]))
                elif len(output) == 3:
                    # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
                    return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
+           elif type =='excel':
+               output =create_network_from_excel(extractedfolder)
+               return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
        else:
-           return "file is not uploaded, zip file is only allowed"
+           return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
+
 
 
 #example of using ajax, will be needed in the future for network editing
