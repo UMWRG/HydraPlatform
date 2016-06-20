@@ -87,10 +87,13 @@
 
       <div id="graph_container" class="network_container">
             <div id="graph" class="left">
-                <div class="ui-widget">
+                <div class="checkbox">
+             <label><input type='checkbox' onclick='changeNodesLable(this);'>Display labels</label>
              <input id="search">
              <button type="button" onclick="searchNode()">Search</button>
-            </div>
+
+
+                        </div>
             </div>
             <div id="data" class="data_">
              </div>
@@ -137,6 +140,8 @@
                source: res_names
             });
          });
+
+    </script>
       </script>
 
     {% endblock %}

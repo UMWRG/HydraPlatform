@@ -7,6 +7,8 @@ import logging
 from HydraServer.lib import project as proj
 from HydraServer.lib import network as net
 
+from HydraServer.lib import scenario as sen
+
 from HydraServer.util.hdb import login_user
 from HydraServer.soap_server.hydra_base import get_session_db
 
@@ -18,6 +20,8 @@ import os
 import sys
 import subprocess
 import importlib
+from os.path import join
+from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceScenario
 
 UPLOAD_FOLDER = 'uploaded_files'
 ALLOWED_EXTENSIONS = set(['zip'])
@@ -91,7 +95,6 @@ def list_graphs():
 
 @app.route('/graphs/<filename>', methods=['GET', 'POST'])
 def get_graph(filename):
-    from os.path import join
     json_pth = join(DATA_FOLDER, filename)
 
     if request.method == 'POST':
@@ -229,15 +232,6 @@ def create_network_from_excel(directory):
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
     print "Excel file: ============>", excel_import
     cmd =excel_import + " -i "+ directory+"\\"+ excel_file +" -m "+directory+"\\"+"template.xml"
-
-    '''
-    from subprocess import Popen, PIPE
-    process = Popen(cmd)
-    stdout, stderr = process.communicate()
-    process.wait()
-    print "Done ....."
-    '''
-
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     output = []
     while True:
@@ -451,6 +445,9 @@ def go_network():
 
     network = net.get_network(network_id, False, 'N', scenario_ids=[scenario_id], **session)
 
+    print "====>", sen.get_scenario_data(scenario_id)
+
+
 
 
     def get_layout_property(resource, prop, default):
@@ -526,17 +523,8 @@ def go_network():
             type = None
 
         links_.append({'id': link.link_id,'source':node_index[link.node_1_id],'target':node_index[link.node_2_id],'value':links_types.index(type)+1, 'type':type, 'name':link.link_name, 'res_type':'link'})
-
     nodes_ras=[]
-
-
-
-    sys.path.insert(0, "F:\work\HydraPlatform\HydraServer\python\HydraServer\soap_server")
-
-    from hydra_complexmodels import ResourceAttr, ResourceScenario
-
     node_resourcescenarios = net.get_attributes_for_resource(network_id, scenario_id, "NODE", nodes_ids, 'N')
-
     for nodes in node_resourcescenarios:
         ra = ResourceAttr(nodes.resourceattr)
         ra.resourcescenario = ResourceScenario(nodes, ra.attr_id)

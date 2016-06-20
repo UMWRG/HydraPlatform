@@ -36,7 +36,10 @@ var color = d3.scale.category20();
 var force = d3.layout.force()
     .charge(-120)
     .linkDistance(30)
-    .size([width + margin.left + margin.right, height+ margin.top + margin.bottom]);
+    .size([width + margin.left + margin.right, height+ margin.top + margin.bottom])
+    .on("tick", tick)
+     .start();
+
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -93,12 +96,20 @@ var node = svg.selectAll("nodes_")
     .style("fill", function (d) {
     return color(d.group);
 })
-
-
     .call(force.drag)
     .on('mouseover', mouse_in) //Added
     .on('mouseout', node_mouse_out) //Added
     .on("click", nodes_mouse_click);
+
+
+ var text = svg.append("g").selectAll("node")
+    .data(nodes_)
+    .enter().append("text")
+     .attr("x",function(d){return self.x((d.x))+8;})
+    .attr("y", function(d){return self.y((d.y))+8;})
+    .text(function(d) { return d.name; })
+    .style("visibility", "hidden");
+
 
 
 //giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
@@ -130,6 +141,8 @@ var node = svg.selectAll("nodes_")
     });
 });
 */
+// Per-type markers, as they don't inherit styles.
+
 svg.append("defs").selectAll("marker")
     .data(["suit", "licensing", "resolved"])
   .enter().append("marker")
@@ -146,6 +159,11 @@ svg.append("defs").selectAll("marker")
     .style("opacity", "0.6");
 
 
+function tick() {
+  path.attr("d", linkArc);
+  circle.attr("transform", transform);
+  text.attr("transform", transform);
+}
 
  function nodes_mouse_click(d) {
    // unenlarge target node
@@ -210,14 +228,15 @@ function node_mouse_out(d) {
       tip.hide(d);
       d3.select(this).style('stroke', '#999');
    }
-
-
+    //svg.selectAll("text").style("visibility", "visible");
 }
 
 function mouse_in(d) {
    // show  resource tip and change border
    tip.show(d);
    d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
+   //svg.selectAll("text").remove()
+   //svg.selectAll("text").style("visibility", "hidden");
 }
 
 function link_mouse_out(d) {
@@ -227,6 +246,7 @@ function link_mouse_out(d) {
        tip.hide(d);
        d3.select(this).style('stroke', '#999');
    }
+   //svg.selectAll("text").style("visibility", "visible");
 }
 
 function hid_res(d)
@@ -413,4 +433,15 @@ if(cur_table!=null)
     cur_table.show();
 
 
+}
+
+function changeNodesLable(cb) {
+ if (cb.checked) {
+               svg.selectAll("text").style("visibility", "visible");
+
+        }
+        else
+        {
+                svg.selectAll("text").style("visibility", "hidden");
+        }
 }
