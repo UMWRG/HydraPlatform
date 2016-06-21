@@ -75,7 +75,8 @@ var link = svg.selectAll("links_")
     .data(links_)
     .enter().append("line")
     .attr("class", "link")
-    .style("marker-end",  "url(#suit)") // Modified line
+     //.style("stroke-dasharray", ("3, 3"))
+     .style("marker-end", 'None')
     .style("stroke-width", 1.6)
     .attr('x1', function (d) { return self.x(d.source.x); })
     .attr('y1', function (d) { return self.y(d.source.y); })
@@ -210,16 +211,12 @@ function tick() {
      }
    }
    d3.select(this).style('stroke',  function(d) {get_node_attributes(d.id, d.node_name)});
-
 }
-
-
-
-function mouse_in(d) {
+//function mouse_in(d) {
    // unenlarge target node
-   tip.show(d);
-   d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
-}
+   //tip.show(d);
+ //  d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
+//}
 
 function node_mouse_out(d) {
    // unenlarge target node
@@ -253,7 +250,6 @@ function hid_res(d)
 {
    tip.hide(d);
    d3.select(this).style('stroke', '#999');
-   //alert('It is hidddn');
 }
 
 
@@ -333,9 +329,7 @@ function create_table(res) {
 
         }
         else
-
         {
-
         var v_row = $("<tr/>");
         var v_title_ = $('<th></th>').text('Value ' );
         v_row.append(v_title_);
@@ -350,7 +344,6 @@ function create_table(res) {
           $('#data').append(t_table);
           t_table.hide();
           }
-
    }
 
 function searchNode() {
@@ -443,5 +436,17 @@ function changeNodesLable(cb) {
         else
         {
                 svg.selectAll("text").style("visibility", "hidden");
+        }
+}
+
+function changeLinkDirection(cb) {
+ if (cb.checked)
+        {
+             svg.selectAll("line").style("marker-end",  "url(#suit)");
+        }
+        else
+        {
+            svg.selectAll("line").style("marker-end", 'None');
+
         }
 }

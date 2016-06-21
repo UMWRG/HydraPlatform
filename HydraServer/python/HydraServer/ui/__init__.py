@@ -445,8 +445,8 @@ def go_network():
 
     network = net.get_network(network_id, False, 'N', scenario_ids=[scenario_id], **session)
 
-    print "====>", sen.get_scenario_data(scenario_id)
 
+    print "====>", sen.get_resource_data('NODE', network.nodes[0].node_id, scenario_id,  None, **session)
 
 
 
