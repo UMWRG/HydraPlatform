@@ -230,7 +230,6 @@ def create_network_from_excel(directory):
     pp1 = pp[0: (len(pp) - 1)]
     basefolder = '\\'.join(pp1)
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
-    print "Excel file: ============>", excel_import
     cmd =excel_import + " -i "+ directory+"\\"+ excel_file +" -m "+directory+"\\"+"template.xml"
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
     output = []
@@ -432,6 +431,42 @@ def add_numbers():
 
 
 
+def get_dict(obj):
+    if not  hasattr(obj,"__dict__"):
+        return obj
+    result = {}
+    for key, val in obj.__dict__.items():
+
+        if key.startswith("_"):
+            continue
+        if isinstance(val, list):
+            element = []
+            for item in val:
+                element.append(get_dict(item))
+        else:
+            element = get_dict(obj.__dict__[key])
+        result[key] = element
+    return result
+
+
+
+def get_dict(obj):
+    if not hasattr(obj, "__dict__"):
+        return obj
+    result = {}
+    for key, val in obj.__dict__.items():
+
+        if key.startswith("_"):
+            continue
+        if isinstance(val, list):
+            element = []
+            for item in val:
+                element.append(get_dict(item))
+        else:
+            element = get_dict(obj.__dict__[key])
+        result[key] = element
+    return result
+
 
 @app.route('/network', methods=['GET'])
 def go_network():
@@ -443,10 +478,10 @@ def go_network():
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
 
-    network = net.get_network(network_id, False, 'N', scenario_ids=[scenario_id], **session)
+    network = net.get_network(network_id, False, 'Y', scenario_ids=[scenario_id], **session)
 
 
-    print "====>", sen.get_resource_data('NODE', network.nodes[0].node_id, scenario_id,  None, **session)
+
 
 
 
@@ -500,7 +535,6 @@ def go_network():
         #nodes_[node.node_id]=[1, node.node_x, node.node_y]
         node_coords[node.node_id] = [node.node_x, node.node_y]
         node_name_map.append({'id':node.node_id, 'name':node.node_name, 'name': node.node_name})
-
         nodes_.append({'id':node.node_id, 'group': nodes_types.index(type) + 1, 'x':float(node.node_x),'y': float(node.node_y), 'name':node.node_name, 'type':type,'res_type':'node'})
 
 
@@ -524,8 +558,11 @@ def go_network():
 
         links_.append({'id': link.link_id,'source':node_index[link.node_1_id],'target':node_index[link.node_2_id],'value':links_types.index(type)+1, 'type':type, 'name':link.link_name, 'res_type':'link'})
     nodes_ras=[]
+
     node_resourcescenarios = net.get_attributes_for_resource(network_id, scenario_id, "NODE", nodes_ids, 'N')
+    ii=0;
     for nodes in node_resourcescenarios:
+        ii=ii+1
         ra = ResourceAttr(nodes.resourceattr)
         ra.resourcescenario = ResourceScenario(nodes, ra.attr_id)
         nodes_ras.append(ra)
@@ -538,43 +575,45 @@ def go_network():
         links_ras.append(ra)
 
     nodes_attrs=[]
-    for res in nodes_ras:
-        #print "***===>",  res
-        for node in network.nodes:
-            if(node.node_id ==  res.ref_id):
-                attrr_name=attr_id_name[res.attr_id]
-                vv=json.loads(res.resourcescenario.value.value)
-                if(res.resourcescenario.value.type == "timeseries"):
+    for node_ in network.nodes:
+        ress=sen.get_resource_data('NODE', node_.node_id, scenario_id, None, **session)
+        for res in ress:
+            attrr_name_ = attr_id_name[res.resourceattr.attr_id]
+            try:
+                vv = json.loads(res.dataset.value)
+            except:
+                vv = res.dataset.value
 
-                    values_=[]
-                    for index in vv.keys():
-                        for date_ in sorted(vv[index].keys()):
-                            value=vv[index][date_]
-                            values_.append({'date':date_, 'value': value})
-                    vv=values_
-
-                nodes_attrs.append({'id':node.node_id,'attr_id': res.attr_id ,'attrr_name': attrr_name, 'type':res.resourcescenario.value.type, 'values':vv})
+            if (res.dataset.data_type == "timeseries"):
+                values_ = []
+                for index in vv.keys():
+                    for date_ in sorted(vv[index].keys()):
+                        value = vv[index][date_]
+                        values_.append({'date': date_, 'value': value})
+                vv = values_
+            nodes_attrs.append({'id': node_.node_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
+                                'type': res.dataset.data_type, 'values': vv})
 
     links_attrs = []
-    for res in links_ras:
-        #print "***===>",  res
-        for link in network.links:
-            if (link.link_id == res.ref_id):
-                attrr_name = attr_id_name[res.attr_id]
-                try:
-                    vv = json.loads(res.resourcescenario.value.value)
-                except:
-                    vv=res.resourcescenario.value.value
-                if (res.resourcescenario.value.type == "timeseries"):
-                    values_ = []
-                    for index in vv.keys():
-                        for date_ in vv[index].keys():
-                            value = vv[index][date_]
-                            values_.append({'date': date_, 'value': value})
-                    vv = values_
+    for link_ in network.links:
+        ress = sen.get_resource_data('LINK', link_.link_id, scenario_id, None, **session)
+        for res in ress:
+            attrr_name_ = attr_id_name[res.resourceattr.attr_id]
+            try:
+                vv = json.loads(res.dataset.value)
+            except:
+                vv = res.dataset.value
 
-                    links_attrs.append({'id': link.link_id, 'attr_id': res.attr_id, 'attrr_name': attrr_name,
-                                    'type': res.resourcescenario.value.type, 'values': vv})
+            if (res.dataset.data_type == "timeseries"):
+                values_ = []
+                for index in vv.keys():
+                    for date_ in sorted(vv[index].keys()):
+                        value = vv[index][date_]
+                        values_.append({'date': date_, 'value': value})
+                vv = values_
+            links_attrs.append({'id': link_.link_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
+                                'type': res.dataset.data_type, 'values': vv})
+
 
             #Get the min, max x and y coords
     extents = net.get_network_extents(network_id, **session)
@@ -594,7 +633,7 @@ def go_network():
                            nodes_=nodes_,\
                            links_=links_, \
                            nodes_attrs=nodes_attrs, \
-                           links_attrs=links_attrs)
+links_attrs=links_attrs)
 
 
 if __name__ == "__main__":

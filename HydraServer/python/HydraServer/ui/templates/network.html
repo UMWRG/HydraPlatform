@@ -88,14 +88,15 @@
       <div id="graph_container" class="network_container">
             <div id="graph" class="left">
                 <div class="checkbox">
-             <label><input type='checkbox' onclick='changeNodesLable(this);'>Display labels</label>
+             <label >
+                 <input id="label" type='checkbox' onclick='changeNodesLable(this);'>
+                 Display labels</label>
                                  <label><input type='checkbox' onclick='changeLinkDirection(this);'>Link direction</label>
 
              <input id="search">
-             <button type="button" onclick="searchNode()">Search</button>
+             <button type="button" onclick="searchNode()">Select</button>
 
-
-                        </div>
+             </div>
             </div>
             <div id="data" class="data_">
              </div>
