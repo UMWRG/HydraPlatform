@@ -25,24 +25,31 @@
                     </ul>
                 </li>
 
-
      <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Networks<b class="caret"></b></a>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Data<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
-                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import</a>
+                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import network</a>
 								<ul class="dropdown-menu">
 									<li><a href="{{url_for ('go_import_network', import_from='csv', message='None')}}">from CSV</a></li>
                                     <li><a href="{{url_for ('go_import_network', import_from='excel', message='None')}}">from Excel</a></li>
 									<li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
-									<li><a href="#">from GAMS</a></li>
+								</ul>
+							</li>
+                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import results</a>
+								<ul class="dropdown-menu">
+                                    <li><a href="#">from GAMS Data eXchange (GDX)</a></li>
 								</ul>
 							</li>
                           <li class="divider"></li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export</a>
+                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
 								<ul class="dropdown-menu">
 									<li><a href="#">to CSV</a></li>
                                     <li><a href="#">to Excel</a></li>
 									<li><a href="#">to pywr</a></li>
+								</ul>
+							</li>
+                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export input file</a>
+								<ul class="dropdown-menu">
 									<li><a href="#">to GAMS</a></li>
                                     <li><a href="#">to Pyomo</a></li>
 								</ul>
@@ -55,9 +62,7 @@
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="#">GamsApp</a></li>
                         <li><a href="#">MatlabApp</a></li>
-                        <li><a href="#">PywrApp</a></li>
                          <li class="divider"></li>
-                        <li><a href="#">ExcelApp></a></li>
                     </ul>
          <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Addminstration<b class="caret"></b></a>
