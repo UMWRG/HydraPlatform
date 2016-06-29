@@ -68,9 +68,7 @@
           }
         )
     {% endfor %}
-
     var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
-
       </script>
               {% include 'network_details.html' %}
 
@@ -102,10 +100,7 @@
              </div>
             <div id="timeseries_g" class="timeseries_gr">
              </div>
-
         </div> <!-- graph_container -->
-
-
        {% include 'nodesandlinks.html' %}
 
         </div> <!-- tab-contents -->
@@ -116,7 +111,7 @@
 0
         <!--Include css & javascript-->
         <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
-        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3.v3.min.js')}}"></script>
         <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
         <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
         <script src="{{url_for('static', filename='js/hydra.js')}}"></script>

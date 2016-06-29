@@ -527,3 +527,11 @@ function simulateClick(elem /* Must be the element, not d3 selection */) {
     elem.dispatchEvent(evt);
 
 }
+
+function create_project_tree()
+{
+var project_list=$( "#LinkedList1" )
+for (node in nodes_)
+{
+}
+}

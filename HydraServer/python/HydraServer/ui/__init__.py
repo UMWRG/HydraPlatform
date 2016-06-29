@@ -336,7 +336,7 @@ def create_network_from_csv_files(directory):
 
 def check_process_output(output):
     line1="<message>Run successfully</message>"
-    line2 =r"<message>Data impot was successful.</message>"
+    line2 =r"<message>Data import was successful.</message>"
     if (line2 in output or line1 in output):
         for line in output:
             if line.startswith('<network_id>'):
