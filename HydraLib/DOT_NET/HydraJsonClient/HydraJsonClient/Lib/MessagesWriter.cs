@@ -29,8 +29,10 @@ namespace HydraJsonClient.Lib
     {
        static public string plugin_name="";
        static bool is_error_reporter = false;
+        public static bool exit_in_error=true;
 
-       static public void writeMessage(string message)       
+
+        static public void writeMessage(string message)       
        {
            logWriter.Writelog(message, "Informal");
            Console.WriteLine("!!Output " + DateTime.Now + ": " + message);       
@@ -58,8 +60,9 @@ namespace HydraJsonClient.Lib
                is_error_reporter = true;
                logWriter.Writelog(error_message, "Error");
                Console.ForegroundColor = ConsoleColor.Red;
-               Console.WriteLine(error_message);              
-               Environment.Exit(0);
+               Console.WriteLine(error_message);   
+                if(exit_in_error)           
+                    Environment.Exit(0);
            }
        }
 
@@ -81,8 +84,9 @@ namespace HydraJsonClient.Lib
                is_error_reporter = true;
                logWriter.Writelog(error_message, "Error");
                Console.ForegroundColor = ConsoleColor.Red;
-               Console.WriteLine(error_message);               
-               Environment.Exit(0);
+               Console.WriteLine(error_message);
+               if (exit_in_error)
+                    Environment.Exit(0);
            }
        }
 
