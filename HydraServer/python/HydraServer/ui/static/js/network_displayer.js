@@ -1,16 +1,5 @@
 var toLocaleFormat = d3.time.format("%Y-%m-%d");
 
-//var nodes_= [{"name": "Myriel","group": 1, "x": 0, "y": 20}, {"name": "Napoleon","group": 1, "x":20, "y":30}, {"name": "Mlle.Baptistine", "group": 1, "x":40, "y":500 }];
-
-//var links_=[ {"source": 1,"target":0,"value":1},{"source":0,"target":2,"value":1}]
-
-//Constants for the SVG
-//var width = 500,
- //   height = 500;
-// alert('HEllo')
-
-
-
 var current_res=null;
 
 var display=true;
@@ -20,7 +9,6 @@ var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
     var width  = (900- margin.left - margin.right),
     height = (700-margin.top - margin.bottom);
     colors = d3.scale.category10();
- //alert('HEllo 2')
 
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
@@ -39,8 +27,9 @@ var force = d3.layout.force()
     .charge(-120)
     .linkDistance(30)
     .size([width + margin.left + margin.right, height+ margin.top + margin.bottom])
-    .on("tick", tick)
-     .start();
+    .on("tick", tick);
+force.gravity(0);
+
 
 var drag = force.drag()
     .on("dragstart", dragstart);
@@ -53,8 +42,6 @@ var tip = d3.tip()
   //return "<strong>Name:</strong> <span style='color:red'>" + d.name + "</span>";
   })
 
-
-
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("#graph").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -62,13 +49,14 @@ var svg = d3.select("#graph").append("svg")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
     .attr("clsss", "left");
 
-svg.call(tip);
 
+    // .call(d3.behavior.zoom().on("zoom", redraw));
+
+svg.call(tip);
 
 //Read the data from the mis element
 //var mis = document.getElementById('mis').innerHTML;
 //graph = JSON.parse(nodes);
-//alert  ('hii  there 4');
 
 //Creates the graph data structure out of the json data
 force.nodes(nodes_)
@@ -104,12 +92,10 @@ var node = svg.selectAll("nodes_")
     .style("fill", function (d) {
     return color(d.group);
 })
-   //.call(force.drag)
     .on('mouseover', mouse_in) //Added
     .on('mouseout', node_mouse_out) //Added
     .on("click", nodes_mouse_click)
         .on("dblclick", nodes_mouse_double_click);
-
 
  var text = svg.append("g").selectAll("node")
     .data(nodes_)
@@ -167,12 +153,14 @@ svg.append("defs").selectAll("marker")
     .style("stroke", "#4679BD")
     .style("opacity", "0.6");
 
+    force.on("tick",tick);
+
+
 
 function tick() {
-  path.attr("d", linkArc);
-  circle.attr("transform", transform);
-  text.attr("transform", transform);
-}
+
+    }
+
 function nodes_mouse_double_click(d)
 {
   d3.selectAll('.node')  //here's how you get all the nodes
@@ -186,7 +174,6 @@ function dragstart (d)
 {
 }
  function nodes_mouse_click(d) {
-
    // unenlarge target node
    //
    tip.hide(d);
@@ -293,6 +280,26 @@ function hid_res(d)
 
 function get_node_attributes(id, name){
 }
+ function redraw() {
+     // d3.select(this).attr('transform', '');
+
+      svg.attr("transform",
+          "translate(" + d3.event.translate + ")"
+          + " scale(" + d3.event.scale + ")");
+
+/*
+          link.attr("x1", function (d) { return  self.x(d.source.x); })
+            .attr("y1", function (d) { return self.y(d.source.y);  })
+            .attr("x2", function (d) { return self.x(d.target.x); })
+            .attr("y2", function (d) { return self.y(d.target.y); });
+
+        node.attr("transform", function (d) {
+            return "translate(" + self.x(d.x) + "," + self.y(d.y) + ")";
+        });
+
+
+*/
+    }
 
 function create_table(res) {
         t_table=null;
@@ -529,9 +536,11 @@ function simulateClick(elem /* Must be the element, not d3 selection */) {
 }
 
 function create_project_tree()
-{
+    {
+
 var project_list=$( "#LinkedList1" )
 for (node in nodes_)
-{
+    {
+    }
 }
-}
+

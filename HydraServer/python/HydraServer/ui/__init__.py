@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, Response, json, request, session, redirect, url_for, escape
+from flask import Flask, jsonify, Response, json, request, session, redirect, url_for, escape, send_file
 
 import requests
 
@@ -46,10 +46,12 @@ def index():
         username = escape(session['username'])
         projects = proj.get_projects(user_id, **{'user_id':user_id})
         app.logger.info("Logged in. Going to projects page.")
+        net_scn={'network_id': 0,'scenario_id':0}
+
         return render_template('projects.html',
                                display_name=username,
                                username=username,
-                               projects=projects)
+                               projects=projects,net_scn=net_scn)
 
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
@@ -157,20 +159,81 @@ def check_session(req):
 
     return sess_info
 
-
-
 @app.route('/header', methods=['GET'])
 def go_about():
     return render_template('about.html')
 
+
+'''
+@app.route('/header', methods=['GET'])
+def go_export_network():
+    app.logger.info(request.args['scenario_id'])
+
+    app.logger.info(request.args['network_id'])
+
+    scenario_id = request.args['scenario_id']
+    network_id = request.args['network_id']
+
+
+    print network_id,', scenario: '+scenario_id
+    return "It iS Working ...network_id: "+network_id+', scenario: '+scenario_id
+ '''
+
+
+@app.route('/header/<export_to>, <network_id>, <scenario_id>, <message>' , methods=['GET', 'POST'])
+def go_export_network(export_to, network_id, scenario_id, message):
+    basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
+    directory = os.path.join(basefolder, 'temp')
+    delete_files_from_folder(directory)
+    if(export_to== 'pywr'):
+        zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
+        out_proce=export_network_to_pywr_json(directory,zip_file_name, network_id, scenario_id )
+        if not os.path.exists(zip_file_name):
+            return "An error occurred!!!"
+        return send_file(zip_file_name, as_attachment=True)
+
+def export_network_to_pywr_json(directory, zip_file_name, network_id, scenario_id):
+    print "==============>", zip_file_name
+    output_file = os.path.join(directory, ('network_' + network_id + '.json'))
+    os.chdir(directory)
+    pp = os.path.realpath(__file__).split('\\')
+    pp1 = pp[0: (len(pp) - 1)]
+    basefolder = '\\'.join(pp1)
+    pywr_import = os.path.join(basefolder, "Apps", "pywr_app", "Exporter", "PywrExporter.py")
+    print "===>", pywr_import, output_file
+    cmd = "python " + pywr_import + ' -t '+network_id+' -s '+scenario_id +' -o '+output_file
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    output = []
+    while True:
+        line = proc.stdout.readline()
+        if line != '':
+            output.append(line.replace('\n', '').strip())
+        else:
+            break
+    create_zip_file(directory, zip_file_name)
+
+    return check_process_output(output)
+
+def create_zip_file(directory, zip_file_name):
+    for file in os.listdir(directory):
+        zf = zipfile.ZipFile(zip_file_name, mode='a')
+        print "adding file ...", file
+        zf.write(file)
+        zf.close()
+
+
 @app.route('/header/<import_from>, <message>', methods=['GET'])
 def go_import_network(import_from, message):
+    net_scn = {'network_id': 0, 'scenario_id': 0}
     if(import_from == 'csv'):
-        return render_template('import_from_csv.html', message=message)
+        return render_template('import_from_csv.html', net_scn=net_scn, message=message)
     elif (import_from=='pywr'):
-        return render_template('import_from_pywr.html', message=message)
+        return render_template('import_from_pywr.html',net_scn=net_scn, message=message)
     elif (import_from == 'excel'):
-        return render_template('import_from_excel.html', message=message)
+        if  os.name is 'nt':
+            return render_template('import_from_excel.html', net_scn=net_scn, message=message)
+        else:
+            return "This feature is not available in this server !!!"
 
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
@@ -215,8 +278,6 @@ def allowed_file (filename):
     else:
         return False
 
-
-
 def create_network_from_excel(directory):
     os.chdir(directory)
     excel_file=None
@@ -240,7 +301,6 @@ def create_network_from_excel(directory):
         else:
             break
     return check_process_output(output)
-
 
 def create_network_from_csv_files(directory):
     os.chdir(directory)
@@ -621,6 +681,8 @@ def go_network():
 
     app.logger.info("Network %s retrieved", network.network_name)
 
+    net_scn={'network_id': network_id, 'scenario_id': scenario_id}
+
     return render_template('network.html',\
                 scenario_id=scenario_id,
                 node_coords=node_coords,\
@@ -632,7 +694,7 @@ def go_network():
                 network=network,\
                            nodes_=nodes_,\
                            links_=links_, \
-                           nodes_attrs=nodes_attrs, \
+                           nodes_attrs=nodes_attrs, net_scn=net_scn, \
 links_attrs=links_attrs)
 
 

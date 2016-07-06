@@ -1,5 +1,6 @@
 
 <script>
+
     (function($){
 	$(document).ready(function(){
 		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
@@ -10,6 +11,16 @@
 		});
 	});
 })(jQuery);
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+  }
+
 </script>
 <!-- Navbar -->
 <nav role="navigation" class="navbar navbar-inverse" id="main_menu">
@@ -24,7 +35,6 @@
                         <li><a href="/">Open project</a></li>
                     </ul>
                 </li>
-
      <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Data<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
@@ -45,7 +55,7 @@
 								<ul class="dropdown-menu">
 									<li><a href="#">to CSV</a></li>
                                     <li><a href="#">to Excel</a></li>
-									<li><a href="#">to pywr</a></li>
+									<li><a href="{{url_for ('go_export_network', export_to='pywr', network_id=net_scn.network_id, scenario_id=net_scn.scenario_id, message='None')}}">to pywr</a></li>
 								</ul>
 							</li>
                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export input file</a>
