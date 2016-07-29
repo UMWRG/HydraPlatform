@@ -1,0 +1,46 @@
+{% extends "page_layout.html" %}
+{% block title %}Project {{project.project_name}}{% endblock %}
+{% block content %}
+
+
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+  <title>Project {{project.project_name}}</title>
+
+  <script src="{{url_for('static', filename='js/project.js')}}"></script>
+
+
+    <div class="contianer">
+        <div id="networks_and_scenarios" class="table table-hover">
+          <div id="network_list" class="table-col">
+            <div class="table-head">
+                Networks
+            </div>
+            {% for network in project.networks %}
+                <div id="network_{{network.network_id}}" class="network table-row">
+                    {{network.network_name}}
+                </div>
+            {% endfor %}
+          </div>
+
+
+          <div id="scenario_list" class="table-col">
+            <div class="table-head">
+                Scenarios
+            </div>
+            {% for network in project.networks %}
+                <div id="network_{{network.network_id}}_scenarios" class="table-row hidden">
+                    {% for scenario in network.scenarios%}
+                    <a href="{{ url_for('go_network', network_id=network.network_id, scenario_id=scenario.scenario_id) }}">
+                            <div id="scenario_{{scenario.scenario_id}}}}">
+                                {{scenario.scenario_name}}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

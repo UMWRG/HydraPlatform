@@ -1,0 +1,165 @@
+.footer
+{
+ clear: both;
+}
+
+.network_container
+{
+width: 1900px;
+height 800px;
+//border: 1px solid red;
+}
+
+.graph
+{
+width: 900px;
+height 750px;
+float: left;
+}
+
+.data_
+{
+  width: 350px;
+  height 750pxpx;
+  float: left;
+  padding-top: 20px;
+  padding-right: 30px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  border: 2px;
+  margin: auto;
+  overflow-y:scroll;
+  display:block;
+}
+
+timeseries_gr
+{
+      float: right;
+      width: 550px;
+      padding-left: 30px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      margin: auto;
+      border: 0px;
+
+ }
+.right
+{
+      float: right;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      margin: auto;
+      border: 0px;
+}
+
+.left
+{
+float: left;
+}
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+.node :hover {
+  fill: black ;
+}
+
+.node text {
+  font: 9px helvetica;
+}
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+.node text {
+  font: 9px helvetica;
+}
+
+.node text {
+  font: 9px helvetica;
+}
+
+d3-tip {
+    line-height: 1;
+    color: black;
+}
+
+d3-tip :hover {
+   fill: blue ;
+}
+
+
+.table {
+  border-collapse: collapse;
+  width: 300px;
+  height: 600 px;
+}
+
+th, td {
+  padding: 0.25rem;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+tbody tr:nth-child(odd) {
+  background: #eee;
+}
+
+tbody tr:hover {
+  background: yellow;
+}
+
+.attr_table
+{
+ align: center;
+}
+
+
+path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+.grid path {
+    stroke-width: 0;
+}
+
+.graph_title
+{
+ color: blue;
+}
+
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+

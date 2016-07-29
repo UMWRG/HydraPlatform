@@ -1,0 +1,33 @@
+<html>
+
+    {% include 'master.html' %}
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
+  <title>User ${display_name}'s Projects</title>
+</head>
+
+<body>
+    {% include "header.html" %}
+    <div class="container-fixed">
+
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Project Description</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for p in projects %}
+            <tr>
+                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_name }}</a></td>
+                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_description }}</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

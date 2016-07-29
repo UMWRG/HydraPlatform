@@ -1,0 +1,49 @@
+{% extends "page_layout.html" %}
+{% block title %}Login Form{% endblock %}
+{% block content %}
+<script>
+    $(document).ready(function() {
+    $("#log_").hide();
+   $("#main_menu").click(function() {
+     return false;
+   });
+});
+</script>
+<body >
+<h2 class="title"></h2>
+  <h3 class="sub_title">Login</h3>
+  <div class="page_width">
+    <div >
+        <form action="/login"
+            method="post" accept-charset="UTF-8" class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="username" placeholder="Enter username">Username:</label>
+          <div class="col-sm-10">
+            <input  class ="input_text" type="text" name="username" placeholder="Enter username"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="password">Password:</label>
+          <div class="col-sm-10">
+            <input  class ="input_text" type="password" name="password" placeholder="Enter password"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="remember" value="2252000" /> remember me
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <button type="submit" id="login-btn" class="btn btn-default">Login</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

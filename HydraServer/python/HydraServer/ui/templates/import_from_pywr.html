@@ -1,0 +1,33 @@
+{% extends "page_layout.html" %}
+{% block title %}Import from Pywr{% endblock %}
+
+
+{% block content %}
+
+
+<div id="pywr_importer"  class ="buttons">
+
+    <div id="error_pan" hidden="true">
+         <h4 style="color:red">Error:</h4>
+         <p id= "error_message">None</p>
+    </div>
+
+<div class="blue">
+    <p>
+        Please upload  the network zip which contains the Json pywr file and data files. <br>The json file name needs to be “pywr.json
+        ”</p>
+    </div>
+
+<form action = "/uploader" method = "POST"  enctype = "multipart/form-data"  >
+                     <input type = "file" name = "pywr_file"  class="bb" />
+                     <input type = "submit" value="Upload" class="bb"/>
+   </form>
+</div>
+<script>
+   message_={{message|tojson}};
+   if(message_!='None')   {
+      $(error_pan).show();
+      $(error_message).text(message_);
+   }
+   </script>
+{% endblock %}

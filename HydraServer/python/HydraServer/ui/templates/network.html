@@ -1,0 +1,144 @@
+{% extends "page_layout.html" %}
+{% block title %}Network {{network.network_name}}{% endblock %}
+{% block content %}
+    <div class="main_content">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
+
+  <script>
+
+  nodes_attrs={{nodes_attrs|tojson}};
+  links_attrs={{links_attrs|tojson}}
+
+  // set up initial nodes and links
+  //  - nodes are known by 'id', not by index in array.
+  //  - reflexive edges are indicated on the node (as a bold black circle).
+  //  - links are always source < target; edge directions are set by 'left' and 'right'.
+    var scenario_id={{scenario_id}};
+    var data_={{node_name_map|tojson}};
+    function get_name(id)
+    {
+    value='None'
+    for (i in data_)
+    {
+        if(data_[i].id==id)
+        {
+            value=data_[i].name;
+            break;
+        }
+    }
+     return value;
+     }
+
+     var nodes_=[]
+     nodes_={{nodes_|tojson}};
+
+   var links_=[];
+   var links_={{links_|tojson}};
+
+
+    var min_x = {{extents['min_x']}};
+    var max_x = {{extents['max_x']}};
+    var min_y = {{extents['min_y']}};
+    var max_y = {{extents['max_y']}};
+
+    var nodes = [];
+    var node_coords = {};
+    var lastNodeId = null;
+    {% for id, coord in node_coords.items()%}
+      nodes.push(
+        {
+          'id': {{id}},
+          'reflexive':false,
+          'x':{{coord[0]}},
+          'y':{{coord[1]}},
+        }
+      )
+      lastNodeId={{id}};
+      node_coords[{{id}}] = [{{coord[0]}}, {{coord[1]}}];
+    {% endfor %}
+
+    var links = [];
+    {% for id, connected_nodes in links.items()%}
+        links.push(
+          {
+            'source': {{connected_nodes[0]}},
+            'target': {{connected_nodes[1]}},
+            'left'  : 'true',
+            'right' : 'false',
+          }
+        )
+    {% endfor %}
+    var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
+      </script>
+              {% include 'network_details.html' %}
+
+        <ul id="network-tabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" id="statictab">
+                <a data-toggle="tab">Graph View</a>
+            </li>
+            <li role="presentation" id="listtab">
+                <a data-toggle="tab">List View</a>
+            </li>
+        </ul>
+
+      <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
+
+      <div id="graph_container" class="network_container">
+            <div id="graph" class="left">
+                <div class="checkbox">
+             <label >
+                 <input id="label" type='checkbox' onclick='changeNodesLable(this);'>
+                 Display labels</label>
+                                 <label><input type='checkbox' onclick='changeLinkDirection(this);'>Link direction</label>
+
+             <input id="search">
+             <button type="button" onclick="searchNode()">Select</button>
+
+             </div>
+            </div>
+            <div id="data" class="data_">
+             </div>
+            <div id="timeseries_g" class="timeseries_gr">
+             </div>
+        </div> <!-- graph_container -->
+       {% include 'nodesandlinks.html' %}
+
+        </div> <!-- tab-contents -->
+
+      </div> <!-- main_content -->
+
+        <!-- this needs to be updated and turned into a tooltip that can be hidden -->
+0
+        <!--Include css & javascript-->
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3.v3.min.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
+        <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
+        <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
+        <script src="{{url_for('static', filename='js/network.js')}}"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
+
+
+       <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
+
+        <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+
+<script>
+         $(function() {
+            var res_names = [];
+            for ( i in nodes_)
+            {
+            res_names.push(nodes_[i].name);
+            }
+            for(i in links_)
+            {
+             res_names.push(links_[i].name);
+            }
+            $( "#search" ).autocomplete({
+               source: res_names
+            });
+         });
+
+
+    </script>
+    {% endblock %}
