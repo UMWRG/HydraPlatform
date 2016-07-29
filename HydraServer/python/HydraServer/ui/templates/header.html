@@ -1,97 +1,94 @@
-
 <script>
+    (function($) {
+        $(document).ready(function() {
+            $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(this).parent().siblings().removeClass('open');
+                $(this).parent().toggleClass('open');
+            });
+        });
+    })(jQuery);
 
-    (function($){
-	$(document).ready(function(){
-		$('ul.dropdown-menu [data-toggle=dropdown]').on('click', function(event) {
-			event.preventDefault();
-			event.stopPropagation();
-			$(this).parent().siblings().removeClass('open');
-			$(this).parent().toggleClass('open');
-		});
-	});
-})(jQuery);
-
-function getUrlVars() {
-    var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-    function(m,key,value) {
-      vars[key] = value;
-    });
-    return vars;
-  }
-
+    function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+            function(m, key, value) {
+                vars[key] = value;
+            });
+        return vars;
+    }
 </script>
 <!-- Navbar -->
 <nav role="navigation" class="navbar navbar-inverse" id="main_menu">
-     <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="http://hydraplatform.org/" target="_blank">HydraPlatform</a>
-    </div>
-    <ul class="nav navbar-nav">
-        <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Projects<b class="caret"></b></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a href="/">Open project</a></li>
-                    </ul>
-                </li>
-     <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Data<b class="caret"></b></a>
-                    <ul role="menu" class="dropdown-menu">
-                         <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import network</a>
-								<ul class="dropdown-menu">
-									<li><a href="{{url_for ('go_import_network', import_from='csv', message='None')}}">from CSV</a></li>
-                                    <li><a href="{{url_for ('go_import_network', import_from='excel', message='None')}}">from Excel</a></li>
-									<li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
-								</ul>
-							</li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import results</a>
-								<ul class="dropdown-menu">
-                                    <li><a href="#">from GAMS Data eXchange (GDX)</a></li>
-								</ul>
-							</li>
-                          <li class="divider"></li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">to CSV</a></li>
-                                    <li><a href="#">to Excel</a></li>
-									<li><a href="{{url_for ('go_export_network', export_to='pywr', network_id=net_scn.network_id, scenario_id=net_scn.scenario_id, message='None')}}">to pywr</a></li>
-								</ul>
-							</li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export input file</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">to GAMS</a></li>
-                                    <li><a href="#">to Pyomo</a></li>
-								</ul>
-							</li>
-                    </ul>
-     </li>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{url_for ('index')}}">HydraPlatform</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Projects<b class="caret"></b></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="/">Open project</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Data<b class="caret"></b></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import network</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for ('go_import_network', import_from='csv', message='None')}}">from CSV</a></li>
+                            <li><a href="{{url_for ('go_import_network', import_from='excel', message='None')}}">from Excel</a></li>
+                            <li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import results</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">from GAMS Data eXchange (GDX)</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                    <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">to CSV</a></li>
+                            <li><a href="#">to Excel</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export input file</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">to GAMS</a></li>
+                            <li><a href="#">to Pyomo</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
 
-<li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Applications<b class="caret"></b></a>
-                    <ul role="menu" class="dropdown-menu">
-                        <li><a href="#">GamsApp</a></li>
-                        <li><a href="#">MatlabApp</a></li>
-                         <li class="divider"></li>
-                    </ul>
-         <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Addminstration<b class="caret"></b></a>
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Applications<b class="caret"></b></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="#">GamsApp</a></li>
+                    <li><a href="#">MatlabApp</a></li>
+                    <li class="divider"></li>
+                </ul>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Admin<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="#">Add application</a></li>
-                        <li><a href="#">Users managment</a></li>
+                        <li><a href="#">User managment</a></li>
                     </ul>
                 </li>
-                </li>      <li><a href="{{url_for ('go_about')}}">About</a></li>
+            </li>
+            <li><a href="{{url_for ('go_about')}}">About</a></li>
 
-    </ul>
-    <form role="search" class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" placeholder="Search" class="form-control">
-                </div>
-      </form>
-    <ul class="nav navbar-nav navbar-right" id="log_">
-      <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
-      <!--<li><a href="/admin">Admin</a></li>-->
-  </ul>
-</div>
+        </ul>
+        <form role="search" class="navbar-form navbar-left">
+            <div class="form-group">
+                <input type="text" placeholder="Search" class="form-control">
+            </div>
+        </form>
+        <ul class="nav navbar-nav navbar-right" id="log_">
+            <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
+            <!--<li><a href="/admin">Admin</a></li>-->
+        </ul>
+    </div>
 </nav>

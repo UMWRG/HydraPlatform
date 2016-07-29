@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, Response, json, request, session, redirect, url_for, escape, send_file
+from flask import Flask, jsonify, Response, json, request, redirect, url_for, escape, send_file
 
 import requests
 
@@ -10,17 +10,18 @@ from HydraServer.lib import network as net
 from HydraServer.lib import scenario as sen
 
 from HydraServer.util.hdb import login_user
-from HydraServer.soap_server.hydra_base import get_session_db
 
 from flask import render_template
 
 from werkzeug import secure_filename
+
 import zipfile
 import os
 import sys
 import subprocess
 import importlib
 from os.path import join
+from functools import wraps
 from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceScenario
 
 UPLOAD_FOLDER = 'uploaded_files'
@@ -34,16 +35,36 @@ DATA_FOLDER = 'python/HydraServer/ui/data'
 
 app = Flask(__name__)
 
+
+def requires_login(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        try:
+            beaker_session = request.environ['beaker.session']
+        except:
+            app.logger.critical("No beaker information found!")
+            return redirect(url_for('index'))
+        try:
+            user_id = beaker_session['user_id']
+            return func(*args, **kwargs)
+        except:
+            app.logger.warn("Not logged in.")
+            return redirect(url_for('index'))
+
+    return wrapped
+
 @app.route('/')
 def index():
+
     app.logger.info("Index")
-    app.logger.info("Session: %s", session)
-    if 'username' not in session:
+    session_info = request.environ.get('beaker.session')
+    app.logger.info("Session: %s", session_info)
+    if 'user_id' not in session_info:
         app.logger.info("Going to login page.")
         return render_template('login.html', msg="")
     else:
-        user_id = session['user_id']
-        username = escape(session['username'])
+        user_id = session_info['user_id']
+        username = escape(session_info['username'])
         projects = proj.get_projects(user_id, **{'user_id':user_id})
         app.logger.info("Logged in. Going to projects page.")
         net_scn={'network_id': 0,'scenario_id':0}
@@ -58,18 +79,19 @@ def do_login():
     app.logger.info("Received login request.")
     if request.method == 'POST':
         try:
-            user_id, api_session_id = login_user(request.form['username'], request.form['password'])
-        except:
+            user_id = login_user(request.form['username'], request.form['password'])
+        except Exception, e:
+            app.logger.exception(e)
             app.logger.warn("Bad login for user %s", request.form['username'])
             return render_template('login.html', msg="Unable to log in")
 
-        session['username'] = request.form['username']
-        session['user_id'] = user_id
-        session['session_id'] = api_session_id
+        request.environ['beaker.session']['username'] = request.form['username']
+        request.environ['beaker.session']['user_id'] = user_id
+        request.environ['beaker.session'].save()
 
         app.logger.info("Good login %s. Redirecting to index (%s)"%(request.form['username'], url_for('index')))
 
-        app.logger.info(session)
+        app.logger.info(request.environ['beaker.session'])
 
         return redirect(url_for('index'))
 
@@ -78,12 +100,10 @@ def do_login():
 
 @app.route('/do_logout', methods=['GET', 'POST'])
 def do_logout():
-    app.logger.info("Logging out %s", session['username'])
+    app.logger.info("Logging out %s", request.environ['beaker.session']['username'])
     # remove the username from the session if it's there
-    session.pop('username', None)
-    session.pop('user_id', None)
-    session.pop('session_id', None)
-    app.logger.info(session)
+    request.environ['beaker.session'].delete()
+    app.logger.info(request.environ.get('beaker.session'))
     return redirect(url_for('index', _external=True))
 
 # set the secret key.  keep this really secret:
@@ -144,20 +164,6 @@ def call_hydra(func):
         raise Exception(err)
 
     return Response(response.content, status=200, mimetype="application/json")
-
-def check_session(req):
-    session_db = get_session_db()
-
-    session_id = request.headers.get('session_id')
-
-    sess_info = session_db.get(session_id)
-
-    if sess_info is None:
-        raise Exception("No Session")
-
-    sess_info = {'user_id':sess_info[0], 'username':sess_info[1]}
-
-    return sess_info
 
 @app.route('/header', methods=['GET'])
 def go_about():
@@ -236,11 +242,13 @@ def go_import_network(import_from, message):
             return "This feature is not available in this server !!!"
 
 @app.route('/project/<project_id>', methods=['GET'])
+@requires_login
 def go_project(project_id):
     """
         Get a user's projects
     """
-    project = proj.get_project(project_id, **session)
+
+    project = proj.get_project(project_id, **request.environ['beaker.session'])
     app.logger.info("Project %s retrieved", project.project_name)
     '''
     if the project has only one network and the network has only one scenario, it will display network '''
@@ -248,8 +256,8 @@ def go_project(project_id):
         return redirect(url_for('go_network', network_id=project.networks[0].network_id, scenario_id=project.networks[0].scenarios[0].scenario_id))
     else:
         return render_template('project.html',\
-                          username=session['username'],\
-                          display_name=session['username'],\
+                          username=request.environ['beaker.session']['username'],\
+                          display_name=request.environ['beaker.session']['username'],\
                           project=project)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -428,54 +436,54 @@ def get_uploaded_file_name(file_type):
 
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
-   if request.method == 'POST':
-       if get_uploaded_file_name('csv_file') != None:
-           print "CSV from here"
-           file = request.files['csv_file']
-           type = 'csv'
-       elif get_uploaded_file_name('pywr_file') != None:
-           file = request.files['pywr_file']
-           type = 'pywr'
-       elif get_uploaded_file_name('excel_file') != None:
-           file = request.files['excel_file']
-           type = 'excel'
-       if file.filename == '':
-           return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
-       if allowed_file(file.filename):
-           filename = secure_filename(file.filename)
-           basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
-           zipfilename = os.path.join(basefolder, filename)
-           extractedfolder= os.path.join(basefolder, 'temp')
-           if not os.path.exists(extractedfolder):
-               os.makedirs(extractedfolder)
-           else:
-               delete_files_from_folder(extractedfolder)
-           print zipfilename
-           file.save(zipfilename)
-           zip = zipfile.ZipFile(zipfilename)
-           zip.extractall(extractedfolder)
-           if type=='csv':
-              output= create_network_from_csv_files(extractedfolder)
-              if(len(output))==1:
-                  return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
-                  #return output[0]
-              elif len(output)==3:
-                  return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
-              else:
-                  return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
+    if request.method == 'POST':
+        if get_uploaded_file_name('csv_file') != None:
+            print "CSV from here"
+            file = request.files['csv_file']
+            type = 'csv'
+        elif get_uploaded_file_name('pywr_file') != None:
+            file = request.files['pywr_file']
+            type = 'pywr'
+        elif get_uploaded_file_name('excel_file') != None:
+            file = request.files['excel_file']
+            type = 'excel'
+        if file.filename == '':
+            return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
 
-           elif type =='pywr':
-               output =create_network_from_pywr_json(extractedfolder)
-               if (len(output)) == 1:
-                   return redirect(url_for('go_import_network', import_from=type, message=output[0]))
-               elif len(output) == 3:
-                   # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
-                   return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-           elif type =='excel':
-               output =create_network_from_excel(extractedfolder)
-               return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-       else:
-           return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
+        if allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
+            zipfilename = os.path.join(basefolder, filename)
+            extractedfolder= os.path.join(basefolder, 'temp')
+            if not os.path.exists(extractedfolder):
+                os.makedirs(extractedfolder)
+            else:
+                delete_files_from_folder(extractedfolder)
+            print zipfilename
+            file.save(zipfilename)
+            zip = zipfile.ZipFile(zipfilename)
+            zip.extractall(extractedfolder)
+            if type=='csv':
+                output= create_network_from_csv_files(extractedfolder)
+                if(len(output))==1:
+                    return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
+                    #return output[0]
+                elif len(output)==3:
+                    return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
+                else:
+                    return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
+            elif type =='pywr':
+                output =create_network_from_pywr_json(extractedfolder)
+                if (len(output)) == 1:
+                    return redirect(url_for('go_import_network', import_from=type, message=output[0]))
+                elif len(output) == 3:
+                    # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
+                    return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
+            elif type =='excel':
+                output =create_network_from_excel(extractedfolder)
+                return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
+            else:
+                return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
 
 
 
@@ -509,26 +517,8 @@ def get_dict(obj):
     return result
 
 
-
-def get_dict(obj):
-    if not hasattr(obj, "__dict__"):
-        return obj
-    result = {}
-    for key, val in obj.__dict__.items():
-
-        if key.startswith("_"):
-            continue
-        if isinstance(val, list):
-            element = []
-            for item in val:
-                element.append(get_dict(item))
-        else:
-            element = get_dict(obj.__dict__[key])
-        result[key] = element
-    return result
-
-
 @app.route('/network', methods=['GET'])
+@requires_login
 def go_network():
     """
         Get a user's projects
@@ -538,12 +528,7 @@ def go_network():
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
 
-    network = net.get_network(network_id, False, 'Y', scenario_ids=[scenario_id], **session)
-
-
-
-
-
+    network = net.get_network(network_id, False, 'Y', scenario_ids=[scenario_id], **request.environ['beaker.session'])
 
     def get_layout_property(resource, prop, default):
         layout = {}
@@ -636,7 +621,7 @@ def go_network():
 
     nodes_attrs=[]
     for node_ in network.nodes:
-        ress=sen.get_resource_data('NODE', node_.node_id, scenario_id, None, **session)
+        ress=sen.get_resource_data('NODE', node_.node_id, scenario_id, None, **request.environ['beaker.session'])
         for res in ress:
             attrr_name_ = attr_id_name[res.resourceattr.attr_id]
             try:
@@ -656,7 +641,7 @@ def go_network():
 
     links_attrs = []
     for link_ in network.links:
-        ress = sen.get_resource_data('LINK', link_.link_id, scenario_id, None, **session)
+        ress = sen.get_resource_data('LINK', link_.link_id, scenario_id, None, **request.environ['beaker.session'])
         for res in ress:
             attrr_name_ = attr_id_name[res.resourceattr.attr_id]
             try:
@@ -675,8 +660,8 @@ def go_network():
                                 'type': res.dataset.data_type, 'values': vv})
 
 
-            #Get the min, max x and y coords
-    extents = net.get_network_extents(network_id, **session)
+    #Get the min, max x and y coords
+    extents = net.get_network_extents(network_id, **request.environ['beaker.session'])
     app.logger.info(node_coords)
 
     app.logger.info("Network %s retrieved", network.network_name)
@@ -687,8 +672,8 @@ def go_network():
                 scenario_id=scenario_id,
                 node_coords=node_coords,\
                 links=links,\
-                username=session['username'],\
-                display_name=session['username'],\
+                username=request.environ['beaker.session']['username'],\
+                display_name=request.environ['beaker.session']['username'],\
                 node_name_map=node_name_map,\
                 extents=extents,\
                 network=network,\
