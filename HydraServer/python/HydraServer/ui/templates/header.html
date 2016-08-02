@@ -45,13 +45,15 @@ function getUrlVars() {
 									<li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
 								</ul>
 							</li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import results</a>
+
+                        <!-- li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import results</a>
 								<ul class="dropdown-menu">
                                     <li><a href="#">from GAMS Data eXchange (GDX)</a></li>
 								</ul>
 							</li>
-                          <li class="divider"></li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
+                        <!-->
+                          <!-- li class="divider"></li>
+                        <!-- li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
 								<ul class="dropdown-menu">
 									<li><a href="#">to CSV</a></li>
                                     <li><a href="#">to Excel</a></li>
@@ -64,31 +66,36 @@ function getUrlVars() {
                                     <li><a href="#">to Pyomo</a></li>
 								</ul>
 							</li>
+							<!-->
                     </ul>
      </li>
 
-<li class="dropdown">
+<!-- li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Applications<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="#">GamsApp</a></li>
                         <li><a href="#">MatlabApp</a></li>
                          <li class="divider"></li>
                     </ul>
+        </li>
          <li class="dropdown">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">Addminstration<b class="caret"></b></a>
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="#">Add application</a></li>
                         <li><a href="#">Users managment</a></li>
                     </ul>
+
                 </li>
-                </li>      <li><a href="{{url_for ('go_about')}}">About</a></li>
+        <!-->
+        <li><a href="{{url_for ('go_about')}}">About</a></li>
 
     </ul>
-    <form role="search" class="navbar-form navbar-left">
+    <!-- form role="search" class="navbar-form navbar-left">
                 <div class="form-group">
                     <input type="text" placeholder="Search" class="form-control">
                 </div>
       </form>
+      <!-->
     <ul class="nav navbar-nav navbar-right" id="log_">
       <li><a href="{{ url_for('do_logout') }}">Logout</a></li>
       <!--<li><a href="/admin">Admin</a></li>-->

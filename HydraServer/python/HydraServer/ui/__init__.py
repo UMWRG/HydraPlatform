@@ -36,18 +36,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    net_scn = {'network_id': 0, 'scenario_id': 0}
     app.logger.info("Index")
     app.logger.info("Session: %s", session)
     if 'username' not in session:
         app.logger.info("Going to login page.")
-        return render_template('login.html', msg="")
+        return render_template('login.html', net_scn=net_scn, msg="")
     else:
         user_id = session['user_id']
         username = escape(session['username'])
         projects = proj.get_projects(user_id, **{'user_id':user_id})
         app.logger.info("Logged in. Going to projects page.")
-        net_scn={'network_id': 0,'scenario_id':0}
-
         return render_template('projects.html',
                                display_name=username,
                                username=username,
@@ -56,12 +55,13 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
     app.logger.info("Received login request.")
+    net_scn = {'network_id': 0, 'scenario_id': 0}
     if request.method == 'POST':
         try:
             user_id, api_session_id = login_user(request.form['username'], request.form['password'])
         except:
             app.logger.warn("Bad login for user %s", request.form['username'])
-            return render_template('login.html', msg="Unable to log in")
+            return render_template('login.html',net_scn=net_scn,  msg="Unable to log in")
 
         session['username'] = request.form['username']
         session['user_id'] = user_id
@@ -74,7 +74,10 @@ def do_login():
         return redirect(url_for('index'))
 
     app.logger.warn("Login request was not a post. Redirecting to login page.")
-    return render_template('login.html', msg="")
+    net_scn = {'network_id': 0, 'scenario_id': 0}
+    return render_template('login.html',
+                           net_scn=net_scn,
+                           msg="")
 
 @app.route('/do_logout', methods=['GET', 'POST'])
 def do_logout():
@@ -161,7 +164,8 @@ def check_session(req):
 
 @app.route('/header', methods=['GET'])
 def go_about():
-    return render_template('about.html')
+    net_scn = {'network_id': 0, 'scenario_id': 0}
+    return render_template('about.html', net_scn=net_scn)
 
 
 '''
@@ -395,6 +399,7 @@ def create_network_from_csv_files(directory):
 
 
 def check_process_output(output):
+    print "Check: ", output
     line1="<message>Run successfully</message>"
     line2 =r"<message>Data import was successful.</message>"
     if (line2 in output or line1 in output):
@@ -429,55 +434,64 @@ def get_uploaded_file_name(file_type):
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-       if get_uploaded_file_name('csv_file') != None:
-           print "CSV from here"
-           file = request.files['csv_file']
-           type = 'csv'
-       elif get_uploaded_file_name('pywr_file') != None:
-           file = request.files['pywr_file']
-           type = 'pywr'
-       elif get_uploaded_file_name('excel_file') != None:
-           file = request.files['excel_file']
-           type = 'excel'
-       if file.filename == '':
-           return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
-       if allowed_file(file.filename):
-           filename = secure_filename(file.filename)
-           basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
-           zipfilename = os.path.join(basefolder, filename)
-           extractedfolder= os.path.join(basefolder, 'temp')
-           if not os.path.exists(extractedfolder):
-               os.makedirs(extractedfolder)
+       try:
+           if get_uploaded_file_name('csv_file') != None:
+               print "CSV from here"
+               file = request.files['csv_file']
+               type = 'csv'
+           elif get_uploaded_file_name('pywr_file') != None:
+               file = request.files['pywr_file']
+               type = 'pywr'
+           elif get_uploaded_file_name('excel_file') != None:
+               file = request.files['excel_file']
+               type = 'excel'
+           if file.filename == '':
+               return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
+           if allowed_file(file.filename):
+               filename = secure_filename(file.filename)
+               basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
+               zipfilename = os.path.join(basefolder, filename)
+               extractedfolder= os.path.join(basefolder, 'temp')
+               if not os.path.exists(extractedfolder):
+                   os.makedirs(extractedfolder)
+               else:
+                   delete_files_from_folder(extractedfolder)
+               print zipfilename
+               file.save(zipfilename)
+               zip = zipfile.ZipFile(zipfilename)
+               zip.extractall(extractedfolder)
+               if type=='csv':
+                  output= create_network_from_csv_files(extractedfolder)
+                  if(len(output))==1:
+                      return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
+                      #return output[0]
+                  elif len(output)==3:
+                      return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
+                  else:
+                      return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
+
+               elif type =='pywr':
+                   output =create_network_from_pywr_json(extractedfolder)
+                   if (len(output)) == 1:
+                       return redirect(url_for('go_import_network', import_from=type, message=output[0]))
+                   elif len(output) == 3:
+                       # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
+                       return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
+               elif type =='excel':
+                   output =create_network_from_excel(extractedfolder)
+                   print "=========================================>", output
+                   if (len(output)) == 1:
+                       return redirect(url_for('go_import_network', import_from=type, message=output[0]))
+                   elif len(output) == 3:
+                       return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
            else:
-               delete_files_from_folder(extractedfolder)
-           print zipfilename
-           file.save(zipfilename)
-           zip = zipfile.ZipFile(zipfilename)
-           zip.extractall(extractedfolder)
-           if type=='csv':
-              output= create_network_from_csv_files(extractedfolder)
-              if(len(output))==1:
-                  return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
-                  #return output[0]
-              elif len(output)==3:
-                  return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
-              else:
-                  return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
-
-           elif type =='pywr':
-               output =create_network_from_pywr_json(extractedfolder)
-               if (len(output)) == 1:
-                   return redirect(url_for('go_import_network', import_from=type, message=output[0]))
-               elif len(output) == 3:
-                   # return redirect(url_for('.go_network', network_id=output[1],scenario_id=output[2] ))
-                   return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-           elif type =='excel':
-               output =create_network_from_excel(extractedfolder)
-               return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-       else:
-           return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
-
-
+               return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
+       except Exception as e:
+           error="error"
+           if(e.message!=None and e.message!=""):
+               error=e.message
+           print "Error====>", e.message
+           return redirect(url_for('go_import_network', import_from=type, message=error))
 
 #example of using ajax, will be needed in the future for network editing
 @app.route('/_add_numbers')
@@ -537,13 +551,9 @@ def go_network():
 
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
+    print "TOZ: ", session
 
     network = net.get_network(network_id, False, 'Y', scenario_ids=[scenario_id], **session)
-
-
-
-
-
 
     def get_layout_property(resource, prop, default):
         layout = {}
