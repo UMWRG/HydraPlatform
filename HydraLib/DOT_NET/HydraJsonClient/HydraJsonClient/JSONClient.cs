@@ -88,7 +88,6 @@ namespace HydraJsonClient
                 httpWebRequest.ProtocolVersion = HttpVersion.Version10;
                 httpWebRequest.Method = "POST";
                 addCookie();
-                httpWebRequest.Headers.Add("session_id", user.sessonid);
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                 {
                     streamWriter.Write(request);
@@ -97,7 +96,6 @@ namespace HydraJsonClient
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (cookies == null && string.IsNullOrEmpty(user.sessonid))
                     this.getCokkie(httpResponse);
-
 
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
@@ -146,8 +144,7 @@ namespace HydraJsonClient
                 httpWebRequest.ProtocolVersion = HttpVersion.Version10;
                 httpWebRequest.Method = "POST";
                 addCookie();
-                httpWebRequest.Headers.Add("session_id", user.sessonid);
-                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {                   
                         streamWriter.Write(request);
                         streamWriter.Flush();
@@ -191,16 +188,7 @@ namespace HydraJsonClient
 
          void getUser()
             {            
-                string res = callServer(user.getLoginParameters()); 
-                JavaScriptSerializer js = new JavaScriptSerializer();
-                try
-                {
-
-                    hydra_user uses = js.Deserialize<hydra_user>(res);
-                    user.sessonid = uses.session_id;
-                   
-                }
-                catch (System.Exception ex) { }       
+                callServer("login", user.getLoginParameters()); 
             }
 
 

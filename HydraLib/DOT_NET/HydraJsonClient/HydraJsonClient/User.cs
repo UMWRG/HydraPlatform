@@ -41,10 +41,12 @@ namespace HydraJsonClient
             this.sessonid = sessionid;
         }        
 
-    public string getLoginParameters()
+    public System.Collections.Hashtable getLoginParameters()
         {
-           return  "{\"login\": {\"username\": \""+user_name+"\", \"password\": \""+password+"\"}}";
-            
+            System.Collections.Hashtable param= new System.Collections.Hashtable();
+            param["username"] = user_name;
+            param["password"]=  password ;
+            return param;            
         }
     }
 }
