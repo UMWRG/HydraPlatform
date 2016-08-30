@@ -1,0 +1,64 @@
+{
+    "timestepper": {
+        "start": "1990-01-01",
+        "end": "1999-12-31",
+        "timestep": 1
+    },
+    "solver": {
+        "name": "glpk"
+    },
+    "nodes": [
+        {
+            "name": "catchment1",
+            "type": "Input",
+            "max_flow": {
+                "type": "arrayindexed",
+                "url": "Not a real flow series.csv"
+            },
+            "min_flow": {
+                "type": "arrayindexed",
+                "url": "Not a real flow series.csv"
+            },
+            "cost": -999
+        },
+        {
+            "name": "reservoir1",
+            "type": "Storage",
+            "inputs": 1,
+            "outputs": 1,
+            "initial_volume": 16000,
+            "max_volume": 20000,
+            "min_volume": 3000,
+            "cost": 0
+        },
+        {
+            "name": "demand1",
+            "type": "Output",
+            "max_flow": 81.0,
+            "cost": -5000
+        },
+        {
+            "name": "river1",
+            "type": "Link"
+        },
+        {
+            "name": "compensation1",
+            "type": "Link",
+            "max_flow": 5.0,
+            "cost": -10000
+        },
+        {
+            "name": "waste",
+            "type": "Output",
+            "cost": 1
+        }
+    ],
+    "edges": [
+        ["catchment1", "reservoir1"],
+        ["reservoir1", "demand1"],
+        ["reservoir1", "river1"],
+        ["reservoir1", "compensation1"],
+        ["river1", "waste"],
+        ["compensation1", "waste"]
+    ]
+}

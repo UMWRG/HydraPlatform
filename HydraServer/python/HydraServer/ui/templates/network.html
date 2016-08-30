@@ -87,12 +87,12 @@
             <div id="graph" class="left">
                 <div class="checkbox">
              <label >
-                 <input id="label" type='checkbox' onclick='changeNodesLable(this);'>
+                 <input id="label" type='checkbox' onclick='changeNodesLableVisibility(this);'>
                  Display labels</label>
-                                 <label><input type='checkbox' onclick='changeLinkDirection(this);'>Link direction</label>
+                                 <label><input type='checkbox' onclick='changeLinkDirectionVisibility(this);'>Link direction</label>
 
              <input id="search">
-             <button type="button" onclick="searchNode()">Select</button>
+             <button type="button" onclick="findResource()">Select</button>
 
              </div>
             </div>
@@ -113,14 +113,13 @@
         <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap.min.css') }}"/>
         <script type='text/javascript' src="{{url_for('static', filename='js/d3.v3.min.js')}}"></script>
         <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
+
+        <script src="{{url_for('static', filename='js/createResourceAttributesTable.js')}}"></script>
+
         <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
-        <script src="{{url_for('static', filename='js/hydra.js')}}"></script>
         <script src="{{url_for('static', filename='js/network.js')}}"></script>
         <link rel="stylesheet" href="{{url_for('static', filename='css/app.css')}}">
-
-
-       <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
-
+        <link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
         <script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
 
 <script>

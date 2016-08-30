@@ -16,7 +16,6 @@ var basic_error = function(xhr, status, error){
 
 /*LOGIN*/
 d3.select('#login-btn').on('click', function(){
- 
     var success = function(data){
         console.log(data);
         session_id = data['session_id'];
