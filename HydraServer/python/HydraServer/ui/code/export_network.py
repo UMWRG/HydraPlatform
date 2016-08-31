@@ -22,9 +22,7 @@ def check_process_output(output):
 def export_network_to_pywr_json(directory, zip_file_name, network_id, scenario_id, basefolder):
     output_file = os.path.join(directory, ('network_' + network_id + '.json'))
     os.chdir(directory)
-    pp = basefolder.split('\\')
-    pp1 = pp[0: (len(pp) - 1)]
-    basefolder = '\\'.join(pp1)
+    print basefolder
     pywr_import = os.path.join(basefolder, "Apps", "pywr_app", "Exporter", "PywrExporter.py")
     cmd = "python " + pywr_import + ' -t '+network_id+' -s '+scenario_id +' -o '+output_file
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)

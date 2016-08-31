@@ -233,7 +233,7 @@ def upload_file():
                zip = zipfile.ZipFile(zipfilename)
                zip.extractall(extractedfolder)
                if type=='csv':
-                  output= create_network_from_csv_files(extractedfolder, basefolder)
+                  output= import_network_from_csv_files(extractedfolder, basefolder)
                   if(len(output))==1:
                       return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
                   elif len(output)==3:
@@ -242,13 +242,13 @@ def upload_file():
                       return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
 
                elif type =='pywr':
-                   output =create_network_from_pywr_json(extractedfolder, basefolder)
+                   output =import_network_from_pywr_json(extractedfolder, basefolder)
                    if (len(output)) == 1:
                        return redirect(url_for('go_import_network', import_from=type, message=output[0]))
                    elif len(output) == 3:
                        return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
                elif type =='excel':
-                   output =create_network_from_excel(extractedfolder, basefolder)
+                   output =import_network_from_excel(extractedfolder, basefolder)
                    if (len(output)) == 1:
                        return redirect(url_for('go_import_network', import_from=type, message=output[0]))
                    elif len(output) == 3:
