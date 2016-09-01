@@ -1,13 +1,6 @@
-from flask import Flask, jsonify, Response, json, request, session, redirect, url_for, escape, send_file
-
-import requests
-
-import logging
+from flask import  request, session, redirect, url_for, escape, send_file
 
 from HydraServer.lib import project as proj
-from HydraServer.lib import network as net
-
-from HydraServer.lib import scenario as sen
 
 from HydraServer.util.hdb import login_user
 from HydraServer.soap_server.hydra_base import get_session_db
@@ -18,13 +11,6 @@ from werkzeug import secure_filename
 import zipfile
 import os
 import sys
-import subprocess
-import importlib
-from os.path import join
-from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceScenario
-
-
-from path import path
 
 pp = os.path.realpath(__file__).split('\\')
 pp1 = pp[0: (len(pp) - 1)]
@@ -34,6 +20,9 @@ basefolder = os.path.dirname(__file__)
 
 code= os.path.join(basefolder, 'code')
 sys.path.insert(0, code)
+
+import logging
+log = logging.getLogger(__name__)
 
 
 from app_utilities import delete_files_from_folder
