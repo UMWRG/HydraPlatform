@@ -377,3 +377,55 @@ function update_node(node_id, name, x, y)
     {
     //to do connect to the server and update node location
     }
+
+   function runModel()
+   {
+   $(progressbar).show();
+   set_progress();
+   }
+
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+    alert("woke up!");
+}
+
+var res_hide=function hide_progress()
+{
+$(progressbar).hide()
+}
+function set_progress()  {
+    var progressbar = $( "#progressbar" ),
+      progressLabel = $( ".progress-label" );
+
+    progressbar.progressbar({
+      value: false,
+      change: function() {
+        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+      },
+      complete: function() {
+        progressLabel.text( "Run successfully, loading the results …!" );
+        setTimeout(res_hide    , 1000);
+      }
+    });
+
+    function progress() {
+      var val = progressbar.progressbar( "value" ) || 0;
+
+      progressbar.progressbar( "value", val + 2 );
+
+      if ( val < 99 ) {
+        setTimeout( progress, 80 );
+      }
+    }
+    setTimeout( progress, 2000 );
+  }
