@@ -1,26 +1,37 @@
 
-function createResourceAttributesTable (res) {
-        t_table=null;
-        var table = $('<table></table>').addClass('table');
+ function createDataTableHeading(){
+    var heading = $('<table></table>').addClass('table');
         //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
         var name_row = $("<tr/>");
         var name_ = $('<th></th>').text('Attribute name ' );
         name_row.append(name_);
 
-        var res_name = $('<th></th>').text(res.attrr_name);
-        name_row.append(res_name);
-        table.append(name_row);
+        var val = $('<th></th>').text('Value ' );
+        name_row.append(val);
+        heading.append(name_row);
+        
+        $('#data').append(heading);
+}
+
+
+function createResourceAttributesTable (res) {
+        t_table=null;
+        var table = $('<table></table>').addClass('table');
 
         var type_row = $("<tr/>");
-        var type_ = $('<th></th>').text('Type ' );
+        var type_ = $('<th></th>').text(res.attrr_name);
         type_row.append(type_);
 
         var res_type = document.createElement("th");
+        
+        var modal_text = '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ts_modal"><span class="glyphicon glyphicon-time"></span>  </button>'
 
-         if(res.type == 'timeseries')
-               res_type.innerHTML ='<a href="#">'+res.type+'</a>';
-        else
+         if(res.type == 'timeseries'){
+               //res_type.innerHTML ='<span class="glyphicon glyphicon-time"><a class="glyphicon glyphicon-time" href="#">'+res.type+'</a></span>';
+               res_type.innerHTML = modal_text
+         }else{
                res_type.innerHTML =res.type;
+         }
 
          type_row.append(res_type);
         table.append(type_row);
@@ -59,7 +70,6 @@ function createResourceAttributesTable (res) {
            value_row.append(res_value);
            t_table.append(value_row);
         }
-        res_type.innerHTML ='<a href="#">'+res.type+'</a>';
         res_type.onclick =(function(){
         drawTimeseriesGraph('../static/js/_timeseries_graph.js', graph_data, res.attrr_name, t_table);
     });

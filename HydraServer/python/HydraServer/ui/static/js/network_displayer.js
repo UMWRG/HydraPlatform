@@ -188,12 +188,14 @@ function nodes_mouse_double_click(d)
 
   var count=0;
 
+
    for (i in nodes_attrs)
    {
      if (d.id==nodes_attrs[i].id)
      {
      if(count==0)
        $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
+       createDataTableHeading()
        count+=1;
      createResourceAttributesTable (nodes_attrs[i]);
      }
