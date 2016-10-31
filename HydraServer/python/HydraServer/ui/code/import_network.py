@@ -2,7 +2,7 @@ import os
 import sys
 import subprocess
 
-from export_network import check_process_output
+from app_utilities import check_process_output
 
 def import_network_from_pywr_json(directory, basefolder):
     os.chdir(directory)

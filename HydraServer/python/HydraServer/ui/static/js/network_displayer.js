@@ -347,6 +347,26 @@ if(cur_table!=null)
     cur_table.show();
 }
 
+function drawArrayGraph(script, graph_data, attr_name, t_table) {
+    $.ajax({
+        url: script,
+        dataType: "script",
+        async: false,           // <-- This is the key
+        success: function () {
+            draw_timeseries(graph_data, attr_name);
+        },
+            error: function ()
+            {
+                alert("Could not load script " + script);
+            }
+    });
+
+if(cur_table!=null)
+    cur_table.hide();
+    cur_table=t_table;
+    cur_table.show();
+}
+
 
 function changeNodesLableVisibility(cb) {
     if (cb.checked)
@@ -380,54 +400,86 @@ function update_node(node_id, name, x, y)
     //to do connect to the server and update node location
     }
 
-   function runModel()
+function runModel()
    {
-   $(progressbar).show();
-   set_progress();
+        start_app();
    }
 
-function sleepFor( sleepDuration ){
-    var now = new Date().getTime();
-    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
-}
+   function start_app() {
+   $(progressbar).show();
 
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-    alert("woke up!");
-}
+            var_ =getUrlVars();
+       var pars=
+       {
+            network_id: var_["network_id"],
+            scenario_id: var_["scenario_id"]
+        };
+       $(progressbar).show();
+        // send ajax POST request to start background job
 
-var res_hide=function hide_progress()
-{
-$(progressbar).hide()
-}
-function set_progress()  {
-    var progressbar = $( "#progressbar" ),
-      progressLabel = $( ".progress-label" );
+         $.ajax({
+                    type: 'POST',
+                    url: '/run_app',
+                    data:  {"para": JSON.stringify(pars)},
+                    success: function(data, status, request) {
+                        status_url = request.getResponseHeader('Address');
+                        update_progress_2(status_url);
+                    },
+                    error: function() {
+                        alert('Unexpected error');
+                    }
+                });
+        }
 
-    progressbar.progressbar({
-      value: false,
-      change: function() {
-        progressLabel.text( progressbar.progressbar( "value" ) + "%" );
-      },
-      complete: function() {
-        progressLabel.text( "Run successfully, loading the results …!" );
-        setTimeout(res_hide    , 1000);
-      }
+
+
+
+function update_progress_2(status_url) {
+
+            var progressLabel = $( "#progressLabel" );
+
+
+            // send GET request to status URL
+            $.getJSON(status_url, function(data) {
+                // update UI
+                percent = parseInt(data['current'] * 100 / data['total']);
+                //nanobar.go(percent);
+                value=percent
+                $("#progress-bar")
+      .css("width", value + "%")
+      .attr("aria-valuenow", value)
+      .text(value + "%");
+          progressLabel.text(data['status']);
+               // $(status_div.childNodes[1]).text(percent + '%');
+                //$(status_div.childNodes[2]).text(data['status']);
+                if (data['status'] != 'Pending' && data['status'] != 'Running') {
+                    if ('result' in data) {
+                        // show result
+                       // $(status_div.childNodes[3]).text('Result: ' + data['result']);
+                    }
+                    else {
+                        // something unexpected happened
+                        //$(status_div.childNodes[3]).text('Result: ' + data['state']);
+                    }
+                }
+                else {
+                    // rerun in 1 second
+                    setTimeout(function() {
+                        update_progress_2(status_url);
+                    }, 1000);
+                }
+            });
+        }
+
+
+
+
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+    function(m,key,value) {
+      vars[key] = value;
     });
-
-    function progress() {
-      var val = progressbar.progressbar( "value" ) || 0;
-
-      progressbar.progressbar( "value", val + 2 );
-
-      if ( val < 99 ) {
-        setTimeout( progress, 80 );
-      }
-    }
-    setTimeout( progress, 2000 );
+    return vars;
   }

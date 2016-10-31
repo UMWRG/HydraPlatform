@@ -7,6 +7,30 @@ from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceSc
 
 from hydra_connector import load_network, get_attributes_for_resource, get_resource_data, get_network_extents
 
+
+def get_dict(obj):
+    if type(obj) is list:
+        list_results=[]
+        for item in obj:
+            list_results.append(get_dict(item))
+        return list_results
+
+    if not hasattr(obj, "__dict__"):
+        return obj
+
+    result = {}
+    for key, val in obj.__dict__.items():
+        if key.startswith("_"):
+            continue
+        if isinstance(val, list):
+            element = []
+            for item in val:
+                element.append(get_dict(item))
+        else:
+            element = get_dict(obj.__dict__[key])
+        result[key] = element
+    return result
+
 def get_layout_property(resource, prop, default):
     layout = {}
     if resource.layout is not None:
@@ -22,12 +46,16 @@ def get_layout_property(resource, prop, default):
     return prop_value
 
 
+def set_metadata(hydra_metadata):
+    metadata={}
+    for meta in hydra_metadata:
+        metadata[meta['metadata_name']]=meta['metadata_val']
+    return metadata
+
 def get_network (network_id, scenario_id, session, app):
     network = load_network(network_id, scenario_id, session)
-
     node_coords = {}
     node_name_map = []
-
     nodes_ = []
     links_ = []
     node_index = {}
@@ -119,8 +147,10 @@ def get_network (network_id, scenario_id, session, app):
                         value = vv[index][date_]
                         values_.append({'date': date_, 'value': value})
                 vv = values_
+            metadata = set_metadata(get_dict(res.dataset)['metadata'])
+
             nodes_attrs.append({'id': node_.node_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
-                                'type': res.dataset.data_type, 'values': vv})
+                                'type': res.dataset.data_type, 'values': vv, 'metadata':metadata })
 
     links_attrs = []
     for link_ in network.links:
@@ -139,8 +169,10 @@ def get_network (network_id, scenario_id, session, app):
                         value = vv[index][date_]
                         values_.append({'date': date_, 'value': value})
                 vv = values_
+            metadata=set_metadata(get_dict(res.dataset)['metadata'])
+
             links_attrs.append({'id': link_.link_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
-                                'type': res.dataset.data_type, 'values': vv})
+                                'type': res.dataset.data_type, 'values': vv, 'metadata':metadata})
 
 
             # Get the min, max x and y coords

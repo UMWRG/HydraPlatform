@@ -1,4 +1,4 @@
-from flask import  request, session, redirect, url_for, escape, send_file
+from flask import  request, session, redirect, url_for, escape, send_file, jsonify
 
 from HydraServer.lib import project as proj
 
@@ -11,6 +11,9 @@ from werkzeug import secure_filename
 import zipfile
 import os
 import sys
+
+from run_hydra_app import *
+
 
 pp = os.path.realpath(__file__).split('\\')
 pp1 = pp[0: (len(pp) - 1)]
@@ -278,3 +281,55 @@ links_attrs=links_attrs)
 
 
 
+
+def long_task():
+    """Background task that runs a long function with progress reports."""
+    pidfilename = "c:\\temp\\test_process.txt"
+    for i in range(1, 100):
+        pidfile = open(pidfilename, 'a')
+        line = "I is: " + str(i) + '\n'
+        print line
+        pidfile.write(line)
+        pidfile.close()
+        time.sleep(1)
+
+    return {'current': 100, 'total': 100, 'status': 'Task completed!',
+            'result': 42}
+
+@app.route('/run_app', methods=['POST'])
+def run_app():
+    import json
+    pars= json.loads(request.form['para'])
+    network_id = pars['network_id']
+    scenario_id = pars['scenario_id']
+    print "===>",network_id, scenario_id
+    exe = "F:\work\HydraPlatform\HydraServer\python\HydraServer\ui\Apps\GAMSApp\\GAMSAutoRun.exe"
+    model_file="\"F:\work\HydraPlatform\HydraServer\python\HydraServer\ui\data\Models\AW Project_MGA_final vesrion.gms\""
+    args = {'t': network_id, 's': scenario_id, 'm': model_file}
+
+    pid=run_app_(exe, args)
+    print "PID: ", pid
+    return jsonify({}), 202, {'Address': url_for('appstatus',
+                                                  task_id=pid)}
+
+
+@app.route('/status/<task_id>')
+def appstatus(task_id):
+    #task = long_task.AsyncResult(task_id)
+    task, progress , total, status=get_app_progress(task_id)
+
+    print "task ", task, progress , total, status
+    if task == True:
+        response = {
+            'current': progress,
+            'total': total,
+            'status': status
+        }
+    else:
+        response = {
+            'current': 100,
+            'total': 100,
+            'status':status
+        }
+
+    return jsonify(response)
