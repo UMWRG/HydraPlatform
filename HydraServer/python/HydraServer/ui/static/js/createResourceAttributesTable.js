@@ -9,17 +9,16 @@
         var val = $('<th></th>').text('Value ' );
         name_row.append(val);
         heading.append(name_row);
-
         $('#data').append(heading);
 }
-
 
 function createResourceAttributesTable (res) {
         t_table=null;
         var table = $('<table></table>').addClass('table');
 
         var type_row = $("<tr/>");
-        var type_ = $('<th></th>').text(res.attrr_name);
+
+        var type_ = $('<th></th>').text(attr_id_name[res.attrr_id]);
         type_row.append(type_);
 
         var res_type = document.createElement("th");
@@ -72,7 +71,7 @@ function createResourceAttributesTable (res) {
            t_table.append(value_row);
         }
         res_type.onclick =(function(){
-        drawTimeseriesGraph('../static/js/_timeseries_graph.js', graph_data, res.attrr_name, t_table);
+        drawTimeseriesGraph('../static/js/_timeseries_graph.js', graph_data, attr_id_name[res.attrr_id], t_table);
     });
 
         }
@@ -117,7 +116,7 @@ function createResourceAttributesTable (res) {
            t_table.append(value_row);
         }
         res_type.onclick =(function(){
-        drawArrayGraph('../static/js/_timeseries_graph.js', graph_data, res.attrr_name, t_table);
+        drawArrayGraph('../static/js/_timeseries_graph.js', graph_data, attr_id_name[res.attrr_id], t_table);
     });
     ///////////////////////////////////////////////////////////////////////////////////////////////
        }

@@ -5,7 +5,7 @@ var current_res=null;
 var display=true;
 var cur_table=null;
 
-
+var var_=getUrlVars()
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
     var width  = (900- margin.left - margin.right),
@@ -176,7 +176,8 @@ function nodes_mouse_double_click(d)
    svg.selectAll(".node").attr("r", 9);
    d3.select(this).attr("r", 12);
    document.getElementById('search').value=d.name;
-   display_node_attributes(d);
+   //display_node_attributes(d);
+   call_server_get_res_attrs('NODE', d);
    }
    function display_node_attributes(d)
    {
@@ -186,21 +187,125 @@ function nodes_mouse_double_click(d)
    current_res=d;
    var table = $('<table></table>').addClass('foo');
 
-  var count=0;
+   var_ =getUrlVars();
+    var pars=
+       {
+            network_id: var_["network_id"],
+            scenario_id: var_["scenario_id"],
+            res_id: d.id,
+            resource_type:'NODE'
+        };
+         $.ajax({
+                    type: 'POST',
+                    url: '/get_res_attrs',
+                    data:  {"para": JSON.stringify(pars)},
+                    success: function(data, status, request) {
+                        node_attrs=data.node_attrs;
+                          var count=0;
 
 
-   for (i in nodes_attrs)
+   for (i in node_attrs)
    {
-     if (d.id==nodes_attrs[i].id)
      {
      if(count==0)
        $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
        createDataTableHeading()
        count+=1;
-     createResourceAttributesTable (nodes_attrs[i]);
+     createResourceAttributesTable (node_attrs[i]);
      }
    }
+
+                    },
+                    error: function() {
+                        alert('Unexpected error');
+
+                    }
+                });
+
+
 }
+
+function get_network_attributes()
+{
+    res_type='NETWORK';
+$( "#data" ).empty();
+         $("#timeseries_g" ).empty();
+
+       var table = $('<table></table>').addClass('foo');
+       var_=getUrlVars();
+        var pars=
+       {
+            network_id: var_["network_id"],
+            scenario_id: var_["scenario_id"],
+            res_id: var_["network_id"],
+            resource_type:res_type
+        };
+
+       $.ajax({
+                    type: 'POST',
+                    url: '/get_res_attrs',
+                    data:  {"para": JSON.stringify(pars)},
+                    success: function(data, status, request) {
+                    res_attrs=data.res_attrs;
+       var count=0;
+       for (i in res_attrs)
+       {
+         {
+         if(count==0)
+           $("#data" ).append(  '<h4>Attributes for '+res_type+' '+'</h4>');
+           createDataTableHeading();
+           count+=1;
+         createResourceAttributesTable (res_attrs[i]);
+         }
+       }
+            },
+            error: function() {
+                alert('Unexpected error');
+            }
+        });
+}
+
+function call_server_get_res_attrs(res_type, d)
+{
+$( "#data" ).empty();
+         $("#timeseries_g" ).empty();
+
+       current_res=d;
+       var table = $('<table></table>').addClass('foo');
+        var pars=
+       {
+            network_id: var_["network_id"],
+            scenario_id: var_["scenario_id"],
+            res_id: d.id,
+            resource_type:res_type
+        };
+         $.ajax({
+                    type: 'POST',
+                    url: '/get_res_attrs',
+                    data:  {"para": JSON.stringify(pars)},
+                    success: function(data, status, request) {
+                        res_attrs=data.res_attrs;
+        var count=0;
+       for (i in res_attrs)
+       {
+         {
+         if(count==0)
+           $("#data" ).append(  '<h4>Attributes for '+res_type+': '+d.name+'</h4>');
+           createDataTableHeading();
+           count+=1;
+         createResourceAttributesTable (res_attrs[i]);
+         }
+       }
+
+            },
+            error: function() {
+                alert('Unexpected error');
+
+            }
+        });
+
+}
+
  function links_mouse_click(d) {
 
    svg.selectAll("line").style("stroke-width", 1.8);
@@ -208,7 +313,8 @@ function nodes_mouse_double_click(d)
    d3.select(this).style("stroke-width", 3);
   document.getElementById('search').value=d.name;
    tip.hide(d);
-   display_link_attributes(d)
+   //display_link_attributes(d)
+   call_server_get_res_attrs('LINK', d)
    }
 
 function display_link_attributes(d) {
@@ -282,14 +388,14 @@ function findResource() {
         var selected = node.filter(function (d, i){
         if(d.name == selectedVal)
              {
-
              d3.select(this);
              svg.selectAll("line").style("stroke-width", 1.8);
              svg.selectAll(".node").attr("r", 9);
              d3.select(this).attr("r", 12);
              tip.show;
 
-             display_node_attributes(d);
+             //display_node_attributes(d);
+             call_server_get_res_attrs('NODE', d)
              sel=d;
              return true;
              }
@@ -310,7 +416,8 @@ function findResource() {
                  svg.selectAll("line").style("stroke-width", 1.8);
                  svg.selectAll(".node").attr("r", 9);
                  d3.select(this).style("stroke-width", 3);
-                 display_link_attributes(d);
+                 //display_link_attributes(d);
+                 call_server_get_res_attrs('LINK', d)
                  sel=d;
                  return true;
              }
@@ -431,9 +538,6 @@ function runModel()
                 });
         }
 
-
-
-
 function update_progress_2(status_url) {
 
             var progressLabel = $( "#progressLabel" );
@@ -471,15 +575,13 @@ function update_progress_2(status_url) {
             });
         }
 
-
-
-
-
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
     function(m,key,value) {
       vars[key] = value;
     });
+    vars["network_id"]=vars["network_id"].replace("#","");
+    vars["scenario_id"]=vars["scenario_id"].replace("#","");
     return vars;
   }

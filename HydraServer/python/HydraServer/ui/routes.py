@@ -1,4 +1,5 @@
 from flask import  request, session, redirect, url_for, escape, send_file, jsonify
+import json
 
 from HydraServer.lib import project as proj
 
@@ -30,7 +31,7 @@ log = logging.getLogger(__name__)
 
 from app_utilities import delete_files_from_folder
 
-from network_utilities import get_network
+from network_utilities import get_network, get_resource_attributes
 
 from export_network import export_network_to_pywr_json
 
@@ -168,7 +169,6 @@ def go_project(project_id):
                               display_name=session['username'],\
                               project=project, net_scn=net_scn
                                )
-
 @app.route('/', methods=['GET', 'POST'])
 def upload_file_():
     if request.method == 'POST':
@@ -263,7 +263,7 @@ def go_network():
 
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
-    node_coords, links, node_name_map, extents, network, nodes_, links_, nodes_attrs, net_scn, links_attrs=get_network(network_id, scenario_id, session, app)
+    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name=get_network(network_id, scenario_id, session, app)
 
     return render_template('network.html',\
                 scenario_id=scenario_id,
@@ -276,12 +276,10 @@ def go_network():
                 network=network,\
                            nodes_=nodes_,\
                            links_=links_, \
-                           nodes_attrs=nodes_attrs, net_scn=net_scn, \
-links_attrs=links_attrs)
+                            net_scn=net_scn, \
+                           attr_id_name=attr_id_name)
 
-
-
-
+'''
 def long_task():
     """Background task that runs a long function with progress reports."""
     pidfilename = "c:\\temp\\test_process.txt"
@@ -295,27 +293,46 @@ def long_task():
 
     return {'current': 100, 'total': 100, 'status': 'Task completed!',
             'result': 42}
+'''
 
-@app.route('/run_app', methods=['POST'])
-def run_app():
-    import json
+@app.route('/get_res_attrs', methods=['POST'])
+def get_res_attrs():
     pars= json.loads(request.form['para'])
     network_id = pars['network_id']
     scenario_id = pars['scenario_id']
-    print "===>",network_id, scenario_id
-    exe = "F:\work\HydraPlatform\HydraServer\python\HydraServer\ui\Apps\GAMSApp\\GAMSAutoRun.exe"
-    model_file="\"F:\work\HydraPlatform\HydraServer\python\HydraServer\ui\data\Models\AW Project_MGA_final vesrion.gms\""
-    args = {'t': network_id, 's': scenario_id, 'm': model_file}
+    res_id= pars['res_id']
+    resource_type=pars['resource_type']
+    res_attrs=get_resource_attributes(network_id, scenario_id, resource_type, res_id, session)
+    return jsonify(res_attrs=res_attrs)
 
+
+def get_model_file (network_id):
+    model_file_ = 'network_' + network_id + '.gms'
+    return os.path.join(basefolder_, 'data', 'Models', model_file_)
+
+def get_pp_exe(app):
+    if app.lower()=='gams':
+        return os.path.join(basefolder_, 'Apps', 'GAMSApp','GAMSAutoRun.exe' )
+
+def get_app_args (network_id, scenario_id, model_file):
+    return {'t': network_id, 's': scenario_id, 'm': model_file}
+
+
+@app.route('/run_app', methods=['POST'])
+def run_app():
+    pars= json.loads(request.form['para'])
+    network_id = pars['network_id']
+    scenario_id = pars['scenario_id']
+    exe=get_pp_exe('gams')
+    model_file=get_model_file(network_id)
+    args = get_app_args (network_id, scenario_id, model_file)
     pid=run_app_(exe, args)
     print "PID: ", pid
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 
-
 @app.route('/status/<task_id>')
 def appstatus(task_id):
-    #task = long_task.AsyncResult(task_id)
     task, progress , total, status=get_app_progress(task_id)
 
     print "task ", task, progress , total, status

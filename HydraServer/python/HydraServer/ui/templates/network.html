@@ -5,8 +5,6 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
   <script>
 
-  nodes_attrs={{nodes_attrs|tojson}};
-  links_attrs={{links_attrs|tojson}}
 
   // set up initial nodes and links
   //  - nodes are known by 'id', not by index in array.
@@ -30,6 +28,8 @@
 
      var nodes_=[]
      nodes_={{nodes_|tojson}};
+     attr_id_name={{attr_id_name|tojson}};
+
 
    var links_=[];
    var links_={{links_|tojson}};

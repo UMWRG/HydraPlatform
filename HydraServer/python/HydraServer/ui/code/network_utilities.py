@@ -5,7 +5,7 @@ import sys
 
 from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceScenario, Node
 
-from hydra_connector import load_network, get_attributes_for_resource, get_resource_data, get_network_extents
+from hydra_connector import load_network, get_attributes_for_resource, get_resource_data, get_network_extents, get_all_attributes
 
 
 def get_dict(obj):
@@ -52,7 +52,35 @@ def set_metadata(hydra_metadata):
         metadata[meta['metadata_name']]=meta['metadata_val']
     return metadata
 
+def get_resource_attributes(network_id, scenario_id, resource_type, res_id, session):
+    res_attrs=[]
+    ress = get_resource_data(resource_type, res_id, scenario_id, None, session)
+    for res in ress:
+        attrr_id = res.resourceattr.attr_id
+        try:
+            vv = json.loads(res.dataset.value)
+        except:
+            vv = res.dataset.value
+
+        if (res.dataset.data_type == "timeseries"):
+            values_ = []
+            for index in vv.keys():
+                for date_ in sorted(vv[index].keys()):
+                    value = vv[index][date_]
+                    values_.append({'date': date_, 'value': value})
+            vv = values_
+        metadata = set_metadata(get_dict(res.dataset)['metadata'])
+
+        res_attrs.append({'id': res_id, 'attr_id': res.resourceattr.attr_id, 'attrr_id': attrr_id,
+                            'type': res.dataset.data_type, 'values': vv, 'metadata': metadata})
+    return res_attrs
+
+
 def get_network (network_id, scenario_id, session, app):
+    attrs_=get_all_attributes(session)
+    attr_id_name = {}
+    for attr in attrs_:
+        attr_id_name[attr.attr_id]=attr.attr_name
     network = load_network(network_id, scenario_id, session)
     node_coords = {}
     node_name_map = []
@@ -64,19 +92,9 @@ def get_network (network_id, scenario_id, session, app):
     nodes_types = []
     nodes_types.append(None)
     nodes_ids = []
-    attr_id_name = {}
-
-    for attr in network.attributes:
-        attr_id = attr_id = attr[len(attr) - 2]  # attr[0]
-        attr_name = attr[len(attr) - 1]
-        attr_id_name[attr_id] = attr_name
 
     for node in network.nodes:
         nodes_ids.append(node.node_id)
-        for attr in node.attributes:
-            attr_id = attr_id = attr[len(attr) - 2]  # attr[0]
-            attr_name = attr[len(attr) - 1]
-            attr_id_name[attr_id] = attr_name
 
         try:
             type = node.types[0].templatetype.type_name
@@ -98,10 +116,7 @@ def get_network (network_id, scenario_id, session, app):
 
     for link in network.links:
         links[link.link_id] = [link.node_1_id, link.node_2_id]
-        for attr in link.attributes:
-            attr_id = attr[len(attr) - 2]  # attr[0]
-            attr_name = attr[len(attr) - 1]
-            attr_id_name[attr_id] = attr_name
+
 
         link_ids.append(link.link_id)
         try:
@@ -113,24 +128,10 @@ def get_network (network_id, scenario_id, session, app):
 
         links_.append({'id': link.link_id, 'source': node_index[link.node_1_id], 'target': node_index[link.node_2_id],
                        'value': links_types.index(type) + 1, 'type': type, 'name': link.link_name, 'res_type': 'link'})
-    nodes_ras = []
 
-    node_resourcescenarios = get_attributes_for_resource(network_id, scenario_id, "NODE", nodes_ids, 'N')
-    ii = 0;
-    for nodes in node_resourcescenarios:
-        ii = ii + 1
-        ra = ResourceAttr(nodes.resourceattr)
-        ra.resourcescenario = ResourceScenario(nodes, ra.attr_id)
-        nodes_ras.append(ra)
-
-    links_ras = []
-    link_resourcescenarios = get_attributes_for_resource(network_id, scenario_id, "LINK", link_ids, 'Y')
-    for link in link_resourcescenarios:
-        ra = ResourceAttr(link.resourceattr)
-        ra.resourcescenario = ResourceScenario(link, ra.attr_id)
-        links_ras.append(ra)
 
     nodes_attrs = []
+    '''
     for node_ in network.nodes:
         ress = get_resource_data('NODE', node_.node_id, scenario_id, None, session)
         for res in ress:
@@ -176,11 +177,12 @@ def get_network (network_id, scenario_id, session, app):
 
 
             # Get the min, max x and y coords
+    '''
     extents = get_network_extents(network_id, session)
     app.logger.info(node_coords)
 
     app.logger.info("Network %s retrieved", network.network_name)
 
     net_scn = {'network_id': network_id, 'scenario_id': scenario_id}
-    return node_coords, links, node_name_map,  extents, network, nodes_, links_, nodes_attrs, net_scn,  links_attrs
+    return node_coords, links, node_name_map,  extents, network, nodes_, links_,  net_scn,  attr_id_name
 
