@@ -1,28 +1,31 @@
-!!Progress 1/18
-*$ include input.txt
-$ include EBSD_Input_f.txt
-!!Progress 2/18
-!!Progress 3/18
-!!Progress 4/18
-Found id and it --------------> default LINK_type
-Found id and it --------------> none LEFT_RIGHT_DEP_SET_1
-Found id and it --------------> default LINKS_CODE_1
-Found id and it --------------> none EXCL_SET_1
-none EXCL_SET_1
-[u'EXCLUSIVITY_SET', u'Code']
-=====================================>
-default LINKS_CODE_1
-[u'to_NODE_type', u'Code']
-=====================================>
-none LEFT_RIGHT_DEP_SET_1
-[u'DEPENDENCY_SET', u'Code', u'LEFT_RIGHT_SET']
-=====================================>
-default LINK_type
-[u'links_types', u'from_NODE_type']
-=====================================>
-Found id and it --------------> Code MIN_CAP_OPT_1
-!!Progress 5/18
-!!Output Writing output file
-!!Progress 6/18
-!!Progress 7/18
-!!Progress 8/18
+!!Progress 1/9
+!!Progress 2/9
+!!Progress 3/9
+!!Output Reading Node file nodes.csv
+!!Progress 4/9
+!!Output Reading Link file links.csv
+!!Progress 5/9
+!!Output Reading Group file groups.csv
+!!Progress 6/9
+!!Output Reading Group Members
+!!Progress 7/9
+!!Output Saving network
+!!Progress 9/9
+!!Progress 9/9
+!!Output Saving types
+!!Progress 9/9
+<plugin_result>
+    <message>Data import was successful.</message>
+    <plugin_name>ImportCSV</plugin_name>
+    <network_id>161</network_id>
+    <scenario_id>161</scenario_id>
+    <errors>
+        
+    </errors>
+    <warnings>
+        
+    </warnings>
+    <files>
+        
+    </files>
+</plugin_result>

@@ -1,4 +1,3 @@
-
 <script>
 
     (function($){
@@ -40,9 +39,9 @@ function getUrlVars() {
                     <ul role="menu" class="dropdown-menu">
                          <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Import network</a>
 								<ul class="dropdown-menu">
-									<li><a href="{{url_for ('go_import_network', import_from='csv', message='None')}}">from CSV</a></li>
-                                    <li><a href="{{url_for ('go_import_network', import_from='excel', message='None')}}">from Excel</a></li>
-									<li><a href="{{url_for ('go_import_network', import_from='pywr', message='None')}}">from pywr</a></li>
+									<li><a  href="#" onclick="import_csv()">from CSV</a></li>
+                                    <li><a href="#" onclick="import_excel()">from  Excel</a></li>
+									<li><a href="#" onclick="import_pywr()">from  pywr</a></li>
 								</ul>
 							</li>
 
@@ -102,3 +101,6 @@ function getUrlVars() {
   </ul>
 </div>
 </nav>
+<div>
+    {% include 'run_app.html' %}
+</div>

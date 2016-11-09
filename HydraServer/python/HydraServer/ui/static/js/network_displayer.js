@@ -179,6 +179,8 @@ function nodes_mouse_double_click(d)
    //display_node_attributes(d);
    call_server_get_res_attrs('NODE', d);
    }
+
+
    function display_node_attributes(d)
    {
     $( "#data" ).empty();
@@ -250,13 +252,13 @@ $( "#data" ).empty();
        var count=0;
        for (i in res_attrs)
        {
-         {
+
          if(count==0)
            $("#data" ).append(  '<h4>Attributes for '+res_type+' '+'</h4>');
            createDataTableHeading();
            count+=1;
          createResourceAttributesTable (res_attrs[i]);
-         }
+
        }
             },
             error: function() {
@@ -507,81 +509,27 @@ function update_node(node_id, name, x, y)
     //to do connect to the server and update node location
     }
 
-function runModel()
-   {
-        start_app();
-   }
+//function runModel()
 
-   function start_app() {
-   $(progressbar).show();
-
-            var_ =getUrlVars();
-       var pars=
-       {
-            network_id: var_["network_id"],
-            scenario_id: var_["scenario_id"]
-        };
-       $(progressbar).show();
-        // send ajax POST request to start background job
-
-         $.ajax({
-                    type: 'POST',
-                    url: '/run_app',
-                    data:  {"para": JSON.stringify(pars)},
-                    success: function(data, status, request) {
-                        status_url = request.getResponseHeader('Address');
-                        update_progress_2(status_url);
-                    },
-                    error: function() {
-                        alert('Unexpected error');
-                    }
-                });
-        }
-
-function update_progress_2(status_url) {
-
-            var progressLabel = $( "#progressLabel" );
-
-
-            // send GET request to status URL
-            $.getJSON(status_url, function(data) {
-                // update UI
-                percent = parseInt(data['current'] * 100 / data['total']);
-                //nanobar.go(percent);
-                value=percent
-                $("#progress-bar")
-      .css("width", value + "%")
-      .attr("aria-valuenow", value)
-      .text(value + "%");
-          progressLabel.text(data['status']);
-               // $(status_div.childNodes[1]).text(percent + '%');
-                //$(status_div.childNodes[2]).text(data['status']);
-                if (data['status'] != 'Pending' && data['status'] != 'Running') {
-                    if ('result' in data) {
-                        // show result
-                       // $(status_div.childNodes[3]).text('Result: ' + data['result']);
-                    }
-                    else {
-                        // something unexpected happened
-                        //$(status_div.childNodes[3]).text('Result: ' + data['state']);
-                    }
-                }
-                else {
-                    // rerun in 1 second
-                    setTimeout(function() {
-                        update_progress_2(status_url);
-                    }, 1000);
-                }
-            });
-        }
-
-function getUrlVars() {
+ function getUrlVars(){
     var vars = {};
+
+try
+{
+
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
     function(m,key,value) {
       vars[key] = value;
     });
-    vars["network_id"]=vars["network_id"].replace("#","");
-    vars["scenario_id"]=vars["scenario_id"].replace("#","");
+        vars["network_id"]=vars["network_id"].replace("#","");
+        vars["scenario_id"]=vars["scenario_id"].replace("#","");
+    }
+    catch (err)
+    {
+    //alert(err.message);
+        vars["network_id"]=0;
+        vars["scenario_id"]=0;
+    }
+
     return vars;
   }

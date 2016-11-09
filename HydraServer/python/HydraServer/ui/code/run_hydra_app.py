@@ -2,20 +2,22 @@ import subprocess
 import psutil
 import json
 import os
-from app_utilities import create_zip_file, check_process_output
+from app_utilities import create_zip_file, check_process_output, get_progress_from_output
 
 
 '''
 run back ground process using the command and redircet the output to log file to be read later to get process progress ...
 '''
 
-def run_app_(exe, args):
+def run_app_(exe, args, use_wd=True):
     arg = ''
     for item in args.keys():
         arg = arg + ' -' + item + ' ' + args[item]
     cmd = exe + ' ' + arg
-    print args, '----------------------------->'
-    os.chdir(os.path.dirname(exe))
+    if use_wd==True:
+        print args, '----------------------------->'
+        os.chdir(os.path.dirname(exe))
+
     f = open("..\\..\\log.txt", "w")
 
     proc = subprocess.Popen(cmd, stdout=f)
@@ -51,23 +53,15 @@ def get_app_progress(pid):
 
     if(isIt == True):
         if len(contents)>0:
-            line =contents[len(contents)-1]
-            if line.startswith("!!Progress"):
-                line=line.replace('!!Progress', '')
-                line=line.split('/')
-                if len(line)==2:
-                    progress=int (line[0])
-                    total=int (line[1])
-                    status="Running"
-            else:
-                progress=0
-                total=100
-
+            status,  progress, total=get_progress_from_output(contents)
             print "===================>", progress, total, status
+            print "status:2 ", status
             return isIt, progress, total, status
     else:
         status=check_process_output(contents)
+        print "=======================>-------------------->===================>", status
+        print contents
         progress=100,
         total=100
-
+    print "status: ",  status
     return isIt, progress, total, status

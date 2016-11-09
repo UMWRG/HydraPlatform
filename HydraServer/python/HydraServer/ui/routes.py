@@ -141,7 +141,7 @@ def go_export_network(export_to, network_id, scenario_id, message):
 def go_import_network(import_from, message):
     net_scn = {'network_id': 0, 'scenario_id': 0}
     if(import_from == 'csv'):
-        return render_template('import_from_csv.html', net_scn=net_scn, message=message)
+        return render_template('run_app.html', net_scn=net_scn, message=message)
     elif (import_from=='pywr'):
         return render_template('import_from_pywr.html',net_scn=net_scn, message=message)
     elif (import_from == 'excel'):
@@ -149,7 +149,21 @@ def go_import_network(import_from, message):
             return render_template('import_from_excel.html', net_scn=net_scn, message=message)
         else:
             return "This feature is not available in this server !!!"
+'''
+@app.route('/import_csv/<import_from>, <message>', methods=['GET'])
+def go_import_network(import_from, message):
+    net_scn = {'network_id': 0, 'scenario_id': 0}
+    if (import_from == 'csv'):
+        return render_template('run_app.html', net_scn=net_scn, message=message)
+    elif (import_from == 'pywr'):
+        return render_template('import_from_pywr.html', net_scn=net_scn, message=message)
+    elif (import_from == 'excel'):
+        if os.name is 'nt':
+            return render_template('import_from_excel.html', net_scn=net_scn, message=message)
+        else:
+            return "This feature is not available in this server !!!"
 
+'''
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
     """
@@ -187,72 +201,6 @@ def allowed_file (filename):
         return True
     else:
         return False
-
-def get_uploaded_file_name(file_type):
-    try:
-        file = request.files[file_type]
-        return file
-    except Exception as e:
-        return None
-
-@app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file():
-   if request.method == 'POST':
-       try:
-           if get_uploaded_file_name('csv_file') != None:
-               print "CSV from here"
-               file = request.files['csv_file']
-               type = 'csv'
-           elif get_uploaded_file_name('pywr_file') != None:
-               file = request.files['pywr_file']
-               type = 'pywr'
-           elif get_uploaded_file_name('excel_file') != None:
-               file = request.files['excel_file']
-               type = 'excel'
-           if file.filename == '':
-               return redirect(url_for('go_import_network', import_from=type, message="No file is selected"))
-           if allowed_file(file.filename):
-               filename = secure_filename(file.filename)
-               basefolder= os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
-               zipfilename = os.path.join(basefolder, filename)
-               extractedfolder= os.path.join(basefolder, 'temp')
-               if not os.path.exists(extractedfolder):
-                   os.makedirs(extractedfolder)
-               else:
-                   delete_files_from_folder(extractedfolder)
-
-               file.save(zipfilename)
-               zip = zipfile.ZipFile(zipfilename)
-               zip.extractall(extractedfolder)
-               if type=='csv':
-                  output= import_network_from_csv_files(extractedfolder, basefolder)
-                  if(len(output))==1:
-                      return redirect(url_for('go_import_network', import_from=type ,message=output[0]))
-                  elif len(output)==3:
-                      return redirect (url_for('go_network', network_id=output[1], scenario_id=output[2]))
-                  else:
-                      return redirect(url_for('go_import_network', import_from=type ,message='Error while improting the network!'))
-
-               elif type =='pywr':
-                   output =import_network_from_pywr_json(extractedfolder, basefolder)
-                   if (len(output)) == 1:
-                       return redirect(url_for('go_import_network', import_from=type, message=output[0]))
-                   elif len(output) == 3:
-                       return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-               elif type =='excel':
-                   output =import_network_from_excel(extractedfolder, basefolder)
-                   if (len(output)) == 1:
-                       return redirect(url_for('go_import_network', import_from=type, message=output[0]))
-                   elif len(output) == 3:
-                       return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
-           else:
-               return redirect(url_for('go_import_network', import_from=type, message="zip file is only allowed"))
-       except Exception as e:
-           error="error"
-           if(e.message!=None and e.message!=""):
-               error=e.message
-           return redirect(url_for('go_import_network', import_from=type, message=error))
-
 
 @app.route('/network', methods=['GET'])
 def go_network():
@@ -331,11 +279,19 @@ def run_app():
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 
+
+
+def run_gams_app(model_file, network_id, scenario_id):
+    exe=get_pp_exe('gams')
+    args = get_app_args (network_id, scenario_id, model_file)
+    pid=run_app_(exe, args)
+    return jsonify({}), 202, {'Address': url_for('appstatus',
+                                                  task_id=pid)}
+
+
 @app.route('/status/<task_id>')
 def appstatus(task_id):
     task, progress , total, status=get_app_progress(task_id)
-
-    print "task ", task, progress , total, status
     if task == True:
         response = {
             'current': progress,
@@ -350,3 +306,67 @@ def appstatus(task_id):
         }
 
     return jsonify(response)
+
+
+@app.route('/import_uploader', methods=['POST'])
+def import_uploader():
+    print "===================>run App"
+    print request.files.keys()
+    type= request.files.keys()[0]
+    print type
+
+    file = request.files[type]
+    if (file.filename == ''):
+        return jsonify({}), 202, {'Error': 'No file is selected'}
+    elif not allowed_file(file.filename) and type != 'run_model':
+        return jsonify({}), 202, {'Error': 'zip file is only allowed'}
+
+    filename = secure_filename(file.filename)
+    basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
+    uploaded_file = os.path.join(basefolder, filename)
+    extractedfolder = os.path.join(basefolder, 'temp')
+    if not os.path.exists(extractedfolder):
+        os.makedirs(extractedfolder)
+    else:
+        delete_files_from_folder(extractedfolder)
+
+    file.save(uploaded_file)
+
+    if (type == 'run_model'):
+        network_id = request.form['network_id']
+        scenario_id = request.form['scenario_id']
+        return run_gams_app(uploaded_file, network_id, scenario_id)
+
+    zip = zipfile.ZipFile(uploaded_file)
+    zip.extractall(extractedfolder)
+
+
+    if(type== 'csv'):
+        pid = import_network_from_csv_files(extractedfolder, basefolder)
+    elif (type== 'pywr'):
+        pid=import_network_from_pywr_json(extractedfolder, basefolder)
+    elif (type== 'excel'):
+        pid=import_network_from_excel(extractedfolder, basefolder)
+    else:
+        pid=type+ ' is not recognized.'
+
+    print "PID: ", pid
+    try:
+        int (pid)
+        return jsonify({}), 202, {'Address': url_for('appstatus',
+                                                   task_id=pid)}
+    except:
+        return jsonify({}), 202, {'Error': pid}
+
+
+
+    '''
+    if (len(output)) == 1:
+        return jsonify({}), 202, {'Address': url_for('appstatus',
+                                                     task_id=pid)}
+        return redirect(url_for('go_import_network', import_from=type, message=output[0]))
+    elif len(output) == 3:
+        return redirect(url_for('go_network', network_id=output[1], scenario_id=output[2]))
+    else:
+        return redirect(url_for('go_import_network', import_from=type, message='Error while improting the network!'))
+    '''
