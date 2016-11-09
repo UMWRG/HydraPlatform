@@ -1,0 +1,53 @@
+<!-- Modal -->
+<div id="importModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="import_title">Title</h4>
+      </div>
+        <div id="import_progressbar"  style="margin: 15px;">
+            <div class="progress">
+                  <div class="progress-bar progress-bar-striped active" id="import_progress_bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+            </div>
+        </div>
+       </div>
+    <div id="status_pan" hidden="true">
+         <h4 style="color:blue">Status:</h4>
+         <p id= "_message"></p>
+    </div>
+      <div class="modal-body" id="help_message">
+        <p id ="help_">Help meessage</p>
+      </div>
+   <form  id="import_form" method="post" enctype=multipart/form-data>
+        <div class="col-lg-6 col-sm-6 col-12">
+
+               <div class="input-group">
+                   <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip;
+                        <input type="file" name="import_file"  id="import_file" style="display: none;" multiple>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly>
+            </div>
+       <span class="help-block">
+                <file></file>
+            </span>
+            <input type = "submit" value="Upload" id="CSVFormSubmit"  class="btn btn-info btn-lg" />
+            <button type="button" class="btn btn-info btn-lg"  onclick="cancel_app()">Cancel</button>
+        </div>
+   </form>
+      <div class="modal-footer">
+      </div>
+
+</div>
+</div>
+        <script src="{{url_for('static', filename='js/apps.js')}}"></script>
+<script>
+add_fileselect_event();
+run_apps();
+</script>
+    </div>
+
+

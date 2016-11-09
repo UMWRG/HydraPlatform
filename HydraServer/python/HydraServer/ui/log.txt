@@ -1,24 +1,8 @@
-!!Progress 1/9
-!!Progress 2/9
-!!Progress 3/9
-!!Output Reading Node file nodes.csv
-!!Progress 4/9
-!!Output Reading Link file links.csv
-!!Progress 5/9
-!!Output Reading Group file groups.csv
-!!Progress 6/9
-!!Output Reading Group Members
-!!Progress 7/9
-!!Output Saving network
-!!Progress 9/9
-!!Progress 9/9
-!!Output Saving types
-!!Progress 9/9
 <plugin_result>
     <message>Data import was successful.</message>
-    <plugin_name>ImportCSV</plugin_name>
-    <network_id>161</network_id>
-    <scenario_id>161</scenario_id>
+    <plugin_name>Pywr importer</plugin_name>
+    <network_id>165</network_id>
+    <scenario_id>165</scenario_id>
     <errors>
         
     </errors>
