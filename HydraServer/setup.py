@@ -29,11 +29,12 @@ install_requires=[
     "pandas",
     "bcrypt",
     "lxml",
-    "mysql-connector-python",
+    "mysql-connector",
     "suds",
     "spyne >= 2.12",
     "cherrypy",
     "python-dateutil",
+    "requests"
     ]
 
 if platform.system() == "Windows":  # only add winpaths when platform is Windows so that setup.py is universal
