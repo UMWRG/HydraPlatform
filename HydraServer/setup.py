@@ -63,5 +63,6 @@ setup(
                     'eggsecutable = server:run',
                 ]
     },
-    zip_safe=False
+    zip_safe=False,
+    dependency_links=['http://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.1.4.zip'],
 )
