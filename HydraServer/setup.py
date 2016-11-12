@@ -29,7 +29,7 @@ install_requires=[
     "pandas",
     "bcrypt",
     "lxml",
-    "mysql-connector",
+    "mysql-connector-python",
     "suds",
     "spyne >= 2.12",
     "cherrypy",
