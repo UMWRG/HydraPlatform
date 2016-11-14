@@ -311,14 +311,14 @@ def appstatus(task_id):
 @app.route('/import_uploader', methods=['POST'])
 def import_uploader():
     print "===================>run App"
-    print request.files.keys()
     type= request.files.keys()[0]
-    print type
+    app_name=request.form['app_name']
+    print type, app_name
 
     file = request.files[type]
     if (file.filename == ''):
         return jsonify({}), 202, {'Error': 'No file is selected'}
-    elif not allowed_file(file.filename) and type != 'run_model':
+    elif not allowed_file(file.filename) and app_name != 'run_model':
         return jsonify({}), 202, {'Error': 'zip file is only allowed'}
 
     filename = secure_filename(file.filename)
@@ -332,7 +332,7 @@ def import_uploader():
 
     file.save(uploaded_file)
 
-    if (type == 'run_model'):
+    if (app_name == 'run_model'):
         network_id = request.form['network_id']
         scenario_id = request.form['scenario_id']
         return run_gams_app(uploaded_file, network_id, scenario_id)
@@ -341,11 +341,11 @@ def import_uploader():
     zip.extractall(extractedfolder)
 
 
-    if(type== 'csv'):
+    if(app_name== 'csv'):
         pid = import_network_from_csv_files(extractedfolder, basefolder)
-    elif (type== 'pywr'):
+    elif (app_name== 'pywr'):
         pid=import_network_from_pywr_json(extractedfolder, basefolder)
-    elif (type== 'excel'):
+    elif (app_name== 'excel'):
         pid=import_network_from_excel(extractedfolder, basefolder)
     else:
         pid=type+ ' is not recognized.'

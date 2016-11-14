@@ -31,6 +31,7 @@ function run_apps (){
       //alert(vars);
       form_data.append('network_id', vars['network_id']);
       form_data.append('scenario_id', vars['scenario_id']);
+      form_data.append('app_name',cur_name);
       $.ajax({
                     type: 'POST',
                     url: '/import_uploader',
@@ -114,7 +115,7 @@ function import_csv ()
      $("#help_message").show();
      $(_message).text("");
      //$("#import_file")..attr('name', 'csv_file');
-    $('input:file[name="import_file"]').attr('name', 'csv');
+   // $('input:file[name="import_file"]').attr('name', 'csv');
     cur_name='csv';
     $("#help_").text("Please upload the network zip file which contains all the required csv files. The network file name needs to be “network.csv");
     $ ("#import_title").text("Import Hydra network from CSV files");
@@ -131,7 +132,7 @@ function import_excel ()
 $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
-    $('input:file[name="import_file"]').attr('name', 'excel');
+   // $('input:file[name="import_file"]').attr('name', 'excel');
     cur_name='excel';
     $("#help_").text("Please upload the zip file which contains Excel file and template file.");
     $ ("#import_title").text("Import Hydra network from Excel");
@@ -147,7 +148,7 @@ function import_pywr ()
     $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
-    $('input:file[name="import_file"]').attr('name', 'pywr');
+    //$('input:file[name="import_file"]').attr('name', 'pywr');
     cur_name='pywr';
     $("#help_").text("Please upload the network zip which contains the Json pywr file and data files. The json file name needs to be “pywr.json ”");
     $ ("#import_title").text("Import Hydra network from Pywr JSON");
@@ -163,20 +164,18 @@ function runModel()
    $(status_pan).hide();
    $("#help_message").show();
    $(_message).text("");
-   $('input:file[name="import_file"]').attr('name', 'run_model');
+   //$('input:file[name="import_file"]').attr('name', 'run_model');
    cur_name='run_model';
    $("#help_").text("Please upload the file which contains the GAMS code");
    $ ("#import_title").text("Run GAMS model");
    $( "#importModal" ).modal('show')
    }
 
-
-
   function cancel_app()
   {
   if(cur_name!=null)
   {
-    $('input:file[name="'+cur_name+'"]').attr('name', 'import_file');
+    //$('input:file[name="'+cur_name+'"]').attr('name', 'import_file');
     cur_name=null;
 
   }

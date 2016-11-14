@@ -64,20 +64,16 @@ float: left;
   fill: black ;
 }
 
-.node text {
-  font: 9px helvetica;
-}
+
 .link {
   stroke: #999;
   stroke-opacity: .6;
 }
 
-.node text {
-  font: 9px helvetica;
-}
+
 
 .node text {
-  font: 9px helvetica;
+  font: 19px helvetica;
 }
 
 d3-tip {

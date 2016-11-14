@@ -68,7 +68,7 @@ var tip = d3.tip()
   })
 
 
-var zoomer = d3.behavior.zoom().x(self.xScale).y(self.yScale).scaleExtent([0.1, 8]).on("zoom", zoom);
+var zoomer = d3.behavior.zoom().x(self.xScale).y(self.yScale).scaleExtent([0.1, 18]).on("zoom", zoom);
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("#graph").append("svg")
@@ -118,7 +118,8 @@ var node = svg.selectAll("nodes_")
     .data(nodes_)
     .enter().append("text")
     .text(function(d) { return d.name; })
-    .style("visibility", "hidden");
+    .style("visibility", "hidden")
+    .style("font", "12px sans-serif");
 
 // Per-type markers, as they don't inherit styles.
 svg.append("defs").selectAll("marker")
