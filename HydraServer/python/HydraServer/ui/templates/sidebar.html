@@ -1,0 +1,88 @@
+{%block imports%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/sidebar.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/palette.css') }}"/>
+
+{%endblock%}
+
+<div id="sidebar_container" class="col-md-2">
+<!--<div id="sidebar_button" class="btn btn-primary btn-lg">
+    <span class="glyphicon glyphicon-chevron-right"><span>
+</div>    -->
+
+<div id="sidebar" class="hidden-menu-left">
+    <ul class="options nav navbar-nav">
+        <li id="" class="menusection">
+            <div class="filterheading">
+                {{network.network_name}}
+            </div>
+        
+            <div class='filtercontent hidden'>
+                <ul>
+                    <li>
+                        <h4>Network Type:</h4>
+                        {{network.types[0].templatetype.type_name}} ( {{template.template_name}})
+                    </li>
+
+                    <li>
+                        <h4>Projection:</h4>
+                        {{network.projection}}
+                    </li>
+                    <li>
+                        <h4>Attributes:</h4>
+                        <a href="#" onclick="get_network_attributes()">View Attributes</a>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
+        <li id="nodes" class="menusection">
+            <div class="filterheading">Scenarios
+            </div>
+        
+            <div class='filtercontent'>
+                <select>
+                    {% for s in network.scenarios%}
+                    <option value="{{s.scenario_id}}">
+                        {{s.scenario_name}}
+                    </option>
+                    {%endfor%}
+                </select>
+            </div>
+        </li>
+        <li id="nodes" class="menusection">
+            <div class="filterheading">Nodes
+            </div>
+        
+            <div id="palette" class='filtercontent'>
+            </div>
+        </li>
+        <li id= "links" class="menusection">
+            <div class="filterheading">Links
+            </div>
+            <div class='filtercontent'>
+            </div>
+        </li>
+        <li id="notes" class="menusection">
+            <div class="noteheading" >
+            <h3> Notes </h3>
+                <div id="new-note-btn" class="btn btn-primary btn-small" data-toggle="modal" data-target="#new-note-container">
+    <span class="glyphicon glyphicon-pencil"></span>
+            </div>
+            </div>
+            <div class="filtercontent">
+            <ul class="list-group">
+            {% for n in notes %}
+                <li class="list-group-item" title="{{n.text}}" data-toggle="tooltip" data-placement="right">
+                    {{n.author.username}} @ {{n.cr_date}}
+                </li>
+            {% endfor %}
+            </ul>
+            </div> <!-- filtercontent -->
+        </li>
+        
+    <ul>
+</div><!-- sidebar menu-->
+</div> <!--sidebar container-->
+
+
+

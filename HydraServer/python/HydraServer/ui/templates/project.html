@@ -10,6 +10,11 @@
 
 
     <div class="contianer">
+
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add_network_modal">
+            <span class="glyphicon glyphicon-plus"></span> Create Network
+        </button>
+
         <div id="networks_and_scenarios" class="table table-hover">
           <div id="network_list" class="table-col">
             <div class="table-head">
@@ -41,6 +46,57 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="add_network_modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create a Network</h4>
+          </div>
+          <div class="modal-body">
+              <form id="create-network" action="create_network" type="POST">
+                <input type="hidden" name="project_id" value="{{project.project_id}}">
+                <table class="table">
+                <tr>
+                    <td><label for="network-name-input">Name*</label></td>
+                    <td><input id="network-name-input" type="text" name="name" value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="network-description-input">Description</label></td>
+                    <td><input id="network-description-input" type="text" name="description" value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="network-template">Network Type*</label></td>
+
+                    <td>
+                        <select id="network-template">
+                            <option value="">
+                                -
+                            </option>
+                            {%for network_type in all_network_types%}
+                                <option class="template" value="{{network_type.type_id}}">
+                                        {{network_type.type_name}}
+                                </option>
+                            {%endfor%}
+                        </select>
+
+                    </td>
+
+                </tr>
+                </table>
+                <div>* This is mandatory</div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-create-network-button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="create-network-button" class="btn btn-success" data-dismiss="modal">Create</button>
+            <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endblock %}
 
 

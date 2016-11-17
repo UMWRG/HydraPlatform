@@ -206,9 +206,12 @@ td:first-child {
   border-left: 1px solid #cecfd5;
 }
 
+tr.header td:first-child{
+    font-weight: bold;
+}
 
 tbody tr:hover {
-  background: yellow;
+  background: #EAEAEA;
 }
 
 .sub

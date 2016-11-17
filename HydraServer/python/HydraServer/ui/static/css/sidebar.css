@@ -1,0 +1,96 @@
+#sidebar_container {
+    border: 1px solid #aaa;
+    border-radius: 2px;
+    box-shadow: 2px 2px 1px #888888;
+    padding: 5px;
+}
+
+#sidebar_button {
+    position:fixed;
+    top: 200px;
+    float:right;
+    width: 1.2em;
+    height:5ex;
+    cursor: pointer;
+    border-radius: 0px 4px 4px 0px;
+    border: 1px solid transparent;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    padding-left: 0px;
+}
+
+.menusection{
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+#sidebar_button i{
+    top: 4px;
+    margin-right: 0.05ex;
+}
+
+.filtercontent ul{
+    list-style: none;
+    padding: 0;
+    list-style-type: none;
+}
+
+.options .filterheading{
+    border-bottom: 1px solid;
+    border-color: #e7e7e7;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    background: #EEEEEE;
+    font-size: 16pt;
+    border-radius: 3px;
+}
+
+.filterheading:hover{
+    background: #CCCCCC;
+}
+
+h1 {
+  display: inline-block;
+}
+
+/*filters*/
+.options{
+    padding-top: 1ex;
+    vertical-align: top;
+}
+.options label{
+    display:block;
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+}
+.options .do-filter{
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+    display:block;
+}
+
+#filtermenu>* {
+    display:block;
+    max-width: 300px;
+}
+
+#filtermenu button.multiselect{
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#filtermenu button.multiselect>span{
+}
+
+.bootstrap-switch{
+    height: 35px;
+}
+
+.options button{
+overflow: hidden;
+max-width: 250px;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+

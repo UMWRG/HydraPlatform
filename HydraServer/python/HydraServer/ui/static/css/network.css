@@ -5,16 +5,15 @@
 
 .network_container
 {
-width: 1900px;
+/*width: 1900px;
 height 800px;
-//border: 1px solid red;
+//border: 1px solid red;*/
 }
 
 .graph
 {
 width: 900px;
 height 750px;
-float: left;
 }
 
 .data_container

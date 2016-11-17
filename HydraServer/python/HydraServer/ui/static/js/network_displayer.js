@@ -1,4 +1,4 @@
-var toLocaleFormat = d3.time.format("%Y-%m-%d");
+var toLocaleFormat = d3.timeFormat("%Y-%m-%d");
 
 var current_res=null;
 
@@ -10,31 +10,31 @@ var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
     var width  = (900- margin.left - margin.right),
     height = (700-margin.top - margin.bottom);
-    colors = d3.scale.category10();
+    colors = d3.scaleOrdinal(d3.schemeCategory10);
 
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
-  var yScale = d3.scale.linear()
+  var yScale = d3.scaleLinear()
                            .domain([min_y, max_y ])
                            .range([height,0]);
-  var xScale = d3.scale.linear()
+  var xScale = d3.scaleLinear()
                           .domain([min_x, max_x])
                           .range([0,width]);
 
 //Set up the colour scale
-var color = d3.scale.category20();
+var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-var drag = d3.behavior.drag()
-        .origin(function (d) { return d; })
-         .on("dragstart", dragstarted)
+var drag = d3.drag()
+         .on("start", dragstarted)
         .on("drag", dragged)
-        .on("dragend", dragended);
+        .on("end", dragended);
 
 function dragstarted(d) {
     d3.event.sourceEvent.stopPropagation();
 
     d.fixed |= 2;
 }
+
 function dragged(d) {
 
     var mouse = d3.mouse(svg.node());
@@ -42,7 +42,7 @@ function dragged(d) {
     d.y = yScale.invert(mouse[1]);
     d.px = d.x;
     d.py = d.y;
-    force.resume();
+    force.restart();
 }
 
 function dragended(d)
@@ -53,12 +53,12 @@ function dragended(d)
  }
 
  //Set up the force layout
-var force = d3.layout.force()
+var force = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) { return d.id }))
 
-    .size([width + margin.left + margin.right, height+ margin.top + margin.bottom])
+    //.size([width + margin.left + margin.right, height+ margin.top + margin.bottom])
 
     .on("tick", tick);
-force.gravity(0);
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -68,24 +68,30 @@ var tip = d3.tip()
   })
 
 
-var zoomer = d3.behavior.zoom().x(self.xScale).y(self.yScale).scaleExtent([0.1, 18]).on("zoom", zoom);
+//var zoomer = d3.behavior.zoom().x(self.xScale).y(self.yScale).scaleExtent([0.1, 18]).on("zoom", zoom);
+var zoomer = d3.zoom().scaleExtent([0.1, 8]).on("zoom", zoom);
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("#graph").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height+ margin.top + margin.bottom)
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-    .attr("clsss", "left")
     .call(zoomer)
-    // disable zooming with mouse double clink
+    // disable zooming with mouse double click
     .on("dblclick.zoom", null)
+    .on("click", function(d){
+        svg.selectAll("line").style("stroke-width", 1.8);
+        svg.selectAll(".node").attr("r", 9);
+        svg.selectAll(".node").style('stroke',  "")
+        svg.selectAll(".node").each(function(d){tip.hide(d)})
+    })
     .call(tip);
 
 
 //Creates the graph data structure out of the json data
-force.nodes(nodes_)
-    .links(links_)
-    .start();
+force.nodes(nodes_).on('tick', tick)
+force.force('link').links(links_)
+force.restart();
 
 //Create all the line svgs but without locations yet
 var link = svg.selectAll("links_")
@@ -94,7 +100,8 @@ var link = svg.selectAll("links_")
     .attr("class", "link")
       .style("marker-end", 'None')
     .style("stroke-width", 1.8)
-     .style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
+     .style('stroke',  function(d) { 
+         return d3.rgb(colors(d.id)).darker().toString(); })
     .on('mouseover', mouse_in) //Added
     .on('mouseout', link_mouse_out) //Added
     .on("click", links_mouse_click);
@@ -107,8 +114,8 @@ var node = svg.selectAll("nodes_")
     .attr("id", function(d) {return d.id;})
     .attr("r", 9)
     .style("fill", function (d) {
-    return color(d.group);
-})
+        return colors(d.group);
+    })
     .on('mouseover', mouse_in) //Added
     .on('mouseout', node_mouse_out) //Added
     .on("click", nodes_mouse_click)
@@ -142,34 +149,41 @@ force.on("tick",tick);
 function tick() {
   zoom();
   force.stop();
+}
+
+function zoom (){
+    if (link != undefined){
+
+        link
+        .attr('x1', function (d) { return self.xScale(d.source.x); })
+        .attr('y1', function (d) { return self.yScale(d.source.y); })
+        .attr('x2', function (d) { return self.xScale(d.target.x); })
+        .attr('y2', function (d) { return self.yScale(d.target.y); })
     }
-
-    function zoom (){
-    link
-   .attr('x1', function (d) { return self.xScale(d.source.x); })
-   .attr('y1', function (d) { return self.yScale(d.source.y); })
-   .attr('x2', function (d) { return self.xScale(d.target.x); })
-   .attr('y2', function (d) { return self.yScale(d.target.y); })
-
- node.attr("transform", function (d) {
+    if (node != undefined){
+        node.attr("transform", function (d) {
             return "translate(" + self.xScale(d.x) + "," + self.yScale(d.y) + ")";
         });
-
- text.attr("transform", function (d) {
-            return "translate(" + self.xScale(d.x)+14 + "," + self.yScale(d.y) + ")";
-        });
     }
+    
+    if (text != undefined){
+        text.attr("transform", function (d) {
+                return "translate(" + self.xScale(d.x)+14 + "," + self.yScale(d.y) + ")";
+            });
+    }
+}
 
 function nodes_mouse_double_click(d)
 {
   d3.selectAll('.node')  //here's how you get all the nodes
     .each(function(d) {
-    d3.select(this).classed("fixed", d.fixed = true);
-    d3.select(this).on(".drag", null);
+        d3.select(this).classed("fixed", d.fixed = true);
+        d3.select(this).on(".drag", null);
     });
-           d3.select(this).call(drag);
+    d3.select(this).call(drag);
 }
- function nodes_mouse_click(d) {
+
+function nodes_mouse_click(d) {
    // unenlarge target node
 
    tip.hide(d);
@@ -179,10 +193,11 @@ function nodes_mouse_double_click(d)
    document.getElementById('search').value=d.name;
    //display_node_attributes(d);
    call_server_get_res_attrs('NODE', d);
-   }
 
+   d3.event.stopPropagation();
+}
 
-   function display_node_attributes(d)
+function display_node_attributes(d)
    {
     $( "#data" ).empty();
      $("#timeseries_g" ).empty();
@@ -218,12 +233,12 @@ function nodes_mouse_double_click(d)
      }
    }
 
-                    },
-                    error: function() {
-                        alert('Unexpected error');
+    },
+    error: function() {
+        alert('Unexpected error');
 
-                    }
-                });
+    }
+});
 
 
 }
@@ -318,6 +333,8 @@ $( "#data" ).empty();
    tip.hide(d);
    //display_link_attributes(d)
    call_server_get_res_attrs('LINK', d)
+
+    d3.event.stopPropagation();
    }
 
 function display_link_attributes(d) {
@@ -342,7 +359,7 @@ function node_mouse_out(d) {
    if(current_res == null || d!=current_res)
    {
       tip.hide(d);
-      d3.select(this).style('stroke', '#999');
+      d3.select(this).style('stroke', "");
    }
 
     }
@@ -365,13 +382,6 @@ function link_mouse_out(d) {
        d3.select(this).style('stroke', '#999');
    }
 }
-
-function hid_res(d)
-{
-   tip.hide(d);
-   d3.select(this).style('stroke', '#999');
-}
-
 
 function get_node_attributes(id, name){
 }
@@ -505,32 +515,97 @@ function changeLinkDirectionVisibility(cb) {
 }
 
 
-function update_node(node_id, name, x, y)
-    {
-    //to do connect to the server and update node location
-    }
-
-//function runModel()
-
- function getUrlVars(){
+function getUrlVars(){
     var vars = {};
 
-try
-{
+    try
+    {
 
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-    function(m,key,value) {
-      vars[key] = value;
-    });
-        vars["network_id"]=vars["network_id"].replace("#","");
-        vars["scenario_id"]=vars["scenario_id"].replace("#","");
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+        function(m,key,value) {
+          vars[key] = value;
+        });
+            vars["network_id"]=vars["network_id"].replace("#","");
+            vars["scenario_id"]=vars["scenario_id"].replace("#","");
     }
     catch (err)
     {
-    //alert(err.message);
         vars["network_id"]=0;
         vars["scenario_id"]=0;
     }
 
     return vars;
   }
+
+var newnodetip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    var date = new Date(); // for now
+    var default_name = "Node " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+  return "<label>Name: </label><input type=\"text\" name=\"node_name\">" + default_name+" </input>";
+  })
+
+ 
+var add_node = function(name, type_id, x, y){
+    var node_id = null;
+
+    var success = function(resp){
+        //Add ID of ode
+        node_id = resp.node_id;
+    }
+
+    var error = function(resp){
+        alert(resp)    
+    }
+    
+    var nodedata = {
+        name: name,
+        network_id: network_id,
+        types : [{'id': type_id}],
+        x : x,
+        y : y
+    }
+    $.ajax({
+       url:  add_node_url,
+       type: 'POST',
+       data : JSON.stringify(nodedata),
+       success: success,
+       error: error,
+    })
+
+    return node_id;
+
+}
+
+function update_node(node_id, name, x, y)
+    {
+    //to do connect to the server and update node location
+
+    var success = function(resp){
+        console.log("Node"+ node_id +" updated")
+    }
+
+    var error = function(resp){
+        alert(resp)    
+    }
+    
+    var nodedata = {
+        name: name,
+        id: node_id,
+        x : x,
+        y : y
+    }
+
+    $.ajax({
+       url:  update_node_url,
+       type: 'POST',
+       data : JSON.stringify(nodedata),
+       success: success,
+       error: error,
+    })
+
+    return node_id;
+    }
+
+

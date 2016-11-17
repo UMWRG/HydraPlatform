@@ -1,7 +1,11 @@
 {% extends "page_layout.html" %}
 {% block title %}Network {{network.network_name}}{% endblock %}
 {% block content %}
-    <div class="main_content">
+    <div class="row">
+    {%block sidebar%}
+        {% include 'sidebar.html' %}
+    {%endblock%}
+    <div class="main_content col-md-10">
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/network.css') }}"/>
   <script>
 
@@ -11,6 +15,7 @@
   //  - reflexive edges are indicated on the node (as a bold black circle).
   //  - links are always source < target; edge directions are set by 'left' and 'right'.
     var scenario_id={{scenario_id}};
+    var network_id={{network.network_id}};
     var data_={{node_name_map|tojson}};
     function get_name(id)
     {
@@ -35,10 +40,10 @@
    var links_={{links_|tojson}};
 
 
-    var min_x = {{extents['min_x']}};
-    var max_x = {{extents['max_x']}};
-    var min_y = {{extents['min_y']}};
-    var max_y = {{extents['max_y']}};
+    var min_x = {{extents['min_x'] if extents['min_x'] != None else 0}};
+    var max_x = {{extents['max_x'] if extents['max_x'] != None else 100}};
+    var min_y = {{extents['min_y'] if extents['min_y'] != None else 0}};
+    var max_y = {{extents['max_y'] if extents['max_y'] != None else 100}};
 
     var nodes = [];
     var node_coords = {};
@@ -67,9 +72,17 @@
           }
         )
     {% endfor %}
-    var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
+        
+        var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
+
+        var template = {{template.as_json()|safe}};
+
+
+        var add_node_url="{{url_for('do_add_node')}}";
+        var update_node_url="{{url_for('do_update_node')}}";
+        var add_link_url="{{url_for('do_add_link')}}";
+
       </script>
-              {% include 'network_details.html' %}
 
         <ul id="network-tabs" class="nav nav-tabs" role="tablist">
             <li role="presentation" id="statictab">
@@ -83,25 +96,41 @@
       <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
       <div id="graph_container" class="network_container">
-            <div id="graph" class="left">
-                <div class="checkbox">
-             <label >
-                 <input id="label" type='checkbox' onclick='changeNodesLableVisibility(this);'>
-                 Display labels</label>
-                                 <label><input type='checkbox' onclick='changeLinkDirectionVisibility(this);'>Link direction</label>
+            <div class="checkbox">
+                <label >
+                    <input id="label" type='checkbox' 
+                        onclick='changeNodesLableVisibility(this);'>
+                        Display labels
+                </label>
+                <label>
+                    <input type='checkbox'
+                    onclick='changeLinkDirectionVisibility(this);'>
+                    Link direction
+                </label>
+            </div>
 
-             <input id="search">
-             <button type="button" onclick="findResource()">Select</button>
-                      <button type="button" onclick="runModel()" style=" float: right;">Run model ></button>
-                                         </div>
+            <input id="search">
+            <button type="button" onclick="findResource()">Select</button>
+            <button type="button" onclick="runModel()">Run model</button>
+          <!--  <div id="progressbar" hidden="True" style="margin: 15px;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
+                <label id="progressLabel"> </label>
+          </div>-->
+
         </div> <!-- graph_container -->
-            <div id="data" class="data_container">
-             </div>
+        <div id="graph" class="left">
+        </div>
+        <div id="data" class="data_container">
+         </div>
        {% include 'nodesandlinks.html' %}
 
         </div> <!-- tab-contents -->
 
       </div> <!-- main_content -->
+
+    </div>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="ts_modal">
   <div class="modal-dialog" role="document">
@@ -124,13 +153,15 @@
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
 
         <!--Include css & javascript-->
-        <script type='text/javascript' src="{{url_for('static', filename='js/d3.v3.min.js')}}"></script>
-        <script src="http://d3js.org/topojson.v0.min.js"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/d3_tip.js')}}"></script>
-        <script src="{{url_for('static', filename='js/createResourceAttributesTable.js')}}"></script>
-        <script src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
-        <script src="{{url_for('static', filename='js/network.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/createResourceAttributesTable.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/network.js')}}"></script>
 
+        <script type='text/javascript' src="{{url_for('static', filename='js/sidebar.js')}}"></script>
+        <script type='text/javascript' src="{{url_for('static', filename='js/palette.js')}}"></script>
 
 <script>
          $(function() {
@@ -150,7 +181,9 @@
 
 
     </script>
-  <script>
+   
+    {% include 'nodesandlinks.html' %}
 
-  </script>
     {% endblock %}
+
+

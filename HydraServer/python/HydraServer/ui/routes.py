@@ -13,6 +13,7 @@ import zipfile
 import os
 import sys
 
+
 from run_hydra_app import *
 
 
@@ -25,13 +26,17 @@ basefolder = os.path.dirname(__file__)
 code= os.path.join(basefolder, 'code')
 sys.path.insert(0, code)
 
+from HydraServer.ui.code.model import JSONObject 
+
 import logging
 log = logging.getLogger(__name__)
 
 
 from app_utilities import delete_files_from_folder
 
-from network_utilities import get_network, get_resource_attributes
+import network_utilities as netutils 
+import attr_utilities as attrutils
+import template_utilities as tmplutils
 
 from export_network import export_network_to_pywr_json
 
@@ -39,17 +44,19 @@ from import_network import import_network_from_csv_files, import_network_from_ex
 
 from __init__ import app
 
+from HydraServer.db import commit_transaction, rollback_transaction
+
+global DATA_FOLDER
+DATA_FOLDER = 'python/HydraServer/ui/data'
+
 UPLOAD_FOLDER = 'uploaded_files'
 ALLOWED_EXTENSIONS = set(['zip'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-DATA_FOLDER = 'python/HydraServer/ui/data'
-
 # 'server/'
 @app.route('/')
 def index():
-    net_scn = {'network_id': 0, 'scenario_id': 0}
     app.logger.info("Index")
     app.logger.info("Session: %s", session)
     if 'username' not in session:
@@ -63,7 +70,7 @@ def index():
         return render_template('projects.html',
                                display_name=username,
                                username=username,
-                               projects=projects,net_scn=net_scn)
+                               projects=projects)
 
 # 'server/login'
 @app.route('/login', methods=['GET', 'POST'])
@@ -122,8 +129,83 @@ def check_session(req):
 
 @app.route('/header', methods=['GET'])
 def go_about():
-    net_scn = {'network_id': 0, 'scenario_id': 0}
-    return render_template('about.html', net_scn=net_scn)
+    return render_template('about.html')
+
+@app.route('/templates', methods=['GET'])
+def go_templates():
+    user_id = session['user_id']
+    all_templates = tmplutils.get_all_templates(user_id) 
+    return render_template('templates.html', templates=all_templates)
+
+@app.route('/newtemplate', methods=['GET'])
+def go_new_template():
+    all_attributes = attrutils.get_all_attributes() 
+    return render_template('newtemplate.html', 
+                              all_attrs=all_attributes
+                          )
+
+@app.route('/template/<template_id>', methods=['GET'])
+def go_template(template_id):
+
+    user_id = session['user_id']
+    all_attributes = attrutils.get_all_attributes() 
+    tmpl = tmplutils.get_template(template_id, user_id)
+
+    typeattr_lookup = {}
+
+    for rt in tmpl.templatetypes:
+        if rt.typeattrs is not None:
+            typeattr_lookup[rt.type_id] = [ta.attr_id for ta in rt.typeattrs]
+        else:
+            typeattr_lookup[rt.type_id] = []
+    
+    app.logger.info(tmpl)
+    return render_template('template.html',
+                           all_attrs=all_attributes,
+                           template=tmpl,
+                            typeattr_lookup=typeattr_lookup)
+
+
+@app.route('/create_attr', methods=['POST'])
+def do_create_attr():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    attr_j = JSONObject(d)
+
+    newattr = attrutils.create_attr(attr_j, user_id) 
+    
+    commit_transaction()
+
+    return newattr.as_json()
+
+@app.route('/create_template', methods=['POST'])
+def do_create_template():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    template_j = JSONObject(d)
+
+    newtemplate = tmplutils.create_template(template_j, user_id) 
+    
+    commit_transaction()
+
+    return newtemplate.as_json()
+
+@app.route('/delete_template', methods=['POST'])
+def do_delete_template(template_id):
+    
+    user_id = session['user_id']
+
+    status = delete_template(template_id, user_id) 
+    
+    commit_transaction()
+
+    return status
 
 @app.route('/header/<export_to>, <network_id>, <scenario_id>, <message>' , methods=['GET', 'POST'])
 def go_export_network(export_to, network_id, scenario_id, message):
@@ -169,7 +251,8 @@ def go_project(project_id):
     """
         Get a user's projects
     """
-    project = proj.get_project(project_id, **session)
+    user_id = session['user_id']
+    project = proj.get_project(project_id, user_id=user_id)
     app.logger.info("Project %s retrieved", project.project_name)
     '''
     if the project has only one network and the network has only one scenario, it will display network directly
@@ -177,11 +260,12 @@ def go_project(project_id):
     if len(project.networks)==1 and len(project.networks[0].scenarios)==1:
         return redirect(url_for('go_network', network_id=project.networks[0].network_id, scenario_id=project.networks[0].scenarios[0].scenario_id))
     else:
-        net_scn = net_scn = {'network_id': 0, 'scenario_id': 0}
+        network_types = tmplutils.get_all_network_types(user_id)
         return render_template('project.html',\
                               username=session['username'],\
                               display_name=session['username'],\
-                              project=project, net_scn=net_scn
+                              project=project,
+                               all_network_types=network_types
                                )
 @app.route('/', methods=['GET', 'POST'])
 def upload_file_():
@@ -193,6 +277,24 @@ def upload_file_():
             return redirect(url_for('uploaded_file',
                                     filename=filename))
     return
+
+@app.route('/create_network', methods=['POST'])
+def do_create_network():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    d['scenarios'] = [{"name": "Baseline", "resourcescenarios":[]}]
+    
+    net_j = JSONObject(d)
+
+    net = netutils.create_network(net_j, user_id) 
+    
+    commit_transaction()
+
+    return net.as_json()
+
 
 
 def allowed_file (filename):
@@ -207,11 +309,18 @@ def go_network():
     """
         Get a user's projects
     """
+
+    user_id = session['user_id']
+
     app.logger.info(request.args['scenario_id'])
 
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
-    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name=get_network(network_id, scenario_id, session, app)
+    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name = netutils.get_network(network_id, scenario_id, session, app)
+
+    template = None 
+    template_id = network.types[0].templatetype.template_id
+    tmpl = tmplutils.get_template(template_id, user_id)
 
     return render_template('network.html',\
                 scenario_id=scenario_id,
@@ -222,10 +331,64 @@ def go_network():
                 node_name_map=node_name_map,\
                 extents=extents,\
                 network=network,\
-                           nodes_=nodes_,\
-                           links_=links_, \
-                            net_scn=net_scn, \
-                           attr_id_name=attr_id_name)
+                nodes_=nodes_,\
+                links_=links_, \
+                net_scn=net_scn, \
+                attr_id_name=attr_id_name,\
+                template = tmpl)
+
+@app.route('/add_node', methods=['POST'])
+def do_add_node():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    node_j = JSONObject(d)
+
+    newnode = netutils.add_node(node_j, user_id) 
+    
+    commit_transaction()
+    
+    app.logger.info("Node %s added. New ID of %s",newnode.node_name, newnode.node_id)
+
+    return newnode.as_json()
+
+
+@app.route('/update_node', methods=['POST'])
+def do_update_node():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    node_j = JSONObject(d)
+
+    updatednode = netutils.update_node(node_j, user_id) 
+    
+    commit_transaction()
+    
+    app.logger.info("Node %s updated.",updatednode.node_name)
+
+    return updatednode.as_json()
+
+
+@app.route('/add_link', methods=['POST'])
+def do_add_link():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    link_j = JSONObject(d)
+
+    newlink = netutils.add_link(link_j, user_id) 
+    
+    commit_transaction()
+    
+    app.logger.info("Link %s added. New ID of %s",newlink.node_name, newlink.node_id)
+
+    return newlink.as_json()
 
 '''
 def long_task():
@@ -250,7 +413,7 @@ def get_res_attrs():
     scenario_id = pars['scenario_id']
     res_id= pars['res_id']
     resource_type=pars['resource_type']
-    res_attrs=get_resource_attributes(network_id, scenario_id, resource_type, res_id, session)
+    res_attrs=netutils.get_resource_attributes(network_id, scenario_id, resource_type, res_id, session)
     return jsonify(res_attrs=res_attrs)
 
 
@@ -306,7 +469,6 @@ def appstatus(task_id):
         }
 
     return jsonify(response)
-
 
 @app.route('/import_uploader', methods=['POST'])
 def import_uploader():

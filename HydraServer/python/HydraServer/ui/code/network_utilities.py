@@ -1,12 +1,8 @@
 from flask import json
 
-import os
-import sys
+import hydra_connector as hc
 
-from HydraServer.soap_server.hydra_complexmodels import ResourceAttr, ResourceScenario, Node
-
-from hydra_connector import load_network, get_attributes_for_resource, get_resource_data, get_network_extents, get_all_attributes
-
+from HydraServer.ui.code.model import JSONObject 
 
 def get_dict(obj):
     if type(obj) is list:
@@ -54,7 +50,7 @@ def set_metadata(hydra_metadata):
 
 def get_resource_attributes(network_id, scenario_id, resource_type, res_id, session):
     res_attrs=[]
-    ress = get_resource_data(resource_type, res_id, scenario_id, None, session)
+    ress = hc.get_resource_data(resource_type, res_id, scenario_id, None, session)
     for res in ress:
         attrr_id = res.resourceattr.attr_id
         try:
@@ -75,13 +71,21 @@ def get_resource_attributes(network_id, scenario_id, resource_type, res_id, sess
                             'type': res.dataset.data_type, 'values': vv, 'metadata': metadata})
     return res_attrs
 
+def create_network(network, user_id):
+    """
+    Take a JSONObjhect network and pass it to Hydra Platform's get_network fn
+    """
+
+    new_network = hc.add_network(network, user_id=user_id)
+
+    return JSONObject(new_network)
 
 def get_network (network_id, scenario_id, session, app):
-    attrs_=get_all_attributes(session)
+    attrs_= hc.get_all_attributes()
     attr_id_name = {}
     for attr in attrs_:
         attr_id_name[attr.attr_id]=attr.attr_name
-    network = load_network(network_id, scenario_id, session)
+    network = hc.load_network(network_id, scenario_id, session)
     node_coords = {}
     node_name_map = []
     nodes_ = []
@@ -97,19 +101,19 @@ def get_network (network_id, scenario_id, session, app):
         nodes_ids.append(node.node_id)
 
         try:
-            type = node.types[0].templatetype.type_name
-            if (type in nodes_types) == False:
-                nodes_types.append(type)
+            nodetype = node.types[0].templatetype.type_name
+            if (nodetype in nodes_types) == False:
+                nodes_types.append(nodetype)
         except:
-            type = None
+            nodetype = None
 
         node_index[node.node_id] = network.nodes.index(node)
         node_coords[node.node_id] = [node.node_x, node.node_y]
 
         node_name_map.append({'id': node.node_id, 'name': node.node_name, 'name': node.node_name, 'description':node.description})
         nodes_.append(
-            {'id': node.node_id, 'group': nodes_types.index(type) + 1, 'x': float(node.node_x), 'y': float(node.node_y),
-             'name': node.node_name, 'type': type, 'res_type': 'node'})
+            {'id': node.node_id, 'group': nodes_types.index(nodetype) + 1, 'x': float(node.node_x), 'y': float(node.node_y),
+             'name': node.node_name, 'type': nodetype, 'res_type': 'node'})
 
     links = {}
     link_ids = []
@@ -120,14 +124,14 @@ def get_network (network_id, scenario_id, session, app):
 
         link_ids.append(link.link_id)
         try:
-            type = link.types[0].templatetype.type_name
-            if (type in links_types) == False:
-                links_types.append(type)
+            linktype = link.types[0].templatetype.type_name
+            if (linktype in links_types) == False:
+                links_types.append(linktype)
         except:
-            type = None
+            linktype = None
 
         links_.append({'id': link.link_id, 'source': node_index[link.node_1_id], 'target': node_index[link.node_2_id],
-                       'value': links_types.index(type) + 1, 'type': type, 'name': link.link_name, 'res_type': 'link'})
+                       'value': links_types.index(linktype) + 1, 'type': linktype, 'name': link.link_name, 'res_type': 'link'})
 
 
     nodes_attrs = []
@@ -178,7 +182,7 @@ def get_network (network_id, scenario_id, session, app):
 
             # Get the min, max x and y coords
     '''
-    extents = get_network_extents(network_id, session)
+    extents = hc.get_network_extents(network_id, session)
     app.logger.info(node_coords)
 
     app.logger.info("Network %s retrieved", network.network_name)
@@ -186,3 +190,33 @@ def get_network (network_id, scenario_id, session, app):
     net_scn = {'network_id': network_id, 'scenario_id': scenario_id}
     return node_coords, links, node_name_map,  extents, network, nodes_, links_,  net_scn,  attr_id_name
 
+
+def add_node(node, user_id):
+    """
+    Take a JSONObjhect node and pass it to Hydra Platform's add_node fn.
+    The ID of the network is contained in the node object.
+    """
+
+    new_node = hc.add_node(node, user_id=user_id)
+
+    return JSONObject(new_node)
+
+def update_node(node, user_id):
+    """
+    Take a JSONObjhect node and pass it to Hydra Platform's add_node fn.
+    The ID of the network is contained in the node object.
+    """
+
+    updated_node = hc.update_node(node, user_id=user_id)
+
+    return JSONObject(updated_node)
+
+def add_link(link, user_id):
+    """
+    Take a JSONObjhect link and pass it to Hydra Platform's add_link fn.
+    The ID of the network is contained in the link object.
+    """
+
+    new_link = hc.add_link(link, user_id=user_id)
+
+    return JSONObject(new_link)

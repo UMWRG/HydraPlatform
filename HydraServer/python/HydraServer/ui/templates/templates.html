@@ -1,0 +1,21 @@
+{% extends "page_layout.html" %}
+{% block title %}Templates{% endblock %}
+{% block content %}
+<a type="button" class="btn btn-primary btn-lg" href="{{url_for ('go_new_template')}}">
+    <span class="glyphicon glyphicon-plus"></span>
+    Create Template
+</a>
+
+<h2>My Templates</h2>
+
+<table id="templates">
+    <thead>
+        <tr><th>Name</th><th>Description</th></tr>:
+    </thead>
+    <tbody>
+        {%for t in templates%}
+        <tr><td><a href={{url_for ('go_template', template_id=t.template_id)}}>{{t.template_name}}</a></td><td>{{t.template_description}}</td></tr>
+        {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
