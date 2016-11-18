@@ -91,19 +91,19 @@ def get_network (network_id, scenario_id, session, app):
     nodes_ = []
     links_ = []
     node_index = {}
-    links_types = []
-    links_types.append(None)
-    nodes_types = []
-    nodes_types.append(None)
+    link_types = []
+    link_types.append(None)
+    node_types = []
+    node_types.append(None)
     nodes_ids = []
 
     for node in network.nodes:
         nodes_ids.append(node.node_id)
 
         try:
-            nodetype = node.types[0].templatetype.type_name
-            if (nodetype in nodes_types) == False:
-                nodes_types.append(nodetype)
+            nodetype = node.types[0].templatetype
+            if (nodetype.type_name in node_types) == False:
+                node_types.append(nodetype.type_name)
         except:
             nodetype = None
 
@@ -112,7 +112,7 @@ def get_network (network_id, scenario_id, session, app):
 
         node_name_map.append({'id': node.node_id, 'name': node.node_name, 'name': node.node_name, 'description':node.description})
         nodes_.append(
-            {'id': node.node_id, 'group': nodes_types.index(nodetype) + 1, 'x': float(node.node_x), 'y': float(node.node_y),
+            {'id': node.node_id, 'group': node_types.index(nodetype.type_name) + 1, 'x': float(node.node_x), 'y': float(node.node_y),
              'name': node.node_name, 'type': nodetype, 'res_type': 'node'})
 
     links = {}
@@ -124,18 +124,18 @@ def get_network (network_id, scenario_id, session, app):
 
         link_ids.append(link.link_id)
         try:
-            linktype = link.types[0].templatetype.type_name
-            if (linktype in links_types) == False:
-                links_types.append(linktype)
+            linktype = link.types[0].templatetype
+            if (linktype.type_name in link_types) == False:
+                link_types.append(linktype.type_name)
         except:
             linktype = None
 
         links_.append({'id': link.link_id, 'source': node_index[link.node_1_id], 'target': node_index[link.node_2_id],
-                       'value': links_types.index(linktype) + 1, 'type': linktype, 'name': link.link_name, 'res_type': 'link'})
+                       'value': link_types.index(linktype.type_name) + 1, 'type': linktype, 'name': link.link_name, 'res_type': 'link'})
 
 
-    nodes_attrs = []
     '''
+    nodes_attrs = []
     for node_ in network.nodes:
         ress = get_resource_data('NODE', node_.node_id, scenario_id, None, session)
         for res in ress:

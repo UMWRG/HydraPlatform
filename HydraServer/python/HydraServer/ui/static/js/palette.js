@@ -43,26 +43,63 @@ function handleDrop(e) {
     svg_topleft_x = svg_origin.x;
     svg_topleft_y = svg_origin.y;
 
-    x = e.clientX - svg_topleft_x - margin.left;
-    y = e.clientY - svg_topleft_y - margin.top;
+    var nodex = e.clientX - svg_topleft_x - margin.left;
+    var nodey = e.clientY - svg_topleft_y - margin.top;
+
+    var nodex_nomargin =  e.clientX - svg_topleft_x;
+    var nodey_nomargin = e.clientY - svg_topleft_y;
        
     var g = dragSrcEl.querySelector("g");
 
-    console.log("Dropping "+g+" on "+x+" , "+y+".");
+
+    console.log("Dropping "+g+" on "+nodex+" , "+nodey+".");
+    console.log("Dropping "+g+" on "+nodex_nomargin+" , "+nodey_nomargin+".");
     
     var newnode = svg.append('g')
       .html(g.innerHTML)
       .attr('class', 'node')
       .attr("transform", function(d) { 
-          return "translate(" + x + "," + y + ")"; 
+          return "translate(" + nodex + "," + nodey + ")"; 
         }); 
     
-        var date = new Date(); // for now
+    var date = new Date(); // for now
     var default_name = "Node " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-    var type_id = d3.select('path', newnode).attr('resourcetype')
+    var type_id = newnode.select('path').attr('resourcetype')
 
-    add_node(default_name, type_id, xScale.invert(x), yScale.invert(y))
+    for (var i=0; i<template.templatetypes.length; i++){
+        if (parseInt(type_id) == template.templatetypes[i]['type_id']){
+            var t = template.templatetypes[i]
+        }
+    }
+
+    if (currentTransform == null){
+        var realnodex = xScale.invert(nodex)
+    }else{
+        var realnodex = xScale.invert(currentTransform.invertX(nodex))
+    }
+
+    if (currentTransform == null){
+        var realnodey = yScale.invert(nodey)
+    }else{
+        var realnodey = yScale.invert(currentTransform.invertY(nodey))
+    }
+
+    nodes_.push({
+        name        : default_name,
+        type        : t,
+        x           : realnodex,
+        y           : realnodey, 
+        description : "",
+        group       : 1, //These will be phased out
+        res_type    : 'node'
+    })
+
+    console.log(nodes_[nodes_.length-1])
+
+    add_node(default_name, type_id, realnodex, realnodey)
+
+    redraw_nodes()
 
   return false;
 }
