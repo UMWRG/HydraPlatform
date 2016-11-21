@@ -1,37 +1,106 @@
 {% extends "page_layout.html" %}
 {% block title %}{{template.template_name}}{% endblock %}
 {% block content %}
+<script>
+{%if new%}
+    var isnew = 'Y';
+    var save_template_url = "{{url_for('do_create_template')}}"
+    var template_id='';
+{%else%}
+   var isnew = 'N';
+   var save_template_url = "{{url_for('do_update_template')}}"
+   var template_id = {{template.template_id}};
+{%endif%}
+</script>
 <h3>{{template.template_name}}</h3> 
 <form>
 
-    <table id="newtemplatetable" type="table" class="table">
+    <table id="templatetable" type="table" class="table">
         <tbody class="general">
-            <tr class=""><td></td><td class="header">Name</td><td><input name="template_name" 
+            <tr class=""><td></td><td class="header">Template Name</td><td><input name="template_name" 
                     value="{{template.template_name}}"type="text"></input></td></tr>
            <!-- <tr><td></td><td>Description</td><td><input 
                     name="template_description" 
                     value="{{template.template_description}}"
                     type="text"></input></td></tr>-->
-        <tr class="resourcetype networktype">
-            <td></td>
-            <td colspan="2">
-                <table class="table">
-                    <tr>
-                        <td>Network Type:<input name="name" type="text"></input></td>
-                        <td class="typeattrs">Attributes:
-                            <select class="selectpicker" multiple=multiple>
-                                {%for attr in all_attrs%}
-                                <option value="{{attr.attr_id}}">
-                                    {{attr.attr_name}} ({{attr.attr_dimen}})
-                                </option>
-                                {%endfor%}
-                            </select>
-                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#add_attr_modal"><span class="glyphicon glyphicon-plus"></span> New Attribute</button>
+                <tr class="header">
+                    <td>-</td>
+                    <td>Network Details</td>
+                    <td>
+                    </td>
+                </tr>
+                {%if new==False%}
+                {% for resourcetype in template.templatetypes%}
+                    {% if resourcetype.resource_type == 'NETWORK'%}
+                    <tr class="resourcetype networktype" id="{{resourcetype.type_id}}">
+                        <td></td>
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Network Type 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value="{{resourcetype.type_name}}"></input>
+                                    </td>
+
+                                    <td class="typeattrs">Attributes:
+                                        <select  class="selectpicker" multiple=multiple>
+                                            {%for attr in all_attrs%}
+                                            <option value="{{attr.attr_id}}"
+                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
+                                                    selected="selected"
+                                                    {%endif%}
+                                             >
+                                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                                            </option>
+                                            {%endfor%}
+                                        </select>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
+                                            data-toggle="modal" data-target="#add_attr_modal">
+                                            <span class="glyphicon glyphicon-plus"></span> 
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
-                </table>
-            </td>
-        <tr>
+
+                    {%endif%}
+                {%endfor%}
+            {%else%}        
+                    <tr class="resourcetype">
+                        <td></td>
+                        <td>Network Type:<input name="name" type="text">
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Network Type 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value=""></input>
+                                    </td>
+
+                                    <td class="typeattrs">Attributes:
+                                        <select  class="selectpicker" multiple=multiple>
+                                            {%for attr in all_attrs%}
+                                            <option value="{{attr.attr_id}}">
+                                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                                            </option>
+                                            {%endfor%}
+                                        </select>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
+                                            data-toggle="modal" data-target="#add_attr_modal">
+                                            <span class="glyphicon glyphicon-plus"></span> 
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+            {%endif%}
         </tbody>
         <tbody class="nodetypes">
                 <tr class="header">
@@ -39,12 +108,15 @@
                     <td>Nodes</td>
                     <td>
                         <button id="addnodetype" type="button" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-plus"></span></button>
+                            <span class="glyphicon glyphicon-plus"></span>
+                        Add Node Type
+                        </button>
                     </td>
                 </tr>
-        {% for resourcetype in template.templatetypes%}
-            {% if resourcetype.resource_type == 'NODE'%}
-                <tr class="resourcetype" id="{{resourcetype.type_id}}">
+            {%if not new%}
+                {% for resourcetype in template.templatetypes%}
+                    {% if resourcetype.resource_type == 'NODE'%}
+                    <tr class="resourcetype nodetype" id="{{resourcetype.type_id}}">
                         <td></td>
                         <td colspan="2">
                             <table class="table">
@@ -68,19 +140,40 @@
                                             </option>
                                             {%endfor%}
                                         </select>
-                                        <button type="button" class="btn btn-primary" 
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
                                             data-toggle="modal" data-target="#add_attr_modal">
                                             <span class="glyphicon glyphicon-plus"></span> 
-                                            New Attribute
                                         </button>
                                     </td>
+                                    <td class="typelayout">
+                                        <select class="selectpicker shapeselector">
+                                            <option name="circle">Circle</option>
+                                            <option name="diamond">Diamond</option>
+                                            <option name="cross">Cross</option>
+                                            <option name="triangle">Triangle</option>
+                                            <option name="square">Square</option>
+                                            <option name="star">Star</option>
+                                            <option name="wye">Wye</option>
+                                        </select>
+                                        <button
+                                                class="colorpicker jscolor {valueElement:null,value:'CC0000'}">
+                                        </button>
+                                    </td>
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+
                                 </tr>
                             </table>
                         </td>
-                    <tr>
+                    </tr>
 
+                    {%endif%}
+                {%endfor%}
             {%endif%}
-        {%endfor%}
         </tbody>
         <tbody class="linktypes">
         <tr class="header">
@@ -88,12 +181,15 @@
             <td>Links</td>
             <td>
                 <button id="addlinktype" type="button" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-plus"></span></button>
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add Link Type
+                </button>
             </td>
         </tr>
+        {%if not new%}
         {% for resourcetype in template.templatetypes%}
             {% if resourcetype.resource_type == 'LINK'%}
-                <tr class="resourcetype" id="{{resourcetype.type_id}}">
+                <tr class="resourcetype linktype" id="{{resourcetype.type_id}}">
                         <td></td>
                         <td colspan="2">
                             <table class="table">
@@ -107,24 +203,35 @@
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}">
+                                            <option value="{{attr.attr_id}}"
+                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
+                                                    selected="selected"
+                                                    {%endif%}
+                                             >
                                                 {{attr.attr_name}} ({{attr.attr_dimen}})
                                             </option>
                                             {%endfor%}
                                         </select>
-                                        <button type="button" class="btn btn-primary" 
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
                                             data-toggle="modal" data-target="#add_attr_modal">
                                             <span class="glyphicon glyphicon-plus"></span> 
-                                            New Attribute
                                         </button>
                                     </td>
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+
                                 </tr>
                             </table>
                         </td>
-                    <tr>
+                    </tr>
 
             {%endif%}
         {%endfor%}
+        {%endif%}
         </tbody>
         <tbody class="grouptypes">
         <tr class="header">
@@ -133,12 +240,14 @@
             <td>
                 <button id="addgrouptype" type="button" class="btn btn-primary">
                     <span  class="glyphicon glyphicon-plus"></span>
+                    Add Group Type
                 </button>
             </td>
         </tr>
+        {%if not new%}
         {% for resourcetype in template.templatetypes%}
             {% if resourcetype.resource_type == 'GROUP'%}
-                <tr class="resourcetype" id="{{resourcetype.type_id}}">
+                <tr class="resourcetype grouptype"  id="{{resourcetype.type_id}}">
                         <td></td>
                         <td colspan="2">
                             <table class="table">
@@ -152,28 +261,38 @@
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}">
+                                            <option value="{{attr.attr_id}}"
+                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
+                                                    selected="selected"
+                                                    {%endif%}
+                                             >
                                                 {{attr.attr_name}} ({{attr.attr_dimen}})
                                             </option>
                                             {%endfor%}
                                         </select>
-                                        <button type="button" class="btn btn-primary" 
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
                                             data-toggle="modal" data-target="#add_attr_modal">
                                             <span class="glyphicon glyphicon-plus"></span> 
-                                            New Attribute
                                         </button>
                                     </td>
-                                </tr>
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+                                                </tr>
                             </table>
                         </td>
-                    <tr>
+                    </tr>
 
             {%endif%}
         {%endfor%}
+        {%endif%}
         </tbody>
     </table>
     <div class="form-footer">
-        <button class="btn btn-success" id="create-template-button">Save</button>
+        <button class="btn btn-success" id="save-template-button">Save</button>
     </div>
 </form>
 
@@ -185,19 +304,28 @@
                 <tr>
                     <td>Name <input name="name" type="text"></input></td>
                     <td class="typeattrs">Attributes:
-                        <select class="selectpicker" multiple=multiple>
+                        <select class="" multiple=multiple>
                             {%for attr in all_attrs%}
                             <option value="{{attr.attr_id}}">
                                 {{attr.attr_name}} ({{attr.attr_dimen}})
                             </option>
                             {%endfor%}
                         </select>
-                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#add_attr_modal"><span class="glyphicon glyphicon-plus"></span> New Attribute</button>
+                        <button type="button" class="btn btn-primary btn-small" 
+                            data-toggle="modal" data-target="#add_attr_modal">
+                            <span class="glyphicon glyphicon-plus"></span> 
+                        </button>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
                     </td>
                 </tr>
             </table>
         </td>
-    <tr>
+    </tr>
 </table>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="add_attr_modal">
@@ -229,8 +357,30 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script src="{{url_for('static', filename='js/newtemplate.js')}}"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/newtemplate.css') }}"/>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="delete_type_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+          This action will permanently remove this type from the template.
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-create-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="create-attr-button" class="btn btn-danger" data-dismiss="modal">Remove</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+
+
+<script src="{{url_for('static', filename='js/template.js')}}"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/jscolor.min.js')}}"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
 {% endblock %}

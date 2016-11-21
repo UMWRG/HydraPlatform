@@ -23,12 +23,14 @@ class JSONObject(dict):
         elif isinstance(obj_dict, dict):
             obj = obj_dict
         else:
+            log.critical("Error with value: %s" , obj_dict)
             raise ValueError("Unrecognised value. It must be a valid JSON dict, a SQLAlchemy result or a dictionary.")
 
         for k, v in obj.items():
             if isinstance(v, dict):
                 setattr(self, k, JSONObject(v, obj_dict))
             elif isinstance(v, list):
+                log.info(v)
                 l = [JSONObject(item, obj_dict) for item in v]
                 setattr(self, k, l)
             else:
@@ -47,7 +49,7 @@ class JSONObject(dict):
                 except:
                     pass
 
-                if k == 'layout':
+                if k == 'layout' and v is not None:
                     v = JSONObject(v)
 
                 if isinstance(v, datetime):

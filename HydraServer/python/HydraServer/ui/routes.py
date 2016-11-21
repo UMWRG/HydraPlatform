@@ -140,8 +140,9 @@ def go_templates():
 @app.route('/newtemplate', methods=['GET'])
 def go_new_template():
     all_attributes = attrutils.get_all_attributes() 
-    return render_template('newtemplate.html', 
-                              all_attrs=all_attributes
+    return render_template('template.html', 
+                                new=True,
+                              all_attrs=all_attributes,
                           )
 
 @app.route('/template/<template_id>', methods=['GET'])
@@ -161,6 +162,7 @@ def go_template(template_id):
     
     app.logger.info(tmpl)
     return render_template('template.html',
+                           new=False,
                            all_attrs=all_attributes,
                            template=tmpl,
                             typeattr_lookup=typeattr_lookup)
@@ -191,6 +193,21 @@ def do_create_template():
     template_j = JSONObject(d)
 
     newtemplate = tmplutils.create_template(template_j, user_id) 
+    
+    commit_transaction()
+
+    return newtemplate.as_json()
+
+@app.route('/update_template', methods=['POST'])
+def do_update_template():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    template_j = JSONObject(d)
+
+    newtemplate = tmplutils.update_template(template_j, user_id) 
     
     commit_transaction()
 

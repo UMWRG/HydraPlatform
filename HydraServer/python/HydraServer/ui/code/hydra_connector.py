@@ -47,6 +47,10 @@ def add_template(template, user_id):
     new_tmpl =  tmpl.add_template(template, user_id=user_id)
     return new_tmpl
 
+def update_template(template, user_id):
+    updated_tmpl =  tmpl.update_template(template, user_id=user_id)
+    return updated_tmpl
+
 def get_template(template_id, user_id):
     template =  tmpl.get_template(template_id, user_id=user_id)
     return template

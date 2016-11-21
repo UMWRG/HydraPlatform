@@ -5,6 +5,9 @@ from HydraServer.ui.code.model import JSONObject
 def create_template(template, user_id):
     return JSONObject(hydra_connector.add_template(template, user_id=user_id))
 
+def update_template(template, user_id):
+    return JSONObject(hydra_connector.update_template(template, user_id=user_id))
+
 def get_template(template_id, user_id):
     return JSONObject(hydra_connector.get_template(template_id, user_id=user_id))
 

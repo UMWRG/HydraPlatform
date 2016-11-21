@@ -210,9 +210,9 @@ tr.header td:first-child{
     font-weight: bold;
 }
 
-tbody tr:hover {
+/*tbody tr:hover {
   background: #EAEAEA;
-}
+}*/
 
 .sub
 {

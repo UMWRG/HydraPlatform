@@ -95,8 +95,6 @@ function handleDrop(e) {
         res_type    : 'node'
     })
 
-    console.log(nodes_[nodes_.length-1])
-
     add_node(default_name, type_id, realnodex, realnodey)
 
     redraw_nodes()
