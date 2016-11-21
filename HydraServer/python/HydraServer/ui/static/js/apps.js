@@ -8,7 +8,7 @@ var cur_name=null;
     input.trigger('fileselect', [numFiles, label]);
   });
 
-  // We can watch for our custom `fileselect` event like this
+  // custom `fileselect` event like this
   $(document).ready( function() {
       $(':file').on('fileselect', function(event, numFiles, label) {
 
@@ -23,12 +23,18 @@ var cur_name=null;
       });
   });
 }
-function run_apps (){
-    $('#CSVFormSubmit').click(function(e){
-      e.preventDefault();
-      var form_data = new FormData($('#import_form')[0]);
+//to be deleted later as  replaced by
+function run_app ()
+    {
+        $('#runApp').click(function(e){
+          e.preventDefault();
+          run();
+        });
+    }
+
+function run(){
       vars=getUrlVars();
-      //alert(vars);
+      var form_data = new FormData($('#import_form')[0]);
       form_data.append('network_id', vars['network_id']);
       form_data.append('scenario_id', vars['scenario_id']);
       form_data.append('app_name',cur_name);
@@ -44,26 +50,27 @@ function run_apps (){
                     $(status_pan).show();
                     $(help_message).hide();
                     error = request.getResponseHeader("Error");
-                    if(error!=null)
+                     if(error!=null)
                     {
                         $(_message).text('Error: '+error);
                     }
                     else
                     {
                        status_url = request.getResponseHeader('Address');
-                       if(status_url!=null)
-                           update_progress_2(status_url);
+                        if(status_url!=null)
+                        {
+                         directory = request.getResponseHeader('directory');
+                           update_progress_2(status_url, directory);
+                         }
                     }
                       },
                     error: function() {
                         alert('Unexpected error');
                     }
                 });
-      // alert ('Good bye');
-    });
 }
 
-function update_progress_2(status_url) {
+function update_progress_2(status_url, directory) {
             // send GET request to status URL
             $.getJSON(status_url, function(data) {
                 // update UI
@@ -80,15 +87,42 @@ function update_progress_2(status_url) {
                     result=data['status'][0];
                     network_id=data['status'][1];
                     scenario_id=data['status'][2];
-
-                    message=result+". Opening network (id= "+network_id+"), and scenario (id="+scenario_id+")";
-                    $(_message).text(message);
-                    setTimeout(function() {
-                    pars={'network_id': network_id, 'scenario_id':scenario_id};
-                    $( "#importModal" ).modal('hide');
+                    if(cur_name.indexOf('ex') !=0)
+                    {
+                        message=result+". Opening network (id= "+network_id+"), and scenario (id="+scenario_id+")";
+                        $(_message).text(message);
+                        setTimeout(function() {
+                        pars={'network_id': network_id, 'scenario_id':scenario_id};
+                        $( "#importModal" ).modal('hide');
                        window.location.href = '/network?network_id='+network_id+'&scenario_id='+scenario_id;
 
                     }, 3000);
+                    }
+                    else
+                    {
+                           var _data = new FormData();
+                             _data.append('network_id', vars['network_id']);
+                                _data.append('scenario_id', vars['scenario_id']);
+                       var pars=
+       {
+            'network_id': network_id,
+            'scenario_id':scenario_id,
+            'directory': directory
+        };
+ $( "#importModal" ).modal('hide');
+ ////////////////////////////////////
+ var url = '/send_zip_files';
+
+
+// add a form hide the div, write the form
+$('#temp_').hide()
+    .html('<form id="exportform" action="' + url + '" target="_blank" method="get">'
+        + '<textarea name="pars">' + JSON.stringify(pars)  +'</textarea>'
+        + '</form>');
+
+// submit the form
+$('#exportform').submit();
+                    }
                 }
                 else
                     {
@@ -98,8 +132,7 @@ function update_progress_2(status_url) {
                 else {
                     // rerun in 1 second
                     setTimeout(function() {
-                        update_progress_2(status_url);
-
+                        update_progress_2(status_url, directory);
                     }, 1000);
                 }
             });
@@ -107,6 +140,13 @@ function update_progress_2(status_url) {
 
 function import_csv ()
 {
+ $("#runApp").show();
+     $("#browse_div").show();
+
+ $('#import_form')[0].reset();
+$("#runApp").prop("value", "Upload");
+
+
  $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -114,8 +154,6 @@ function import_csv ()
     $(status_pan).hide();
      $("#help_message").show();
      $(_message).text("");
-     //$("#import_file")..attr('name', 'csv_file');
-   // $('input:file[name="import_file"]').attr('name', 'csv');
     cur_name='csv';
     $("#help_").text("Please upload the network zip file which contains all the required csv files. The network file name needs to be “network.csv");
     $ ("#import_title").text("Import Hydra network from CSV files");
@@ -124,6 +162,11 @@ function import_csv ()
 
 function import_excel ()
 {
+ $("#runApp").show();
+     $("#browse_div").show();
+
+$('#import_form')[0].reset();
+$("#runApp").prop("value", "Upload");
  $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -132,7 +175,6 @@ function import_excel ()
 $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
-   // $('input:file[name="import_file"]').attr('name', 'excel');
     cur_name='excel';
     $("#help_").text("Please upload the zip file which contains Excel file and template file.");
     $ ("#import_title").text("Import Hydra network from Excel");
@@ -141,14 +183,19 @@ $(status_pan).hide();
 
 function import_pywr ()
 {
-     $("#import_progress_bar")
-                      .css("width", 0 + "%")
-                      .attr("aria-valuenow", 0)
-                      .text(0 + "%");
+ $("#runApp").show();
+     $("#browse_div").show();
+
+$("#runApp").prop("value", "Upload");
+
+    $('#import_form')[0].reset();
+    $("#import_progress_bar")
+                          .css("width", 0 + "%")
+                          .attr("aria-valuenow", 0)
+                          .text(0 + "%");
     $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
-    //$('input:file[name="import_file"]').attr('name', 'pywr');
     cur_name='pywr';
     $("#help_").text("Please upload the network zip which contains the Json pywr file and data files. The json file name needs to be “pywr.json ”");
     $ ("#import_title").text("Import Hydra network from Pywr JSON");
@@ -157,6 +204,10 @@ function import_pywr ()
 
 function runModel()
    {
+    $("#browse_div").show();
+    $("#runApp").show();
+    $("#runApp").prop("value", "Rum Model");
+    $('#import_form')[0].reset();
     $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -175,10 +226,82 @@ function runModel()
   {
   if(cur_name!=null)
   {
-    //$('input:file[name="'+cur_name+'"]').attr('name', 'import_file');
     cur_name=null;
 
   }
      $( "#importModal" ).modal('hide')
-
   }
+
+function export_csv()
+{
+
+ $("#import_progress_bar")
+                      .css("width", 0 + "%")
+                      .attr("aria-valuenow", 0)
+                      .text(0 + "%");
+   $(status_pan).hide();
+   $("#runApp").hide();
+   $("#browse_div").hide();
+   $("#help_message").show();
+   $(_message).text("");
+   //$('input:file[name="import_file"]').attr('name', 'run_model');
+   cur_name='ex_csv';
+   $("#help_").text("Downloading the NETWORK CSV files ");
+   $ ("#import_title").text("Export to CSV");
+   //$ ("#import_title").hide();
+   $("#importModal" ).modal('show')
+   run();
+}
+
+function export_excel()
+{
+ $("#import_progress_bar")
+                      .css("width", 0 + "%")
+                      .attr("aria-valuenow", 0)
+                      .text(0 + "%");
+   $(status_pan).hide();
+   $("#runApp").hide();
+   $("#browse_div").hide();
+   $("#help_message").show();
+   $(_message).text("");
+   //$('input:file[name="import_file"]').attr('name', 'run_model');
+   cur_name='ex_excel';
+   $("#help_").text("Downloading the NETWORK Excel file ");
+   $ ("#import_title").text("Export to Excel");
+   //$ ("#import_title").hide();
+   $("#importModal" ).modal('show')
+   run();
+}
+
+function export_pywr()
+{
+ $("#import_progress_bar")
+                      .css("width", 0 + "%")
+                      .attr("aria-valuenow", 0)
+                      .text(0 + "%");
+   $(status_pan).hide();
+   $("#runApp").hide();
+   $("#browse_div").hide();
+   $("#help_message").show();
+   $(_message).text("");
+   //$('input:file[name="import_file"]').attr('name', 'run_model');
+   cur_name='ex_pywr';
+   $("#help_").text("Downloading the json pywr file ");
+   $ ("#import_title").text("Export to Pywr JSON");
+   //$ ("#import_title").hide();
+   $("#importModal" ).modal('show')
+   run();
+}
+
+
+function startsWith(string_name,starter) {
+if (string_name.length < starter.length)
+    return false;
+
+  for (var i = 0; i < starter.length; i++) {
+    if (string_name[i] != starter[i]) {
+      return false;
+    }
+  }
+  return true;
+}

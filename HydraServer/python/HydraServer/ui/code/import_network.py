@@ -8,9 +8,7 @@ from run_hydra_app import *
 
 def import_network_from_pywr_json(directory, basefolder):
     os.chdir(directory)
-    if os.path.exists('pywr.json'):
-        pass
-    else:
+    if not os.path.exists('pywr.json'):
         return ["pywr json file (pywr.json) is not found ..."]
     pp = basefolder.split('\\')
     pp1 = pp[0: (len(pp) - 1)]
@@ -19,18 +17,7 @@ def import_network_from_pywr_json(directory, basefolder):
     exe="python " + pywr_import
     args={"f": "pywr.json"}
     return run_app_(exe, args, False)
-    '''
-    cmd = "python " + pywr_import + " -f pywr.json "
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    output = []
-    while True:
-        line = proc.stdout.readline()
-        if line != '':
-            output.append(line.replace('\n', '').strip())
-        else:
-            break
-    return check_process_output(output)
-    '''
+
 
 def import_network_from_excel(directory, basefolder):
     os.chdir(directory)
@@ -48,19 +35,7 @@ def import_network_from_excel(directory, basefolder):
     exe=excel_import
     args={"i": directory+"\\"+ excel_file ,"m": directory+"\\"+"template.xml"}
     return run_app_(exe, args, False)
-    '''
-    cmd =excel_import + " -i "+ directory+"\\"+ excel_file +" -m "+directory+"\\"+"template.xml"
 
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    output = []
-    while True:
-        line = proc.stdout.readline()
-        if line != '':
-            output.append(line.replace('\n', '').strip())
-        else:
-            break
-    return check_process_output(output)
-    '''
 
 def import_network_from_csv_files(directory, basefolder):
     os.chdir(directory)
