@@ -10,6 +10,7 @@ var cur_table=null;
 
 var drag_line = null;
 
+
 var var_=getUrlVars()
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
@@ -141,6 +142,8 @@ var svg = d3.select("#graph").append("svg")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
     .on("click", function(d){
         svg.selectAll(".node").each(function(d){tip.hide(d)})
+        svg.selectAll(".node path").style('stroke', "");
+        svg.selectAll(".node path").style('stroke-width',  "");
         svg.selectAll("path.selected").attr("d", normalnode)
         svg.selectAll("path.selected").classed("selected", false)
         d3.selectAll('.node').on("mousedown.drag", null);
@@ -233,6 +236,7 @@ var redraw_nodes = function(){
             var l = d.type.layout;
             if (l.color != undefined){return l.color}else{return 'black'}
           })
+
         .attr("d", normalnode)
         .on('mouseover', mouse_in) //Added
         .on('mouseout', node_mouse_out) //Added
@@ -395,7 +399,6 @@ function nodes_mouse_click(d) {
    // unenlarge target node
 
    tip.hide(d);
-   d3.select(this).attr("r", 12);
    document.getElementById('search').value=d.name;
    //display_node_attributes(d);
    call_server_get_res_attrs('NODE', d);
@@ -620,6 +623,7 @@ function node_mouse_out(d) {
    {
       tip.hide(d);
       d3.select(this).style('stroke', "");
+      d3.select(this).style('stroke-width',  "");
    }
 
     }
