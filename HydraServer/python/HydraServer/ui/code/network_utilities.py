@@ -131,7 +131,7 @@ def get_network (network_id, scenario_id, session, app):
             linktype = None
 
         links_.append({'id': link.link_id, 'source': node_index[link.node_1_id], 'target': node_index[link.node_2_id],
-                       'value': link_types.index(linktype.type_name) + 1, 'type': linktype, 'name': link.link_name, 'res_type': 'link'})
+                       'type': linktype, 'name': link.link_name, 'res_type': 'link'})
 
 
     '''

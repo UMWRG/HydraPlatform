@@ -147,17 +147,16 @@
                                     </td>
                                     <td class="typelayout">
                                         <select class="selectpicker shapeselector">
-                                            <option name="circle">Circle</option>
-                                            <option name="diamond">Diamond</option>
-                                            <option name="cross">Cross</option>
-                                            <option name="triangle">Triangle</option>
-                                            <option name="square">Square</option>
-                                            <option name="star">Star</option>
-                                            <option name="wye">Wye</option>
+                                            <option name="circle" {%if resourcetype.layout['shape'] == 'circle'%}selected=selected{%endif%}>Circle</option>
+                                            <option name="diamond" {%if resourcetype.layout['shape'] == 'diamond'%}selected=selected{%endif%}>Diamond</option>
+                                            <option name="cross" {%if resourcetype.layout['shape'] == 'corss'%}selected=selected{%endif%}>Cross</option>
+                                            <option name="triangle" {%if resourcetype.layout['shape'] == 'triangle'%}selected=selected{%endif%}>Triangle</option>
+                                            <option name="square" {%if resourcetype.layout['shape'] == 'square'%}selected=selected{%endif%}>Square</option>
+                                            <option name="star"{%if resourcetype.layout['shape'] == 'star'%}selected=selected{%endif%}>Star</option>
+                                            <option name="wye" {%if resourcetype.layout['shape'] == 'wye'%}selected=selected{%endif%}>Wye</option>
                                         </select>
-                                        <button
-                                                class="colorpicker jscolor {valueElement:null,value:'CC0000'}">
-                                        </button>
+
+                                        <input class="colorpicker" type='color' value="{{resourcetype.layout['color']}}"></input>
                                     </td>
                                     <td class="deletetype">
                                           <button type="button" class="btn btn-danger btn-small" 
@@ -216,6 +215,23 @@
                                             data-toggle="modal" data-target="#add_attr_modal">
                                             <span class="glyphicon glyphicon-plus"></span> 
                                         </button>
+                                    </td>
+                                    <td class="typelayout">
+                                        <div>
+                                        Style:
+                                        <select class="linestyle">
+                                            <option name="solid" {%if resourcetype.layout['linestyle'] == 'solid'%}selected=selected{%endif%}>Solid</option>
+                                            <option name="dashed" {%if resourcetype.layout['linestyle'] == 'dashed'%}selected=selected{%endif%}>Dashed</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                        Width:
+                                        <input class="linewidth" type='range' name="points" min="1" max="4" value="{%if resourcetype.layout.get('width') != None%}{{ resourcetype.layout.get('width')}}{%else%}1{%endif%}">
+                                        </div>
+                                        <div>
+                                        Color:
+                                        <input class="colorpicker" type='color' value="{{resourcetype.layout['color']}}"></input>
+                                        </div>
                                     </td>
                                     <td class="deletetype">
                                           <button type="button" class="btn btn-danger btn-small" 
@@ -296,7 +312,7 @@
     </div>
 </form>
 
-<table id="resourcetypetemplate" style="display:none">
+<table id="nodetypetemplate" style="display:none">
     <tr class="resourcetype">
         <td></td>
         <td colspan="2">
@@ -315,6 +331,103 @@
                             data-toggle="modal" data-target="#add_attr_modal">
                             <span class="glyphicon glyphicon-plus"></span> 
                         </button>
+                    </td>
+                    <td class="typelayout">
+                        <select class="shapeselector">
+                            <option name="circle">Circle</option>
+                            <option name="diamond">Diamond</option>
+                            <option name="cross">Cross</option>
+                            <option name="triangle">Triangle</option>
+                            <option name="square">Square</option>
+                            <option name="star">Star</option>
+                            <option name="wye">Wye</option>
+                        </select>
+                        <input class="colorpicker" type='color'></input>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table id="linktypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr>
+                    <td>Name <input name="name" type="text"></input></td>
+                    <td class="typeattrs">Attributes:
+                        <select class="" multiple=multiple>
+                            {%for attr in all_attrs%}
+                            <option value="{{attr.attr_id}}">
+                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                            </option>
+                            {%endfor%}
+                        </select>
+                        <button type="button" class="btn btn-primary btn-small" 
+                            data-toggle="modal" data-target="#add_attr_modal">
+                            <span class="glyphicon glyphicon-plus"></span> 
+                        </button>
+                    </td>
+                    <td class="typelayout">
+                        <div>
+                        Style:
+                        <select class="linestyle">
+                            <option name="solid">Solid</option>
+                            <option name="dashed">Dashed</option>
+                        </select>
+                        </div>
+                        <div>
+                        Width:
+                        <input class="linewidth" type='range' name="points" min="1" max="4">
+                        </div>
+                        <div>
+                        Color:
+                        <input class="colorpicker" type='color'></input>
+                        </div>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+<table id="grouptypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr>
+                    <td>Name <input name="name" type="text"></input></td>
+                    <td class="typeattrs">Attributes:
+                        <select class="" multiple=multiple>
+                            {%for attr in all_attrs%}
+                            <option value="{{attr.attr_id}}">
+                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                            </option>
+                            {%endfor%}
+                        </select>
+                        <button type="button" class="btn btn-primary btn-small" 
+                            data-toggle="modal" data-target="#add_attr_modal">
+                            <span class="glyphicon glyphicon-plus"></span> 
+                        </button>
+                    </td>
+                    <td class="typelayout">
+                        <input class="colorpicker" type='color'></input>
                     </td>
                     <td class="deletetype">
                           <button type="button" class="btn btn-danger btn-small" 

@@ -51,3 +51,8 @@ $(document).on('keyup', function(event){
 
 });
 
+$('.linkbutton').click(function(e) {
+    e.preventDefault();
+    $('.linkbutton').removeClass('active')
+    $(this).addClass('active');
+})

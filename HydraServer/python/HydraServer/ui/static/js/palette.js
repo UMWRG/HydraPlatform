@@ -85,7 +85,10 @@ function handleDrop(e) {
         var realnodey = yScale.invert(currentTransform.invertY(nodey))
     }
 
+    node_id = add_node(default_name, type_id, realnodex, realnodey)
+
     nodes_.push({
+        id          : node_id,
         name        : default_name,
         type        : t,
         x           : realnodex,
@@ -94,8 +97,6 @@ function handleDrop(e) {
         group       : 1, //These will be phased out
         res_type    : 'node'
     })
-
-    add_node(default_name, type_id, realnodex, realnodey)
 
     redraw_nodes()
 
@@ -169,7 +170,7 @@ function loadShapesIntoPalette(){
           if (d.layout.border != undefined){return d.layout.border}else{return 'black'}
       })
       .style("fill", function(d) {
-          if (d.layout.colour != undefined){return d.layout.colour}else{return 'black'}
+          if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
       })
       .attr("d", d3.symbol()
          .size(function(d) { 

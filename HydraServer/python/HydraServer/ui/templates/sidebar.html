@@ -60,6 +60,16 @@
             <div class="filterheading">Links
             </div>
             <div class='filtercontent'>
+              {%for tmpltype in template.templatetypes%}
+                    {%if tmpltype.resource_type == 'LINK'%}
+                        <button id="link-type-{{tmpltype.type_id}}" type='button' class="btn btn-default btn-xs linkbutton">
+                            
+                            {%if tmpltype.layout['linestyle']%}
+                            <div title="{{tmpltype.type_id}}" style="width:40px; border:3px {{tmpltype.layout['linestyle']}} {{tmpltype.layout['color']}}"></div>
+                            {%endif%}
+                        </button>
+                    {%endif%}
+                {%endfor%}
             </div>
         </li>
         <li id="notes" class="menusection">

@@ -61,7 +61,7 @@ def index():
     app.logger.info("Session: %s", session)
     if 'username' not in session:
         app.logger.info("Going to login page.")
-        return render_template('login.html', net_scn=net_scn, msg="")
+        return render_template('login.html', msg="")
     else:
         user_id = session['user_id']
         username = escape(session['username'])
@@ -76,13 +76,12 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
     app.logger.info("Received login request.")
-    net_scn = {'network_id': 0, 'scenario_id': 0}
     if request.method == 'POST':
         try:
             user_id, api_session_id = login_user(request.form['username'], request.form['password'])
         except:
             app.logger.warn("Bad login for user %s", request.form['username'])
-            return render_template('login.html',net_scn=net_scn,  msg="Unable to log in")
+            return render_template('login.html',  msg="Unable to log in")
 
         session['username'] = request.form['username']
         session['user_id'] = user_id
@@ -95,9 +94,7 @@ def do_login():
         return redirect(url_for('index'))
 
     app.logger.warn("Login request was not a post. Redirecting to login page.")
-    net_scn = {'network_id': 0, 'scenario_id': 0}
     return render_template('login.html',
-                           net_scn=net_scn,
                            msg="")
 
 @app.route('/do_logout', methods=['GET', 'POST'])
@@ -335,9 +332,16 @@ def go_network():
     network_id = request.args['network_id']
     node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name = netutils.get_network(network_id, scenario_id, session, app)
 
-    template = None 
     template_id = network.types[0].templatetype.template_id
     tmpl = tmplutils.get_template(template_id, user_id)
+    #Build a map from type id to layout, to make it easy for the javascript
+    #and html templates to access type layouts
+    type_layout_map = {}
+    for tmpltype in tmpl.templatetypes:
+        layout = tmpltype.layout
+        if layout == None:
+            layout = {}
+        type_layout_map[tmpltype.type_id] = layout
 
     return render_template('network.html',\
                 scenario_id=scenario_id,
@@ -352,7 +356,8 @@ def go_network():
                 links_=links_, \
                 net_scn=net_scn, \
                 attr_id_name=attr_id_name,\
-                template = tmpl)
+                template = tmpl,\
+                type_layout_map=type_layout_map)
 
 @app.route('/add_node', methods=['POST'])
 def do_add_node():

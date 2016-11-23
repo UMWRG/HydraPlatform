@@ -31,7 +31,7 @@ height 750px;
   display:block;
 }
 
-timeseries_gr
+.timeseries_gr
 {
       float: right;
       width: 550px;
@@ -158,3 +158,7 @@ text {
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
 
+
+.networkoptions{
+    margin-bottom: 10px;
+}

@@ -1,7 +1,9 @@
 $(document).ready(function(){
-    $('#templatetable .selectpicker').selectpicker({
+    $('#templatetable .typeattrs .selectpicker').selectpicker({
        // style: 'btn-info',
         liveSearch:true
+    }); 
+    $('#templatetable .selectpicker').selectpicker({
     }); 
     
 })
@@ -9,48 +11,56 @@ $(document).ready(function(){
 $(document).on('click', "#addnodetype", function(event){
     event.preventDefault(); 
 
-    var nodetyperow = $("#resourcetypetemplate tr:first").clone();
+    var nodetyperow = $("#nodetypetemplate tr:first").clone();
 
     nodetyperow.addClass('nodetype');
     $("select",nodetyperow).addClass('selectpicker');
     
     $("#templatetable tbody.nodetypes").append(nodetyperow);
 
-    $('.selectpicker', nodetyperow).selectpicker({
+    $('.selectpicker .typeattrs', nodetyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
+    $('.selectpicker', nodetyperow).selectpicker({
+    }); 
+
 })
 $(document).on('click', "#addlinktype", function(event){
     event.preventDefault(); 
 
-    var linktyperow = $("#resourcetypetemplate tr:first").clone();
+    var linktyperow = $("#linktypetemplate tr:first").clone();
     $("select",linktyperow).addClass('selectpicker');
 
     linktyperow.addClass('linktype');
     
     $("#templatetable tbody.linktypes").append(linktyperow);
 
-    $('.selectpicker', linktyperow).selectpicker({
+    $('.selectpicker .typeattrs', linktyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
+    $('.selectpicker', linktyperow).selectpicker({
+    }); 
+
 
 
 })
 $(document).on('click', "#addgrouptype", function(event){
     event.preventDefault(); 
 
-    var grouptyperow = $("#resourcetypetemplate tr:first").clone();
+    var grouptyperow = $("#grouptypetemplate tr:first").clone();
     $("select",grouptyperow).addClass('selectpicker');
 
     grouptyperow.addClass('grouptype');
     
     $("#templatetable tbody.grouptypes").append(grouptyperow);
 
-    $('.selectpicker', grouptyperow).selectpicker({
+    $('.selectpicker .typeattrs', grouptyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
+    }); 
+    $('.selectpicker', grouptyperow).selectpicker({
     }); 
 
 
@@ -126,7 +136,27 @@ $(document).on("click", "#save-template-button", function(event){
             templatetype[name] = value
 
         })
-        data.types.push(templatetype)
+        
+        var layout = {}
+        var color = $(".colorpicker", this).val()
+        if (color != undefined){
+            layout['color'] = color
+        }
+        var shape = $('.shapeselector option:selected', this).attr('name')
+        if (shape != undefined){
+            layout['shape'] = shape;
+        }
+        var linestyle = $('.linestyle option:selected', this).attr('name')
+        if (linestyle != undefined){
+            layout['linestyle'] = linestyle;
+        }
+        var width = $('.linewidth', this).val()
+        if (width != undefined){
+            layout['width'] = width;
+        }
+
+
+        templatetype.layout = JSON.stringify(layout)
 
         var typeattrs = []
         $(".typeattrs option:selected",this).each(function(){
@@ -135,6 +165,8 @@ $(document).on("click", "#save-template-button", function(event){
             typeattrs.push(ta)
         })
         templatetype.typeattrs = typeattrs
+        
+        data.types.push(templatetype)
     })
     
     var success = function(resp){

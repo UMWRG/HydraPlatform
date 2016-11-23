@@ -109,9 +109,20 @@
                 </label>
             </div>
 
-            <input id="search">
-            <button type="button" onclick="findResource()">Select</button>
-            <button type="button" onclick="runModel()">Run model</button>
+            <div class="btn-toolbar networkoptions" role="toolbar" aria-label="...">
+                <div class="btn-group" role="group" aria-label="...">
+                <div class="input-group">
+                <input id="search" type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" onclick="findResource()">Go!</button>
+                </span>
+                </div><!-- /input-group -->
+                </div>
+
+                <div class="btn-group" role="group" aria-label="...">
+                <button type="button" class="btn btn-default" onclick="runModel()">Run model <span class="glyphicon glyphicon-play"></span></button>
+            </div>
+            </div>
           <!--  <div id="progressbar" hidden="True" style="margin: 15px;">
                 <div class="progress">
                     <div class="progress-bar progress-bar-striped active" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
