@@ -13,19 +13,18 @@
 }
 
 function createResourceAttributesTable (res) {
-        t_table=null;
-        var table = $('<table></table>').addClass('table');
+        var t_table = $('<table></table>').addClass('table');
 
         var type_row = $("<tr/>");
 
-        var type_ = $('<th></th>').text(attr_id_name[res.attrr_id]);
+        var type_ = $('<th></th>').text(attr_id_name[res.attr_id]);
         type_row.append(type_);
 
         var res_type = document.createElement("th");
 
         var modal_text = '<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ts_modal"><span class="glyphicon glyphicon-time"></span>  </button>'
 
-         if(res.type == 'timeseries'){
+         if(res.data_type == 'timeseries'){
                //res_type.innerHTML ='<span class="glyphicon glyphicon-time"><a class="glyphicon glyphicon-time" href="#">'+res.type+'</a></span>';
                res_type.innerHTML = modal_text
          }
@@ -36,7 +35,7 @@ function createResourceAttributesTable (res) {
          }
 
          type_row.append(res_type);
-        table.append(type_row);
+        t_table.append(type_row);
         var graph_data={};
 
         if(res.type == 'timeseries')
@@ -49,21 +48,20 @@ function createResourceAttributesTable (res) {
            date_row.append(date_);
            date_row.append(value_);
 
-         var t_table = $('<table></table>').addClass('table');
          t_table.append(date_row);
 
-         for (j in res.values)
+         for (var j=0; j<res.dataset.value.length; j++)
         {
+           var dateval = res.dataset.value[j]
            var value_row = $("<tr/>");
-           var date=new Date(res.values[j].date);
+           var date=new Date(dateval.date);
            var formateddate=toLocaleFormat(date);
-           var thread=$ ('<tr></tr>');
            var res_date = $('<td></td>').text(formateddate);
-           var res_value = $('<td></td>').text(res.values[j].value);
+           var res_value = $('<td></td>').text(dateval.value);
            graph_data.push(
             {
               'date': date,
-              'value':res.values[j].value,
+              'value':dateval.value,
             }
         )
            value_row.append(res_date);
@@ -95,14 +93,12 @@ function createResourceAttributesTable (res) {
            date_row.append(date_);
            date_row.append(value_);
 
-         var t_table = $('<table></table>').addClass('table');
          t_table.append(date_row);
          res.values[0]=res.values[0].sort();
          for (j = 0; j < res.values[0].length; j++)        {
            var value_row = $("<tr/>");
            var formateddate=(res.values[0][j]);
            //var formateddate=toLocaleFormat(date);
-           var thread=$ ('<tr></tr>');
            var res_date = $('<td></td>').text(formateddate);
            var res_value = $('<td></td>').text(res.values[1][j]);
            graph_data.push(
@@ -127,9 +123,9 @@ function createResourceAttributesTable (res) {
             v_row.append(v_title_);
             var vv_ = $('<td></td>').text(res.values);
             v_row.append(vv_);
-            table.append(v_row);
+            t_table.append(v_row);
         }
-    $('#data').append(table);
+    $('#data').append(t_table);
     if(t_table!=null)
          {
               $('#data').append(t_table);

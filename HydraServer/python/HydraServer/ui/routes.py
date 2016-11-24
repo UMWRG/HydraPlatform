@@ -330,7 +330,7 @@ def go_network():
 
     scenario_id = request.args['scenario_id']
     network_id = request.args['network_id']
-    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name = netutils.get_network(network_id, scenario_id, session, app)
+    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name = netutils.get_network(network_id, scenario_id, user_id) 
 
     template_id = network.types[0].templatetype.template_id
     tmpl = tmplutils.get_template(template_id, user_id)
@@ -428,15 +428,33 @@ def long_task():
             'result': 42}
 '''
 
-@app.route('/get_res_attrs', methods=['POST'])
-def get_res_attrs():
-    pars= json.loads(request.form['para'])
+@app.route('/get_resource_data', methods=['POST'])
+def do_get_resource_data():
+
+    user_id = session['user_id']
+
+    pars= json.loads(request.get_data())
     network_id = pars['network_id']
     scenario_id = pars['scenario_id']
-    res_id= pars['res_id']
+    resource_id= pars['res_id']
     resource_type=pars['resource_type']
-    res_attrs=netutils.get_resource_attributes(network_id, scenario_id, resource_type, res_id, session)
-    return jsonify(res_attrs=res_attrs)
+
+    app.logger.info("Getting resource attributes for: %s", str(pars)) 
+    resource, resource_scenarios=netutils.get_resource_data(network_id,
+                                                  scenario_id,
+                                                  resource_type,
+                                                  resource_id,
+                                                  user_id)
+
+    attr_id_name_map = netutils.get_attr_id_name_map()
+
+    return render_template('attributes.html', 
+                           attr_id_name_map=attr_id_name_map,
+                           resource_scenarios=resource_scenarios.values(),
+                           resource=resource,
+                            resource_id=resource_id,
+                            scenario_id=scenario_id,
+                            resource_type=resource_type,)
 
 
 def get_model_file (network_id):

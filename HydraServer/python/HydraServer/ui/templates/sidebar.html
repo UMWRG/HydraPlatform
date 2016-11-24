@@ -40,13 +40,22 @@
             </div>
         
             <div class='filtercontent'>
-                <select>
+                <select class="selectpicker">
                     {% for s in network.scenarios%}
                     <option value="{{s.scenario_id}}">
                         {{s.scenario_name}}
                     </option>
                     {%endfor%}
                 </select>
+                <div class="btn-group new-scenario">
+                    <button type="button" class="btn btn-default btn-s dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <ul class="dropdown-menu new-scenario-menu">
+                        <li><a class="clone-btn" href="">Clone..</a></li>
+                        <li><a class="new-scenario-btn" href="">New...</a></li>
+                    </ul>
+                </div>
             </div>
         </li>
         <li id="nodes" class="menusection">
@@ -93,6 +102,4 @@
     <ul>
 </div><!-- sidebar menu-->
 </div> <!--sidebar container-->
-
-
 

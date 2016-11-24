@@ -18,17 +18,21 @@ height 750px;
 
 .data_container
 {
-  width: 350px;
-  height 750px;
-  float: left;
-  padding-top: 20px;
-  padding-right: 30px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  border: 2px;
-  margin: auto;
-  overflow-y:scroll;
-  display:block;
+    width: 350px;
+    position: absolute;
+    top: 140px;
+    right: 130px;
+  
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px #aaa;
+    padding: 5px;
+
+}
+.data_container table
+{
+    margin: auto;
+    margin-bottom: 5px;
 }
 
 .timeseries_gr
@@ -97,12 +101,13 @@ th, td {
   border: 1px solid #ccc;
 }
 
-tbody tr:nth-child(odd) {
+tbody tr {
   background: #eee;
+  opacity: 0.9;
 }
 
 tbody tr:hover {
-  background: yellow;
+  background: #e7e7e7;
 }
 
 .attr_table

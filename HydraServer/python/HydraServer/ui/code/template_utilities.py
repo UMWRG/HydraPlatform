@@ -29,3 +29,6 @@ def get_all_network_types(user_id):
 def delete_template(template_id, user_id):
     status = hydra_connector.delete_template(template_id, user_id)
     return status
+
+def get_type(type_id, user_id):
+    return JSONObject(hydra_connector.get_type(type_id, user_id=user_id))

@@ -1,7 +1,6 @@
 #sidebar_container {
     border: 1px solid #aaa;
-    border-radius: 2px;
-    box-shadow: 2px 2px 1px #888888;
+    box-shadow: 0px 0px 2px #aaa;
     padding: 5px;
 }
 
@@ -41,9 +40,10 @@
     border-color: #e7e7e7;
     margin-bottom: 10px;
     padding-left: 10px;
-    background: #EEEEEE;
+    background: linear-gradient(#ddd, #eee);
     font-size: 16pt;
-    border-radius: 3px;
+    margin-right: -5px;
+    margin-left: -5px;
 }
 
 .filterheading:hover{
@@ -94,3 +94,6 @@ white-space: nowrap;
 text-overflow: ellipsis;
 }
 
+.bootstrap-select{
+    width: auto !important;
+}

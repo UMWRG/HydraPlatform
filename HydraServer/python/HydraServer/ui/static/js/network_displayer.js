@@ -400,8 +400,8 @@ function nodes_mouse_click(d) {
 
    tip.hide(d);
    document.getElementById('search').value=d.name;
-   //display_node_attributes(d);
-   call_server_get_res_attrs('NODE', d);
+
+   get_resource_data('NODE', d);
    
    var selectedlinktype = d3.select('.linkbutton.active div')
 
@@ -462,74 +462,21 @@ function nodes_mouse_click(d) {
 
 }
 
-function display_node_attributes(d)
-   {
-    $( "#data" ).empty();
-     $("#timeseries_g" ).empty();
-
-   current_res=d;
-   var table = $('<table></table>').addClass('foo');
-
-   var_ =getUrlVars();
-    var pars=
-       {
-            network_id: var_["network_id"],
-            scenario_id: var_["scenario_id"],
-            res_id: d.id,
-            resource_type:'NODE'
-        };
-         $.ajax({
-                    type: 'POST',
-                    url: '/get_res_attrs',
-                    data:  {"para": JSON.stringify(pars)},
-                    success: function(data, status, request) {
-                        node_attrs=data.node_attrs;
-                          var count=0;
-
-
-   for (i in node_attrs)
-   {
-     {
-     if(count==0)
-       $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
-       createDataTableHeading()
-       count+=1;
-     createResourceAttributesTable (node_attrs[i]);
-     }
-   }
-
-    },
-    error: function() {
-        alert('Unexpected error');
-
-    }
-});
-
-
-}
-
 function get_network_attributes()
 {
     res_type='NETWORK';
-$( "#data" ).empty();
-         $("#timeseries_g" ).empty();
+    $( "#data" ).empty();
+    $("#timeseries_g" ).empty();
 
-       var table = $('<table></table>').addClass('foo');
-       var_=getUrlVars();
-        var pars=
-       {
-            network_id: var_["network_id"],
-            scenario_id: var_["scenario_id"],
-            res_id: var_["network_id"],
-            resource_type:res_type
-        };
+    var table = $('<table></table>').addClass('foo');
 
-       $.ajax({
-                    type: 'POST',
-                    url: '/get_res_attrs',
-                    data:  {"para": JSON.stringify(pars)},
-                    success: function(data, status, request) {
-                    res_attrs=data.res_attrs;
+    var error = function(resp) {
+        alert('Unexpected error');
+    }
+
+
+    var success =function(data, status, request) {
+       res_attrs=data.resource_scenarios;
        var count=0;
        for (i in res_attrs)
        {
@@ -541,82 +488,36 @@ $( "#data" ).empty();
          createResourceAttributesTable (res_attrs[i]);
 
        }
-            },
-            error: function() {
-                alert('Unexpected error');
-            }
-        });
-}
+     }
 
-function call_server_get_res_attrs(res_type, d)
-{
-$( "#data" ).empty();
-         $("#timeseries_g" ).empty();
+    var_=getUrlVars();
+    var pars=
+    {
+        network_id: var_["network_id"],
+        scenario_id: var_["scenario_id"],
+        res_id: var_["network_id"],
+        resource_type:res_type
+    };
 
-       current_res=d;
-       var table = $('<table></table>').addClass('foo');
-        var pars=
-       {
-            network_id: var_["network_id"],
-            scenario_id: var_["scenario_id"],
-            res_id: d.id,
-            resource_type:res_type
-        };
-         $.ajax({
-                    type: 'POST',
-                    url: '/get_res_attrs',
-                    data:  {"para": JSON.stringify(pars)},
-                    success: function(data, status, request) {
-                        res_attrs=data.res_attrs;
-        var count=0;
-       for (i in res_attrs)
-       {
-         {
-         if(count==0)
-           $("#data" ).append(  '<h4>Attributes for '+res_type+': '+d.name+'</h4>');
-           createDataTableHeading();
-           count+=1;
-         createResourceAttributesTable (res_attrs[i]);
-         }
-       }
 
-            },
-            error: function() {
-                alert('Unexpected error');
-
-            }
-        });
-
+   $.ajax({
+        type: 'POST',
+        url: get_resource_data_url,
+        data:  JSON.stringify(pars),
+        success: success,
+        error: error
+   });
 }
 
  function links_mouse_click(d) {
 
    d3.select(this).style("stroke-width", 3);
-  document.getElementById('search').value=d.name;
+   document.getElementById('search').value=d.name;
    tip.hide(d);
-   //display_link_attributes(d)
-   call_server_get_res_attrs('LINK', d)
+   get_resource_data('LINK', d)
 
     d3.event.stopPropagation();
    }
-
-function display_link_attributes(d) {
- $( "#data" ).empty();
-   $( "#timeseries_g" ).empty();
-   var count=0;
-   current_res=d;
-   for (i in links_attrs)
-   {
-     if (d.id==links_attrs[i].id)
-     {
-     if(count==0)
-       $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
-       count+=1;
-     createResourceAttributesTable (links_attrs[i]);
-     }
-   }
-   d3.select(this).style('stroke',  function(d) {get_node_attributes(d.id, d.node_name)});
-}
 
 function node_mouse_out(d) {
    if(current_res == null || d!=current_res)
@@ -653,10 +554,6 @@ function link_mouse_out(d) {
    }
 }
 
-function get_node_attributes(id, name){
-}
-
-
 function findResource() {
     //find the node or links
     var selectedVal = document.getElementById('search').value;
@@ -677,8 +574,7 @@ function findResource() {
              d3.select(this).attr("r", 12);
              tip.show;
 
-             //display_node_attributes(d);
-             call_server_get_res_attrs('NODE', d)
+             get_resesource_data('NODE', d)
              sel=d;
              return true;
              }
@@ -699,8 +595,7 @@ function findResource() {
                  svg.selectAll("line").style("stroke-width", 1.8);
                  svg.selectAll(".node").attr("r", 9);
                  d3.select(this).style("stroke-width", 3);
-                 //display_link_attributes(d);
-                 call_server_get_res_attrs('LINK', d)
+                 get_resource_data('LINK', d)
                  sel=d;
                  return true;
              }
@@ -716,47 +611,6 @@ function findResource() {
             }
     }
 }
-
-function drawTimeseriesGraph(script, graph_data, attr_name, t_table) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false,           // <-- This is the key
-        success: function () {
-            draw_timeseries(graph_data, attr_name);
-        },
-            error: function ()
-            {
-                alert("Could not load script " + script);
-            }
-    });
-
-if(cur_table!=null)
-    cur_table.hide();
-    cur_table=t_table;
-    cur_table.show();
-}
-
-function drawArrayGraph(script, graph_data, attr_name, t_table) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false,           // <-- This is the key
-        success: function () {
-            draw_timeseries(graph_data, attr_name);
-        },
-            error: function ()
-            {
-                alert("Could not load script " + script);
-            }
-    });
-
-if(cur_table!=null)
-    cur_table.hide();
-    cur_table=t_table;
-    cur_table.show();
-}
-
 
 function changeNodesLableVisibility(cb) {
     if (cb.checked)
@@ -911,3 +765,6 @@ var add_link = function(name, type_id, source, target){
     return link_id;
 
 }
+
+
+

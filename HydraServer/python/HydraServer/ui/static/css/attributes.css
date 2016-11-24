@@ -1,0 +1,25 @@
+.menubar {
+    width: 100%;
+    background: #e5e5e5;
+    padding: 3px 2px 2px 2px;
+    background: linear-gradient(#aaa, #ccc); /* Standard syntax */
+    background: -moz-linear-gradient(#aaa, #ccc); /* Standard syntax */
+    background: -webkit-linear-gradient(#aaa, #ccc); /* Standard syntax */
+    border-radius: 4px 4px 0px 0px;
+    font-weight: bold;
+}
+
+.menubar button{
+    font-size: 6pt;
+}
+.manubar .left{
+    float:   left;
+    height:  15px;
+    padding: 0px;
+}
+
+.manubar .right{
+    float:   right;
+    height:  15px;
+    padding: 0px;
+}

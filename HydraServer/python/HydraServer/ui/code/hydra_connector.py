@@ -5,20 +5,29 @@ from HydraServer.lib import scenario as sen
 from HydraServer.lib import attributes as attrs
 
 
-def load_network(network_id, scenario_id, session):
+def load_network(network_id, scenario_id, user_id):
     return net.get_network(int(network_id),
                            summary=False,
                            include_data='Y',
-                           scenario_ids=[scenario_id], **session)
+                           scenario_ids=[scenario_id], user_id=user_id)
+
+def get_node(node_id, user_id):
+    return net.get_node(node_id, user_id=user_id)
+
+def get_link(link_id, user_id):
+    return net.get_link(link_id, user_id=user_id)
+
+def get_resourcegroup(resourcegroup_id, user_id):
+    return net.get_resourcegroup(resourcegroup_id, user_id=user_id)
 
 def get_attributes_for_resource(network_id, scenario_id, resource, ids, include_metadata):
     return net.get_attributes_for_resource(network_id, scenario_id, resource, ids, include_metadata)
 
-def get_resource_data(resource, id, scenario_id, type_id, session):
-    return sen.get_resource_data(resource, id, scenario_id, type_id, **session)
+def get_resource_data(resource, id, scenario_id, type_id, user_id):
+    return sen.get_resource_data(resource, id, scenario_id, type_id, user_id=user_id)
 
-def get_network_extents(network_id, session):
-    return net.get_network_extents(network_id, **session)
+def get_network_extents(network_id, user_id):
+    return net.get_network_extents(network_id, user_id=user_id)
 
 def add_network(network, user_id):
     new_network = net.add_network(network, user_id=user_id)
@@ -62,3 +71,8 @@ def delete_template(template_id, user_id):
 def get_all_templates(user_id, load_all=False):
     all_templates =  tmpl.get_templates(load_all=load_all, user_id=user_id)
     return all_templates 
+
+def get_type(type_id, user_id):
+    tmpltype =  tmpl.get_type(type_id, user_id=user_id)
+    return tmpltype
+

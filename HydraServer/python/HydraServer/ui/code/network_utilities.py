@@ -4,6 +4,9 @@ import hydra_connector as hc
 
 from HydraServer.ui.code.model import JSONObject 
 
+import logging
+log = logging.getLogger(__name__)
+
 def get_dict(obj):
     if type(obj) is list:
         list_results=[]
@@ -48,28 +51,67 @@ def set_metadata(hydra_metadata):
         metadata[meta['metadata_name']]=meta['metadata_val']
     return metadata
 
-def get_resource_attributes(network_id, scenario_id, resource_type, res_id, session):
-    res_attrs=[]
-    ress = hc.get_resource_data(resource_type, res_id, scenario_id, None, session)
-    for res in ress:
-        attrr_id = res.resourceattr.attr_id
+def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
+    res_scenarios={}
+    resource_scenarios = hc.get_resource_data(resource_type, res_id, scenario_id, None, user_id)
+    for rs in resource_scenarios:
+        attr_id = rs.resourceattr.attr_id
+        dataset = JSONObject(rs.dataset)
         try:
-            vv = json.loads(res.dataset.value)
-        except:
-            vv = res.dataset.value
+            val = json.loads(dataset.value)
+        except ValueError:
+            val = dataset.value
 
-        if (res.dataset.data_type == "timeseries"):
-            values_ = []
-            for index in vv.keys():
-                for date_ in sorted(vv[index].keys()):
-                    value = vv[index][date_]
-                    values_.append({'date': date_, 'value': value})
-            vv = values_
-        metadata = set_metadata(get_dict(res.dataset)['metadata'])
+        if (dataset.data_type == "timeseries"):
+            parsed_timeseries = []
+            for index in val.keys():
+                for ts_time in sorted(val[index].keys()):
+                    value = val[index][ts_time]
+                    parsed_timeseries.append({'date': ts_time, 'value': value})
+            dataset.value = parsed_timeseries
+        dataset.metadata = set_metadata(dataset.metadata)
 
-        res_attrs.append({'id': res_id, 'attr_id': res.resourceattr.attr_id, 'attrr_id': attrr_id,
-                            'type': res.dataset.data_type, 'values': vv, 'metadata': metadata})
-    return res_attrs
+        res_scenarios[attr_id] =  JSONObject({'rs_id': res_id, 
+                 'ra_id': rs.resourceattr.resource_attr_id,
+                 'attr_id': attr_id,
+                 'dataset': dataset,
+                 'data_type': dataset.data_type,
+                })
+    
+    
+    resource = get_resource(resource_type, res_id, user_id) 
+   
+    ra_dict = {}
+    if resource.attributes is not None:
+        for ra in resource.attributes:
+            ra_dict[ra.attr_id] = ra
+   
+    #Identify any attributes which do not have data -- those not in ther resource attribute table, but in the type attribute table.
+    for typ in resource.types:
+        tmpltype = typ.templatetype
+        for tattr in tmpltype.typeattrs:
+            if tattr.attr_id not in res_scenarios:
+                res_scenarios[tattr.attr_id] = JSONObject({
+                    'rs_id': None,
+                    'ra_id': ra_dict.get(tattr.attr_id, None).resource_attr_id,
+                    'attr_id':tattr.attr_id,
+                    'dataset': None,
+                    'is_var': tattr.attr_is_var,
+                    'data_type': tattr.data_type,
+                })
+            else:
+                res_scenarios[tattr.attr_id].is_var = tattr.attr_is_var
+                res_scenarios[tattr.attr_id].data_type = tattr.data_type
+
+    return resource, res_scenarios
+
+def get_attr_id_name_map():
+    attrs_= hc.get_all_attributes()
+    attr_id_name_map = {}
+    for attr in attrs_:
+        attr_id_name_map[attr.attr_id]=attr.attr_name
+
+    return attr_id_name_map
 
 def create_network(network, user_id):
     """
@@ -80,12 +122,15 @@ def create_network(network, user_id):
 
     return JSONObject(new_network)
 
-def get_network (network_id, scenario_id, session, app):
+def get_network (network_id, scenario_id, user_id):
     attrs_= hc.get_all_attributes()
     attr_id_name = {}
     for attr in attrs_:
         attr_id_name[attr.attr_id]=attr.attr_name
-    network = hc.load_network(network_id, scenario_id, session)
+    network = hc.load_network(network_id, scenario_id, user_id=user_id)
+    network.id = network.network_id
+    network.name = network.network_name
+
     node_coords = {}
     node_name_map = []
     nodes_ = []
@@ -182,14 +227,56 @@ def get_network (network_id, scenario_id, session, app):
 
             # Get the min, max x and y coords
     '''
-    extents = hc.get_network_extents(network_id, session)
-    app.logger.info(node_coords)
+    extents = hc.get_network_extents(network_id,user_id) 
+    log.info(node_coords)
 
-    app.logger.info("Network %s retrieved", network.network_name)
+    log.info("Network %s retrieved", network.network_name)
 
     net_scn = {'network_id': network_id, 'scenario_id': scenario_id}
     return node_coords, links, node_name_map,  extents, network, nodes_, links_,  net_scn,  attr_id_name
 
+
+def get_resource(resource_type, resource_id, user_id, scenario_id=None):
+    resource_type = resource_type.upper()
+    if resource_type == 'NODE':
+        return get_node(resource_id, user_id)
+    elif resource_type == 'LINK':
+        return get_link(resource_id, user_id)
+    elif resource_type == 'GROUP':
+        return get_resourcegroup(resource_id, user_id)
+    elif resource_type == 'NETWORK':
+        return get_network(resource_id, scenario_id, user_id)
+
+def get_node(node_id, user_id):
+    node = hc.get_node(node_id, user_id)
+    #Load the node's types
+    for t in node.types:
+        t.templatetype.typeattrs
+    
+    node_j = JSONObject(node)
+    node_j.name = node_j.node_name
+    node_j.id = node_j.node_id
+    return node_j
+
+def get_link(link_id, user_id):
+    link = hc.get_link(link_id, user_id)
+    for t in link.types:
+        t.templatetype.typeattrs
+    link_j = JSONObject(link)
+    link_j.name = link_j.node_name
+    link_j.id = link_j.id
+    return link_j
+
+def get_resourcegroup(group_id, user_id):
+    group = hc.get_resourcegroup(group_id, user_id)
+    for t in group.types:
+        t.templatetype.typeattrs
+    group_j = JSONObject(group)
+
+    group_j.name = group_j.group_name
+    group_j.id = group_j.group_id
+
+    return group_j
 
 def add_node(node, user_id):
     """

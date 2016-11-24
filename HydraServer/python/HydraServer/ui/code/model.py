@@ -33,8 +33,12 @@ class JSONObject(dict):
                 log.info(v)
                 l = [JSONObject(item, obj_dict) for item in v]
                 setattr(self, k, l)
+            elif hasattr(v, '_sa_instance_state'): #Special case for SQLAlchemy obhjects
+
+                l = JSONObject(v)
+                setattr(self, k, l)
             else:
-                if k == '_sa_instance_state' or hasattr(v, '_sa_instance_state'): #Special case for SQLAlchemy obhjects
+                if k == '_sa_instance_state':# or hasattr(v, '_sa_instance_state'): #Special case for SQLAlchemy obhjects
                     continue
                 if type(v) == type(parent):
                     continue
