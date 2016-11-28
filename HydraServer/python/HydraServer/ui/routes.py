@@ -37,6 +37,7 @@ from app_utilities import delete_files_from_folder, create_zip_file
 import network_utilities as netutils 
 import attr_utilities as attrutils
 import template_utilities as tmplutils
+import dataset_utilities as datasetutils
 
 from export_network import export_network_to_pywr_json, export_network_to_excel, export_network_to_csv
 
@@ -157,11 +158,16 @@ def go_template(template_id):
         else:
             typeattr_lookup[rt.type_id] = []
     
+    attr_id_name_lookup = dict([(a.attr_id, a.attr_name) for a in all_attributes])
+    attr_dimen_lookup = dict([(a.attr_id, a.attr_dimen) for a in all_attributes]) 
+
     app.logger.info(tmpl)
     return render_template('template.html',
                            new=False,
                            all_attrs=all_attributes,
+                           attr_id_name_lookup=attr_id_name_lookup,
                            template=tmpl,
+                           attr_dimen_lookup=attr_dimen_lookup,
                             typeattr_lookup=typeattr_lookup)
 
 
@@ -179,6 +185,22 @@ def do_create_attr():
     commit_transaction()
 
     return newattr.as_json()
+
+@app.route('/create_dataset', methods=['POST'])
+def do_create_dataset():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    dataset_j = JSONObject(d)
+
+    newdataset = datasetutils.create_dataset(dataset_j, user_id) 
+    
+    commit_transaction()
+    
+    app.logger.info(newdataset)
+    return newdataset.as_json()
 
 @app.route('/create_template', methods=['POST'])
 def do_create_template():

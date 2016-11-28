@@ -109,6 +109,7 @@ $(document).on("click", "#save-template-button", function(event){
     }
 
     $("#templatetable .resourcetype").each(function(){
+        var row = this;
         var templatetype = {
             template_id:template_id
         }
@@ -137,31 +138,27 @@ $(document).on("click", "#save-template-button", function(event){
 
         })
         
-        var layout = {}
-        var color = $(".colorpicker", this).val()
-        if (color != undefined){
-            layout['color'] = color
-        }
-        var shape = $('.shapeselector option:selected', this).attr('name')
-        if (shape != undefined){
-            layout['shape'] = shape;
-        }
-        var linestyle = $('.linestyle option:selected', this).attr('name')
-        if (linestyle != undefined){
-            layout['linestyle'] = linestyle;
-        }
-        var width = $('.linewidth', this).val()
-        if (width != undefined){
-            layout['width'] = width;
-        }
-
+        var layout = getLayout(this)
 
         templatetype.layout = JSON.stringify(layout)
 
         var typeattrs = []
         $(".typeattrs option:selected",this).each(function(){
-            var ta = {'attr_id':$(this).val()}
+            var attr_id = $(this).val()
+            var ta = {'attr_id':attr_id}
             if (type_id != null){ta['type_id'] = type_id}
+
+            var details = $('.attr-'+attr_id, row)
+            var datatype = $('.data_types option:selected', details)
+            if (datatype.length > 0){
+                ta['data_type'] = datatype.val()
+            }
+
+            default_value = getDefaultValue(attr_id, row)
+            if (default_value != null){
+                ta['default_dataset_id'] = new_dataset.dataset_id
+            }
+
             typeattrs.push(ta)
         })
         templatetype.typeattrs = typeattrs
@@ -188,3 +185,67 @@ $(document).on("click", "#save-template-button", function(event){
     })
 
 })
+
+var getDefaultValue = function(attr_id, row){
+    var defaultDataset = null
+
+    var details = $('.attr-'+attr_id, row)
+    var datatype = $('.data_types option:selected', details)
+    var default_val = $(".dataset .input[name=value]", details)
+
+    if (default_val.length > 0 && default_val.val() != ""){
+
+
+        defaultDataset = createDataset({
+            data_type: datatype.val(),
+            value    : default_val.val(),
+        })
+
+    }
+
+    return defaultDataset
+
+}
+
+var getLayout = function(element){
+    var layout = {}
+    var color = $(".colorpicker", this).val()
+    if (color != undefined){
+        layout['color'] = color
+    }
+    var shape = $('.shapeselector option:selected', this).attr('name')
+    if (shape != undefined){
+        layout['shape'] = shape;
+    }
+    var linestyle = $('.linestyle option:selected', this).attr('name')
+    if (linestyle != undefined){
+        layout['linestyle'] = linestyle;
+    }
+    var width = $('.linewidth', this).val()
+    if (width != undefined){
+        layout['width'] = width;
+    }
+
+    return layout
+}
+
+$(document).on('click', '.toggleattributedetails', function(){
+    
+    var s = $('span', this)
+
+    var resourcerow = $(this).closest('tr');
+
+    if (s.hasClass('glyphicon-chevron-right'))
+        {
+            $('span', this).removeClass('glyphicon-chevron-right')
+            $('span', this).addClass('glyphicon-chevron-down')
+            $('.attributedetails', resourcerow).show()
+        }else{
+            $('span', this).removeClass('glyphicon-chevron-down')
+            $('span', this).addClass('glyphicon-chevron-right')
+            $('.attributedetails', resourcerow).hide()
+        }
+
+
+})
+

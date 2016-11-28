@@ -2,6 +2,8 @@
 {% block title %}{{template.template_name}}{% endblock %}
 {% block content %}
 <script>
+
+var add_dataset_url = "{{url_for('do_create_dataset')}}"
 {%if new%}
     var isnew = 'Y';
     var save_template_url = "{{url_for('do_create_template')}}"
@@ -13,7 +15,6 @@
 {%endif%}
 </script>
 <h3>{{template.template_name}}</h3> 
-<form>
 
     <table id="templatetable" type="table" class="table">
         <tbody class="general">
@@ -117,7 +118,8 @@
                 {% for resourcetype in template.templatetypes%}
                     {% if resourcetype.resource_type == 'NODE'%}
                     <tr class="resourcetype nodetype" id="{{resourcetype.type_id}}">
-                        <td></td>
+                        <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
                         <td colspan="2">
                             <table class="table">
                                 <tr>
@@ -131,7 +133,7 @@
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}"
+                                            <option value="{{attr.attr_id|int}}"
                                                     {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
                                                     selected="selected"
                                                     {%endif%}
@@ -166,6 +168,30 @@
                                     </td>
 
                                 </tr>
+                                <tbody class="attributedetails" style="background:#ddd; color:white ">
+                                    {%for ta in resourcetype.typeattrs%}
+                                        <tr class="attributedetail attr-{{ta.attr_id|int}}">
+                                            <td>{{attr_id_name_lookup[ta.attr_id]}}</td>
+                                            <td class="datatypecontainer">
+                                                <select name="data_type" class="data_types selectpicker">
+                                                    <option value="scalar">Single Number</option>
+                                                    <option value="timeseries">Time Series</option>
+                                                    <option value="array">Array</option>
+                                                    <option value="descriptor">Free Text</option>
+                                                </select>
+                                            </td>
+                                            <td class="defautvaluecontainer dataset">
+                                                <input name="value" type="number"
+                                                    {%if ta.default_dataset%}
+                                                    value={{ta.default_dataset.value}}
+                                                    class="ta.default_dataset.data_type"
+                                                    {%endif%}
+                                                    >
+                                                </input>
+                                            </td>
+                                        </tr>
+                                    {%endfor%}
+                                </tbody>
                             </table>
                         </td>
                     </tr>
@@ -189,7 +215,9 @@
         {% for resourcetype in template.templatetypes%}
             {% if resourcetype.resource_type == 'LINK'%}
                 <tr class="resourcetype linktype" id="{{resourcetype.type_id}}">
-                        <td></td>
+                      <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
+ 
                         <td colspan="2">
                             <table class="table">
                                 <tr>
@@ -202,7 +230,7 @@
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}"
+                                            <option value="{{attr.attr_id|int}}"
                                                     {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
                                                     selected="selected"
                                                     {%endif%}
@@ -241,6 +269,32 @@
                                     </td>
 
                                 </tr>
+                                    <tbody class="attributedetails" style="background:#ddd; color:white ">
+                                    {%for ta in resourcetype.typeattrs%}
+                                        <tr class="attributedetail attr-{{ta.attr_id|int}}">
+                                            <td>{{attr_id_name_lookup[ta.attr_id]}}</td>
+                                            <td class="datatypecontainer">
+                                                <select name="data_type" class="data_types selectpicker">
+                                                    <option value="scalar" {%if ta.data_type == 'scalar'%}selected=selected{%endif%}>Single Number</option>
+                                                    <option value="timeseries" {%if ta.data_type == 'timeseries'%}selected=selected{%endif%}>Time Series</option>
+                                                    <option value="array" {%if ta.data_type == 'array'%}selected=selected{%endif%}>Array</option>
+                                                    <option value="descriptor" {%if ta.data_type == 'array'%}selected=selected{%endif%}>Free Text</option>
+                                                </select>
+                                            </td>
+                                            <td class="defautvaluecontainer dataset">
+                                                <input name="value" type="number" 
+                                                    {%if ta.data_type%}
+                                                        class="{{ta.data_type}}"
+                                                    {%endif%}
+                                                    {%if ta.default_dataset%}
+                                                        value={{ta.default_dataset.value}}
+                                                    {%endif%}
+                                                    >
+                                                </input>
+                                            </td>
+                                        </tr>
+                                    {%endfor%}
+                                </tbody>
                             </table>
                         </td>
                     </tr>
@@ -277,7 +331,7 @@
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}"
+                                            <option value="{{attr.attr_id|int}}"
                                                     {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
                                                     selected="selected"
                                                     {%endif%}
@@ -310,7 +364,6 @@
     <div class="form-footer">
         <button class="btn btn-success" id="save-template-button">Save</button>
     </div>
-</form>
 
 <table id="nodetypetemplate" style="display:none">
     <tr class="resourcetype">
@@ -441,6 +494,27 @@
     </tr>
 </table>
 
+<table id="attrdetailstemplate" style="display:none">
+    <tbody class="attributedetails" style="background:#ddd; color:white ">
+            <tr class="attributedetail">
+                <td></td>
+                <td class="datatypecontainer">
+                    <select name="data_type" class="data_types selectpicker">
+                        <option value="scalar">Single Number</option>
+                        <option value="timeseries">Time Series</option>
+                        <option value="array">Array</option>
+                        <option value="descriptor">Free Text</option>
+                    </select>
+                </td>
+                <td class="defautvaluecontainer dataset">
+                    <input name="value">
+                    </input>
+                </td>
+            </tr>
+    </tbody>
+</table>
+
+
 <div class="modal fade" tabindex="-1" role="dialog" id="add_attr_modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -492,6 +566,7 @@
 
 
 <script src="{{url_for('static', filename='js/template.js')}}"></script>
+<script src="{{url_for('static', filename='js/dataset.js')}}"></script>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
 <script src="{{url_for('static', filename='js/jscolor.min.js')}}"></script>

@@ -1,4 +1,3 @@
-from flask import json
 import hydra_connector
 from HydraServer.ui.code.model import JSONObject 
 

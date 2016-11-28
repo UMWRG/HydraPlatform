@@ -32,3 +32,12 @@ table tr.header{
     vertical-align: middle;
     padding: 0px;
 }
+
+.attributedetails{
+    display:None;
+    background:#ddd;
+    color:#fff;
+}
+.attributedetails input{
+    color:#000;
+}

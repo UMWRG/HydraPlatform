@@ -3,6 +3,7 @@ from HydraServer.lib import network as net
 from HydraServer.lib import template as tmpl
 from HydraServer.lib import scenario as sen
 from HydraServer.lib import attributes as attrs
+from HydraServer.lib import data  as data
 
 
 def load_network(network_id, scenario_id, user_id):
@@ -51,6 +52,17 @@ def get_all_attributes():
 def add_attr(attr, user_id):
     new_attr =  attrs.add_attribute(attr, user_id=user_id)
     return new_attr
+
+def add_dataset(dataset, user_id):
+    new_dataset = data.add_dataset(
+                    dataset['data_type'],
+                    dataset['value'],
+                    dataset.get('unit', None),
+                    dataset.get('dimension', None),
+                    dataset.get('metadata', {}),
+                    user_id=user_id,
+                    flush=True)
+    return new_dataset
 
 def add_template(template, user_id):
     new_tmpl =  tmpl.add_template(template, user_id=user_id)

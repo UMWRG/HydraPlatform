@@ -33,7 +33,7 @@ class JSONObject(dict):
                 log.info(v)
                 l = [JSONObject(item, obj_dict) for item in v]
                 setattr(self, k, l)
-            elif hasattr(v, '_sa_instance_state'): #Special case for SQLAlchemy obhjects
+            elif hasattr(v, '_sa_instance_state') and v != parent: #Special case for SQLAlchemy obhjects
 
                 l = JSONObject(v)
                 setattr(self, k, l)
