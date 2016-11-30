@@ -1,10 +1,62 @@
+var current_res_type = null;
+var current_res = null;
 $(document).on('click', '#data .close-resource-data', function(){
     $("#data").html("No Resource Selected.")
+    current_res_type = null;
+    current_res = null;
 })
 
 
 $(document).on('click', '#data .save-resource-data', function(){
     
+    var container = $("#data table")
+    
+    var rs_list = []
+    $('tr', container).each(function(){
+        var attr_id = $("input[name='attr_id']", this).val()
+        var rs_id = $("input[name='rs_id']", this).val()
+        var ra_id = $("input[name='ra_id']", this).val()
+        var dataset_id = $("input[name='dataset_id']", this).val()
+        var data_type = $("input[name='data_type']", this).val()
+        var value = $("input[name='value']", this).val()
+       
+        var dataset = {
+           type: data_type,
+           value : value,
+           name: ''
+        }
+
+        var rs = {
+            id: rs_id,
+            resource_attr_id: ra_id,
+            value: dataset, 
+        }
+
+        rs_list.push(rs)
+    })
+
+
+    var data = {
+        rs_list: rs_list,
+        scenario_id: scenario_id
+    }
+    
+    var success = function(){
+        get_resource_data(current_res_type, current_res)
+    }
+
+    var error = function(resp){
+        alert(resp)
+    }
+
+    $.ajax({
+        url: update_resourcedata_url,
+        data: JSON.stringify(data),
+        async: false,
+        type:'POST',
+
+    })
+
 })
 
 function drawTimeseriesGraph(script, graph_data, attr_name, t_table) {
@@ -52,15 +104,15 @@ function get_resource_data(res_type, d)
     $( "#data" ).empty();
     $("#timeseries_g" ).empty();
 
-    current_res=d;
-    var table = $('<table></table>')
-    
     var error = function(resp) {
         alert('Unexpected error');
     }
 
     var success = function(data, status, request) {
         $('#data').html(data)
+        updateInputs() // Turn text inputs into buttons for timeseries and arrays. Function in dataset.js
+        current_res_type = res_type;
+        current_res = d
     }
     
     var pars=
@@ -79,6 +131,7 @@ function get_resource_data(res_type, d)
         error:error,
     });
 
+
 }
 
 function get_network_attributes()
@@ -90,3 +143,5 @@ function get_network_attributes()
     
     get_resource_data('NETWORK', d)
 }
+
+

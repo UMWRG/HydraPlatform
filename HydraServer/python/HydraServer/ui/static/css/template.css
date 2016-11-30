@@ -36,8 +36,15 @@ table tr.header{
 .attributedetails{
     display:None;
     background:#ddd;
-    color:#fff;
+    color:#000;
 }
 .attributedetails input{
     color:#000;
+}
+
+.ts_outer {
+    position: relative;
+    width: 550px;
+    overflow: none;
+    height: auto;
 }

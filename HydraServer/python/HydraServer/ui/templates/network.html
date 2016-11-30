@@ -84,6 +84,7 @@
         var update_node_url="{{url_for('do_update_node')}}";
         var add_link_url="{{url_for('do_add_link')}}";
         var get_resource_data_url="{{url_for('do_get_resource_data')}}";
+        var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
 
       </script>
 
@@ -99,20 +100,7 @@
       <div id="tab-contents"> <!--This is just to provide some styling rules to the tab contents overall -->
 
       <div id="graph_container" class="network_container">
-            <div class="checkbox">
-                <label >
-                    <input id="label" type='checkbox' 
-                        onclick='changeNodesLableVisibility(this);'>
-                        Display labels
-                </label>
-                <label>
-                    <input type='checkbox'
-                    onclick='changeLinkDirectionVisibility(this);'>
-                    Link direction
-                </label>
-            </div>
-
-            <div class="btn-toolbar networkoptions" role="toolbar" aria-label="...">
+            <div class="btn-toolbar networkoptions checkbox" role="toolbar" aria-label="...">
                 <div class="btn-group" role="group" aria-label="...">
                 <div class="input-group">
                 <input id="search" type="text" class="form-control" placeholder="Search for...">
@@ -124,6 +112,18 @@
 
                 <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-default" onclick="runModel()">Run model <span class="glyphicon glyphicon-play"></span></button>
+            </div>
+            <div class="btn-group pull-right">
+                <label >
+                    <input id="label" type='checkbox' 
+                        onclick='changeNodesLableVisibility(this);'>
+                        Display labels
+                </label>
+                <label>
+                    <input type='checkbox'
+                    onclick='changeLinkDirectionVisibility(this);'>
+                    Link direction
+                </label>
             </div>
             </div>
           <!--  <div id="progressbar" hidden="True" style="margin: 15px;">
@@ -151,18 +151,26 @@
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
 
         <!--Include css & javascript-->
-        <script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/createResourceAttributesTable.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/network.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/network.js')}}"></script>
 
-        <script type='text/javascript' src="{{url_for('static', filename='js/sidebar.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/palette.js')}}"></script>
-        <script type='text/javascript' src="{{url_for('static', filename='js/attributes.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/sidebar.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/palette.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/attributes.js')}}"></script>
 
-<script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+
+<script src="{{url_for('static', filename='js/handsontable.full.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
+<script src="{{url_for('static', filename='js/moment.js')}}"></script>
+<script src="{{url_for('static', filename='js/dataset.js')}}"></script>
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
+
+{% include 'run_app.html' %}
 
 <script>
          $(function() {
@@ -189,5 +197,6 @@
     {% include 'nodesandlinks.html' %}
 
     {% endblock %}
+
 
 

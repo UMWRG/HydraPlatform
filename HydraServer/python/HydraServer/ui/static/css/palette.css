@@ -12,7 +12,6 @@
 #palette {
   background: #f5f5f0;
   float:left;
-  height: 100%;
   -moz-box-flex: 0;       /* Mozilla */
   -webkit-box-flex: 0;
   margin: 0ex 0.25em 0ex 0em;
@@ -21,6 +20,7 @@
 
 #palette .shapecontainer{
     margin: 0.25ex 0.25em;
+    display: inline-block;
 }
 #palette .shapecontainer:hover{
     background: #e1e1e1;
@@ -36,4 +36,8 @@
 
 #palette .palettesvg .type{
     cursor: move;
+}
+
+.palettesvg{
+    outline: none;
 }

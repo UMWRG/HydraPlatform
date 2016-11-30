@@ -1,5 +1,3 @@
-from flask import json
-
 import hydra_connector as hc
 
 from HydraServer.ui.code.model import JSONObject 
@@ -44,66 +42,6 @@ def get_layout_property(resource, prop, default):
 
     return prop_value
 
-
-def set_metadata(hydra_metadata):
-    metadata={}
-    for meta in hydra_metadata:
-        metadata[meta['metadata_name']]=meta['metadata_val']
-    return metadata
-
-def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
-    res_scenarios={}
-    resource_scenarios = hc.get_resource_data(resource_type, res_id, scenario_id, None, user_id)
-    for rs in resource_scenarios:
-        attr_id = rs.resourceattr.attr_id
-        dataset = JSONObject(rs.dataset)
-        try:
-            val = json.loads(dataset.value)
-        except ValueError:
-            val = dataset.value
-
-        if (dataset.data_type == "timeseries"):
-            parsed_timeseries = []
-            for index in val.keys():
-                for ts_time in sorted(val[index].keys()):
-                    value = val[index][ts_time]
-                    parsed_timeseries.append({'date': ts_time, 'value': value})
-            dataset.value = parsed_timeseries
-        dataset.metadata = set_metadata(dataset.metadata)
-
-        res_scenarios[attr_id] =  JSONObject({'rs_id': res_id, 
-                 'ra_id': rs.resourceattr.resource_attr_id,
-                 'attr_id': attr_id,
-                 'dataset': dataset,
-                 'data_type': dataset.data_type,
-                })
-    
-    
-    resource = get_resource(resource_type, res_id, user_id) 
-   
-    ra_dict = {}
-    if resource.attributes is not None:
-        for ra in resource.attributes:
-            ra_dict[ra.attr_id] = ra
-   
-    #Identify any attributes which do not have data -- those not in ther resource attribute table, but in the type attribute table.
-    for typ in resource.types:
-        tmpltype = typ.templatetype
-        for tattr in tmpltype.typeattrs:
-            if tattr.attr_id not in res_scenarios:
-                res_scenarios[tattr.attr_id] = JSONObject({
-                    'rs_id': None,
-                    'ra_id': ra_dict.get(tattr.attr_id, None).resource_attr_id,
-                    'attr_id':tattr.attr_id,
-                    'dataset': None,
-                    'is_var': tattr.attr_is_var,
-                    'data_type': tattr.data_type,
-                })
-            else:
-                res_scenarios[tattr.attr_id].is_var = tattr.attr_is_var
-                res_scenarios[tattr.attr_id].data_type = tattr.data_type
-
-    return resource, res_scenarios
 
 def get_attr_id_name_map():
     attrs_= hc.get_all_attributes()

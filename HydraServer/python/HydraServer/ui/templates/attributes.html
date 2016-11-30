@@ -21,34 +21,31 @@
         <tr>
             <td>{{attr_id_name_map[rs.attr_id]}}</td>
             <td>
+                <div class='dataset'>
                 <input type="hidden" name="attr_id" value="{{rs.attr_id}}"></input>
                 <input type="hidden" name="rs_id" value="{{rs.rs_id}}"></input>
                 <input type="hidden" name="ra_id" value="{{rs.ra_id}}"></input>
+                <input type="hidden" name="dataset_id" value="{{rs.dataset.dataset_id}}"></input>
                 {%if data_type == "descriptor"%}
                     <input type="hidden" name="data_type" value="descriptor"></input>
-                    <input type="text" name="value" value="{{rs.dataset.value}}"></input>
+                    <input type="text" name="value" value="{{rs.dataset.value}}" class="{{data_type}}"></input>
                 {%elif data_type == "scalar"%}
 
-                    <input type="hidden" name="data_type" value="scaler"></input>
-                    <input type="number" name="value" value="{{rs.dataset.value}}"></input>
+                    <input type="hidden" name="data_type" value="scalar"></input>
+                    <input type="number" name="value" value="{{rs.dataset.value}}" class="{{data_type}}"></input>
                 {%elif data_type == "array"%}
 
                     <input type="hidden" name="data_type" value="array"></input>
-                    <input type="hidden" name="value" value="rs.dataset.value"></input>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#array_modal">
-                        <span class="glyphicon glyphicon-time"></span> 
-                    </button>
+                    <input type="hidden" name="value" value="rs.dataset.value" class="{{data_type}}"></input>
                 {%elif data_type == "timeseries"%}
 
                     <input type="hidden" name="data_type" value="timeseries"></input>
-                    <input type="hidden" name="value" value="rs.dataset.value"></input>
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#ts_modal">
-                        <span class="glyphicon glyphicon-time"></span>  
-                    </button>
+                    <input type="hidden" name="value" value="{{rs.dataset.value}}"  class="{{data_type}}"></input>
                 {%else%}
                     <input type="hidden" name="data_type" value="scalar"></input>
-                    <input type="number" name="value" value="{{rs.dataset.value}}"></input>
+                    <input type="number" name="value" value="{{rs.dataset.value}}"  class="{{data_type}}"></input>
                 {%endif%}
+                </div>
             </td>
         </tr>
     {%endfor%}

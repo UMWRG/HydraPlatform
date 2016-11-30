@@ -1,3 +1,4 @@
+
 import json
 
 import logging
@@ -5,8 +6,12 @@ log = logging.getLogger(__name__)
 
 from datetime import datetime
 
+from HydraLib.HydraException import HydraError
+
+from HydraServer.util import generate_data_hash
 from HydraLib import config
 import zlib
+import pandas as pd
 
 class JSONObject(dict):
     """
@@ -89,12 +94,20 @@ class JSONObject(dict):
         else:
             return None
 
+class ResourceScenario(JSONObject):
+    def __init__(self, rs):
+        super(ResourceScenario, self).__init__(rs)
+        for k, v in rs.items():
+            if k == 'value':
+                setattr(self, k, Dataset(v))
+        
  
 class Dataset(JSONObject):
     def parse_value(self):
         """
             Turn the value of an incoming dataset into a hydra-friendly value.
         """
+        import pudb; pudb.set_trace()
         try:
             #attr_data.value is a dictionary,
             #but the keys have namespaces which must be stripped.
@@ -136,3 +149,56 @@ class Dataset(JSONObject):
             log.exception(e)
             raise HydraError("Error parsing value %s: %s"%(self.value, e))
 
+    def get_metadata_as_dict(self, user_id=None, source=None):
+        """
+        Convert a metadata json string into a dictionary.
+
+        Args:
+            user_id (int): Optional: Insert user_id into the metadata if specified
+            source (string): Optional: Insert source (the name of the app typically) into the metadata if necessary.
+
+        Returns:
+            dict: THe metadata as a python dictionary
+        """
+
+        if self.metadata is None:
+            return {}
+
+        metadata_dict = {}
+
+        if type(self.metadata) == dict:
+            metadata_dict = self.metadata
+        else:
+            metadata_dict = json.loads(self.metadata)
+
+        #These should be set on all datasests by default, but we don't
+        #want to enforce this rigidly
+        metadata_keys = [m.lower() for m in metadata_dict]
+        if user_id is not None and 'user_id' not in metadata_keys:
+            metadata_dict['user_id'] = str(user_id)
+
+        if source is not None and 'source' not in metadata_keys:
+            metadata_dict['source'] = str(source)
+
+        return metadata_dict
+
+    def get_hash(self, val, metadata):
+
+        if metadata is None:
+            metadata = self.get_metadata_as_dict()
+
+        if val is None:
+            value = self.parse_value()
+        else:
+            value = val
+
+        dataset_dict = {'data_name' : self.name,
+                    'data_units': self.unit,
+                    'data_dimen': self.dimension,
+                    'data_type' : self.type.lower(),
+                    'value'     : value,
+                    'metadata'  : metadata,}
+
+        data_hash = generate_data_hash(dataset_dict)
+
+        return data_hash

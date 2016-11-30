@@ -138,7 +138,7 @@ $(document).on("click", "#save-template-button", function(event){
 
         })
         
-        var layout = getLayout(this)
+        var layout = getLayout(row)
 
         templatetype.layout = JSON.stringify(layout)
 
@@ -156,7 +156,7 @@ $(document).on("click", "#save-template-button", function(event){
 
             default_value = getDefaultValue(attr_id, row)
             if (default_value != null){
-                ta['default_dataset_id'] = new_dataset.dataset_id
+                ta['default_dataset_id'] = default_value.dataset_id
             }
 
             typeattrs.push(ta)
@@ -191,13 +191,13 @@ var getDefaultValue = function(attr_id, row){
 
     var details = $('.attr-'+attr_id, row)
     var datatype = $('.data_types option:selected', details)
-    var default_val = $(".dataset .input[name=value]", details)
+    var default_val = $(".dataset input[name=value]", details)
 
     if (default_val.length > 0 && default_val.val() != ""){
 
 
         defaultDataset = createDataset({
-            data_type: datatype.val(),
+            type     : datatype.val(),
             value    : default_val.val(),
         })
 
@@ -209,19 +209,19 @@ var getDefaultValue = function(attr_id, row){
 
 var getLayout = function(element){
     var layout = {}
-    var color = $(".colorpicker", this).val()
+    var color = $(".colorpicker", element).val()
     if (color != undefined){
         layout['color'] = color
     }
-    var shape = $('.shapeselector option:selected', this).attr('name')
+    var shape = $('.shapeselector option:selected', element).attr('name')
     if (shape != undefined){
         layout['shape'] = shape;
     }
-    var linestyle = $('.linestyle option:selected', this).attr('name')
+    var linestyle = $('.linestyle option:selected', element).attr('name')
     if (linestyle != undefined){
         layout['linestyle'] = linestyle;
     }
-    var width = $('.linewidth', this).val()
+    var width = $('.linewidth', element).val()
     if (width != undefined){
         layout['width'] = width;
     }

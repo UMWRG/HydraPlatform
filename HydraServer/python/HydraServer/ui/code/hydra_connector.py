@@ -27,6 +27,9 @@ def get_attributes_for_resource(network_id, scenario_id, resource, ids, include_
 def get_resource_data(resource, id, scenario_id, type_id, user_id):
     return sen.get_resource_data(resource, id, scenario_id, type_id, user_id=user_id)
 
+def update_resource_data(scenario_id, rs_list, user_id):
+    return sen.update_resourcedata(scenario_id, rs_list, user_id=user_id)
+
 def get_network_extents(network_id, user_id):
     return net.get_network_extents(network_id, user_id=user_id)
 

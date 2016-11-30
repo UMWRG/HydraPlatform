@@ -69,6 +69,9 @@
             <div class="filterheading">Links
             </div>
             <div class='filtercontent'>
+                        <button id="nolink" type='button' class="btn btn-default btn-xs linkbutton">
+                            <span class="fa fa-crosshairs"></span> 
+                        </button>
               {%for tmpltype in template.templatetypes%}
                     {%if tmpltype.resource_type == 'LINK'%}
                         <button id="link-type-{{tmpltype.type_id}}" type='button' class="btn btn-default btn-xs linkbutton">

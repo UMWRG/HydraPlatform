@@ -26,7 +26,7 @@ basefolder = os.path.dirname(__file__)
 code= os.path.join(basefolder, 'code')
 sys.path.insert(0, code)
 
-from HydraServer.ui.code.model import JSONObject 
+from HydraServer.lib.objects import JSONObject, ResourceScenario
 
 import logging
 log = logging.getLogger(__name__)
@@ -38,6 +38,7 @@ import network_utilities as netutils
 import attr_utilities as attrutils
 import template_utilities as tmplutils
 import dataset_utilities as datasetutils
+import scenario_utilities as scenarioutils
 
 from export_network import export_network_to_pywr_json, export_network_to_excel, export_network_to_csv
 
@@ -399,7 +400,7 @@ def do_get_resource_data():
     resource_type=pars['resource_type']
 
     app.logger.info("Getting resource attributes for: %s", str(pars)) 
-    resource, resource_scenarios=netutils.get_resource_data(network_id,
+    resource, resource_scenarios=scenarioutils.get_resource_data(network_id,
                                                   scenario_id,
                                                   resource_type,
                                                   resource_id,
@@ -415,6 +416,28 @@ def do_get_resource_data():
                             scenario_id=scenario_id,
                             resource_type=resource_type,)
 
+
+@app.route('/update_resourcedata', methods=['POST'])
+def do_update_resource_data():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    log.info(d)
+
+    if len(d) == 0:
+        return 'OK'
+
+    rs_list = [ResourceScenario(rs) for rs in d['rs_list']]
+
+    log.info(rs_list)
+    
+    scenarioutils.update_resource_data(d['scenario_id'], rs_list, user_id) 
+    
+    commit_transaction()
+    
+    return 'OK'
 
 def get_model_file (network_id, model_file):
     model_file_ = 'network_' + network_id + '.gms'

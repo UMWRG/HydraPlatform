@@ -130,28 +130,12 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                         value="{{resourcetype.type_name}}"></input>
                                     </td>
 
-                                    <td class="typeattrs">Attributes:
-                                        <select  class="selectpicker" multiple=multiple>
-                                            {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id|int}}"
-                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
-                                                    selected="selected"
-                                                    {%endif%}
-                                             >
-                                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                                            </option>
-                                            {%endfor%}
-                                        </select>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                            data-toggle="modal" data-target="#add_attr_modal">
-                                            <span class="glyphicon glyphicon-plus"></span> 
-                                        </button>
-                                    </td>
+                                    {%include 'typeattributes.html'%}
                                     <td class="typelayout">
                                         <select class="selectpicker shapeselector">
                                             <option name="circle" {%if resourcetype.layout['shape'] == 'circle'%}selected=selected{%endif%}>Circle</option>
                                             <option name="diamond" {%if resourcetype.layout['shape'] == 'diamond'%}selected=selected{%endif%}>Diamond</option>
-                                            <option name="cross" {%if resourcetype.layout['shape'] == 'corss'%}selected=selected{%endif%}>Cross</option>
+                                            <option name="cross" {%if resourcetype.layout['shape'] == 'cross'%}selected=selected{%endif%}>Cross</option>
                                             <option name="triangle" {%if resourcetype.layout['shape'] == 'triangle'%}selected=selected{%endif%}>Triangle</option>
                                             <option name="square" {%if resourcetype.layout['shape'] == 'square'%}selected=selected{%endif%}>Square</option>
                                             <option name="star"{%if resourcetype.layout['shape'] == 'star'%}selected=selected{%endif%}>Star</option>
@@ -168,30 +152,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                     </td>
 
                                 </tr>
-                                <tbody class="attributedetails" style="background:#ddd; color:white ">
-                                    {%for ta in resourcetype.typeattrs%}
-                                        <tr class="attributedetail attr-{{ta.attr_id|int}}">
-                                            <td>{{attr_id_name_lookup[ta.attr_id]}}</td>
-                                            <td class="datatypecontainer">
-                                                <select name="data_type" class="data_types selectpicker">
-                                                    <option value="scalar">Single Number</option>
-                                                    <option value="timeseries">Time Series</option>
-                                                    <option value="array">Array</option>
-                                                    <option value="descriptor">Free Text</option>
-                                                </select>
-                                            </td>
-                                            <td class="defautvaluecontainer dataset">
-                                                <input name="value" type="number"
-                                                    {%if ta.default_dataset%}
-                                                    value={{ta.default_dataset.value}}
-                                                    class="ta.default_dataset.data_type"
-                                                    {%endif%}
-                                                    >
-                                                </input>
-                                            </td>
-                                        </tr>
-                                    {%endfor%}
-                                </tbody>
+                                    {%include 'attributedetails.html'%}
                             </table>
                         </td>
                     </tr>
@@ -227,23 +188,8 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                         type="text"
                                         value="{{resourcetype.type_name}}"></input>
                                     </td>
-                                    <td class="typeattrs">Attributes:
-                                        <select  class="selectpicker" multiple=multiple>
-                                            {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id|int}}"
-                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
-                                                    selected="selected"
-                                                    {%endif%}
-                                             >
-                                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                                            </option>
-                                            {%endfor%}
-                                        </select>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                            data-toggle="modal" data-target="#add_attr_modal">
-                                            <span class="glyphicon glyphicon-plus"></span> 
-                                        </button>
-                                    </td>
+
+                                    {%include 'typeattributes.html'%}
                                     <td class="typelayout">
                                         <div>
                                         Style:
@@ -269,32 +215,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                     </td>
 
                                 </tr>
-                                    <tbody class="attributedetails" style="background:#ddd; color:white ">
-                                    {%for ta in resourcetype.typeattrs%}
-                                        <tr class="attributedetail attr-{{ta.attr_id|int}}">
-                                            <td>{{attr_id_name_lookup[ta.attr_id]}}</td>
-                                            <td class="datatypecontainer">
-                                                <select name="data_type" class="data_types selectpicker">
-                                                    <option value="scalar" {%if ta.data_type == 'scalar'%}selected=selected{%endif%}>Single Number</option>
-                                                    <option value="timeseries" {%if ta.data_type == 'timeseries'%}selected=selected{%endif%}>Time Series</option>
-                                                    <option value="array" {%if ta.data_type == 'array'%}selected=selected{%endif%}>Array</option>
-                                                    <option value="descriptor" {%if ta.data_type == 'array'%}selected=selected{%endif%}>Free Text</option>
-                                                </select>
-                                            </td>
-                                            <td class="defautvaluecontainer dataset">
-                                                <input name="value" type="number" 
-                                                    {%if ta.data_type%}
-                                                        class="{{ta.data_type}}"
-                                                    {%endif%}
-                                                    {%if ta.default_dataset%}
-                                                        value={{ta.default_dataset.value}}
-                                                    {%endif%}
-                                                    >
-                                                </input>
-                                            </td>
-                                        </tr>
-                                    {%endfor%}
-                                </tbody>
+                                    {%include 'attributedetails.html'%}
                             </table>
                         </td>
                     </tr>
@@ -328,30 +249,15 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                         type="text"
                                         value="{{resourcetype.type_name}}"></input>
                                     </td>
-                                    <td class="typeattrs">Attributes:
-                                        <select  class="selectpicker" multiple=multiple>
-                                            {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id|int}}"
-                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
-                                                    selected="selected"
-                                                    {%endif%}
-                                             >
-                                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                                            </option>
-                                            {%endfor%}
-                                        </select>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                            data-toggle="modal" data-target="#add_attr_modal">
-                                            <span class="glyphicon glyphicon-plus"></span> 
-                                        </button>
-                                    </td>
+                                    {%include 'typeattributes.html'%}
                                     <td class="deletetype">
                                           <button type="button" class="btn btn-danger btn-small" 
                                             data-toggle="modal" data-target="#delete_type_modal">
                                             <span class="glyphicon glyphicon-remove"></span> 
                                         </button>
                                     </td>
-                                                </tr>
+                                </tr>
+                                    {%include 'attributedetails.html'%}
                             </table>
                         </td>
                     </tr>
@@ -372,19 +278,8 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
             <table class="table">
                 <tr>
                     <td>Name <input name="name" type="text"></input></td>
-                    <td class="typeattrs">Attributes:
-                        <select class="" multiple=multiple>
-                            {%for attr in all_attrs%}
-                            <option value="{{attr.attr_id}}">
-                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                            </option>
-                            {%endfor%}
-                        </select>
-                        <button type="button" class="btn btn-primary btn-small" 
-                            data-toggle="modal" data-target="#add_attr_modal">
-                            <span class="glyphicon glyphicon-plus"></span> 
-                        </button>
-                    </td>
+                    {%include 'typeattributes.html'%}
+
                     <td class="typelayout">
                         <select class="shapeselector">
                             <option name="circle">Circle</option>
@@ -416,19 +311,8 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
             <table class="table">
                 <tr>
                     <td>Name <input name="name" type="text"></input></td>
-                    <td class="typeattrs">Attributes:
-                        <select class="" multiple=multiple>
-                            {%for attr in all_attrs%}
-                            <option value="{{attr.attr_id}}">
-                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                            </option>
-                            {%endfor%}
-                        </select>
-                        <button type="button" class="btn btn-primary btn-small" 
-                            data-toggle="modal" data-target="#add_attr_modal">
-                            <span class="glyphicon glyphicon-plus"></span> 
-                        </button>
-                    </td>
+
+                    {%include 'typeattributes.html'%}
                     <td class="typelayout">
                         <div>
                         Style:
@@ -495,7 +379,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
 </table>
 
 <table id="attrdetailstemplate" style="display:none">
-    <tbody class="attributedetails" style="background:#ddd; color:white ">
+    <tbody class="attributedetails">
             <tr class="attributedetail">
                 <td></td>
                 <td class="datatypecontainer">
@@ -566,9 +450,14 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
 
 
 <script src="{{url_for('static', filename='js/template.js')}}"></script>
+<script src="{{url_for('static', filename='js/handsontable.full.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
+<script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
-<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
-<script src="{{url_for('static', filename='js/jscolor.min.js')}}"></script>
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
 {% endblock %}
