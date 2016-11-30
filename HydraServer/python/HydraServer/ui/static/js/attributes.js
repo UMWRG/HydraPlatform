@@ -19,11 +19,16 @@ $(document).on('click', '#data .save-resource-data', function(){
         var dataset_id = $("input[name='dataset_id']", this).val()
         var data_type = $("input[name='data_type']", this).val()
         var value = $("input[name='value']", this).val()
-       
+        var name = $("input[name='dataset_name']", this).val()
+        
+        if (dataset_id == ''){
+           name = new Date().toJSON().slice(0,10);
+        }
+
         var dataset = {
            type: data_type,
            value : value,
-           name: ''
+           name: name 
         }
 
         var rs = {

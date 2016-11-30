@@ -62,9 +62,9 @@ var updateInputs = function(element){
             $(this).append('<button class="btn btn-outline-primary btn-sm ts-edit" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-pencil"></span></button>')
 
             if (valueinput.val() == ""){
-                $(this).append('<button class="btn btn-outline-primary btn-sm ts-edit" data-toggle="modal" data-target="#ts-editor" disabled><span class="fa fa-area-chart"></span></button>')
+                $(this).append('<button class="btn btn-outline-primary btn-sm ts-graph" data-toggle="modal" data-target="#ts-editor" disabled><span class="fa fa-area-chart"></span></button>')
             }else{
-                $(this).append('<button class="btn btn-outline-primary btn-sm ts-edit" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-area-chart"></span></button>')
+                $(this).append('<button class="btn btn-outline-primary btn-sm ts-graph" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-area-chart"></span></button>')
             }
         }else if (valueinput.hasClass('array')){
             valueinput.hide();
@@ -268,8 +268,27 @@ var hotToTs = function(){
 $(document).on('click', '.dataset .ts-edit', function(){
     var btn = this;
     setTimeout(function(){renderTimeseries(btn)}, 300)
+})
 
-    
+$(document).on('click', '.dataset .ts-graph', function(){
+    var btn = this;
+
+    var datasetcontainer = $(btn).closest('.dataset')
+
+    currentVal = $('input.timeseries', datasetcontainer)
+
+    var valuetext = currentVal.val()
+
+    if (valuetext == ''){
+        data = defaultdata;
+    }else{
+        data = tsToHot(valuetext)
+    }
+
+    var graph_data = data.slice(1, data.length)
+    var attr_name  = $("input[name='attr_name']", datasetcontainer).val()
+
+    setTimeout(function(){draw_timeseries(graph_data, attr_name)}, 300)
 })
 
 $(document).on('click', '.dataset .arr-edit', renderArray)
@@ -280,8 +299,10 @@ var insertModals = function(){
     $('body').append(array_modal)
     
     $('#ts-editor').on('hidden.bs.modal', function (e) {
-        hot.destroy()
-
+        if (hot != null){
+            hot.destroy()
+        }
+        $('#ts-edit-inner').empty()
     })
 
 }

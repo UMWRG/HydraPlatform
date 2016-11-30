@@ -23,3 +23,15 @@
     height:  15px;
     padding: 0px;
 }
+
+.ts_outer{
+    position:relative;
+}
+.ts_inner{
+    position:relative;
+}
+
+.ts_inner svg{
+    position:relative;
+}
+

@@ -23,9 +23,11 @@
             <td>
                 <div class='dataset'>
                 <input type="hidden" name="attr_id" value="{{rs.attr_id}}"></input>
+                <input type="hidden" name="attr_name" value="{{attr_id_name_map[rs.attr_id]}}"></input>
                 <input type="hidden" name="rs_id" value="{{rs.rs_id}}"></input>
                 <input type="hidden" name="ra_id" value="{{rs.ra_id}}"></input>
                 <input type="hidden" name="dataset_id" value="{{rs.dataset.dataset_id}}"></input>
+                <input type="hidden" name="dataset_name" value="{{rs.dataset.data_name}}"></input>
                 {%if data_type == "descriptor"%}
                     <input type="hidden" name="data_type" value="descriptor"></input>
                     <input type="text" name="value" value="{{rs.dataset.value}}" class="{{data_type}}"></input>
@@ -58,39 +60,3 @@
 <div class="btn-group pull-right" role="group" aria-label="...">
 <button type="button" class="btn btn-success save-resource-data">Save</button>
 </div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="ts_modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Timeseries</h4>
-      </div>
-      <div class="modal-body">
-        <div id="timeseries_g" class="timeseries_gr">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal fade" tabindex="-1" role="dialog" id="array_modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Array</h4>
-      </div>
-      <div class="modal-body">
-        <div id="timeseries_g" class="timeseries_gr">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
