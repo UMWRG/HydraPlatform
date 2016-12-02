@@ -89,7 +89,7 @@ function update_progress_2(status_url, directory) {
                     scenario_id=data['status'][2];
                     if(cur_name.indexOf('ex') !=0)
                     {
-                        message=result+". Opening network (id= "+network_id+"), and scenario (id="+scenario_id+")";
+                        message=result+". Loading network (id= "+network_id+"), and scenario (id="+scenario_id+")";
                         $(_message).text(message);
                         setTimeout(function() {
                         pars={'network_id': network_id, 'scenario_id':scenario_id};
@@ -202,7 +202,28 @@ $("#runApp").prop("value", "Upload");
     $( "#importModal" ).modal('show')
 }
 
-function runModel()
+function runPywrApp ()
+{
+$("#import_progress_bar")
+                      .css("width", 0 + "%")
+                      .attr("aria-valuenow", 0)
+                      .text(0 + "%");
+   $(status_pan).hide();
+   $("#runApp").hide();
+   $("#browse_div").hide();
+   $("#help_message").show();
+   $(_message).text("");
+   //$('input:file[name="import_file"]').attr('name', 'run_model');
+   cur_name='run_pywr_app';
+   $("#help_").text("Run pywr App and extract the results ");
+   $ ("#import_title").text("Run Pywr App");
+   //$ ("#import_title").hide();
+   $("#importModal" ).modal('show')
+   run();
+
+
+}
+function runGamsModel()
    {
     $("#browse_div").show();
     $("#runApp").show();
@@ -216,7 +237,7 @@ function runModel()
    $("#help_message").show();
    $(_message).text("");
    //$('input:file[name="import_file"]').attr('name', 'run_model');
-   cur_name='run_model';
+   cur_name='run_gams_model';
    $("#help_").text("Please upload the file which contains the GAMS code");
    $ ("#import_title").text("Run GAMS model");
    $( "#importModal" ).modal('show')

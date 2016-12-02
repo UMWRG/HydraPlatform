@@ -92,7 +92,16 @@
 
              <input id="search">
              <button type="button" onclick="findResource()">Select</button>
-                      <button type="button" onclick="runModel()" style=" float: right;">Run model ></button>
+                   <div class="dropdown" style=" float: right;">
+    <button    class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Rum Model
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu dropdown-menu-right">
+      <li><a href="#" onclick="runGamsModel()" >GAMS Model</a></li>
+      <li><a href="#" onclick="runPywrApp()">Pywr App</a></li>
+    </ul>
+  </div>
+
+
                                          </div>
         </div> <!-- graph_container -->
             <div id="data" class="data_container">

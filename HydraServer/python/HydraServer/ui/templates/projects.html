@@ -1,16 +1,12 @@
-<html>
-
-    {% include 'master.html' %}
-
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>User ${display_name}'s Projects</title>
-</head>
-
-<body>
-    {% include "header.html" %}
+{% extends "page_layout.html" %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<script>
+    $(document).ready(function() {
+     $("#export_data").hide();
+});
+</script>
     <div class="container-fixed">
-
         <table class="table table-hover">
           <thead>
             <tr>
@@ -28,6 +24,4 @@
           </tbody>
         </table>
     </div>
-    {% include 'footer.html' %}
-</body>
-</html>
+{% endblock %}

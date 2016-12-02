@@ -1,14 +1,13 @@
 {% extends "page_layout.html" %}
 {% block title %}Project {{project.project_name}}{% endblock %}
 {% block content %}
-
-
+<script>
+    $(document).ready(function() {
+     $("#export_data").hide();
+});
   <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
   <title>Project {{project.project_name}}</title>
-
   <script src="{{url_for('static', filename='js/project.js')}}"></script>
-
-
     <div class="contianer">
         <div id="networks_and_scenarios" class="table table-hover">
           <div id="network_list" class="table-col">

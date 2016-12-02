@@ -52,11 +52,11 @@ function getUrlVars() {
 							</li>
                         <!-->
                          <li class="divider"></li>
-                        <li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
+                        <li class="dropdown dropdown-submenu" id="export_data"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export network</a>
 								<ul class="dropdown-menu">
-									<!-- li><a href="#">to CSV</a></li!-->
-                                    <!--li><a href="#">to Excel</a></li!-->
-									<li><a href="{{url_for ('go_export_network', export_to='pywr', network_id=net_scn.network_id, scenario_id=net_scn.scenario_id, message='None')}}">to pywr</a></li>
+									<li><a href="#" onclick="export_csv()">to CSV</a></li>
+                                    <li><a href="#" onclick="export_excel()">to Excel</a></li>
+									<li><a href="#" onclick="export_pywr()">to pywr</a></li>
 								</ul>
 							</li>
                         <!--li class="dropdown dropdown-submenu"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Export input file</a>
