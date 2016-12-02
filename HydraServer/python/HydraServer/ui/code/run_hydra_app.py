@@ -4,7 +4,6 @@ import json
 import os
 from app_utilities import create_zip_file, check_process_output, get_progress_from_output
 
-
 '''
 run back ground process using the command and redircet the output to log file to be read later to get process progress ...
 '''
@@ -17,9 +16,7 @@ def run_app_(exe, args, use_wd=True):
     if use_wd==True:
         print args, '----------------------------->'
         os.chdir(os.path.dirname(exe))
-
     f = open("..\\..\\log.txt", "w")
-
     proc = subprocess.Popen(cmd, stdout=f)
     print "Process id: ", proc.pid
     return proc.pid
@@ -28,15 +25,14 @@ def run_app_(exe, args, use_wd=True):
     cmd = "python C:\work\csv_reader\process_tester.py"
     f = open("c:\\temp\\blah.txt", "w")
     proc = subprocess.Popen(cmd, stdout=f)
-
     print "Process id: ", proc.pid
     return proc.pid
-    '''
-
+   '''
 
 '''
 get running proces by its id and return its status i.e. still running or not
 '''
+
 def get_app_progress(pid):
     pid=int (pid)
     status = 'Pending'

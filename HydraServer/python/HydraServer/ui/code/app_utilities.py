@@ -49,6 +49,8 @@ def create_zip_file(path, zip_file_name):
     except Exception, e:
         print e
         return e
+
+
     zip_file.close()
 
 ############################################################################

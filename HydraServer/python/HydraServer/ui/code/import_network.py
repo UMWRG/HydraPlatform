@@ -6,16 +6,31 @@ from app_utilities import check_process_output
 
 from run_hydra_app import *
 
+def get_json_file(directory):
+    files_list=os.listdir(directory)
+    for filename in files_list:
+        print "File Name: ==========>", filename
+        ext=os.path.splitext(filename)[1][1:].strip().lower()
+        print "ext: ", ext
+        if ext== 'json':
+            return filename
+    return None
+
 def import_network_from_pywr_json(directory, basefolder):
     os.chdir(directory)
-    if not os.path.exists('pywr.json'):
-        return ["pywr json file (pywr.json) is not found ..."]
+    json_file = get_json_file(directory)
+    print "JSON File: ", json_file
+    if json_file == None:
+        return ["pywr json file is not found ..."]
+
+    #if not os.path.exists('pywr.json'):
+    #    return ["pywr json file (pywr.json) is not found ..."]
     pp = basefolder.split('\\')
     pp1 = pp[0: (len(pp) - 1)]
     basefolder = '\\'.join(pp1)
     pywr_import=os.path.join(basefolder,"Apps","pywr_app", "Importer","PywrImporter.py")
     exe="python " + pywr_import
-    args={"f": "pywr.json"}
+    args={"f": json_file}
     return run_app_(exe, args, False)
 
 
