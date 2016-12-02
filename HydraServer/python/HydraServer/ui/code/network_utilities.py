@@ -60,12 +60,8 @@ def create_network(network, user_id):
 
     return JSONObject(new_network)
 
-def get_network (network_id, scenario_id, user_id):
-    attrs_= hc.get_all_attributes()
-    attr_id_name = {}
-    for attr in attrs_:
-        attr_id_name[attr.attr_id]=attr.attr_name
-    network = hc.load_network(network_id, scenario_id, user_id=user_id)
+def get_network (network_id, user_id):
+    network = hc.load_network(network_id, user_id=user_id)
     network.id = network.network_id
     network.name = network.network_name
 
@@ -170,8 +166,7 @@ def get_network (network_id, scenario_id, user_id):
 
     log.info("Network %s retrieved", network.network_name)
 
-    net_scn = {'network_id': network_id, 'scenario_id': scenario_id}
-    return node_coords, links, node_name_map,  extents, network, nodes_, links_,  net_scn,  attr_id_name
+    return node_coords, links, node_name_map,  extents, network, nodes_, links_
 
 
 def get_resource(resource_type, resource_id, user_id, scenario_id=None):

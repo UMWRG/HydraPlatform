@@ -1,9 +1,7 @@
 $(document).on("click", ".network", function(){
    var net_id = this.id.split('_')[1];
 
-    $('#scenario_list .table-row').addClass('hidden');
-
-   var scenario_container = $('#network_'+net_id+'_scenarios').removeClass('hidden');
+   window.location.href = go_network_url + net_id
 
 });
 
@@ -38,7 +36,7 @@ $(document).on("click", "#create-network-button", function(event){
     }
 
     $.ajax({
-        url: "/create_network",
+        url: add_network_url,
         data : JSON.stringify(data),
         success: success,
         error: error,

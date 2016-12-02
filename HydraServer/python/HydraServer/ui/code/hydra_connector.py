@@ -6,11 +6,23 @@ from HydraServer.lib import attributes as attrs
 from HydraServer.lib import data  as data
 
 
-def load_network(network_id, scenario_id, user_id):
+def load_network(network_id, user_id):
     return net.get_network(int(network_id),
                            summary=False,
                            include_data='Y',
-                           scenario_ids=[scenario_id], user_id=user_id)
+                           user_id=user_id)
+
+def get_projects(user_id):
+    projects = proj.get_projects(user_id, user_id=user_id)
+    return projects
+
+def get_project(project_id, user_id):
+    project = proj.get_project(project_id, user_id=user_id)
+    return project
+
+def add_project(project, user_id):
+    project = proj.add_project(project, user_id=user_id)
+    return project
 
 def get_node(node_id, user_id):
     return net.get_node(node_id, user_id=user_id)

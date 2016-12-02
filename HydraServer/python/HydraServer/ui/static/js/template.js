@@ -1,10 +1,15 @@
 $(document).ready(function(){
+
+
     $('#templatetable .typeattrs .selectpicker').selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
+
+
     $('#templatetable .selectpicker').selectpicker({
     }); 
+
     
 })
 
@@ -18,10 +23,11 @@ $(document).on('click', "#addnodetype", function(event){
     
     $("#templatetable tbody.nodetypes").append(nodetyperow);
 
-    $('.selectpicker .typeattrs', nodetyperow).selectpicker({
+    $('.typeattrs .selectpicker', nodetyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
+
     $('.selectpicker', nodetyperow).selectpicker({
     }); 
 
@@ -36,7 +42,7 @@ $(document).on('click', "#addlinktype", function(event){
     
     $("#templatetable tbody.linktypes").append(linktyperow);
 
-    $('.selectpicker .typeattrs', linktyperow).selectpicker({
+    $('.typeattrs .selectpicker', linktyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
@@ -56,7 +62,7 @@ $(document).on('click', "#addgrouptype", function(event){
     
     $("#templatetable tbody.grouptypes").append(grouptyperow);
 
-    $('.selectpicker .typeattrs', grouptyperow).selectpicker({
+    $('.typeattr .selectpicker', grouptyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
@@ -159,6 +165,15 @@ $(document).on("click", "#save-template-button", function(event){
                 ta['default_dataset_id'] = default_value.dataset_id
             }
 
+            var details = $('.attr-'+attr_id, row)
+            var is_var = $(".attr-"+attr_id+" input[name='is_var']", row)
+
+            if (is_var.prop('checked') == true){
+                ta['is_var'] = 'Y'
+            }else{
+                ta['is_var'] == 'N';
+            }
+
             typeattrs.push(ta)
         })
         templatetype.typeattrs = typeattrs
@@ -249,3 +264,21 @@ $(document).on('click', '.toggleattributedetails', function(){
 
 })
 
+$(document).on('click', ".togglesection", function(){
+    
+    var tbody = $(this).closest('tbody')
+
+
+    $('.resourcetype', tbody).toggle()
+    
+    var icon = $('span', this)
+
+    if (icon.hasClass('fa-plus')){
+        icon.removeClass('fa-plus')
+        icon.addClass('fa-minus')
+    }else{
+        icon.removeClass('fa-minus')
+        icon.addClass('fa-plus')
+    }
+
+})

@@ -5,29 +5,83 @@
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
   <title>User ${display_name}'s Projects</title>
+
+  <script src="{{url_for('static', filename='js/projects.js')}}"></script>
+  <script>
+    var add_project_url = "{{url_for('do_create_project')}}"
+    var go_project_url = "{{url_for('go_project', project_id=XXX)}}"
+  </script>
+
 </head>
 
 <body>
     {% include "header.html" %}
-    <div class="container-fixed">
+    <div id="project-container" class="container-fluid">
+        
 
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Project Description</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for p in projects %}
-            <tr>
-                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_name }}</a></td>
-                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_description }}</a></td>
-            </tr>
+        <div class="container-fluid grid">
+        <h2>My Projects</h2>
+          <ul class="list-unstyled row">
+            {% for p in projects %}
+                <li id="project-{{p.project_id}}" class="col-sm-2">
+                    <a type="button"
+                       class="btn btn-lg link" 
+                       href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
+                        <span>
+                            <div>{{p.project_name}}
+                            </div>
+                            <div class="summary">
+                                {%if p.networks|length == 0%}
+                                    Empty
+                                {%elif p.networks|length == 1%}
+                                    One network
+                                {%else%}
+                                    {{p.networks|length}} Networks}}
+                                {%endif%}
+                            </div>
+                        </span>
+                    </a>
+                </li>
             {% endfor %}
-          </tbody>
-        </table>
+            <li id="new-project" class="col-sm-2">
+                <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
+                    <span class="fa fa-plus "></span>
+                </span>
+            </li>
+          </ul>
+        </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="add_project_modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create a Project</h4>
+          </div>
+          <div class="modal-body">
+              <form id="create-project" action="create_project" type="POST">
+                <table class="table">
+                <tr>
+                    <td><label for="project-name-input">Name*</label></td>
+                    <td><input id="project-name-input" type="text" name="name" value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="project-description-input">Description</label></td>
+                    <td><input id="project-description-input" type="text" name="description" value=""></input></td>
+                </tr>
+                </table>
+                <div>* This is mandatory</div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-create-project-button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="create-project-button" class="btn btn-success" data-dismiss="modal">Create</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     {% include 'footer.html' %}
 </body>
 </html>

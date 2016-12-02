@@ -1,5 +1,11 @@
 {% extends "page_layout.html" %}
-{% block title %}{{template.template_name}}{% endblock %}
+{% block title %}
+{%if not new%}
+    {{template.template_name}}
+{%else%}
+    New Template
+{%endif%}
+{% endblock %}
 {% block content %}
 <script>
 
@@ -14,23 +20,27 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
    var template_id = {{template.template_id}};
 {%endif%}
 </script>
-<h3>{{template.template_name}}</h3> 
+<h3>
+    {%if not new%}
+        {{template.template_name}}
+    {%else%}
+        New Template
+    {%endif%}
+
+</h3> 
 
     <table id="templatetable" type="table" class="table">
         <tbody class="general">
             <tr class=""><td></td><td class="header">Template Name</td><td><input name="template_name" 
-                    value="{{template.template_name}}"type="text"></input></td></tr>
-           <!-- <tr><td></td><td>Description</td><td><input 
-                    name="template_description" 
-                    value="{{template.template_description}}"
-                    type="text"></input></td></tr>-->
+                    value="{%if not new%}{{template.template_name}}{%endif%}"
+                        type="text"></input></td></tr>
                 <tr class="header">
-                    <td>-</td>
+                    <td class='togglesection'><span class="fa fa-minus"></span></td>
                     <td>Network Details</td>
                     <td>
                     </td>
                 </tr>
-                {%if new==False%}
+            {%if new==False%}
                 {% for resourcetype in template.templatetypes%}
                     {% if resourcetype.resource_type == 'NETWORK'%}
                     <tr class="resourcetype networktype" id="{{resourcetype.type_id}}">
@@ -70,19 +80,12 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                     {%endif%}
                 {%endfor%}
             {%else%}        
-                    <tr class="resourcetype">
+                    <tr class="resourcetype networktype" style='display:none'>
                         <td></td>
                         <td>Network Type:<input name="name" type="text">
                         <td colspan="2">
                             <table class="table">
                                 <tr>
-                                    <td>Network Type 
-                                        <input 
-                                        name="name" 
-                                        type="text"
-                                        value=""></input>
-                                    </td>
-
                                     <td class="typeattrs">Attributes:
                                         <select  class="selectpicker" multiple=multiple>
                                             {%for attr in all_attrs%}
@@ -105,7 +108,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         </tbody>
         <tbody class="nodetypes">
                 <tr class="header">
-                    <td>-</td>
+                    <td class='togglesection'><span class="fa fa-plus"></span></td>
                     <td>Nodes</td>
                     <td>
                         <button id="addnodetype" type="button" class="btn btn-primary">
@@ -117,7 +120,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
             {%if not new%}
                 {% for resourcetype in template.templatetypes%}
                     {% if resourcetype.resource_type == 'NODE'%}
-                    <tr class="resourcetype nodetype" id="{{resourcetype.type_id}}">
+                    <tr class="resourcetype nodetype" id="{{resourcetype.type_id}}" style='display:none'>
                         <td class="toggleattributedetails">
                             <span class="glyphicon glyphicon-chevron-right"></span></td>
                         <td colspan="2">
@@ -163,7 +166,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         </tbody>
         <tbody class="linktypes">
         <tr class="header">
-            <td>-</td>
+            <td class='togglesection'><span class="fa fa-plus"></span></td>
             <td>Links</td>
             <td>
                 <button id="addlinktype" type="button" class="btn btn-primary">
@@ -175,7 +178,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         {%if not new%}
         {% for resourcetype in template.templatetypes%}
             {% if resourcetype.resource_type == 'LINK'%}
-                <tr class="resourcetype linktype" id="{{resourcetype.type_id}}">
+                <tr class="resourcetype linktype" id="{{resourcetype.type_id}}" style='display:none'>
                       <td class="toggleattributedetails">
                             <span class="glyphicon glyphicon-chevron-right"></span></td>
  
@@ -226,7 +229,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         </tbody>
         <tbody class="grouptypes">
         <tr class="header">
-            <td>-</td>
+            <td class='togglesection'><span class="fa fa-plus"></span></td>
             <td>Groups</td>
             <td>
                 <button id="addgrouptype" type="button" class="btn btn-primary">
@@ -238,7 +241,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         {%if not new%}
         {% for resourcetype in template.templatetypes%}
             {% if resourcetype.resource_type == 'GROUP'%}
-                <tr class="resourcetype grouptype"  id="{{resourcetype.type_id}}">
+                <tr class="resourcetype grouptype"  id="{{resourcetype.type_id}}" style='display:none'>
                         <td></td>
                         <td colspan="2">
                             <table class="table">
@@ -276,7 +279,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
         <td></td>
         <td colspan="2">
             <table class="table">
-                <tr>
+                <tr class="">
                     <td>Name <input name="name" type="text"></input></td>
                     {%include 'typeattributes.html'%}
 
@@ -454,7 +457,6 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
 <script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
-<script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>

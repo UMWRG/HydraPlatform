@@ -2,6 +2,8 @@
     {%for ta in resourcetype.typeattrs%}
         <tr class="attributedetail attr-{{ta.attr_id|int}}">
             <td>{{attr_id_name_lookup[ta.attr_id]}}</td>
+
+            <td>Variable? <input type="checkbox" name="is_var" {%if ta.attr_is_var == 'Y'%}checked="checked"{%endif%}></input></td>
             <td class="datatypecontainer">
                 <select name="data_type" class="data_types selectpicker">
                     <option value="scalar" {%if ta.data_type == 'scalar'%}selected{%endif%}>Single Number</option>

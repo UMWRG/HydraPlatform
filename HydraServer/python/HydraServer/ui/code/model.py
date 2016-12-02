@@ -3,10 +3,9 @@ import json
 import logging
 log = logging.getLogger(__name__)
 
-from datetime import datetime
+from decimal import Decimal
 
-from HydraLib import config
-import zlib
+from datetime import datetime
 
 class JSONObject(dict):
     """
@@ -19,7 +18,12 @@ class JSONObject(dict):
                 obj = json.loads(obj_dict)
                 assert isinstance(obj, dict), "JSON string does not evaluate to a dict"
             except Exception:
+                log.info(obj_dict)
+
                 raise ValueError("Unable to read string value. Make sure it's JSON serialisable")
+        elif hasattr(obj_dict, '_asdict'):
+            #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
+            obj = obj_dict._asdict()
         elif hasattr(obj_dict, '__dict__'):
             #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
             obj = obj_dict.__dict__
@@ -33,28 +37,29 @@ class JSONObject(dict):
             if isinstance(v, dict):
                 setattr(self, k, JSONObject(v, obj_dict))
             elif isinstance(v, list):
-                log.info(v)
                 l = [JSONObject(item, obj_dict) for item in v]
                 setattr(self, k, l)
             elif hasattr(v, '_sa_instance_state') and v != parent: #Special case for SQLAlchemy obhjects
 
                 l = JSONObject(v)
                 setattr(self, k, l)
+            elif isinstance(v, Decimal):
+                v = float(v)
             else:
                 if k == '_sa_instance_state':# or hasattr(v, '_sa_instance_state'): #Special case for SQLAlchemy obhjects
                     continue
                 if type(v) == type(parent):
                     continue
 
-                try:
-                    v = int(v)
-                except:
-                    pass
+                #try:
+                #    v = int(v)
+                #except:
+                #    pass
 
-                try:
-                    v = float(v)
-                except:
-                    pass
+                #try:
+                #    v = float(v)
+                #except:
+                #    pass
 
                 if k == 'layout' and v is not None:
                     v = JSONObject(v)
@@ -88,51 +93,3 @@ class JSONObject(dict):
             return str(self.properties)
         else:
             return None
-
- 
-class Dataset(JSONObject):
-    def parse_value(self):
-        """
-            Turn the value of an incoming dataset into a hydra-friendly value.
-        """
-        try:
-            #attr_data.value is a dictionary,
-            #but the keys have namespaces which must be stripped.
-
-
-            if self.value is None:
-                log.warn("Cannot parse dataset. No value specified.")
-                return None
-
-            data = str(self.value)
-
-            if len(data) > 100:
-                log.debug("Parsing %s", data[0:100])
-            else:
-                log.debug("Parsing %s", data)
-
-            if self.type == 'descriptor':
-                return data
-            elif self.type == 'scalar':
-                return data
-            elif self.type == 'timeseries':
-                timeseries_pd = pd.read_json(data)
-
-                #Epoch doesn't work here because dates before 1970 are not
-                # supported in read_json. Ridiculous.
-                ts = timeseries_pd.to_json(date_format='iso', date_unit='ns')
-                if len(data) > int(config.get('db', 'compression_threshold', 1000)):
-                    return zlib.compress(ts)
-                else:
-                    return ts
-            elif self.type == 'array':
-                #check to make sure this is valid json
-                json.loads(data)
-                if len(data) > int(config.get('db', 'compression_threshold', 1000)):
-                    return zlib.compress(data)
-                else:
-                    return data
-        except Exception, e:
-            log.exception(e)
-            raise HydraError("Error parsing value %s: %s"%(self.value, e))
-

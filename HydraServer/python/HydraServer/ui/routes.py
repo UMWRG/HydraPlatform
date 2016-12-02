@@ -1,8 +1,6 @@
 from flask import  request, session, redirect, url_for, escape, send_file, jsonify, Markup
 import json
 
-from HydraServer.lib import project as proj
-
 from HydraServer.util.hdb import login_user
 from HydraServer.soap_server.hydra_base import get_session_db
 
@@ -34,6 +32,7 @@ log = logging.getLogger(__name__)
 
 from app_utilities import delete_files_from_folder, create_zip_file
 
+import project_utilities as projutils
 import network_utilities as netutils 
 import attr_utilities as attrutils
 import template_utilities as tmplutils
@@ -67,7 +66,7 @@ def index():
     else:
         user_id = session['user_id']
         username = escape(session['username'])
-        projects = proj.get_projects(user_id, **{'user_id':user_id})
+        projects = projutils.get_projects(user_id)
         app.logger.info("Logged in. Going to projects page.")
         return render_template('projects.html',
                                display_name=username,
@@ -251,16 +250,13 @@ def go_project(project_id):
         Get a user's projects
     """
     user_id = session['user_id']
-    project = proj.get_project(project_id, user_id=user_id)
+    project = projutils.get_project(project_id, user_id)
     app.logger.info("Project %s retrieved", project.project_name)
     '''
     if the project has only one network and the network has only one scenario, it will display network directly
     '''
-    if len(project.networks)==1 and len(project.networks[0].scenarios)==1:
-        return redirect(url_for('go_network', network_id=project.networks[0].network_id, scenario_id=project.networks[0].scenarios[0].scenario_id))
-    else:
-        network_types = tmplutils.get_all_network_types(user_id)
-        return render_template('project.html',\
+    network_types = tmplutils.get_all_network_types(user_id)
+    return render_template('project.html',\
                               username=session['username'],\
                               display_name=session['username'],\
                               project=project,
@@ -285,6 +281,22 @@ def do_create_network():
 
     return net.as_json()
 
+@app.route('/create_project', methods=['POST'])
+def do_create_project():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    proj_j = JSONObject(d)
+
+    proj = projutils.create_project(proj_j, user_id) 
+    
+    commit_transaction()
+
+    return proj.as_json()
+
+
 
 
 def allowed_file (filename):
@@ -294,18 +306,17 @@ def allowed_file (filename):
     else:
         return False
 
-@app.route('/network', methods=['GET'])
-def go_network():
+@app.route('/network/<network_id>', methods=['GET'])
+def go_network(network_id):
     """
         Get a user's projects
     """
 
     user_id = session['user_id']
 
-    app.logger.info(request.args['scenario_id'])
-    scenario_id = request.args['scenario_id']
-    network_id = request.args['network_id']
-    node_coords, links, node_name_map, extents, network, nodes_, links_, net_scn, attr_id_name = netutils.get_network(network_id, scenario_id, user_id) 
+    node_coords, links, node_name_map, extents, network, nodes_, links_ = netutils.get_network(network_id, user_id) 
+
+    attr_id_name_map = netutils.get_attr_id_name_map()
 
     template_id = network.types[0].templatetype.template_id
     tmpl = tmplutils.get_template(template_id, user_id)
@@ -319,7 +330,7 @@ def go_network():
         type_layout_map[tmpltype.type_id] = layout
 
     return render_template('network.html',\
-                scenario_id=scenario_id,
+                scenario_id=network.scenarios[0].scenario_id,
                 node_coords=node_coords,\
                 links=links,\
                 username=session['username'],\
@@ -329,8 +340,7 @@ def go_network():
                 network=network,\
                 nodes_=nodes_,\
                 links_=links_, \
-                net_scn=net_scn, \
-                attr_id_name=attr_id_name,\
+                attr_id_name=attr_id_name_map,\
                 template = tmpl,\
                 type_layout_map=type_layout_map)
 
