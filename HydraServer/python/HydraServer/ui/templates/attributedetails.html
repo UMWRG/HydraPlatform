@@ -13,6 +13,7 @@
                 </select>
             </td>
             <td class="defautvaluecontainer dataset">
+                <input type="hidden" name="attr_id" value={{ta.attr_id|int}} >
                 <input type="hidden" name="attr_name" value="{{attr_id_name_lookup[ta.attr_id]}}"></input>
                 <input name="value" type="" 
                     {%if ta.data_type%}

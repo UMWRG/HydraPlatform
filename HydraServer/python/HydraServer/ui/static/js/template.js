@@ -24,7 +24,6 @@ $(document).on('click', "#addnodetype", function(event){
     $("#templatetable tbody.nodetypes").append(nodetyperow);
 
     $('.typeattrs.selectpicker', nodetyperow).selectpicker({
-       // style: 'btn-info',
         liveSearch:true
     }); 
 
@@ -70,6 +69,48 @@ $(document).on('click', "#addgrouptype", function(event){
     $('.selectpicker', grouptyperow).selectpicker({
     }); 
 
+
+})
+
+$(document).on('change', 'select.typeattrs', function(event){
+
+
+    var row = $(this).closest('.resourcetype');
+    
+    var attrdetails = $("tbody.attributedetails", row);
+
+    var selected = $(this).val()
+
+    if (selected == null){selected = []}
+
+
+    //First remove any de-selected attribute rows
+    $('tr.attributedetail', attrdetails).each(function(){
+         var this_id = $('input[name="attr_id"]', $(this)).val()
+         if (selected.indexOf(this_id) == -1){
+            $(this).remove()
+         }
+    })
+
+    for (var i=0; i<selected.length; i++){
+
+        var attr_id = selected[i]
+        var attr = $("option[value="+attr_id+"]", row)
+        var attr_name   = attr.text()
+        
+        var attr_row = $(".attributedetail.attr-"+attr_id, row)
+
+        if (attr_row.length == 0){
+            var row_tmpl = $("#attrdetailstemplate tr.attributedetail").clone();
+            row_tmpl.addClass('attr-'+attr_id);
+        
+            $('td.attr-name', row_tmpl).text(attr_name);
+            $('input[name="attr_name"]', row_tmpl).val(attr_name);
+            $('input[name="attr_id"]', row_tmpl).val(attr_id);
+
+            attrdetails.append(row_tmpl)
+        }
+    }
 
 })
 

@@ -420,6 +420,21 @@ $(document).on('click', '.dataset .ts-graph', function(){
     setTimeout(function(){draw_timeseries(graph_data, attr_name)}, 300)
 })
 
+
+$(document).on('change', '.dataset input[name="value"]',function(){
+
+    var $this = $(this)
+    var parent = $this.closest('.dataset')
+
+    var metadata = $('.md-edit', parent);
+
+    if ($this.val() == ""){
+        metadata.prop('disabled', true)
+    }else{
+        metadata.prop('disabled', false)
+    }
+})
+
 $(document).on('click', '.dataset .arr-edit', renderArray)
 
 var insertModals = function(){
