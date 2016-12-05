@@ -37,8 +37,12 @@ class JSONObject(dict):
             if isinstance(v, dict):
                 setattr(self, k, JSONObject(v, obj_dict))
             elif isinstance(v, list):
-                l = [JSONObject(item, obj_dict) for item in v]
-                setattr(self, k, l)
+                #another special case for datasets
+                if k == 'metadata':
+                    setattr(self, k, JSONObject(obj_dict.get_metadata_as_dict()))
+                else:
+                    l = [JSONObject(item, obj_dict) for item in v]
+                    setattr(self, k, l)
             elif hasattr(v, '_sa_instance_state') and v != parent: #Special case for SQLAlchemy obhjects
 
                 l = JSONObject(v)

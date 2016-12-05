@@ -40,6 +40,8 @@ function draw_timeseries(graph_data, attr_name)
 
     // Define the div for the tooltip
 
+    var toLocaleFormat = d3.timeFormat("%Y-%m-%d");
+
     var ts_tip = d3.tip()
       .attr('class', 'ts-d3-tip')
       .offset([-10, 0])

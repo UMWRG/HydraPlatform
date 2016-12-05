@@ -14,8 +14,6 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
         attr_id = rs.resourceattr.attr_id
         dataset = JSONObject(rs.dataset)
 
-        dataset.metadata = set_metadata(dataset.metadata)
-
         res_scenarios[attr_id] =  JSONObject({'rs_id': res_id, 
                  'ra_id': rs.resourceattr.resource_attr_id,
                  'attr_id': attr_id,

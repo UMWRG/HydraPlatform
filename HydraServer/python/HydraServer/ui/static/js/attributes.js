@@ -149,4 +149,42 @@ function get_network_attributes()
     get_resource_data('NETWORK', d)
 }
 
+$(document).on("click", "#create-attr-button", function(event){
 
+    event.preventDefault();
+
+    var formdata = $("#create-attr").serializeArray();
+    var data = {}
+    for (var i=0; i<formdata.length; i++){
+        var d = formdata[i]
+        data[d['name']] = d['value']
+    }
+
+    var success = function(resp){
+        var new_attr = JSON.parse(resp)
+
+        var new_attr_option = "<option value='"+new_attr.attr_id+"'>"+new_attr.attr_name+" (" + new_attr.attr_dimen + ") </option>";
+
+        $("select.typeattrs").each(function(){
+            $(this).append(new_attr_option)
+        })
+        
+        $('.selectpicker').selectpicker('refresh');
+
+
+        $("#close-create-attr-button").click() 
+    }
+
+    var error = function(e){
+        alert("An error has occurred:"  +e.message)
+    }
+
+    $.ajax({
+        url: add_attr_url,
+        data : JSON.stringify(data),
+        success: success,
+        error: error,
+        method:'POST',
+    })
+
+})

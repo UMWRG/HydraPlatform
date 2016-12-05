@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 
-    $('#templatetable .typeattrs .selectpicker').selectpicker({
+    $('#templatetable .typeattrs.selectpicker').selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
@@ -23,7 +23,7 @@ $(document).on('click', "#addnodetype", function(event){
     
     $("#templatetable tbody.nodetypes").append(nodetyperow);
 
-    $('.typeattrs .selectpicker', nodetyperow).selectpicker({
+    $('.typeattrs.selectpicker', nodetyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
@@ -32,6 +32,7 @@ $(document).on('click', "#addnodetype", function(event){
     }); 
 
 })
+
 $(document).on('click', "#addlinktype", function(event){
     event.preventDefault(); 
 
@@ -42,7 +43,7 @@ $(document).on('click', "#addlinktype", function(event){
     
     $("#templatetable tbody.linktypes").append(linktyperow);
 
-    $('.typeattrs .selectpicker', linktyperow).selectpicker({
+    $('.typeattrs.selectpicker', linktyperow).selectpicker({
        // style: 'btn-info',
         liveSearch:true
     }); 
@@ -69,36 +70,6 @@ $(document).on('click', "#addgrouptype", function(event){
     $('.selectpicker', grouptyperow).selectpicker({
     }); 
 
-
-})
-
-$(document).on("click", "#create-attr-button", function(event){
-
-    event.preventDefault();
-
-    var formdata = $("#create-attr").serializeArray();
-    var data = {}
-    for (var i=0; i<formdata.length; i++){
-        var d = formdata[i]
-        data[d['name']] = d['value']
-    }
-
-    var success = function(){
-        $("#close-create-attr-button").click() 
-        location.reload()
-    }
-
-    var error = function(e){
-        alert("An error has occurred:"  +e.message)
-    }
-
-    $.ajax({
-        url: "/create_attr",
-        data : JSON.stringify(data),
-        success: success,
-        error: error,
-        method:'POST',
-    })
 
 })
 
@@ -207,6 +178,7 @@ var getDefaultValue = function(attr_id, row){
     var details = $('.attr-'+attr_id, row)
     var datatype = $('.data_types option:selected', details)
     var default_val = $(".dataset input[name=value]", details)
+    var metadata = $(".dataset input[name=metadata]", details)
 
     if (default_val.length > 0 && default_val.val() != ""){
 
@@ -214,6 +186,7 @@ var getDefaultValue = function(attr_id, row){
         defaultDataset = createDataset({
             type     : datatype.val(),
             value    : default_val.val(),
+            metadata : metadata.val(),
         })
 
     }

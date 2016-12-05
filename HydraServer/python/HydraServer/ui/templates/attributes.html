@@ -27,6 +27,13 @@
                 <input type="hidden" name="rs_id" value="{{rs.rs_id}}"></input>
                 <input type="hidden" name="ra_id" value="{{rs.ra_id}}"></input>
                 <input type="hidden" name="dataset_id" value="{{rs.dataset.dataset_id}}"></input>
+                <input type="hidden" name="metadata" 
+                {%if rs.dataset and rs.dataset.metadata%}
+                    value="{{rs.dataset.metadata.as_json()}}"
+                {%else%}
+                    value=""
+                {%endif%}
+                ></input>
                 <input type="hidden" name="dataset_name" value="{{rs.dataset.data_name}}"></input>
                 {%if data_type == "descriptor"%}
                     <input type="hidden" name="data_type" value="descriptor"></input>

@@ -70,11 +70,11 @@ def add_attr(attr, user_id):
 
 def add_dataset(dataset, user_id):
     new_dataset = data.add_dataset(
-                    dataset['data_type'],
+                    dataset['type'],
                     dataset['value'],
                     dataset.get('unit', None),
                     dataset.get('dimension', None),
-                    dataset.get('metadata', {}),
+                    dataset.get_metadata_as_dict(),
                     user_id=user_id,
                     flush=True)
     return new_dataset

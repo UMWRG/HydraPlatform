@@ -417,6 +417,7 @@ def do_get_resource_data():
                                                   user_id)
 
     attr_id_name_map = netutils.get_attr_id_name_map()
+    
 
     return render_template('attributes.html', 
                            attr_id_name_map=attr_id_name_map,

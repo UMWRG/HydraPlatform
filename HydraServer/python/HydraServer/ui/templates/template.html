@@ -10,6 +10,7 @@
 <script>
 
 var add_dataset_url = "{{url_for('do_create_dataset')}}"
+var add_attr_url = "{{url_for('do_create_attr')}}"
 {%if new%}
     var isnew = 'Y';
     var save_template_url = "{{url_for('do_create_template')}}"
@@ -55,23 +56,7 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
                                         value="{{resourcetype.type_name}}"></input>
                                     </td>
 
-                                    <td class="typeattrs">Attributes:
-                                        <select  class="selectpicker" multiple=multiple>
-                                            {%for attr in all_attrs%}
-                                            <option value="{{attr.attr_id}}"
-                                                    {%if attr.attr_id in typeattr_lookup[resourcetype.type_id]%}
-                                                    selected="selected"
-                                                    {%endif%}
-                                             >
-                                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                                            </option>
-                                            {%endfor%}
-                                        </select>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" 
-                                            data-toggle="modal" data-target="#add_attr_modal">
-                                            <span class="glyphicon glyphicon-plus"></span> 
-                                        </button>
-                                    </td>
+                                    {%include 'typeattributes.html'%}
                                 </tr>
                             </table>
                         </td>
@@ -353,18 +338,8 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
             <table class="table">
                 <tr>
                     <td>Name <input name="name" type="text"></input></td>
-                    <td class="typeattrs">Attributes:
-                        <select class="" multiple=multiple>
-                            {%for attr in all_attrs%}
-                            <option value="{{attr.attr_id}}">
-                                {{attr.attr_name}} ({{attr.attr_dimen}})
-                            </option>
-                            {%endfor%}
-                        </select>
-                        <button type="button" class="btn btn-primary btn-small" 
-                            data-toggle="modal" data-target="#add_attr_modal">
-                            <span class="glyphicon glyphicon-plus"></span> 
-                        </button>
+                    <td class="">Attributes:
+                        {%include 'typeattributes.html'%}
                     </td>
                     <td class="typelayout">
                         <input class="colorpicker" type='color'></input>
@@ -457,6 +432,10 @@ var add_dataset_url = "{{url_for('do_create_dataset')}}"
 <script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
+<script src="{{url_for('static', filename='js/attributes.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
+<script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>

@@ -70,6 +70,16 @@ var updateInputs = function(element){
             valueinput.hide();
             $(this).append('<button class="btn btn-outline-primary btn-sm arr-edit" data-toggle="modal" data-target="#array-editor"><span class="fa fa-pencil"></span></button>')
         }
+
+
+        var mdinput = $("input[name='metadata']", this)
+        if (valueinput.val() == ""){
+            $(this).append('<button class="btn btn-outline-primary btn-sm md-edit" data-toggle="modal" data-target="#md-editor" disabled><span class="fa fa-th"></span></button>')
+        }else{
+            $(this).append('<button class="btn btn-outline-primary btn-sm md-edit" data-toggle="modal" data-target="#md-editor"><span class="fa fa-th"></span></button>')
+        }
+
+
     })
 
 }
@@ -102,6 +112,79 @@ function defaultValueRenderer(instance, td, row, col, prop, value, cellPropertie
 }
 
 
+var renderMetadata = function(btn){
+
+    var datasetcontainer = $(btn).closest('.dataset')
+
+    currentVal = $("input[name='metadata']", datasetcontainer)
+
+    var valuetext = currentVal.val()
+
+    if (valuetext == ''){
+        data = [['', '']];
+    }else{
+        data = mdToHot(valuetext)
+    }
+    var container = document.getElementById("md-edit-inner");
+
+    hot = new Handsontable(container, {
+        data: data, 
+        rowHeaders: true,
+        colHeaders: ['Key', 'Value'],
+
+        contextMenu: true,
+        stretchH: "all",
+        contextMenuCopyPaste: true
+
+    });
+
+
+    $(document).off('focusin.bs.modal');
+
+      /*  startRows: 8,
+        startCols: 5,
+        minSpareRows: 1,
+        cells: function (row, col, prop) {
+          var cellProperties = {};
+
+          cellProperties.renderer = defaultValueRenderer;
+
+          return cellProperties;
+        },
+        beforeChange: function (changes) {
+          var instance = hot1,
+            ilen = changes.length,
+            clen = instance.colCount,
+            rowColumnSeen = {},
+            rowsToFill = {},
+            i,
+            c;
+
+          for (i = 0; i < ilen; i++) {
+            // if oldVal is empty
+            if (changes[i][2] === null && changes[i][3] !== null) {
+              if (isEmptyRow(instance, changes[i][0])) {
+                // add this row/col combination to cache so it will not be overwritten by template
+                rowColumnSeen[changes[i][0] + '/' + changes[i][1]] = true;
+                rowsToFill[changes[i][0]] = true;
+              }
+            }
+          }
+          for (var r in rowsToFill) {
+            if (rowsToFill.hasOwnProperty(r)) {
+              for (c = 0; c < clen; c++) {
+                // if it is not provided by user in this change set, take value from template
+                if (!rowColumnSeen[r + '/' + c]) {
+                  changes.push([r, c, null, tpl[c]]);
+                }
+              }
+            }
+          }
+        }
+      })*/
+
+}
+
 var renderTimeseries = function(btn){
 
     var datasetcontainer = $(btn).closest('.dataset')
@@ -127,7 +210,7 @@ var renderTimeseries = function(btn){
         columns: [
         {
             type: 'date',
-            dateFormat: 'DD/MM/YY',
+            dateFormat: 'DD/MM/YYYY',
             strict: false,
             defaultDate: '01/01/16',
         },
@@ -265,10 +348,56 @@ var hotToTs = function(){
 
 }
 
+$(document).on('click', '#md-editor .save', function(event){
+    
+    var md_data = hotToMd();
+
+    currentVal.val(JSON.stringify(md_data))
+
+    $('#md-editor').modal('hide')
+
+})
+
+var mdToHot = function(valuetext){
+    var md = JSON.parse(valuetext)
+    hot_data = []
+    for (var col in md){
+        var v = md[col]
+        hot_data.push([col, v])// Add time and value
+    }
+
+    return hot_data
+}
+
+var hotToMd = function(){
+    var hot_data = hot.getData()
+
+    var md_data = {}
+
+    for (var i=0; i<hot_data.length; i++){
+        //Get the time
+        var k = hot_data[i][0]
+        var v = hot_data[i][1]
+
+        md_data[k] = v
+        
+    }
+
+    return md_data
+
+}
+
 $(document).on('click', '.dataset .ts-edit', function(){
     var btn = this;
     setTimeout(function(){renderTimeseries(btn)}, 300)
 })
+
+$(document).on('click', '.dataset .md-edit', function(){
+    var btn = this;
+    setTimeout(function(){renderMetadata(btn)}, 300)
+})
+
+
 
 $(document).on('click', '.dataset .ts-graph', function(){
     var btn = this;
@@ -297,12 +426,16 @@ var insertModals = function(){
 
     $('body').append(ts_modal)
     $('body').append(array_modal)
+    $('body').append(metadata_modal)
     
     $('#ts-editor').on('hidden.bs.modal', function (e) {
         if (hot != null){
             hot.destroy()
         }
-        $('#ts-edit-inner').empty()
+        $('.ts_inner').empty()
+    })
+    $('#md-editor').on('hidden.bs.modal', function (e) {
+        $('.ts_inner').empty()
     })
 
 }
@@ -341,16 +474,38 @@ var array_modal = `
       </div>
       <div class="modal-body">
         <div class="ts_outer">
-            <div class='ts_inner'>
-            <div>
+            <div class='ts_inner' id='array-edit-inner'>
+            </div>
         </div> <!-- ts outer -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="" class="btn btn-primary save">Save</button>
+        <button type="button" class="btn btn-primary save">Save</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->`;
 
+
+var metadata_modal = `
+<div class="modal fade" tabindex="-1" role="dialog" id="md-editor">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Metadata</h4>
+      </div>
+      <div class="modal-body">
+        <div class="ts_outer">
+            <div class='ts_inner' id='md-edit-inner'> 
+            </div>
+        </div> <!-- ts outer -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->`;
 
