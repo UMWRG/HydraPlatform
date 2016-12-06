@@ -474,6 +474,9 @@ def get_model_file (network_id, model_file):
 def get_pp_exe(app):
     if app.lower()=='gams':
         return os.path.join(basefolder_, 'Apps', 'GAMSApp','GAMSAutoRun.exe' )
+    elif app.lower() == 'pywr':
+        return os.path.join(basefolder_, 'Apps', 'Pywr_App', 'PywrAuto',  'PywrAuto.py')
+
 
 def get_app_args (network_id, scenario_id, model_file):
     return {'t': network_id, 's': scenario_id, 'm': model_file}
@@ -489,6 +492,17 @@ def run_gams_app(network_id, scenario_id, model_file=None):
         return jsonify({}), 202, {'Error': 'Model file is not available, please upload one'}
     args = get_app_args (network_id, scenario_id, model_file)
     pid=run_app_(exe, args)
+    return jsonify({}), 202, {'Address': url_for('appstatus',
+                                                  task_id=pid)}
+
+
+def run_pywr_app(network_id, scenario_id):
+    exe=get_pp_exe('pywr')
+    os.chdir(os.path.dirname(exe))
+
+    exe="python " + exe
+    args = {'t': network_id, 's': scenario_id}
+    pid=run_app_(exe, args, False)
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 
@@ -531,9 +545,9 @@ def import_uploader():
             return "Error, no network and scenario are specified ..."
         else:
             return import_app(network_id, scenario_id, app_name)
-    print "Work till here..."
+    print "Work till here...", app_name
     file = request.files[type]
-    if app_name != 'run_model':
+    if app_name != 'run_gams_model' and app_name != 'run_pywr_app' :
         if (file.filename == '' ) :
             return jsonify({}), 202, {'Error': 'No file is selected'}
         elif not allowed_file(file.filename) :
@@ -543,15 +557,19 @@ def import_uploader():
         uploaded_file = os.path.join(basefolder, filename)
         file.save(uploaded_file)
 
-    print "---------------->", uploaded_file
-    if (app_name == 'run_model'):
+    if (app_name == 'run_gams_model'):
         network_id = request.form['network_id']
         scenario_id = request.form['scenario_id']
         return run_gams_app(network_id, scenario_id, uploaded_file)
 
+    elif(app_name == 'run_pywr_app'):
+        network_id = request.form['network_id']
+        scenario_id = request.form['scenario_id']
+        return run_pywr_app(network_id, scenario_id)
+
+
     zip = zipfile.ZipFile(uploaded_file)
     zip.extractall(extractedfolder)
-
 
     if(app_name== 'csv'):
         pid = import_network_from_csv_files(extractedfolder, basefolder)
@@ -601,7 +619,6 @@ def send_zip_files():
         print "======>> Send methof id called ....", request.form
 
         pars = json.loads(Markup(request.args.get('pars')).unescape())
-        print "---------------------->", pars
         print "Done 222"
         network_id = pars['network_id']
         scenario_id = pars['scenario_id']

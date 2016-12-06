@@ -109,10 +109,18 @@
                 </span>
                 </div><!-- /input-group -->
                 </div>
-
                 <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-default" onclick="runModel()">Run model <span class="glyphicon glyphicon-play"></span></button>
-            </div>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Run a Model
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="runmodeldropdown" style="top:30px">
+                        <li><a href="#" onclick="runGamsModel()" >GAMS Model</a></li>
+                        <li><a href="#" onclick="runPywrApp()">Pywr App</a></li>
+                    </ul>
+                </div>
+                </div>
             <div class="btn-group pull-right">
                 <label >
                     <input id="label" type='checkbox' 

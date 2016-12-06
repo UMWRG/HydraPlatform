@@ -12,6 +12,9 @@ def load_network(network_id, user_id):
                            include_data='Y',
                            user_id=user_id)
 
+def get_network_simple(network_id, user_id):
+    return net.get_network_simple(network_id, user_id=user_id)
+
 def get_projects(user_id):
     projects = proj.get_projects(user_id, user_id=user_id)
     return projects

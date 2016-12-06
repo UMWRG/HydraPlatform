@@ -9,7 +9,7 @@
                     <option value="scalar" {%if ta.data_type == 'scalar'%}selected{%endif%}>Single Number</option>
                     <option value="timeseries" {%if ta.data_type == 'timeseries'%}selected{%endif%}>Time Series</option>
                     <option value="array" {%if ta.data_type == 'array'%}selected{%endif%}>Array</option>
-                    <option value="descriptor" {%if ta.data_type == 'array'%}selected{%endif%}>Free Text</option>
+                    <option value="descriptor" {%if ta.data_type == 'descriptor'%}selected{%endif%}>Free Text</option>
                 </select>
             </td>
             <td class="defautvaluecontainer dataset">

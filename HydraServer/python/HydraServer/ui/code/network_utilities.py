@@ -178,7 +178,19 @@ def get_resource(resource_type, resource_id, user_id, scenario_id=None):
     elif resource_type == 'GROUP':
         return get_resourcegroup(resource_id, user_id)
     elif resource_type == 'NETWORK':
-        return get_network(resource_id, scenario_id, user_id)
+        network = get_network_simple(resource_id, user_id)
+        return network
+
+def get_network_simple(network_id, user_id):
+    network = hc.get_network_simple(network_id, user_id)
+    #Load the network's types
+    for t in network.types:
+        t.templatetype.typeattrs
+    
+    network_j = JSONObject(network)
+    network_j.name = network_j.network_name
+    network_j.id = network_j.network_id
+    return network_j
 
 def get_node(node_id, user_id):
     node = hc.get_node(node_id, user_id)

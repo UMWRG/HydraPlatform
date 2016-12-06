@@ -32,6 +32,8 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
     #Identify any attributes which do not have data -- those not in ther resource attribute table, but in the type attribute table.
     for typ in resource.types:
         tmpltype = typ.templatetype
+        if tmpltype.typeattrs is None:
+            continue
         for tattr in tmpltype.typeattrs:
             if tattr.attr_id not in res_scenarios:
                 res_scenarios[tattr.attr_id] = JSONObject({

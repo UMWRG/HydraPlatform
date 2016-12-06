@@ -22,7 +22,7 @@
    <form  id="import_form" method="post" enctype=multipart/form-data>
         <div class="col-lg-6 col-sm-6 col-12">
 
-               <div class="input-group">
+               <div class="input-group"  id="browse_div">
                    <label class="input-group-btn">
                     <span class="btn btn-primary">
                         Browse&hellip;
@@ -34,11 +34,12 @@
        <span class="help-block">
                 <file></file>
             </span>
-            <input type = "submit" value="Upload" id="CSVFormSubmit"  class="btn btn-info btn-lg" />
+            <input type = "submit" value="Upload" id="runApp"  class="btn btn-info btn-lg" />
             <button type="button" class="btn btn-info btn-lg"  onclick="cancel_app()">Cancel</button>
         </div>
    </form>
-      <div class="modal-footer">
+      <div class="modal-footer" id="footer">
+          <div class="modal-footer" id="temp_">
       </div>
 
 </div>
@@ -46,6 +47,7 @@
         <script src="{{url_for('static', filename='js/apps.js')}}"></script>
 <script>
 add_fileselect_event();
+run_app();
 </script>
     </div>
 

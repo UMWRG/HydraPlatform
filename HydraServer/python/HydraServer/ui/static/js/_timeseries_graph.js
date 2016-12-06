@@ -22,15 +22,15 @@ function draw_timeseries(graph_data, attr_name)
     var y = d3.scaleLinear().range([height, 0]);
 
     // Define the axes
-    var xAxis = d3.axisBottom(x)
+    var xAxis = d3.axisBottom(x).ticks(5)
 
-    var yAxis = d3.axisLeft(y)
+    var yAxis = d3.axisLeft(y).ticks(5)
 
     function make_x_axis() {
-        return d3.axisBottom(x)
+        return d3.axisBottom(x).ticks(10)
     }
     function make_y_axis() {
-        return d3.axisLeft(y)
+        return d3.axisLeft(y).ticks(10)
     }
 
     // Define the line
@@ -44,9 +44,10 @@ function draw_timeseries(graph_data, attr_name)
 
     var ts_tip = d3.tip()
       .attr('class', 'ts-d3-tip')
+      .attr('class', 'd3tip')
       .offset([-10, 0])
       .html(function(d) {
-      return "<strong>date: </strong><span style='color:red'>" + toLocaleFormat(d[0])+" </span>" +"<strong>, "+ attr_name +": </strong><span style='color:red'>" + d[1] + "</span>";
+      return "<strong>Date: </strong><span style='color:red'>" + toLocaleFormat(d[0])+" </span>" +"<strong>, "+ attr_name +": </strong><span style='color:red'>" + d[1] + "</span>";
       //return "<strong>Name:</strong> <span style='color:red'>" + d.name + "</span>";
       })
     // Adds the svg canvas
@@ -67,7 +68,8 @@ function draw_timeseries(graph_data, attr_name)
         // Add the valueline path.
         svg.append("path")
             .attr("class", "line")
-            .attr("d", valueline(graph_data));
+            .attr("d", valueline(graph_data))
+            .style('stroke', '#17315b');
 
         // Add the scatterplot
         svg.selectAll("dot")

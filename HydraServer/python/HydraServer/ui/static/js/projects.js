@@ -1,4 +1,8 @@
 
+$(document).ready(function() {
+     $("#export_data").hide();
+}
+
 $(document).on("click", "#create-project-button", function(event){
 
     event.preventDefault();

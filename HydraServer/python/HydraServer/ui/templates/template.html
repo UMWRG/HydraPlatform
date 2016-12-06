@@ -45,7 +45,8 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
                 {% for resourcetype in template.templatetypes%}
                     {% if resourcetype.resource_type == 'NETWORK'%}
                     <tr class="resourcetype networktype" id="{{resourcetype.type_id}}">
-                        <td></td>
+                        <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
                         <td colspan="2">
                             <table class="table">
                                 <tr>
@@ -58,6 +59,8 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
 
                                     {%include 'typeattributes.html'%}
                                 </tr>
+
+                                    {%include 'attributedetails.html'%}
                             </table>
                         </td>
                     </tr>

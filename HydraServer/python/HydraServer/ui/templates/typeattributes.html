@@ -7,7 +7,7 @@
                 selected="selected"
                 {%endif%}
          >
-            {{attr.attr_name}} ({{attr.attr_dimen}})
+         {{attr.attr_name}} {%if attr.attr_dimen%}({{attr.attr_dimen}}){%endif%}
         </option>
         {%endfor%}
     </select>
