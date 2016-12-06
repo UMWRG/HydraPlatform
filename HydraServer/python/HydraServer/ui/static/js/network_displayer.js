@@ -18,6 +18,12 @@ var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
     height = (700-margin.top - margin.bottom);
     colors = d3.scaleOrdinal(d3.schemeCategory10);
 
+if (min_x == max_x){
+    max_x = max_x * 100;
+}
+if (min_y == max_y){
+    max_y = max_y * 100;
+}
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
   var yScale = d3.scaleLinear()

@@ -15,10 +15,6 @@ import sys
 from run_hydra_app import *
 
 
-pp = os.path.realpath(__file__).split('\\')
-pp1 = pp[0: (len(pp) - 1)]
-basefolder_ = '\\'.join(pp1)
-
 basefolder = os.path.dirname(__file__)
 
 code= os.path.join(basefolder, 'code')
@@ -452,7 +448,7 @@ def do_update_resource_data():
 
 def get_model_file (network_id, model_file):
     model_file_ = 'network_' + network_id + '.gms'
-    model_folder=os.path.join(basefolder_, 'data', 'Models')
+    model_folder=os.path.join(basefolder, 'data', 'Models')
     directory=os.path.join(model_folder, network_id)
     #make folder
     if not os.path.exists(model_folder):
@@ -473,9 +469,9 @@ def get_model_file (network_id, model_file):
 
 def get_pp_exe(app):
     if app.lower()=='gams':
-        return os.path.join(basefolder_, 'Apps', 'GAMSApp','GAMSAutoRun.exe' )
+        return os.path.join(basefolder, 'Apps', 'GAMSApp','GAMSAutoRun.exe' )
     elif app.lower() == 'pywr':
-        return os.path.join(basefolder_, 'Apps', 'Pywr_App', 'PywrAuto',  'PywrAuto.py')
+        return os.path.join(basefolder, 'Apps', 'Pywr_App', 'PywrAuto',  'PywrAuto.py')
 
 
 def get_app_args (network_id, scenario_id, model_file):
@@ -491,18 +487,20 @@ def run_gams_app(network_id, scenario_id, model_file=None):
     if(model_file ==None):
         return jsonify({}), 202, {'Error': 'Model file is not available, please upload one'}
     args = get_app_args (network_id, scenario_id, model_file)
-    pid=run_app_(exe, args)
+    pid=run_app(exe, args)
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 
 
 def run_pywr_app(network_id, scenario_id):
+
     exe=get_pp_exe('pywr')
     os.chdir(os.path.dirname(exe))
 
     exe="python " + exe
     args = {'t': network_id, 's': scenario_id}
-    pid=run_app_(exe, args, False)
+    log.info("Running Pywr App at %s with args %s", exe, args)
+    pid=run_app(exe, args, False)
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 
@@ -592,16 +590,16 @@ def import_uploader():
 def import_app(network_id, scenario_id, app_name):
     basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
     directory = os.path.join(basefolder, 'temp')
-    print "ex_pywr: ", basefolder_
+    print "ex_pywr: ", basefolder
     delete_files_from_folder(directory)
     result=None
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
     if (app_name == 'ex_pywr'):
-        result = export_network_to_pywr_json(directory, network_id, scenario_id, basefolder_)
+        result = export_network_to_pywr_json(directory, network_id, scenario_id, basefolder)
     elif (app_name == 'ex_excel'):
-        result = export_network_to_excel(directory, network_id, scenario_id, basefolder_)
+        result = export_network_to_excel(directory, network_id, scenario_id, basefolder)
     elif (app_name == 'ex_csv'):
-        result = export_network_to_csv(directory, network_id, scenario_id, basefolder_)
+        result = export_network_to_csv(directory, network_id, scenario_id, basefolder)
     else:
         return "application not recognized : "+app_name
     try:

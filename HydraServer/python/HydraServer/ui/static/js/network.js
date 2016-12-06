@@ -195,3 +195,52 @@ $('#network-tab div').click(function (e) {
     e.preventDefault()
     $(this).tab('show');
 });
+
+var updateNodeTimeout = null;
+
+$(document).on('input', "#resource-name input[name='resource_name']", function(){
+       
+    if (updateNodeTimeout != null){
+        console.log('clearing timeout')
+        clearTimeout(updateNodeTimeout);
+        updateNodeTimeout = null;
+    }
+
+    var container = $(this).closest('td')
+
+    var name = $(this).val()
+    var id = $("input[name='resource_id']", container).val()
+    console.log("Name: " + name)
+    
+    updateNodeTimeout = setTimeout(function(){update_resource_name(id, name, 'NODE')}, 300)
+
+})
+
+function update_resource_name(node_id, name, resource_type)
+    {
+    //to do connect to the server and update node location
+        //
+    var success = function(resp){
+        updateNodeTimeout = null;
+    }
+
+    var error = function(resp){
+        alert(resp)    
+    }
+    
+    var nodedata = {
+        name: name,
+        id: node_id,
+    }
+
+    $.ajax({
+       url:  update_node_url,
+       type: 'POST',
+       data : JSON.stringify(nodedata),
+       success: success,
+       error: error,
+    })
+
+    return node_id;
+    }
+

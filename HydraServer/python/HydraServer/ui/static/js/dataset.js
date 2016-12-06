@@ -1,5 +1,5 @@
 
-var defaultdata =[
+var defaultts =[
 ['Time', 'Value'],
 ['', '']
 ] 
@@ -56,6 +56,9 @@ var updateInputs = function(element){
     $('.dataset').each(function(){
         var valueinput = $("input[name='value']", this)
 
+        $('.btn', $(this)).remove()
+        valueinput.val('')
+
         if (valueinput.hasClass('timeseries')){
             valueinput.hide();
 
@@ -68,7 +71,9 @@ var updateInputs = function(element){
             }
         }else if (valueinput.hasClass('array')){
             valueinput.hide();
-            $(this).append('<button class="btn btn-outline-primary btn-sm arr-edit" data-toggle="modal" data-target="#array-editor"><span class="fa fa-pencil"></span></button>')
+            $(this).append('<button class="btn btn-outline-primary btn-sm array-edit" data-toggle="modal" data-target="#array-editor"><span class="fa fa-pencil"></span></button>')
+        }else if (valueinput.hasClass('scalar') || valueinput.hasClass('descriptor')){
+            valueinput.show();
         }
 
 
@@ -194,7 +199,7 @@ var renderTimeseries = function(btn){
     var valuetext = currentVal.val()
 
     if (valuetext == ''){
-        data = defaultdata;
+        data = defaultts;
     }else{
         data = tsToHot(valuetext)
     }
@@ -289,9 +294,81 @@ $(document).on('focus', '.pika-select-year', function(event){
 
 
 
-var renderArray = function(){
-    alert('Not implemented yet.')
+$(document).on('click', '#array-editor .save', function(event){
+    
+    var array_data = hotToArray();
+
+    currentVal.val(JSON.stringify(array_data))
+
+    $('#array-editor').modal('hide')
+
+})
+
+var renderArray = function(btn){
+
+    var datasetcontainer = $(btn).closest('.dataset')
+
+    currentVal = $("input[name='value']", datasetcontainer)
+
+    var valuetext = currentVal.val()
+
+    if (valuetext == '' || valuetext == 'NULL'){
+        data = [['']];
+    }else{
+        data = arrayToHot(valuetext)
+    }
+    var container = document.getElementById("array-edit-inner");
+
+    hot = new Handsontable(container, {
+        data: data, 
+        rowHeaders: true,
+        colHeaders: ['Value'],
+
+        contextMenu: true,
+        stretchH: "all",
+        contextMenuCopyPaste: true
+
+    });
+
+
+    $(document).off('focusin.bs.modal');
+
 }
+
+
+var arrayToHot = function(valuetext){
+    var arr = JSON.parse(valuetext)
+    hot_data = []
+    for (var idx in arr){
+        var v = arr[idx]
+        if (typeof(v) == 'object'){
+            hot_data.push(v)
+        }else{
+            hot_data.push([v])
+        }
+    }
+
+    return hot_data
+}
+
+var hotToArray = function(){
+    var hot_data = hot.getData()
+
+    var array_data = []
+
+    for (var i=0; i<hot_data.length; i++){
+        if (hot_data[i].length > 1){
+            array_data.push(hot_data[i])
+        }else{
+            array_data.push(hot_data[i][0])
+        }
+
+    }
+
+    return array_data
+
+}
+
 
 var tsToHot = function(valuetext){
     var ts = JSON.parse(valuetext)
@@ -397,6 +474,10 @@ $(document).on('click', '.dataset .md-edit', function(){
     setTimeout(function(){renderMetadata(btn)}, 300)
 })
 
+$(document).on('click', '.dataset .array-edit', function(){
+    var btn = this;
+    setTimeout(function(){renderArray(btn)}, 300)
+})
 
 
 $(document).on('click', '.dataset .ts-graph', function(){
@@ -409,7 +490,7 @@ $(document).on('click', '.dataset .ts-graph', function(){
     var valuetext = currentVal.val()
 
     if (valuetext == ''){
-        data = defaultdata;
+        data = defaultts;
     }else{
         data = tsToHot(valuetext)
     }
@@ -435,7 +516,6 @@ $(document).on('change', '.dataset input[name="value"]',function(){
     }
 })
 
-$(document).on('click', '.dataset .arr-edit', renderArray)
 
 var insertModals = function(){
 
@@ -453,6 +533,9 @@ var insertModals = function(){
         $('.ts_inner').empty()
     })
 
+    $('#array-editor').on('hidden.bs.modal', function (e) {
+        $('.ts_inner').empty()
+    })
 }
 
 

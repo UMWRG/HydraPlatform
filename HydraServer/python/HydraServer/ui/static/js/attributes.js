@@ -12,7 +12,7 @@ $(document).on('click', '#data .save-resource-data', function(){
     var container = $("#data table")
     
     var rs_list = []
-    $('tr', container).each(function(){
+    $('tr.attribute', container).each(function(){
         var attr_id = $("input[name='attr_id']", this).val()
         var rs_id = $("input[name='rs_id']", this).val()
         var ra_id = $("input[name='ra_id']", this).val()
@@ -20,15 +20,21 @@ $(document).on('click', '#data .save-resource-data', function(){
         var data_type = $("input[name='data_type']", this).val()
         var value = $("input[name='value']", this).val()
         var name = $("input[name='dataset_name']", this).val()
+        var metadata = $("input[name='metadata']", this).val()
         
         if (dataset_id == ''){
            name = new Date().toJSON().slice(0,10);
         }
 
+        if (value == ""){
+            return
+        }
+
         var dataset = {
            type: data_type,
            value : value,
-           name: name 
+           name: name,
+           metadata:metadata
         }
 
         var rs = {

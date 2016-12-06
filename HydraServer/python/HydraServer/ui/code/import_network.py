@@ -1,9 +1,4 @@
 import os
-import sys
-import subprocess
-
-from app_utilities import check_process_output
-
 from run_hydra_app import *
 
 def get_json_file(directory):
@@ -31,7 +26,7 @@ def import_network_from_pywr_json(directory, basefolder):
     pywr_import=os.path.join(basefolder,"Apps","pywr_app", "Importer","PywrImporter.py")
     exe="python " + pywr_import
     args={"f": json_file}
-    return run_app_(exe, args, False)
+    return run_app(exe, args, False)
 
 
 def import_network_from_excel(directory, basefolder):
@@ -49,7 +44,7 @@ def import_network_from_excel(directory, basefolder):
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
     exe=excel_import
     args={"i": directory+"\\"+ excel_file ,"m": directory+"\\"+"template.xml"}
-    return run_app_(exe, args, False)
+    return run_app(exe, args, False)
 
 
 def import_network_from_csv_files(directory, basefolder):
@@ -67,4 +62,4 @@ def import_network_from_csv_files(directory, basefolder):
         args = {'t': 'network.csv', 'm': 'template.xml', 'x': ''}
     else:
         args={'t': 'network.csv', 'x':''}
-    return run_app_(exe, args, use_wd)
+    return run_app(exe, args, use_wd)

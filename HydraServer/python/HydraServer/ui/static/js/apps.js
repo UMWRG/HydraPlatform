@@ -33,10 +33,10 @@ function run_app ()
     }
 
 function run(){
-      vars=getUrlVars();
+
       var form_data = new FormData($('#import_form')[0]);
-      form_data.append('network_id', vars['network_id']);
-      form_data.append('scenario_id', vars['scenario_id']);
+      form_data.append('network_id', network_id);
+      form_data.append('scenario_id', network_id);
       form_data.append('app_name',cur_name);
       $.ajax({
                     type: 'POST',
@@ -101,8 +101,8 @@ function update_progress_2(status_url, directory) {
                     else
                     {
                            var _data = new FormData();
-                             _data.append('network_id', vars['network_id']);
-                                _data.append('scenario_id', vars['scenario_id']);
+                             _data.append('network_id', network_id);
+                                _data.append('scenario_id', scenario_id);
                        var pars=
        {
             'network_id': network_id,

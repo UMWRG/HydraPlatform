@@ -26,7 +26,7 @@
                 </input>
                 <input name="metadata" type="hidden" 
                     {%if ta.default_dataset and ta.default_dataset.metadata%}
-                        value="{{ta.default_dataset.metadata.as_json()}}"
+                        value={{ta.default_dataset.metadata.as_json()}}
                         {%endif%}>
                 </input>
             </td>

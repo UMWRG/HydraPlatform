@@ -72,6 +72,22 @@ $(document).on('click', "#addgrouptype", function(event){
 
 })
 
+$(document).on('change', 'select.data_types', function(event){
+
+    var typeattr = $(this).closest(".attributedetail");
+
+    var data_type = $(this).val();
+
+    var val_input = $('input[name="value"]', typeattr);
+
+    val_input.removeClass('descriptor scalar array timeseries');
+
+    val_input.addClass(data_type);
+    
+    updateInputs()
+
+})
+
 $(document).on('change', 'select.typeattrs', function(event){
 
 

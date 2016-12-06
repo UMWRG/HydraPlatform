@@ -1,11 +1,4 @@
-import zipfile
-import os
-import sys
-import subprocess
-import importlib
 from run_hydra_app import *
-
-from app_utilities import create_zip_file, check_process_output
 
 def export_network_to_pywr_json(directory, network_id, scenario_id, basefolder):
     output_file = os.path.join(directory, ('network_' + network_id + '.json'))
@@ -15,7 +8,7 @@ def export_network_to_pywr_json(directory, network_id, scenario_id, basefolder):
     exe = "python " + pywr_export
     args = {"t": network_id, "s": scenario_id, "o": output_file}
     print "Arg: ", args
-    out= run_app_(exe, args, False)
+    out= run_app(exe, args, False)
     print "Output: ", out
     return out
 
@@ -25,7 +18,7 @@ def export_network_to_excel(directory, network_id, scenario_id, basefolder):
     args = {"t": network_id, "s": scenario_id, "o": output_file}
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelExporter", "ExcelExporter.exe")
     os.chdir(directory)
-    out = run_app_(excel_import, args, False)
+    out = run_app(excel_import, args, False)
     print "Output: ", out
     return out
 
@@ -40,4 +33,4 @@ def export_network_to_csv(directory, network_id, scenario_id, basefolder):
     exe = "python " + csv_export
 
     args = {"t": network_id, "s": scenario_id, "o": directory}
-    return run_app_(exe, args, use_wd)
+    return run_app(exe, args, use_wd)

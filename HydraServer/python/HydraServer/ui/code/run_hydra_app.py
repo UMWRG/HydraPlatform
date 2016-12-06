@@ -1,14 +1,13 @@
 import subprocess
 import psutil
-import json
 import os
-from app_utilities import create_zip_file, check_process_output, get_progress_from_output
+from app_utilities import check_process_output, get_progress_from_output
 
 '''
 run back ground process using the command and redircet the output to log file to be read later to get process progress ...
 '''
 
-def run_app_(exe, args, use_wd=True):
+def run_app(exe, args, use_wd=True):
     arg = ''
     for item in args.keys():
         arg = arg + ' -' + item + ' ' + args[item]
@@ -16,8 +15,10 @@ def run_app_(exe, args, use_wd=True):
     if use_wd==True:
         print args, '----------------------------->'
         os.chdir(os.path.dirname(exe))
+
     f = open("..\\..\\log.txt", "w")
-    proc = subprocess.Popen(cmd, stdout=f)
+
+    proc = subprocess.Popen(cmd, stdout=f, shell=True)
     print "Process id: ", proc.pid
     return proc.pid
 
