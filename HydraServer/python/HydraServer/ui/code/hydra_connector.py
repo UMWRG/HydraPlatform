@@ -106,3 +106,6 @@ def get_type(type_id, user_id):
     tmpltype =  tmpl.get_type(type_id, user_id=user_id)
     return tmpltype
 
+def apply_template_to_network(template_id, network_id, user_id):
+    tmpl.apply_template_to_network(template_id, network_id, user_id=user_id)
+

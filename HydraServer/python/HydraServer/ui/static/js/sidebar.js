@@ -56,3 +56,19 @@ $('.linkbutton').click(function(e) {
     $('.linkbutton').removeClass('active')
     $(this).addClass('active');
 })
+
+$(document).on('show.bs.modal', '#apply-template-container', function(){
+    var success = function(resp){
+        console.log(resp)
+    }
+
+    var error = function(resp){
+       $('.modal-body', $(this)).append("An error occurred retrieving the templates.") 
+    }
+
+    $.ajax({
+        url: get_all_templates_url,
+        success: success,
+        error: error
+    })
+})

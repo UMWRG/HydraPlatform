@@ -57,7 +57,6 @@ var updateInputs = function(element){
         var valueinput = $("input[name='value']", this)
 
         $('.btn', $(this)).remove()
-        valueinput.val('')
 
         if (valueinput.hasClass('timeseries')){
             valueinput.hide();

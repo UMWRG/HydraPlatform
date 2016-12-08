@@ -31,3 +31,6 @@ def delete_template(template_id, user_id):
 
 def get_type(type_id, user_id):
     return JSONObject(hc.get_type(type_id, user_id=user_id))
+
+def apply_template_to_network(template_id, network_id, user_id):
+    hc.apply_template_to_network(template_id, network_id, user_id)

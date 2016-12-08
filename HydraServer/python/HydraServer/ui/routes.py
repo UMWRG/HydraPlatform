@@ -131,6 +131,12 @@ def go_templates():
     all_templates = tmplutils.get_all_templates(user_id) 
     return render_template('templates.html', templates=all_templates)
 
+@app.route('/get_templates', methods=['GET'])
+def do_get_all_templates():
+    user_id = session['user_id']
+    all_templates = tmplutils.get_all_templates(user_id) 
+    return all_templates
+
 @app.route('/newtemplate', methods=['GET'])
 def go_new_template():
     all_attributes = attrutils.get_all_attributes() 
@@ -239,6 +245,16 @@ def do_delete_template(template_id):
 
     return status
 
+@app.route('/apply_template_to_network', methods=['POST'])
+def do_apply_template_to_network(template_id, network_id):
+    
+    user_id = session['user_id']
+
+    apply_template_to_network(template_id, network_id, user_id) 
+    
+    commit_transaction()
+
+    return redirect(url_for('go_network', network_id=network_id))
 
 @app.route('/project/<project_id>', methods=['GET'])
 def go_project(project_id):
@@ -258,7 +274,6 @@ def go_project(project_id):
                               project=project,
                                all_network_types=network_types
                                )
-
 
 @app.route('/create_network', methods=['POST'])
 def do_create_network():
@@ -302,10 +317,14 @@ def allowed_file (filename):
     else:
         return False
 
+@app.route('/add_network_note/<network_id>/<note_text>', methods=['GET'])
+def do_add_network_note(network_id, note_text):
+    pass
+
 @app.route('/network/<network_id>', methods=['GET'])
 def go_network(network_id):
     """
-        Get a user's projects
+        Get a network 
     """
 
     user_id = session['user_id']
@@ -314,16 +333,21 @@ def go_network(network_id):
 
     attr_id_name_map = netutils.get_attr_id_name_map()
 
-    template_id = network.types[0].templatetype.template_id
-    tmpl = tmplutils.get_template(template_id, user_id)
-    #Build a map from type id to layout, to make it easy for the javascript
-    #and html templates to access type layouts
-    type_layout_map = {}
-    for tmpltype in tmpl.templatetypes:
-        layout = tmpltype.layout
-        if layout == None:
-            layout = {}
-        type_layout_map[tmpltype.type_id] = layout
+    if network.types is not None and len(network.types) > 0:
+        template_id = network.types[0].templatetype.template_id
+
+        tmpl = tmplutils.get_template(template_id, user_id)
+        #Build a map from type id to layout, to make it easy for the javascript
+        #and html templates to access type layouts
+        type_layout_map = {}
+        for tmpltype in tmpl.templatetypes:
+            layout = tmpltype.layout
+            if layout == None:
+                layout = {}
+            type_layout_map[tmpltype.type_id] = layout
+    else:
+        tmpl = JSONObject({'templatetypes': []});
+        type_layout_map = {}
 
     return render_template('network.html',\
                 scenario_id=network.scenarios[0].scenario_id,
@@ -569,12 +593,13 @@ def import_uploader():
     zip = zipfile.ZipFile(uploaded_file)
     zip.extractall(extractedfolder)
 
+    project_id = request.form['project_id']
     if(app_name== 'csv'):
-        pid = import_network_from_csv_files(extractedfolder, basefolder)
+        pid = import_network_from_csv_files(project_id, extractedfolder, basefolder)
     elif (app_name== 'pywr'):
-        pid=import_network_from_pywr_json(extractedfolder, basefolder)
+        pid=import_network_from_pywr_json(project_id, extractedfolder, basefolder)
     elif (app_name== 'excel'):
-        pid=import_network_from_excel(extractedfolder, basefolder)
+        pid=import_network_from_excel(project_id, extractedfolder, basefolder)
     else:
         pid=type+ ' is not recognized.'
 

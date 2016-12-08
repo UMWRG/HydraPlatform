@@ -131,6 +131,14 @@ function activateCanvas(){
 
 }
 
+var nodetip = d3.tip()
+  .attr('class', 'd3-tip')
+  .attr('class', 'd3tip')
+  .offset([-10, 40])
+  .html(function(d) {
+    return "<span>" + d.type_name + "</spsn>";
+  })
+
 function loadShapesIntoPalette(){
 
     var palette = d3.select("#palette")
@@ -138,28 +146,37 @@ function loadShapesIntoPalette(){
     svg = d3.select("#graph svg")
 
     var typedict = {} 
-    for (i=0; i<template.templatetypes.length; i++){
-        var tt = template.templatetypes[i]
-        var rt = tt.resource_type
-
-        if (typedict[rt] == undefined){
-            typedict[rt] = [tt]
-        }else{
-            typedict[rt].push(tt)
+    if (template.templatetypes.length > 0){
+        for (i=0; i<template.templatetypes.length; i++){
+            var tt = template.templatetypes[i]
+            var rt = tt.resource_type
+    
+            if (typedict[rt] == undefined){
+                typedict[rt] = [tt]
+            }else{
+                typedict[rt].push(tt)
+            }
         }
+    }else{
+        typedict['NODE'] = [{'type_name': 'Default Node',
+                             'layout': {'shape':'circle', 'color':'black', 'width': '10', 'height': '10'}
+                       }]
     }
+    
     // Declare the shapes
     var node = palette.selectAll("div.shapecontainer")
       .data(typedict['NODE'])
 
     // Enter the shapes.
-    var nodeEnter = node.enter().append("div")
+    var nodeEnterSvg = node.enter().append("div")
       .attr("class", "shapecontainer")
       .append('span')
       .attr('class', 'draggablebox')
       .attr('draggable', 'true')
       .append("svg")
-      .attr("class", "palettesvg")
+      .call(nodetip)
+
+      nodeEnterSvg.attr("class", "palettesvg")
       .append('g')
       .attr('class', 'type')
       .attr('shape', function(d){if (d.layout.shape != undefined){return d.layout.shape}else{return 'circle'}})
@@ -193,7 +210,9 @@ function loadShapesIntoPalette(){
            (d.layout.shape == "star") { return d3.symbolStar;} else if
            (d.layout.shape == "wye") { return d3.symbolWye;} else
            { return d3.symbolCircle; }
-         })); 
+         }))
+         .on('mouseover', function(d){nodetip.show(d)})
+         .on('mouseout', function(d){nodetip.hide(d)})
 
     //Make the shapes in the palette draggable.
     activateShapes();

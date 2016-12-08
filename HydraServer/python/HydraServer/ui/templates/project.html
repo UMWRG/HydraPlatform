@@ -8,6 +8,7 @@
     <script src="{{url_for('static', filename='js/project.js')}}"></script>
 
     <script>
+    var project_id={{project.project_id}};
     var add_network_url = "{{url_for('do_create_network')}}"
     var go_network_url = "{{url_for('go_network', network_id=XXX)}}"
     </script>
@@ -24,9 +25,12 @@
                         <a type="button"
                             class="btn btn-lg link"
                             href="{{url_for('go_network', network_id=network.network_id)}}"
+                            alt="{{network.network_name}}"
 >
                             <span>
+                                <div class="head">
                                 {{network.network_name}}
+                                </div>
                             </span>
                         </a>
                     </li>
@@ -91,6 +95,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+{% include 'run_app.html' %}
 {% endblock %}
 
 

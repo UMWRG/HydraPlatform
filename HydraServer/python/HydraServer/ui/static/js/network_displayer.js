@@ -81,7 +81,7 @@ function dragended(d)
 
  //Set up the force layout
 var force = d3.forceSimulation()
-            .force("link", d3.forceLink().id(function(d) { return d.index }))
+            .force("link", d3.forceLink().id(function(d) { return d.id }))
 
 var tip = d3.tip()
   .attr('class', 'd3-tip')
@@ -148,12 +148,16 @@ var svg = d3.select("#graph").append("svg")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
     .on("click", function(d){
         svg.selectAll(".node").each(function(d){tip.hide(d)})
-        svg.selectAll(".node path").style('stroke', "");
+        svg.selectAll(".nod22path").style('stroke', "");
         svg.selectAll(".node path").style('stroke-width',  "");
         svg.selectAll("path.selected").attr("d", normalnode)
         svg.selectAll("path.selected").classed("selected", false)
         d3.selectAll('.node').on("mousedown.drag", null);
         
+        $("#data").html("No Resource Selected.")
+        current_res = null; 
+        current_res_type = null;
+
         if (drag_line != null){
             drag_line.remove()
             drag_line = null
@@ -244,7 +248,7 @@ var redraw_nodes = function(){
           })
 
         .attr("d", normalnode)
-        .on('mouseover', mouse_in) //Added
+        .on('mouseover', node_mouse_in) //Added
         .on('mouseout', node_mouse_out) //Added
         .on("click", nodes_mouse_click)
         .on("dblclick", nodes_mouse_double_click);
@@ -297,7 +301,7 @@ var redraw_links = function(){
          .style('stroke',  function(d) { 
               if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
         })
-        .on('mouseover', mouse_in) //Added
+        .on('mouseover', link_mouse_in) //Added
         .on('mouseout', link_mouse_out) //Added
         .on("click", links_mouse_click);
    tick() 
@@ -404,14 +408,21 @@ function nodes_mouse_double_click(d)
 function nodes_mouse_click(d) {
    // unenlarge target node
 
-   tip.hide(d);
-   document.getElementById('search').value=d.name;
+    $("#data").html("No Resource Selected.")
+    current_res = null; 
+    current_res_type = null;
+    unHighlightAllNodes()
+    unHighlightAllLinks()
+    highlightNode(this);
 
-   get_resource_data('NODE', d);
-   
-   var selectedlinktype = d3.select('.linkbutton.active div')
+    tip.hide(d);
+    document.getElementById('search').value=d.name;
 
-   if (!selectedlinktype.empty()){
+    get_resource_data('NODE', d);
+
+    var selectedlinktype = d3.select('.linkbutton.active div')
+
+    if (!selectedlinktype.empty()){
        if (drag_line == null){
             drag_line = svg.append('path')
                 .attr('class', 'link dragline')
@@ -461,9 +472,9 @@ function nodes_mouse_click(d) {
 
             
         }
-   }
+}
 
-   d3.event.stopPropagation();
+d3.event.stopPropagation();
 
 
 }
@@ -516,8 +527,8 @@ function get_network_attributes()
 }
 
  function links_mouse_click(d) {
-
-   d3.select(this).style("stroke-width", 3);
+    unHighlightAllLinks()
+   highlightLink(this)
    document.getElementById('search').value=d.name;
    tip.hide(d);
    get_resource_data('LINK', d)
@@ -525,23 +536,63 @@ function get_network_attributes()
     d3.event.stopPropagation();
    }
 
-function node_mouse_out(d) {
-   if(current_res == null || d!=current_res)
-   {
-      tip.hide(d);
-      d3.select(this).style('stroke', "");
-      d3.select(this).style('stroke-width',  "");
-   }
+function highlightNode(node){
+   d3.select(node).style('stroke',  function(d) { return 'red' });
+   d3.select(node).style('stroke-width',  function(d) { return '4px' });
+}
 
-    }
+function unHighlightNode(node){
+   d3.select(node).style('stroke',  function(d) { return '' });
+   d3.select(node).style('stroke-width',  function(d) { return '' });
+}
+function unHighlightAllNodes(){
+   d3.selectAll(".node path").style('stroke',  function(d) { return '' });
+   d3.selectAll(".node path").style('stroke-width',  function(d) { return '' });
+}
 
-function mouse_in(d) {
+function highlightLink(link){
+    d3.select(link).style('stroke-width',  function(d) {return '4px'}) 
+   d3.select(link).style('stroke',  function(d) { return 'red' });
+}
+
+function unHighlightLink(link){
+    d3.select(link).style('stroke-width',  function(d) { 
+        if (d.type.layout['width'] != undefined){return d.type.layout['width']+'px'}else{return '2px'}
+    })
+    d3.select(link).style('stroke',  function(d) { 
+        if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
+    })
+}
+function unHighlightAllLinks(){
+    d3.selectAll('.link').style('stroke-width',  function(d) { 
+        if (d.type.layout['width'] != undefined){return d.type.layout['width']+'px'}else{return '2px'}
+    })
+    d3.selectAll('.link').style('stroke',  function(d) { 
+        if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
+    })
+}
+function node_mouse_in(d) {
    // show  resource tip and change border
    if(display)
 {
    tip.show(d);
-   d3.select(this).style('stroke',  function(d) { return 'red' });
-   d3.select(this).style('stroke-width',  function(d) { return '4px' });
+   highlightNode(this);
+   }
+}
+
+function node_mouse_out(d) {
+   if(current_res == null || d!=current_res)
+   {
+      tip.hide(d);
+      unHighlightNode(this)
+   }
+}
+function link_mouse_in(d) {
+   // show  resource tip and change border
+   if(display)
+{
+   tip.show(d);
+   highlightLink(this);
    }
 }
 
@@ -551,12 +602,7 @@ function link_mouse_out(d) {
    if(current_res == null || d!=current_res)
    {
        tip.hide(d);
-        d3.select(this).style('stroke-width',  function(d) { 
-            if (d.type.layout['width'] != undefined){return d.type.layout['width']+'px'}else{return '2px'}
-        })
-        d3.select(this).style('stroke',  function(d) { 
-            if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
-        })
+       unHighlightLink(this)
    }
 }
 

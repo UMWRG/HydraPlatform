@@ -28,7 +28,7 @@
                        class="btn btn-lg link" 
                        href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
                         <span>
-                            <div>{{p.project_name}}
+                            <div class="head">{{p.project_name}}
                             </div>
                             <div class="summary">
                                 {%if p.networks|length == 0%}
@@ -36,7 +36,7 @@
                                 {%elif p.networks|length == 1%}
                                     One network
                                 {%else%}
-                                    {{p.networks|length}} Networks}}
+                                    {{p.networks|length}} Networks
                                 {%endif%}
                             </div>
                         </span>

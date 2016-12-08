@@ -1,42 +1,48 @@
 var cur_name=null;
- function add_fileselect_event () {
-  // attach the `fileselect` event to all file inputs on the page
-  $(document).on('change', ':file', function() {
-    var input = $(this),
-        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    input.trigger('fileselect', [numFiles, label]);
+
+// attach the `fileselect` event to all file inputs on the page
+$(document).on('change', ':file', function() {
+var input = $(this),
+    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+input.trigger('fileselect', [numFiles, label]);
+});
+
+// custom `fileselect` event like this
+$(document).ready( function() {
+  $(':file').on('fileselect', function(event, numFiles, label) {
+
+      var input = $(this).parents('.input-group').find(':text'),
+          log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+      if( input.length ) {
+          input.val(log);
+      } else {
+          if( log ) alert(log);
+      }
   });
+});
 
-  // custom `fileselect` event like this
-  $(document).ready( function() {
-      $(':file').on('fileselect', function(event, numFiles, label) {
-
-          var input = $(this).parents('.input-group').find(':text'),
-              log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-          if( input.length ) {
-              input.val(log);
-          } else {
-              if( log ) alert(log);
-          }
-      });
-  });
-}
-//to be deleted later as  replaced by
-function run_app ()
-    {
-        $('#runApp').click(function(e){
-          e.preventDefault();
-          run();
-        });
-    }
+$(document).on('click', '#runApp', function(e){
+  e.preventDefault();
+  run();
+});
 
 function run(){
 
       var form_data = new FormData($('#import_form')[0]);
-      form_data.append('network_id', network_id);
-      form_data.append('scenario_id', network_id);
+      
+      //These are only applicable in certain cases
+      if (this.hasOwnProperty('network_id') == true){
+          form_data.append('network_id', network_id);
+      }
+      if (this.hasOwnProperty('scenario_id') == true){
+          form_data.append('scenario_id', scenario_id);
+        }
+      if (this.hasOwnProperty('project_id') == true){
+          form_data.append('project_id', project_id);
+        }
+
       form_data.append('app_name',cur_name);
       $.ajax({
                     type: 'POST',
@@ -138,23 +144,23 @@ $('#exportform').submit();
             });
         }
 
-function import_csv ()
-{
- $("#runApp").show();
-     $("#browse_div").show();
+function import_csv(){
+    $("#runApp").show();
+    $("#browse_div").show();
 
- $('#import_form')[0].reset();
-$("#runApp").prop("value", "Upload");
+    $('#import_form')[0].reset();
+    $("#runApp").prop("value", "Upload");
 
-
- $("#import_progress_bar")
-                      .css("width", 0 + "%")
-                      .attr("aria-valuenow", 0)
-                      .text(0 + "%");
+    $("#import_progress_bar")
+                  .css("width", 0 + "%")
+                  .attr("aria-valuenow", 0)
+                  .text(0 + "%");
     $(status_pan).hide();
-     $("#help_message").show();
-     $(_message).text("");
+    $("#help_message").show();
+    $(_message).text("");
+
     cur_name='csv';
+
     $("#help_").text("Please upload the network zip file which contains all the required csv files. The network file name needs to be “network.csv");
     $ ("#import_title").text("Import Hydra network from CSV files");
     $( "#importModal" ).modal('show')
@@ -162,17 +168,17 @@ $("#runApp").prop("value", "Upload");
 
 function import_excel ()
 {
- $("#runApp").show();
+    $("#runApp").show();
      $("#browse_div").show();
 
-$('#import_form')[0].reset();
-$("#runApp").prop("value", "Upload");
- $("#import_progress_bar")
+    $('#import_form')[0].reset();
+    $("#runApp").prop("value", "Upload");
+    $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
                       .text(0 + "%");
 
-$(status_pan).hide();
+    $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
     cur_name='excel';
@@ -183,10 +189,10 @@ $(status_pan).hide();
 
 function import_pywr ()
 {
- $("#runApp").show();
+    $("#runApp").show();
      $("#browse_div").show();
 
-$("#runApp").prop("value", "Upload");
+    $("#runApp").prop("value", "Upload");
 
     $('#import_form')[0].reset();
     $("#import_progress_bar")
@@ -202,9 +208,8 @@ $("#runApp").prop("value", "Upload");
     $( "#importModal" ).modal('show')
 }
 
-function runPywrApp ()
-{
-$("#import_progress_bar")
+function runPywrApp (){
+    $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
                       .text(0 + "%");
@@ -220,11 +225,9 @@ $("#import_progress_bar")
    //$ ("#import_title").hide();
    $("#importModal" ).modal('show')
    run();
-
-
 }
-function runGamsModel()
-   {
+
+function runGamsModel(){
     $("#browse_div").show();
     $("#runApp").show();
     $("#runApp").prop("value", "Rum Model");
@@ -241,17 +244,14 @@ function runGamsModel()
    $("#help_").text("Please upload the file which contains the GAMS code");
    $ ("#import_title").text("Run GAMS model");
    $( "#importModal" ).modal('show')
-   }
+}
 
-  function cancel_app()
-  {
-  if(cur_name!=null)
-  {
-    cur_name=null;
-
-  }
-     $( "#importModal" ).modal('hide')
-  }
+function cancel_app(){
+    if(cur_name!=null){
+        cur_name=null;
+    }
+    $( "#importModal" ).modal('hide');
+}
 
 function export_csv()
 {
@@ -316,13 +316,14 @@ function export_pywr()
 
 
 function startsWith(string_name,starter) {
-if (string_name.length < starter.length)
-    return false;
-
-  for (var i = 0; i < starter.length; i++) {
-    if (string_name[i] != starter[i]) {
-      return false;
+    if (string_name.length < starter.length){
+        return false;
     }
-  }
-  return true;
+
+    for (var i = 0; i < starter.length; i++) {
+        if (string_name[i] != starter[i]) {
+            return false;
+        }
+    }
+    return true;
 }

@@ -101,3 +101,6 @@ text-overflow: ellipsis;
 .bootstrap-select{
     width: auto !important;
 }
+.scenariopicker{
+    max-width: 150px;
+}

@@ -84,14 +84,16 @@ def get_network (network_id, user_id):
             if (nodetype.type_name in node_types) == False:
                 node_types.append(nodetype.type_name)
         except:
-            nodetype = None
+            nodetype = {'type_name': 'Default Node',
+                        'layout': {'shape':'circle', 'color':'black', 'width': '10', 'height': '10'}
+                       }
 
         node_index[node.node_id] = network.nodes.index(node)
         node_coords[node.node_id] = [node.node_x, node.node_y]
 
         node_name_map.append({'id': node.node_id, 'name': node.node_name, 'name': node.node_name, 'description':node.description})
         nodes_.append(
-            {'id': node.node_id, 'group': node_types.index(nodetype.type_name) + 1, 'x': float(node.node_x), 'y': float(node.node_y),
+            {'id': node.node_id, 'x': float(node.node_x), 'y': float(node.node_y),
              'name': node.node_name, 'type': nodetype, 'res_type': 'node'})
 
     links = {}
@@ -107,9 +109,11 @@ def get_network (network_id, user_id):
             if (linktype.type_name in link_types) == False:
                 link_types.append(linktype.type_name)
         except:
-            linktype = None
+            linktype = {'type_name': 'Default Link',
+                        'layout': {'color':'black', 'width': '2'}
+                       }
 
-        links_.append({'id': link.link_id, 'source': node_index[link.node_1_id], 'target': node_index[link.node_2_id],
+        links_.append({'id': link.link_id, 'source': link.node_1_id, 'target': link.node_2_id,
                        'type': linktype, 'name': link.link_name, 'res_type': 'link'})
 
 
@@ -208,8 +212,8 @@ def get_link(link_id, user_id):
     for t in link.types:
         t.templatetype.typeattrs
     link_j = JSONObject(link)
-    link_j.name = link_j.node_name
-    link_j.id = link_j.id
+    link_j.name = link_j.link_name
+    link_j.id = link_j.link_id
     return link_j
 
 def get_resourcegroup(group_id, user_id):

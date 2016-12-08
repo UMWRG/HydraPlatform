@@ -9,6 +9,10 @@
     <span class="glyphicon glyphicon-chevron-right"><span>
 </div>    -->
 
+<script>
+    var get_all_templates_url = "{{url_for('do_get_all_templates')}}"
+</script>
+
 <div id="sidebar" class="hidden-menu-left">
     <ul class="options nav navbar-nav">
         <li id="" class="menusection">
@@ -20,7 +24,13 @@
                 <ul>
                     <li>
                         <h4>Network Type:</h4>
-                        {{network.types[0].templatetype.type_name}} ( {{template.template_name}})
+                        {%if network.types|length > 0%}
+                            {{network.types[0].templatetype.type_name}} ( {{template.template_name}})
+                        {%else%}
+                            <button type=button class="btn btn-default btn-s" data-toggle="modal" data-target="#apply-template-container">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        {%endif%}
                     </li>
 
                     <li>
@@ -35,12 +45,12 @@
                 </ul>
             </div>
         </li>
-        <li id="nodes" class="menusection">
+        <li id="scenarios" class="menusection">
             <div class="filterheading">Scenarios
             </div>
         
             <div class='filtercontent'>
-                <select class="selectpicker">
+                <select class="scenariopicker selectpicker">
                     {% for s in network.scenarios%}
                     <option value="{{s.scenario_id}}">
                         {{s.scenario_name}}
@@ -105,4 +115,54 @@
     <ul>
 </div><!-- sidebar menu-->
 </div> <!--sidebar container-->
+
+
+<!-- the tabindex here is to allow 'esc' to close the dialog box -->
+<div id="apply-template-container" class="modal fade bs-example-modal-lg" tabindex=-1>
+
+    <form method="POST" url="{{ url_for('do_apply_template_to_network') }}" enctype="multipart/form-data">
+    <input type="hidden" name="network_id" value="{{network.id}}"></input>
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Find a template to use</h4>
+      </div>
+      <div class="modal-body">
+            <select id="template-select" class="selectpicker">
+            </select>
+      </div> <!-- modal body -->
+      <div class="modal-footer">
+        <button type="button" id="close-note" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="note-commit" class="btn btn-primary">Save</button>
+      </div> <!-- model footer -->
+    </div><!-- modal content -->
+  </div><!-- modal-dialog -->
+</div>
+
+<!-- the tabindex here is to allow 'esc' to close the dialog box -->
+<div id="new-note-container" class="modal fade bs-example-modal-lg" tabindex=-1>
+
+    <form method="POST" url="{{ url_for('do_add_network_note', network_id=XXX, note_text=XXX) }}" enctype="multipart/form-data">
+<input type="hidden" name="network_id" value="{{network.id}}"></input>
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Note</h4>
+      </div>
+      <div class="modal-body">
+            <div id="new-note">
+                <textarea type="input" name="note_text" id="new_note_text" value="" style="width:100%; height: 90px"></textarea>
+            </div>
+      </div> <!-- modal body -->
+      <div class="modal-footer">
+        <button type="button" id="close-note" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="note-commit" class="btn btn-primary">Save</button>
+      </div> <!-- model footer -->
+    </div><!-- modal content -->
+  </div><!-- modal-dialog -->
+</div>
 

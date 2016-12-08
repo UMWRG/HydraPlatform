@@ -313,6 +313,13 @@ color: green;
 .grid .link span .summary{
     font-size: 12pt;
 }
+
+.grid .link span .head{
+    max-width: 170px;
+    text-overflow: ellipsis;
+    overflow: auto;
+}
+
 .grid li:nth-child(even) .link {background: #ddd}
 .grid li:nth-child(odd) .link {background: #eee}
 
@@ -343,14 +350,14 @@ color: green;
   line-height: 1;
   color: rgba(0, 0, 0, 0.8);
   content: "\25BC";
-  text-align: center;
+  text-align: left;
   position:absolute;
   z-index: 2000;
 }
 
 /* Style northward tooltips differently */
 .d3tip.n:after {
-  margin: -1px 0 0 0;
+  margin: -1px 0 0 10px;
   top: 100%;
   left: 0;
   z-index: 2000;

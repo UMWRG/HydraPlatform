@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
      $("#export_data").hide();
-}
+})
 
 $(document).on("click", ".network", function(){
    var net_id = this.id.split('_')[1];
