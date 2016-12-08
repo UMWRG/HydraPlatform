@@ -526,15 +526,15 @@ function get_network_attributes()
    });
 }
 
- function links_mouse_click(d) {
-    unHighlightAllLinks()
+function links_mouse_click(d) {
+   unHighlightAllLinks()
    highlightLink(this)
    document.getElementById('search').value=d.name;
    tip.hide(d);
    get_resource_data('LINK', d)
 
-    d3.event.stopPropagation();
-   }
+   d3.event.stopPropagation();
+}
 
 function highlightNode(node){
    d3.select(node).style('stroke',  function(d) { return 'red' });
@@ -565,9 +565,11 @@ function unHighlightLink(link){
 }
 function unHighlightAllLinks(){
     d3.selectAll('.link').style('stroke-width',  function(d) { 
+        if (d == undefined){return "2px"}; //when adding a new link with no data yet
         if (d.type.layout['width'] != undefined){return d.type.layout['width']+'px'}else{return '2px'}
     })
     d3.selectAll('.link').style('stroke',  function(d) { 
+        if (d == undefined){return "black"}; // when addnig a new link with no data yet
         if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
     })
 }

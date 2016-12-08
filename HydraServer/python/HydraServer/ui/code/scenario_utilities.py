@@ -38,7 +38,7 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
             if tattr.attr_id not in res_scenarios:
                 res_scenarios[tattr.attr_id] = JSONObject({
                     'rs_id': None,
-                    'ra_id': ra_dict.get(tattr.attr_id, None).resource_attr_id,
+                    'ra_id': ra_dict[tattr.attr_id].resource_attr_id if ra_dict.get(tattr.attr_id) else None,
                     'attr_id':tattr.attr_id,
                     'dataset': None,
                     'is_var': tattr.attr_is_var,
@@ -57,5 +57,15 @@ def set_metadata(hydra_metadata):
     return metadata
 
 
+def add_resource_attribute(resource_type, resource_id, attr_id, is_var, user_id):
+    new_ra = hc.add_resource_attribute(resource_type, resource_id, attr_id, is_var,user_id)
+    return JSONObject(new_ra)
+
 def update_resource_data(scenario_id, rs_list, user_id):
-   hc.update_resource_data(scenario_id, rs_list, user_id)
+
+    for rs in rs_list:
+        if rs.resource_attr_id in (None, '', 'None'):
+            ra = add_resource_attribute(rs.resource_type, rs.resource_id, rs.attr_id, 'N', user_id)
+            rs['resource_attr_id'] = ra.resource_attr_id
+
+    hc.update_resource_data(scenario_id, rs_list, user_id)

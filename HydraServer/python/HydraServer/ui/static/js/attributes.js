@@ -41,6 +41,9 @@ $(document).on('click', '#data .save-resource-data', function(){
             id: rs_id,
             resource_attr_id: ra_id,
             value: dataset, 
+            attr_id: attr_id,
+            resource_id:current_res.id,
+            resource_type:current_res_type
         }
 
         rs_list.push(rs)

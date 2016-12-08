@@ -109,3 +109,6 @@ def get_type(type_id, user_id):
 def apply_template_to_network(template_id, network_id, user_id):
     tmpl.apply_template_to_network(template_id, network_id, user_id=user_id)
 
+def add_resource_attribute(resource_type, resource_id, attr_id, is_var, user_id):
+    new_ra = attrs.add_resource_attribute(resource_type, resource_id, attr_id, is_var,user_id=user_id)
+    return new_ra
