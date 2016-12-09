@@ -18,8 +18,7 @@ class JSONObject(dict):
                 obj = json.loads(obj_dict)
                 assert isinstance(obj, dict), "JSON string does not evaluate to a dict"
             except Exception:
-                log.info(obj_dict)
-
+                log.critical("Error with: %s", obj_dict)
                 raise ValueError("Unable to read string value. Make sure it's JSON serialisable")
         elif hasattr(obj_dict, '_asdict'):
             #A special case, trying to load a SQLAlchemy object, which is a 'dict' object

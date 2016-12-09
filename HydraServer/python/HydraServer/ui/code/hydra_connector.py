@@ -86,6 +86,11 @@ def add_template(template, user_id):
     new_tmpl =  tmpl.add_template(template, user_id=user_id)
     return new_tmpl
 
+
+def load_template(template_file, user_id):
+    new_tmpl =  tmpl.upload_template_xml(template_file, user_id=user_id)
+    return new_tmpl
+
 def update_template(template, user_id):
     updated_tmpl =  tmpl.update_template(template, user_id=user_id)
     return updated_tmpl

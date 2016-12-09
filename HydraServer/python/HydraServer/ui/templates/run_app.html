@@ -17,29 +17,32 @@
          <p id= "_message"></p>
     </div>
       <div class="modal-body" id="help_message">
-        <p id ="help_">Help meessage</p>
-       <form  id="import_form" method="post" enctype="multipart/form-data">
-            <div class="col-lg-6 col-sm-6 col-12">
 
-                   <div class="input-group"  id="browse_div">
-                       <label class="input-group-btn">
-                        </label>
-                        <span class="btn btn-primary">
-                            Browse&hellip;
-                            <input type="file" name="import_file"  id="import_file" style="display: none;" multiple>
-                        </span>
-                        <input type="text" class="form-control" readonly></input>
-                </div>
-           <span class="help-block">
-                    <file></file>
-                </span>
-                <input type = "submit" value="Upload" id="runApp"  class="btn btn-info btn-lg" ></input>
-                <button type="button" class="btn btn-info btn-lg"  onclick="cancel_app()">Cancel</button>
-            </div>
-       </form>
+
+      <div class="modal-body" id="help_message">
+        <p id ="help_">Help meessage</p>
       </div>
+   <form  id="import_form" method="post" enctype=multipart/form-data>
+        <div class="col-lg-6 col-sm-6 col-12">
+
+               <div class="input-group"  id="browse_div">
+                   <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse&hellip;
+                        <input type="file" name="import_file"  id="import_file" style="display: none;" multiple>
+                    </span>
+                </label>
+                <input type="text" class="form-control" readonly>
+            </div>
+       <span class="help-block">
+                <file></file>
+            </span>
+            <input type = "submit" value="Upload" id="runApp"  class="btn btn-info btn-lg" />
+            <button type="button" class="btn btn-info btn-lg"  onclick="cancel_app()">Cancel</button>
+        </div>
+   </form>
       <div class="modal-footer" id="footer">
-          <div class="modal-footer" id="temp_"></div>
+          <div class="modal-footer" id="temp_">
       </div>
 
 </div>

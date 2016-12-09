@@ -362,3 +362,8 @@ color: green;
   left: 0;
   z-index: 2000;
 }
+
+/*Help get drop-downs work in modals*/
+.modal { overflow: visible; }
+.modal-body { overflow-y: visible !important; }
+

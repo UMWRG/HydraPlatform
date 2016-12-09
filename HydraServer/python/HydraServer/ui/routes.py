@@ -10,7 +10,7 @@ from werkzeug import secure_filename
 import zipfile
 import os
 import sys
-
+import datetime
 
 from run_hydra_app import *
 
@@ -47,8 +47,10 @@ global DATA_FOLDER
 DATA_FOLDER = 'python/HydraServer/ui/data'
 
 UPLOAD_FOLDER = 'uploaded_files'
+TEMPLATE_FOLDER = 'hydra_templates'
 ALLOWED_EXTENSIONS = set(['zip'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['TEMPLATE_FOLDER'] = TEMPLATE_FOLDER
 
 
 # 'server/'
@@ -214,6 +216,32 @@ def do_create_template():
     template_j = JSONObject(d)
 
     newtemplate = tmplutils.create_template(template_j, user_id) 
+    
+    commit_transaction()
+
+    return newtemplate.as_json()
+
+
+@app.route('/load_template', methods=['POST'])
+def do_load_template():
+
+    now = datetime.datetime.now().strftime("%y%m%d%H%M")
+
+    basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), TEMPLATE_FOLDER, now)
+    if not os.path.exists(basefolder):
+        os.mkdir(basefolder)
+    
+    user_id = session['user_id']
+
+    template_file = request.files['import_file']
+
+    template_file.save(os.path.join(basefolder, template_file.filename))
+
+    f = open(os.path.join(basefolder, template_file.filename))
+    f_arr = f.readlines()
+    text = ''.join(f_arr)
+
+    newtemplate = tmplutils.load_template(text, user_id) 
     
     commit_transaction()
 
