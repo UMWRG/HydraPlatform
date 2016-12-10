@@ -44,6 +44,9 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                     'is_var': tattr.attr_is_var,
                     'data_type': tattr.data_type,
                 })
+
+                if tattr.default_dataset_id is not None:
+                    res_scenarios[tattr.attr_id].dataset = tattr.default_dataset
             else:
                 res_scenarios[tattr.attr_id].is_var = tattr.attr_is_var
                 res_scenarios[tattr.attr_id].data_type = tattr.data_type

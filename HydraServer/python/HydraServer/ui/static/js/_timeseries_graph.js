@@ -69,7 +69,8 @@ function draw_timeseries(graph_data, attr_name)
         svg.append("path")
             .attr("class", "line")
             .attr("d", valueline(graph_data))
-            .style('stroke', '#17315b');
+            .style('stroke', '#17315b')
+            .style('fill', 'white');
 
         // Add the scatterplot
         svg.selectAll("dot")

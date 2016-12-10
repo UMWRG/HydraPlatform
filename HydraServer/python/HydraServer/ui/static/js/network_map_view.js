@@ -97,6 +97,7 @@ var redraw_nodes = function(){
            (d.type.layout.shape == "wye") { return d3.symbolWye;} else
            { return d3.symbolCircle; }
          }))
+        .on("click", nodes_mouse_click)
 
     text = g.append("g").selectAll(".node")
         .data(nodes_)

@@ -26,7 +26,7 @@
                 {%set data_type = None%}
             {%endif%}
         <tr class="attribute">
-            <td>{{attr_id_name_map[rs.attr_id]}}</td>
+            <td><div class="attr_name">{{attr_id_name_map[rs.attr_id]}}</div></td>
             <td>
                 <div class='dataset'>
                 <input type="hidden" name="attr_id" value="{{rs.attr_id}}"></input>

@@ -201,6 +201,9 @@ def get_node(node_id, user_id):
     #Load the node's types
     for t in node.types:
         t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
     
     node_j = JSONObject(node)
     node_j.name = node_j.node_name

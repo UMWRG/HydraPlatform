@@ -26,7 +26,9 @@
     var network_id={{network.network_id}};
     var data_={{node_name_map|tojson}};
     var projection = "{{network.projection}}";
-    var projection_crs = {{network.projection_crs|safe}}
+    {%if network.projection%} 
+        var projection_crs = {{network.projection_crs|safe}}
+    {%endif%}
     
     function get_name(id)
     {
@@ -173,12 +175,12 @@
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/leaflet.js')}}"></script>
 
+<script type='text/javascript' src="{{url_for('static', filename='js/network_shared.js')}}"></script>
 {%if network.projection %}
-
     <script type='text/javascript' src="{{url_for('static', filename='js/proj4.js')}}"></script>
     <script type='text/javascript' src="{{url_for('static', filename='js/network_map_view.js')}}"></script>
 {%else%}
-    <script type='text/javascript' src="{{url_for('static', filename='js/network_schematic.js')}}"></script>
+    <script type='text/javascript' src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
 {%endif%}
 
 <script type='text/javascript' src="{{url_for('static', filename='js/network.js')}}"></script>

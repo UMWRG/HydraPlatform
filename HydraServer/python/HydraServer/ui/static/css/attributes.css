@@ -35,3 +35,10 @@
     position:relative;
 }
 
+
+.attr_name{
+    width: 95px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
