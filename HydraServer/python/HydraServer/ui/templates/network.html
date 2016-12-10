@@ -1,6 +1,12 @@
 {% extends "page_layout.html" %}
 {% block title %}Network {{network.network_name}}{% endblock %}
 {% block content %}
+<style>
+#graph {
+  width: 960px;
+  height: 500px;
+}
+</style>
     <div class="row">
     {%block sidebar%}
         {% include 'sidebar.html' %}
@@ -19,6 +25,9 @@
     var scenario_id={{scenario_id}};
     var network_id={{network.network_id}};
     var data_={{node_name_map|tojson}};
+    var projection = "{{network.projection}}";
+    var projection_crs = {{network.projection_crs|safe}}
+    
     function get_name(id)
     {
     value='None'
@@ -162,7 +171,16 @@
 <script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
-<script type='text/javascript' src="{{url_for('static', filename='js/network_displayer.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/leaflet.js')}}"></script>
+
+{%if network.projection %}
+
+    <script type='text/javascript' src="{{url_for('static', filename='js/proj4.js')}}"></script>
+    <script type='text/javascript' src="{{url_for('static', filename='js/network_map_view.js')}}"></script>
+{%else%}
+    <script type='text/javascript' src="{{url_for('static', filename='js/network_schematic.js')}}"></script>
+{%endif%}
+
 <script type='text/javascript' src="{{url_for('static', filename='js/network.js')}}"></script>
 
 <script type='text/javascript' src="{{url_for('static', filename='js/sidebar.js')}}"></script>
@@ -180,6 +198,7 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/leaflet.css') }}"/>
 
 {% include 'run_app.html' %}
 

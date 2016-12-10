@@ -14,9 +14,9 @@ var drag_line = null;
 var var_=getUrlVars()
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
-    var width  = (900- margin.left - margin.right),
-    height = (700-margin.top - margin.bottom);
-    colors = d3.scaleOrdinal(d3.schemeCategory10);
+var width  = (900- margin.left - margin.right),
+height = (700-margin.top - margin.bottom);
+colors = d3.scaleOrdinal(d3.schemeCategory10);
 
 if (min_x == max_x){
     max_x = max_x * 100;
@@ -24,18 +24,20 @@ if (min_x == max_x){
 if (min_y == max_y){
     max_y = max_y * 100;
 }
-    //`ransform functions, used to convert the Hydra coordinates
-    //to coodrinates on the d3 svg
-  var yScale = d3.scaleLinear()
-                           .domain([min_y, max_y ])
-                           .range([height,0]);
-  var xScale = d3.scaleLinear()
-                          .domain([min_x, max_x])
-                          .range([0,width]);
+
+//`ransform functions, used to convert the Hydra coordinates
+//to coodrinates on the d3 svg
+var yScale = d3.scaleLinear()
+                       .domain([min_y, max_y ])
+                       .range([height,0]);
+var xScale = d3.scaleLinear()
+                      .domain([min_x, max_x])
+                      .range([0,width]);
 
 //Set up the color scale
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
+//Node drag
 var drag = d3.drag()
          .on("start", dragstarted)
         .on("drag", dragged)
@@ -76,7 +78,6 @@ function dragended(d)
         return
     }
     update_node(d.id, d.name, d.x, d.y);
-
  }
 
  //Set up the force layout
@@ -379,15 +380,14 @@ svg.call(d3.zoom()
 //d3.select(window).on("resize", resize);
 
 function resize() {
-    alert('resizing')
-                var w = window.innerWidth,
-                h = window.innerHeight;
-                svg.attr("width", width).attr("height", height);
-                
-                force.size([force.size()[0] + (width - w) / zoom.scale(), force.size()[1] + (height - h) / zoom.scale()]).resume();
-                width = w;
-                height = h;
-            }
+    var w = window.innerWidth,
+    h = window.innerHeight;
+    svg.attr("width", width).attr("height", height);
+    
+    force.size([force.size()[0] + (width - w) / zoom.scale(), force.size()[1] + (height - h) / zoom.scale()]).resume();
+    width = w;
+    height = h;
+}
             
 function nodes_mouse_double_click(d)
 {

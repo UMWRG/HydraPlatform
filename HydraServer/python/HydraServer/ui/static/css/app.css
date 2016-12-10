@@ -3,21 +3,6 @@
   justify-content:left;
 }
 
-svg {
-  background-color: #FFF;
-  cursor: default;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-  outline: thin solid black;
-}
-
-svg:not(.active):not(.ctrl) {
-  cursor: crosshair;
-}
-
 path.link {
   fill: none;
   stroke: #000;
