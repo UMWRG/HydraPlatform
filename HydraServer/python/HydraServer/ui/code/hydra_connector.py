@@ -117,3 +117,15 @@ def apply_template_to_network(template_id, network_id, user_id):
 def add_resource_attribute(resource_type, resource_id, attr_id, is_var, user_id):
     new_ra = attrs.add_resource_attribute(resource_type, resource_id, attr_id, is_var,user_id=user_id)
     return new_ra
+
+def delete_node(node_id, user_id):
+    net.delete_node(node_id, False, user_id=user_id)
+
+def delete_link(link_id, user_id):
+    net.delete_link(link_id, False, user_id=user_id)
+
+def delete_resourcegroup(group_id, user_id):
+    net.delete_resourcegroup(group_id, False, user_id=user_id)
+
+def delete_network(network_id, user_id):
+    net.delete_network(network_id, False, user_id=user_id)

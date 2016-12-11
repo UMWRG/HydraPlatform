@@ -15,6 +15,22 @@ $(document).on("click", ".node", function(){
 
 });
 
+// Per-type markers, as they don't inherit styles.
+svg.append("defs").selectAll("marker")
+    .data(["suit", "licensing", "resolved"])
+  .enter().append("marker")
+    .attr("id", function(d) { return d; })
+    .attr("viewBox", "0 -5 10 10")
+    .attr("refX", 25)
+    .attr("refY", 0)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto")
+  .append("path")
+    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+    .style("stroke", "#4679BD")
+    .style("opacity", "0.6");
+
 var sig = {
         container: 'graph_container',
         type: 'canvas',

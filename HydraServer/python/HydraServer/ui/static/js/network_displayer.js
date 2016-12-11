@@ -1,17 +1,3 @@
-var toLocaleFormat = d3.timeFormat("%Y-%m-%d");
-
-
-var currentTransform = null;
-
-var current_res=null;
-
-var display=true;
-var cur_table=null;
-
-var drag_line = null;
-
-
-var var_=getUrlVars()
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
 var width  = (900- margin.left - margin.right),
@@ -34,27 +20,15 @@ var xScale = d3.scaleLinear()
                       .domain([min_x, max_x])
                       .range([0,width]);
 
-//Set up the color scale
-var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-//Node drag
-var drag = d3.drag()
-         .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended);
-
-function dragstarted(d) {
-
-    d3.event.sourceEvent.stopPropagation();
-
-}
 
 function dragged(d) {
     if( d3.select(this).classed('selected') == false){
+
         return
     }
 
-var mouse = d3.mouse(svg.node());
+    var mouse = d3.mouse(svg.node());
 
     if (currentTransform == null){
         d.x = xScale.invert(mouse[0]);
@@ -72,67 +46,15 @@ var mouse = d3.mouse(svg.node());
     tick()
 }
 
-function dragended(d)
-{
-    if( d3.select(this).classed('selected') == false){
-        return
-    }
-    update_node(d.id, d.name, d.x, d.y);
- }
+//Node drag
+var drag = d3.drag()
+         .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
 
  //Set up the force layout
 var force = d3.forceSimulation()
             .force("link", d3.forceLink().id(function(d) { return d.id }))
-
-var normalnode = d3.symbol()
-         .size(function(d) { 
-             var height = d.type.layout.height
-             if (height == undefined){
-                 height = 10
-             }
-             var width = d.type.layout.width
-             if (width == undefined){
-                 width = 10
-             }
-
-             return height * width; } )
-         .type(function(d) { 
-           if
-           (d.type.layout.shape == "circle") { return d3.symbolCircle; } else if
-           (d.type.layout.shape == "diamond") { return d3.symbolDiamond;} else if
-           (d.type.layout.shape == "cross") { return d3.symbolCross;} else if
-           (d.type.layout.shape == "triangle") { return d3.symbolTriangle;} else if
-           (d.type.layout.shape == "square") { return d3.symbolSquare;} else if
-           (d.type.layout.shape == "star") { return d3.symbolStar;} else if
-           (d.type.layout.shape == "wye") { return d3.symbolWye;} else
-           { return d3.symbolCircle; }
-         })
-
-
-var selectednode = d3.symbol()
-         .size(function(d) { 
-             var height = d.type.layout.height
-             if (height == undefined){
-                 height = 10
-             }
-             var width = d.type.layout.width
-             if (width == undefined){
-                 width = 10
-             }
-
-             return 1.5 * (height * width); } )
-         .type(function(d) { 
-           if
-           (d.type.layout.shape == "circle") { return d3.symbolCircle; } else if
-           (d.type.layout.shape == "diamond") { return d3.symbolDiamond;} else if
-           (d.type.layout.shape == "cross") { return d3.symbolCross;} else if
-           (d.type.layout.shape == "triangle") { return d3.symbolTriangle;} else if
-           (d.type.layout.shape == "square") { return d3.symbolSquare;} else if
-           (d.type.layout.shape == "star") { return d3.symbolStar;} else if
-           (d.type.layout.shape == "wye") { return d3.symbolWye;} else
-           { return d3.symbolCircle; }
-         })
-
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("#graph").append("svg")
@@ -223,7 +145,7 @@ var redraw_nodes = function(){
     node = svg.selectAll(".node")
         .data(nodes_)
         .enter().append("g")
-        .attr("class", "node")
+        .classed("node", true)
         .attr("id", function(d) {return d.id;})
         .attr('shape', function(d){
             if (d.type.layout.shape != undefined){
@@ -244,7 +166,8 @@ var redraw_nodes = function(){
         .on('mouseover', node_mouse_in) //Added
         .on('mouseout', node_mouse_out) //Added
         .on("click", nodes_mouse_click)
-        .on("dblclick", nodes_mouse_double_click);
+        .on("dblclick", nodes_mouse_double_click)
+        .on('contextmenu', d3.contextMenu(menu));
 
     text = svg.append("g").selectAll(".node")
         .data(nodes_)
@@ -308,22 +231,6 @@ force.nodes(nodes_).on('tick', tick)
 force.force('link').links(links_)
 tick()
 
-// Per-type markers, as they don't inherit styles.
-svg.append("defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("marker")
-    .attr("id", function(d) { return d; })
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 25)
-    .attr("refY", 0)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("path")
-    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-    .style("stroke", "#4679BD")
-    .style("opacity", "0.6");
-
 var zoom = function(){
 
     if (d3.event == null){
@@ -366,211 +273,3 @@ var zoom = function(){
 svg.call(d3.zoom()
         .scaleExtent([0.1,8])
         .on("zoom", zoom));
-
-//resize();
-//window.focus();
-//d3.select(window).on("resize", resize);
-
-function resize() {
-    var w = window.innerWidth,
-    h = window.innerHeight;
-    svg.attr("width", width).attr("height", height);
-    
-    force.size([force.size()[0] + (width - w) / zoom.scale(), force.size()[1] + (height - h) / zoom.scale()]).resume();
-    width = w;
-    height = h;
-}
-            
-function nodes_mouse_double_click(d)
-{
-  d3.select("path.selected").attr("d", normalnode)
-  d3.selectAll("path.selected").classed("selected", false)
-
-  d3.selectAll('.node')  //here's how you get all the nodes
-    .each(function(d) {
-        d3.select(this).on(".drag", null);
-    });
-    d3.select(this).attr("d", selectednode)
-    d3.select(this).classed("selected", true)
-    d3.select(this).call(drag);
-
-   d3.event.stopPropagation();
-}
-
-function get_network_attributes()
-{
-    res_type='NETWORK';
-    $( "#data" ).empty();
-    $("#timeseries_g" ).empty();
-
-    var table = $('<table></table>').addClass('foo');
-
-    var error = function(resp) {
-        alert('Unexpected error');
-    }
-
-
-    var success =function(data, status, request) {
-       res_attrs=data.resource_scenarios;
-       var count=0;
-       for (i in res_attrs)
-       {
-
-         if(count==0)
-           $("#data" ).append(  '<h4>Attributes for '+res_type+' '+'</h4>');
-           createDataTableHeading();
-           count+=1;
-         createResourceAttributesTable (res_attrs[i]);
-
-       }
-     }
-
-    var_=getUrlVars();
-    var pars=
-    {
-        network_id: var_["network_id"],
-        scenario_id: var_["scenario_id"],
-        res_id: var_["network_id"],
-        resource_type:res_type
-    };
-
-
-   $.ajax({
-        type: 'POST',
-        url: get_resource_data_url,
-        data:  JSON.stringify(pars),
-        success: success,
-        error: error
-   });
-}
-
-
-function getUrlVars(){
-    var vars = {};
-
-    try
-    {
-
-        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-        function(m,key,value) {
-          vars[key] = value;
-        });
-            vars["network_id"]=vars["network_id"].replace("#","");
-            vars["scenario_id"]=vars["scenario_id"].replace("#","");
-    }
-    catch (err)
-    {
-        vars["network_id"]=0;
-        vars["scenario_id"]=0;
-    }
-
-    return vars;
-  }
-
-var newnodetip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-    var date = new Date(); // for now
-    var default_name = "Node " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-  return "<label>Name: </label><input type=\"text\" name=\"node_name\">" + default_name+" </input>";
-  })
-
- 
-var add_node = function(name, type_id, x, y){
-    var node_id = null;
-
-    var success = function(resp){
-        //Add ID of ode
-        console.log('Node added')
-        node_id = JSON.parse(resp).node_id;
-    }
-
-    var error = function(resp){
-        alert(resp)    
-    }
-    
-    var nodedata = {
-        name: name,
-        network_id: network_id,
-        types : [{'id': type_id}],
-        x : x,
-        y : y
-    }
-    $.ajax({
-       url:  add_node_url,
-       type: 'POST',
-       data : JSON.stringify(nodedata),
-       success: success,
-       error: error,
-       async: false
-    })
-
-    return node_id;
-
-}
-
-function update_node(node_id, name, x, y)
-    {
-    //to do connect to the server and update node location
-
-    var success = function(resp){
-        console.log("Node"+ node_id +" updated")
-    }
-
-    var error = function(resp){
-        alert(resp)    
-    }
-    
-    var nodedata = {
-        name: name,
-        id: node_id,
-        x : x,
-        y : y
-    }
-
-    $.ajax({
-       url:  update_node_url,
-       type: 'POST',
-       data : JSON.stringify(nodedata),
-       success: success,
-       error: error,
-    })
-
-    return node_id;
-    }
-
-var add_link = function(name, type_id, source, target){
-    var link_id = null;
-
-    var success = function(resp){
-        //Add ID of ode
-        link_id = JSON.parse(resp).link_id;
-    }
-
-    var error = function(resp){
-        alert(resp)    
-    }
-    
-    var linkdata = {
-        name: name,
-        network_id: network_id,
-        types : [{'id': type_id}],
-        node_1_id : source.id,
-        node_2_id : target.id
-    }
-    $.ajax({
-       url:  add_link_url,
-       type: 'POST',
-       data : JSON.stringify(linkdata),
-       success: success,
-       error: error,
-       async: false
-    })
-
-    return link_id;
-
-}
-
-
-

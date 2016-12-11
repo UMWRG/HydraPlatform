@@ -402,6 +402,26 @@ def go_network(network_id):
                 template = tmpl,\
                 type_layout_map=type_layout_map)
 
+
+@app.route('/delete_resource', methods=['POST'])
+def do_delete_resource():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    resource_to_delete = JSONObject(d)
+    
+    app.logger.info("Deleting resource %s (%s).",resource_to_delete.id, resource_to_delete.resource_id)
+
+    netutils.delete_resource(resource_to_delete.id,resource_to_delete.resource_type, user_id) 
+    
+    commit_transaction()
+    
+    app.logger.info("Resource %s (%s) deleted.",resource_to_delete.id, resource_to_delete.resource_id)
+
+    return 'OK'
+
 @app.route('/add_node', methods=['POST'])
 def do_add_node():
     

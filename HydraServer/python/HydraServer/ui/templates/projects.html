@@ -23,7 +23,7 @@
         <h2>My Projects</h2>
           <ul class="list-unstyled row">
             {% for p in projects %}
-                <li id="project-{{p.project_id}}" class="col-sm-2">
+                <li id="project-{{p.project_id}}" class="col-sm-3">
                     <a type="button"
                        class="btn btn-lg link" 
                        href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
@@ -43,7 +43,7 @@
                     </a>
                 </li>
             {% endfor %}
-            <li id="new-project" class="col-sm-2">
+            <li id="new-project" class="col-sm-3">
                 <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
                     <span class="fa fa-plus "></span>
                 </span>

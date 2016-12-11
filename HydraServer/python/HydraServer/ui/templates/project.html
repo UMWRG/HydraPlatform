@@ -21,7 +21,7 @@
             <ul class="list-unstyled row">
                 {% for network in project.networks %}
                     <li id="network_{{network.network_id}}"
-                    class="network col-sm-2">
+                    class="network col-sm-3">
                         <a type="button"
                             class="btn btn-lg link"
                             href="{{url_for('go_network', network_id=network.network_id)}}"
@@ -35,7 +35,7 @@
                         </a>
                     </li>
                 {% endfor %}
-                <li type="button" class="col-sm-2"
+                <li type="button" class="col-sm-3"
                     data-toggle="modal" data-target="#add_network_modal">
                         <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
                             <span class="glyphicon glyphicon-plus"></span>

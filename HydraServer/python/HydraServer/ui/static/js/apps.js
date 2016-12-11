@@ -230,7 +230,7 @@ function runPywrApp (){
 function runGamsModel(){
     $("#browse_div").show();
     $("#runApp").show();
-    $("#runApp").prop("value", "Rum Model");
+    $("#runApp").prop("value", "Run");
     $('#import_form')[0].reset();
     $("#import_progress_bar")
                       .css("width", 0 + "%")

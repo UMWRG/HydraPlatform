@@ -96,6 +96,7 @@
         var add_link_url="{{url_for('do_add_link')}}";
         var get_resource_data_url="{{url_for('do_get_resource_data')}}";
         var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
+        var delete_resource_url="{{url_for('do_delete_resource')}}";
 
       </script>
 
@@ -162,7 +163,7 @@
        {% include 'nodesandlinks.html' %}
 
         </div> <!-- tab-contents -->
-
+        <div id="log"></div>
       </div> <!-- main_content -->
 
     </div>
@@ -174,6 +175,7 @@
 <script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/leaflet.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3-context-menu.js')}}"></script>
 
 <script type='text/javascript' src="{{url_for('static', filename='js/network_shared.js')}}"></script>
 {%if network.projection %}
@@ -191,13 +193,13 @@
 <script type='text/javascript' src="{{url_for('static', filename='js/html2canvas.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/html2canvas.svg.js')}}"></script>
 
-
 <script src="{{url_for('static', filename='js/handsontable.full.min.js')}}"></script>
 <script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
 <script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
 
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/d3-context-menu.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/leaflet.css') }}"/>

@@ -230,6 +230,17 @@ def get_resourcegroup(group_id, user_id):
 
     return group_j
 
+def delete_resource(resource_id, resource_type, user_id):
+    resource_type = resource_type.upper()
+    if resource_type == 'NODE':
+        hc.delete_node(resource_id, user_id)
+    elif resource_type == 'LINK':
+        hc.delete_link(resource_id, user_id)
+    elif resource_type == 'GROUP':
+        hc.delete_resourcegroup(resource_id, user_id)
+    elif resource_type == 'NETWORK':
+        hc.delete_network(resource_id, user_id)
+
 def add_node(node, user_id):
     """
     Take a JSONObjhect node and pass it to Hydra Platform's add_node fn.

@@ -58,7 +58,10 @@ var redraw_nodes = function(){
     node = g.selectAll(".node")
         .data(nodes_)
         .enter().append("g")
-        .attr("class", "node")
+        .classed("node", true)
+        .classed("context-menu-one", true)
+        .classed("btn", true)
+        .classed("btn-neutral", true)
         .attr("id", function(d) {return d.id;})
         .attr('shape', function(d){
             if (d.type.layout.shape != undefined){
@@ -67,6 +70,7 @@ var redraw_nodes = function(){
                 return 'circle'
             }})
         .attr('resourcetype', function(d){return d.type.type_id})
+        .style('cursor', 'pointer')
     
         node
         .append('path')
@@ -74,30 +78,12 @@ var redraw_nodes = function(){
             var l = d.type.layout;
             if (l.color != undefined){return l.color}else{return 'black'}
           })
-        .attr("d", d3.symbol()
-         .size(function(d) { 
-             var height = d.type.layout.height
-             if (height == undefined){
-                 height = 10
-             }
-             var width = d.type.layout.width
-             if (width == undefined){
-                 width = 10
-             }
-
-             return height * width; } )
-         .type(function(d) { 
-           if
-           (d.type.layout.shape == "circle") { return d3.symbolCircle; } else if
-           (d.type.layout.shape == "diamond") { return d3.symbolDiamond;} else if
-           (d.type.layout.shape == "cross") { return d3.symbolCross;} else if
-           (d.type.layout.shape == "triangle") { return d3.symbolTriangle;} else if
-           (d.type.layout.shape == "square") { return d3.symbolSquare;} else if
-           (d.type.layout.shape == "star") { return d3.symbolStar;} else if
-           (d.type.layout.shape == "wye") { return d3.symbolWye;} else
-           { return d3.symbolCircle; }
-         }))
+        .attr("d", normalnode)
+        .on('mouseover', node_mouse_in) //Added
+        .on('mouseout', node_mouse_out) //Added
         .on("click", nodes_mouse_click)
+        .on("dblclick", nodes_mouse_double_click)
+        .call(tip)
 
     text = g.append("g").selectAll(".node")
         .data(nodes_)
@@ -146,6 +132,9 @@ var redraw_links = function(){
          .style('stroke',  function(d) { 
               if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
         })
+        .on('mouseover', link_mouse_in) //Added
+        .on('mouseout', link_mouse_out) //Added
+        .on("click", links_mouse_click);
 }
 
 
