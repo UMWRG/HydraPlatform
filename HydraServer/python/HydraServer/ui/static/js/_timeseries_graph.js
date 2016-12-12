@@ -13,7 +13,7 @@ function draw_timeseries(graph_data, attr_name)
     });
 
     // Set the dimensions of the canvas / graph
-    var margin = {top: 30, right: 30, bottom: 40, left: 50},
+    var margin = {top: 30, right: 30, bottom: 40, left: 100},
     width = 550 - margin.left - margin.right,
     height = 270 - margin.top - margin.bottom;
 

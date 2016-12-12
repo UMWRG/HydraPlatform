@@ -15,7 +15,7 @@ def delete_files_from_folder(path_,maxdepth=12):
                 shutil.rmtree(path)
             else:
                 os.remove(path)
-        except Exception, e:
+        except Exception as e:
             print e
 
             '''
@@ -46,7 +46,7 @@ def create_zip_file(path, zip_file_name):
                 real_path = os.path.join(root, file_name)
                 zip_path = real_path.replace(base_directory + '\\','')
                 zip_file.write(real_path, zip_path)
-    except Exception, e:
+    except Exception as e:
         print e
         return e
 

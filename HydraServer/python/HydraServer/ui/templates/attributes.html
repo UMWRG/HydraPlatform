@@ -48,7 +48,7 @@
                 {%elif data_type == "scalar"%}
 
                     <input type="hidden" name="data_type" value="scalar"></input>
-                    <input type="number" name="value"  value={%if rs.dataset and rs.dataset.value not in ('', None)%}{{rs.dataset.value}}{%else%}""{%endif%}  class="{{data_type}}"></input>
+                    <input type="number" name="value"  step="any" value={%if rs.dataset and rs.dataset.value not in ('', None)%}{{rs.dataset.value}}{%else%}""{%endif%}  class="{{data_type}}"></input>
                 {%elif data_type == "array"%}
 
                     <input type="hidden" name="data_type" value="array"></input>
@@ -59,7 +59,7 @@
                     <input type="hidden" name="value"  value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value}}'{%else%}""{%endif%}   class="{{data_type}}"></input>
                 {%else%}
                     <input type="hidden" name="data_type" value="scalar"></input>
-                    <input type="number" name="value" class="{{data_type}}" value={%if rs.dataset and rs.dataset.value not in (None, '')%}{{rs.dataset.value}}{%else%}""{%endif%}></input>
+                    <input type="number" name="value" step="any" class="{{data_type}}" value={%if rs.dataset and rs.dataset.value not in (None, '')%}{{rs.dataset.value}}{%else%}""{%endif%}></input>
                 {%endif%}
                 </div>
             </td>

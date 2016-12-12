@@ -381,11 +381,14 @@ def go_network(network_id):
     if network.projection:
         try:
             proj = network.projection.split(":")[1]
-            resp = urllib2.urlopen("http://spatialreference.org/ref/epsg/%s/proj4js/"%proj)
+            system = network.projection.split(":")[0].lower()
+            resp = urllib2.urlopen("http://spatialreference.org/ref/%s/%s/proj4js/"%(system,proj))
             network.projection_crs = resp.read().split(" = ")[1]
         except:
             log.critical("Error with projection")
-            network.projection = ""
+            network.projection = None
+            network.projection_crs = "" 
+
 
     return render_template('network.html',\
                 scenario_id=network.scenarios[0].scenario_id,

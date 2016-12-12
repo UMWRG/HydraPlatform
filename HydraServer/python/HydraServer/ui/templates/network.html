@@ -57,6 +57,7 @@
     var max_x = {{extents['max_x'] if extents['max_x'] != None else 100}};
     var min_y = {{extents['min_y'] if extents['min_y'] != None else 0}};
     var max_y = {{extents['max_y'] if extents['max_y'] != None else 100}};
+    var centre = [(min_x + max_x)/2, (min_y + max_y)/2];
 
     var nodes = [];
     var node_coords = {};
@@ -171,7 +172,7 @@
         <!-- this needs to be updated and turned into a tooltip that can be hidden -->
 
         <!--Include css & javascript-->
-<script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/topojson.v0.min.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
 <script type='text/javascript' src="{{url_for('static', filename='js/leaflet.js')}}"></script>

@@ -2,8 +2,9 @@
 var dest = new proj4.Proj('EPSG:4326');
 var source = new proj4.Proj(projection_crs);
 
+var converted_centre = proj4(source,dest,centre)
 
-var map = L.map('graph').setView([31.18113841492, 36.451667120665], 8);
+var map = L.map('graph').setView([converted_centre[1], converted_centre[0]], 10);
     mapLink = 
         '<a href="http://openstreetmap.org">OpenStreetMap</a>';
     L.tileLayer(
@@ -12,7 +13,6 @@ var map = L.map('graph').setView([31.18113841492, 36.451667120665], 8);
         maxZoom: 18,
         }).addTo(map);
            
-
 /* Initialize the SVG layer */
 map._initPathRoot()    
 
@@ -143,6 +143,7 @@ force.nodes(nodes_).on('tick', update)
 force.force('link').links(links_)
 
 var update = function(){
+
     node.attr("transform",
         function(d) {
                  d.x_ = map.latLngToLayerPoint(d.LatLng).x;

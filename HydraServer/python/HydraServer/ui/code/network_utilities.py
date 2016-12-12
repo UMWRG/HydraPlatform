@@ -93,7 +93,7 @@ def get_network (network_id, user_id):
 
         node_name_map.append({'id': node.node_id, 'name': node.node_name, 'name': node.node_name, 'description':node.description})
         nodes_.append(
-            {'id': node.node_id, 'x': float(node.node_x), 'y': float(node.node_y),
+            {'id': node.node_id, 'x': float(node.node_x), 'y': float(node.node_y),'fx': float(node.node_x), 'fy': float(node.node_y),
              'name': node.node_name, 'type': nodetype, 'res_type': 'node'})
 
     links = {}

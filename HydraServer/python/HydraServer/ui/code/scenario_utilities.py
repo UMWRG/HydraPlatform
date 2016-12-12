@@ -12,13 +12,12 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
     resource_scenarios = hc.get_resource_data(resource_type, res_id, scenario_id, None, user_id)
     for rs in resource_scenarios:
         attr_id = rs.resourceattr.attr_id
-        dataset = JSONObject(rs.dataset)
 
         res_scenarios[attr_id] =  JSONObject({'rs_id': res_id, 
                  'ra_id': rs.resourceattr.resource_attr_id,
                  'attr_id': attr_id,
-                 'dataset': dataset,
-                 'data_type': dataset.data_type,
+                 'dataset': rs.dataset,
+                 'data_type': rs.dataset.data_type,
                 })
     
     
