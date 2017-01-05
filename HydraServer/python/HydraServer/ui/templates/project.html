@@ -54,7 +54,16 @@
             <h4 class="modal-title">Create a Network</h4>
           </div>
           <div class="modal-body">
-              <form id="create-network" action="create_network" type="POST">
+            <ul id="network-input-tabs" class="nav nav-tabs" role="tablist">
+                <li role="presentation" id="manual-tab">
+                    <a data-toggle="tab" href="#create-network">Manual</a>
+                </li>
+                <li role="presentation" id="import-tab">
+                    <a data-toggle="tab" href="#import">Import<a>
+                </li>
+            </ul>
+
+              <form id="create-network" action="create_network" type="POST" class="tab-pane fade in active">
                 <input type="hidden" name="project_id" value="{{project.project_id}}">
                 <table class="table">
                 <tr>
@@ -85,6 +94,23 @@
                 </tr>
                 </table>
                 <div>* This is mandatory</div>
+              </form>
+              <form id="import" type="post" action="import-network" class="tab-pane fade">
+                <input type="hidden" name="project_id" value="{{project.project_id}}">
+                <table class="table">
+                    <tr>
+                        <td><label for="network-name-input">Name</label></td>
+                        <td><input id="network-name-input" type="text" name="name" value=""></input></td>
+                    </tr>
+                    <tr>
+                        <td><label for="network-input-format">Import From...</label></td>
+                        <td><select id="network-input-format" type="file" name="file" value=""></input></td>
+                    </tr>
+                    <tr>
+                        <td><label for="network-file-input">File</label></td>
+                        <td><input id="network-file-input" type="file" name="file" value=""></input></td>
+                    </tr>
+                </table>
               </form>
           </div>
           <div class="modal-footer">
