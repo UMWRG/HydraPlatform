@@ -13,34 +13,29 @@ import sys
 import datetime
 import urllib2
 
-from run_hydra_app import *
-
+from code.run_hydra_app import *
 
 basefolder = os.path.dirname(__file__)
-
-code= os.path.join(basefolder, 'code')
-sys.path.insert(0, code)
 
 from HydraServer.lib.objects import JSONObject, ResourceScenario
 
 import logging
 log = logging.getLogger(__name__)
 
+from code.app_utilities import delete_files_from_folder, create_zip_file
 
-from app_utilities import delete_files_from_folder, create_zip_file
+import code.project_utilities as projutils
+import code.network_utilities as netutils 
+import code.attr_utilities as attrutils
+import code.template_utilities as tmplutils
+import code.dataset_utilities as datasetutils
+import code.scenario_utilities as scenarioutils
 
-import project_utilities as projutils
-import network_utilities as netutils 
-import attr_utilities as attrutils
-import template_utilities as tmplutils
-import dataset_utilities as datasetutils
-import scenario_utilities as scenarioutils
+from code.export_network import export_network_to_pywr_json, export_network_to_excel, export_network_to_csv
 
-from export_network import export_network_to_pywr_json, export_network_to_excel, export_network_to_csv
+from code.import_network import import_network_from_csv_files, import_network_from_excel, import_network_from_pywr_json
 
-from import_network import import_network_from_csv_files, import_network_from_excel, import_network_from_pywr_json
-
-from __init__ import app
+from . import app
 
 from HydraServer.db import commit_transaction, rollback_transaction
 
