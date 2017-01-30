@@ -1,3 +1,5 @@
+var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
+
 var toLocaleFormat = d3.timeFormat("%Y-%m-%d");
 
 var currentTransform = null;

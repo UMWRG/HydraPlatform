@@ -42,18 +42,19 @@ function handleDrop(e) {
 
     svg_topleft_x = svg_origin.x;
     svg_topleft_y = svg_origin.y;
+    if (x != null){
+        var nodex = e.clientX - svg_topleft_x - margin.left;
+        var nodey = e.clientY - svg_topleft_y - margin.top;
+    }else{
+        var layer_coords = map.mouseEventToLayerPoint(e) 
+        var nodex = layer_coords.x;
+        var nodey = layer_coords.y;
+    }
 
-    var nodex = e.clientX - svg_topleft_x - margin.left;
-    var nodey = e.clientY - svg_topleft_y - margin.top;
-
-    var nodex_nomargin =  e.clientX - svg_topleft_x;
-    var nodey_nomargin = e.clientY - svg_topleft_y;
-       
     var g = dragSrcEl.querySelector("g");
 
 
     console.log("Dropping "+g+" on "+nodex+" , "+nodey+".");
-    console.log("Dropping "+g+" on "+nodex_nomargin+" , "+nodey_nomargin+".");
     
     var newnode = svg.append('g')
       .html(g.innerHTML)
@@ -72,22 +73,31 @@ function handleDrop(e) {
             var t = template.templatetypes[i]
         }
     }
+   
 
-    if (currentTransform == null){
-        var realnodex = xScale.invert(nodex)
-    }else{
-        var realnodex = xScale.invert(currentTransform.invertX(nodex))
-    }
 
-    if (currentTransform == null){
-        var realnodey = yScale.invert(nodey)
+    if (x != null){ 
+        if (currentTransform == null){
+            var realnodex = xScale.invert(nodex)
+        }else{
+            var realnodex = xScale.invert(currentTransform.invertX(nodex))
+        }
+
+        if (currentTransform == null){
+            var realnodey = yScale.invert(nodey)
+        }else{
+            var realnodey = yScale.invert(currentTransform.invertY(nodey))
+        }
     }else{
-        var realnodey = yScale.invert(currentTransform.invertY(nodey))
+        realcoords = map.layerPointToLatLng(new L.Point(nodex, nodey))
+        realnodex = realcoords.lng;
+        realnodey = realcoords.lat;
+
     }
 
     node_id = add_node(default_name, type_id, realnodex, realnodey)
 
-    nodes_.push({
+    var data = {
         id          : node_id,
         name        : default_name,
         type        : t,
@@ -96,9 +106,24 @@ function handleDrop(e) {
         description : "",
         group       : 1, //These will be phased out
         res_type    : 'node'
-    })
+    }
+
+    if (x == null){
+        data.LatLng = new L.LatLng(realnodey, realnodex);
+
+        data.x_ = map.latLngToLayerPoint(d.LatLng).x;
+        data.y_ = map.latLngToLayerPoint(d.LatLng).y;
+
+    }
+
+    newnode.remove()
+
+    nodes_.push(data)
 
     redraw_nodes()
+    update()
+
+
 
   return false;
 }
