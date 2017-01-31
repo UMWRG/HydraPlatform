@@ -1,6 +1,10 @@
+var map = null;
+
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
-var width  = (900- margin.left - margin.right),
+var graph_width = document.getElementById('graph').clientWidth
+
+var width  = (graph_width - margin.left - margin.right),
 height = (700-margin.top - margin.bottom);
 colors = d3.scaleOrdinal(d3.schemeCategory10);
 

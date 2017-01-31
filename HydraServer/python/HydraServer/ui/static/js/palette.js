@@ -42,7 +42,7 @@ function handleDrop(e) {
 
     svg_topleft_x = svg_origin.x;
     svg_topleft_y = svg_origin.y;
-    if (x != null){
+    if (map == null){
         var nodex = e.clientX - svg_topleft_x - margin.left;
         var nodey = e.clientY - svg_topleft_y - margin.top;
     }else{
@@ -76,7 +76,7 @@ function handleDrop(e) {
    
 
 
-    if (x != null){ 
+    if (map == null){ 
         if (currentTransform == null){
             var realnodex = xScale.invert(nodex)
         }else{
@@ -108,7 +108,7 @@ function handleDrop(e) {
         res_type    : 'node'
     }
 
-    if (x == null){
+    if (map != null){
         data.LatLng = new L.LatLng(realnodey, realnodex);
 
         data.x_ = map.latLngToLayerPoint(data.LatLng).x;
@@ -121,7 +121,10 @@ function handleDrop(e) {
     nodes_.push(data)
 
     redraw_nodes()
-    update()
+
+    if (map != null){
+        update()
+    }
 
 
 
