@@ -111,8 +111,8 @@ function handleDrop(e) {
     if (x == null){
         data.LatLng = new L.LatLng(realnodey, realnodex);
 
-        data.x_ = map.latLngToLayerPoint(d.LatLng).x;
-        data.y_ = map.latLngToLayerPoint(d.LatLng).y;
+        data.x_ = map.latLngToLayerPoint(data.LatLng).x;
+        data.y_ = map.latLngToLayerPoint(data.LatLng).y;
 
     }
 
@@ -158,7 +158,6 @@ function activateCanvas(){
 
 var nodetip = d3.tip()
   .attr('class', 'd3-tip')
-  .attr('class', 'd3tip')
   .offset([-10, 40])
   .html(function(d) {
     return "<span>" + d.type_name + "</spsn>";

@@ -104,6 +104,9 @@ var tip = d3.tip()
 
 function nodes_mouse_double_click(d)
 {
+
+  d3.event.stopPropagation();
+
   d3.select("path.selected").attr("d", normalnode)
   d3.selectAll("path.selected").classed("selected", false)
 

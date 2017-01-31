@@ -63,7 +63,7 @@ var svg = d3.select("#graph").append("svg")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
     .on("click", function(d){
         svg.selectAll(".node").each(function(d){tip.hide(d)})
-        svg.selectAll(".nod22path").style('stroke', "");
+        svg.selectAll(".node path").style('stroke', "");
         svg.selectAll(".node path").style('stroke-width',  "");
         svg.selectAll("path.selected").attr("d", normalnode)
         svg.selectAll("path.selected").classed("selected", false)
