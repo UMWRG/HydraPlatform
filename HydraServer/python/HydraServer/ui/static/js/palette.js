@@ -160,8 +160,8 @@ function activateCanvas(){
 }
 
 var nodetip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 40])
+  .attr('class', 'd3tip')
+  .offset([-10,20])
   .html(function(d) {
     return "<span>" + d.type_name + "</spsn>";
   })
@@ -186,7 +186,7 @@ function loadShapesIntoPalette(){
         }
     }else{
         typedict['NODE'] = [{'type_name': 'Default Node',
-                             'layout': {'shape':'circle', 'color':'black', 'width': '10', 'height': '10'}
+                             'layout': {'shape':'circle', 'color':'black', 'width': '15', 'height': '15'}
                        }]
     }
     
@@ -203,28 +203,53 @@ function loadShapesIntoPalette(){
       .append("svg")
       .call(nodetip)
 
+      grad = nodeEnterSvg.append('defs')
+        .append('radialGradient')
+        .attr('id', function(d){return 'nodegradient_'+d.type_name.replace(new RegExp(" ", 'g'), '')})
+      grad.append('stop')
+        .attr('offset', '10%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+        .attr('stop-opacity', "0.6")
+
+      grad.append('stop')
+        .attr('offset', '50%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+        .attr('stop-opacity', "0.8")
+
+      grad.append('stop')
+        .attr('offset', '40%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+
+
       nodeEnterSvg.attr("class", "palettesvg")
       .append('g')
       .attr('class', 'type')
       .attr('shape', function(d){if (d.layout.shape != undefined){return d.layout.shape}else{return 'circle'}})
-      .attr("transform", function(d) { return "translate(10,10)"; })
+      .attr("transform", function(d) { return "translate(15,15)"; })
       .append("path")
       .attr('resourcetype', function(d){return d.type_id})
       .style("stroke", function(d) {
           if (d.layout.border != undefined){return d.layout.border}else{return 'black'}
       })
       .style("fill", function(d) {
-          if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+          return "url(#nodegradient_"+d.type_name.replace(new RegExp(" ", 'g'), '')+")"
+          //if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
       })
       .attr("d", d3.symbol()
          .size(function(d) { 
              var height = d.layout.height
              if (height == undefined){
-                 height = 10
+                 height = 15
              }
              var width = d.layout.width
              if (width == undefined){
-                 width = 10
+                 width = 15
              }
 
              return height * width; } )

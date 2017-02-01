@@ -506,17 +506,3 @@ var add_link = function(name, type_id, source, target){
     return link_id;
 
 }
-
-//resize();
-//window.focus();
-//d3.select(window).on("resize", resize);
-
-function resize() {
-    var w = window.innerWidth,
-    h = window.innerHeight;
-    svg.attr("width", width).attr("height", height);
-    
-    force.size([force.size()[0] + (width - w) / zoom.scale(), force.size()[1] + (height - h) / zoom.scale()]).resume();
-    width = w;
-    height = h;
-}

@@ -10,7 +10,7 @@
 }
 
 #palette {
-  background: #f5f5f0;
+  /*background: #f5f5f0;*/
   float:left;
   -moz-box-flex: 0;       /* Mozilla */
   -webkit-box-flex: 0;
@@ -23,14 +23,14 @@
     display: inline-block;
 }
 #palette .shapecontainer:hover{
-    background: #e1e1e1;
+    background: #efefef;
 }
 #palette .draggablebox{
 }
 
 #palette .palettesvg{
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     cursor: move;
 }
 

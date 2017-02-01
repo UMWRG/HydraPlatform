@@ -1,7 +1,7 @@
 from HydraServer.lib import project as proj
 from HydraServer.lib import network as net
 from HydraServer.lib import template as tmpl
-from HydraServer.lib import scenario as sen
+from HydraServer.lib import scenario as scen
 from HydraServer.lib import attributes as attrs
 from HydraServer.lib import data  as data
 
@@ -40,10 +40,10 @@ def get_attributes_for_resource(network_id, scenario_id, resource, ids, include_
     return net.get_attributes_for_resource(network_id, scenario_id, resource, ids, include_metadata)
 
 def get_resource_data(resource, id, scenario_id, type_id, user_id):
-    return sen.get_resource_data(resource, id, scenario_id, type_id, user_id=user_id)
+    return scen.get_resource_data(resource, id, scenario_id, type_id, user_id=user_id)
 
 def update_resource_data(scenario_id, rs_list, user_id):
-    return sen.update_resourcedata(scenario_id, rs_list, user_id=user_id)
+    return scen.update_resourcedata(scenario_id, rs_list, user_id=user_id)
 
 def get_network_extents(network_id, user_id):
     return net.get_network_extents(network_id, user_id=user_id)
@@ -129,3 +129,9 @@ def delete_resourcegroup(group_id, user_id):
 
 def delete_network(network_id, user_id):
     net.delete_network(network_id, False, user_id=user_id)
+
+def clone_scenario(scenario_id, user_id):
+    return scen.clone_scenario(scenario_id, user_id=user_id)
+
+def update_scenario(scenario, user_id):
+    return scen.update_scenario(scenario, user_id=user_id)

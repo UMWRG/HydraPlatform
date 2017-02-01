@@ -1,4 +1,7 @@
 
+
+$('#data').draggable()
+
 get_node = function(node_id){
     $.ajax({url:"/node/"+node_id,
            dataType:'json',
@@ -260,3 +263,91 @@ function update_resource_name(node_id, name, resource_type)
     return node_id;
     }
 
+
+$(function() {
+    var res_names = [];
+    for ( i in nodes_)
+    {
+    res_names.push(nodes_[i].name);
+    }
+    for(i in links_)
+    {
+     res_names.push(links_[i].name);
+    }
+    $( "#search" ).autocomplete({
+       source: res_names
+    });
+ });
+
+  
+$(document).on('show.bs.modal', '#clone_scenario_modal', function (e) {
+    var current_scenario = $('#scenario-picker option:selected')
+    var scenario_id = current_scenario.val()
+    //Set the clone to tbe the cuurent active scenario
+    $('.scenariopicker option[value='+scenario_id+']', $(this)).select()
+   
+
+     var scenario_names = []
+
+
+     $('#scenario-picker option').each(function(){
+        scenario_names.push($(this).text().trim())                
+     })
+
+     var this_scenario_name = current_scenario.text().trim()
+     var new_scenario_name = ""
+
+     for (var i=1; i<100; i++){
+        var prop_scenario_name = this_scenario_name + " " + i;
+        if (scenario_names.indexOf(prop_scenario_name) == -1){
+            new_scenario_name = prop_scenario_name;
+            break;
+        }
+     }
+
+     $("#scenario-name-input").val(new_scenario_name)
+
+
+}) 
+
+$(document).on('hide.bs.modal', '#clone_scenario_modal', function (e) {
+    $("#clone-scenario-button i").addClass('hidden')
+}) 
+
+$(document).on('click', '#clone-scenario-button', function(e){
+    e.preventDefault();
+    $("#clone-scenario-button i").removeClass('hidden')
+
+    var success = function(resp){
+        var new_scenario = JSON.parse(resp)
+        $("#clone-scenario-button i").addClass('hidden')
+        $('#clone_scenario_modal').modal('hide');
+
+        $("#clone-scenario select").append("<option value='"+new_scenario.scenario_id+"'>"+new_scenario.scenario_name+"</option>")
+        $("#clone-scenario select option[value="+new_scenario.scenario_id+"]").attr('selected','selected');
+        $('#clone_scenario_modal .selectpicker').selectpicker('refresh'); 
+
+        $("#scenario-picker").append("<option value='"+new_scenario.scenario_id+"'>"+new_scenario.scenario_name+"</option>")
+        $("#scenario-picker option[value="+new_scenario.scenario_id+"]").attr('selected','selected');
+        $('#sidebar_container .selectpicker').selectpicker('refresh'); 
+
+        scenario_id=new_scenario.scenario_id;
+    }
+
+    var error = function(){
+        $("#clone-scenario-button i").addClass('hidden')
+        $("#clone_scenario_modal .modal-body").append(
+                            "<div>An error has occurred.</div>")
+    }
+
+    var scenario_name =  $("#scenario-name-input").val()
+    var scenario_id   =  $("#clone-scenario select.scenariopicker option:selected").val()
+    $.ajax({
+        type: 'POST',
+        url : clone_scenario_url,
+        data: JSON.stringify({scenario_id:scenario_id,
+                scenario_name:scenario_name}),
+        success: success,
+        error  : error,
+    })
+})

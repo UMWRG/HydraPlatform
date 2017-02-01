@@ -347,28 +347,6 @@ color: green;
   z-index: 2000;
 }
 
-/* Creates a small triangle extender for the tooltip */
-/*.d3tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  text-align: left;
-  position:absolute;
-  z-index: 2000;
-}*/
-
-/* Style northward tooltips differently */
-/*.d3tip.n:after {
-  margin: -1px 0 0 10px;
-  top: 100%;
-  left: 0;
-  z-index: 2000;
-}*/
-
 /*Help get drop-downs work in modals*/
 .modal { overflow: visible; }
 .modal-body { overflow-y: visible !important; }
