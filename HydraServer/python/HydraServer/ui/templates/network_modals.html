@@ -1,0 +1,46 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="clone_scenario_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Clone a Scenario</h4>
+      </div>
+      <div class="modal-body">
+          <form id="clone-scenario" action="clone_scenario" type="POST" class="tab-pane fade in active">
+
+            <table class="table">
+                <tr>
+                    <td>
+                        <label>Scenario to Clone</label>
+                    </td>
+                    <td>
+                        <select class="scenariopicker selectpicker">
+                            {% for s in network.scenarios%}
+                                <option value="{{s.scenario_id}}" 
+                                        {%if s.scenario_id==scenario_id%}
+                                            selected
+                                        {%endif%}
+                                    >
+                                    {{s.scenario_name}}
+                                </option>
+                            {%endfor%}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="scenario-name-input">Name</label></td>
+                    <td><input id="scenario-name-input" type="text" name="name" value=""></input></td>
+                </tr>
+            </table>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-clone-scenario-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="clone-scenario-button" class="btn btn-success">
+            <i class="fa fa-spinner fa-spin hidden"></i> 
+            Clone
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

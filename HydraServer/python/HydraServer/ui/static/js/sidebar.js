@@ -72,3 +72,14 @@ $(document).on('show.bs.modal', '#apply-template-container', function(){
         error: error
     })
 })
+
+$('#sidebar_container .selectpicker').selectpicker({
+}); 
+
+$(document).on('change', '#scenario-picker', function(){
+    scenario_id=$(this).val()
+    if (current_res != null){
+        get_resource_data(current_res_type, current_res)
+    }
+})
+

@@ -1,3 +1,5 @@
+var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
+
 var toLocaleFormat = d3.timeFormat("%Y-%m-%d");
 
 var currentTransform = null;
@@ -102,6 +104,9 @@ var tip = d3.tip()
 
 function nodes_mouse_double_click(d)
 {
+
+  d3.event.stopPropagation();
+
   d3.select("path.selected").attr("d", normalnode)
   d3.selectAll("path.selected").classed("selected", false)
 
@@ -500,18 +505,4 @@ var add_link = function(name, type_id, source, target){
 
     return link_id;
 
-}
-
-//resize();
-//window.focus();
-//d3.select(window).on("resize", resize);
-
-function resize() {
-    var w = window.innerWidth,
-    h = window.innerHeight;
-    svg.attr("width", width).attr("height", height);
-    
-    force.size([force.size()[0] + (width - w) / zoom.scale(), force.size()[1] + (height - h) / zoom.scale()]).resume();
-    width = w;
-    height = h;
 }

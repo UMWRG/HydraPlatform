@@ -20,7 +20,7 @@
                 {{network.network_name}}
             </div>
         
-            <div class='filtercontent hidden'>
+            <div class='filtercontent'>
                 <ul>
                     <li>
                         <h4>Network Type:</h4>
@@ -50,7 +50,7 @@
             </div>
         
             <div class='filtercontent'>
-                <select class="scenariopicker selectpicker">
+                <select id="scenario-picker" class="scenariopicker selectpicker">
                     {% for s in network.scenarios%}
                     <option value="{{s.scenario_id}}">
                         {{s.scenario_name}}
@@ -58,13 +58,9 @@
                     {%endfor%}
                 </select>
                 <div class="btn-group new-scenario">
-                    <button type="button" class="btn btn-default btn-s dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button id="new-scenario" type="button" class="btn btn-default btn-s"data-toggle="modal" data-target="#clone_scenario_modal">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
-                    <ul class="dropdown-menu new-scenario-menu">
-                        <li><a class="clone-btn" href="">Clone..</a></li>
-                        <li><a class="new-scenario-btn" href="">New...</a></li>
-                    </ul>
                 </div>
             </div>
         </li>

@@ -1,10 +1,14 @@
+
 function draw_timeseries(graph_data, attr_name)
 
 {
 
-   $( "#ts-edit-inner" ).empty();
+    $( "#ts-edit-inner" ).empty();
+    
+    var window_width = document.body.clientWidth
 
-   
+    d3.select('#ts-editor .modal-dialog').style('width', window_width-700+"px")
+
     var parseTime = d3.timeParse("%d-%b-%y");
 
     graph_data.forEach(function(d) {
@@ -12,10 +16,11 @@ function draw_timeseries(graph_data, attr_name)
       d[1] = +d[1]
     });
 
+    var svg_width = window_width - 800
     // Set the dimensions of the canvas / graph
     var margin = {top: 30, right: 30, bottom: 40, left: 100},
-    width = 550 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
+    width = svg_width - margin.left - margin.right,
+    height = (svg_width/2) - margin.top - margin.bottom;
 
     // Set the ranges
     var x = d3.scaleTime().range([0, width]);

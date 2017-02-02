@@ -1,19 +1,64 @@
-.footer
-{
- clear: both;
+html, body, .row{
+    height: 100%
 }
 
-.network_container
+.row {
+    padding-top: 3px
+}
+
+#content{
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#footer{
+    position:absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.footer
 {
-/*width: 1900px;
-height 800px;
-//border: 1px solid red;*/
+ border: none;
+}
+
+#graph-container{
+    height: 100%;
+}
+
+
+#graph_container{
+    padding-top: 10px;
+    height: 100%;
 }
 
 #graph
 {
-width: 1300px;
-height: 900px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 43px;
+    right: 0;
+}
+
+#tab-contents
+{
+    padding : 0px;
+    margin  : 10px 0px 0px 0px;
+}
+
+#nodetable_wrapper{
+    padding: 10px;
+}
+
+.main_content
+{
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
 }
 
 .data_container
@@ -101,7 +146,7 @@ th, td {
   border: 1px solid #ccc;
 }
 
-tbody tr {
+#data tbody tr {
   background: #eee;
   opacity: 0.9;
 }
@@ -165,7 +210,7 @@ text {
 
 
 .networkoptions{
-    margin-bottom: 10px;
+    padding: 00px 20px 0px 100px;
 }
 
 

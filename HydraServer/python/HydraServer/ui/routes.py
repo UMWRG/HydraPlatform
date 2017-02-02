@@ -718,3 +718,17 @@ def go_export_network(network_id, scenario_id, directory):
         return "An error occurred!!!"
 
     return send_file(zip_file_name, as_attachment=True)
+
+@app.route("/clone_scenario", methods=['POST'])
+def do_clone_scenario():
+    pars= json.loads(request.get_data())
+    scenario_id   = pars['scenario_id']
+    log.info("Cloning scenario %s", scenario_id)
+    scenario_name = pars['scenario_name']
+    user_id       = session['user_id']
+
+    new_scenario = scenarioutils.clone_scenario(scenario_id, scenario_name, user_id)
+
+    commit_transaction()
+
+    return new_scenario.as_json()

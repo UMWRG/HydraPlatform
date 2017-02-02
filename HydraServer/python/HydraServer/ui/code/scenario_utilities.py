@@ -71,3 +71,18 @@ def update_resource_data(scenario_id, rs_list, user_id):
             rs['resource_attr_id'] = ra.resource_attr_id
 
     hc.update_resource_data(scenario_id, rs_list, user_id)
+
+def clone_scenario(scenario_id, scenario_name, user_id):
+    new_scenario = hc.clone_scenario(scenario_id, user_id)
+    #Creating and then updating is not efficient, but provides a clean distinction between
+    #funtions, and isn't a time-critical operation
+    s = JSONObject({
+        'id': new_scenario.scenario_id,
+        'network_id':new_scenario.network_id,
+        'name': scenario_name,
+        'resourcescenarios':[],
+        'resourcegroupitems':[],
+    })
+    return JSONObject(hc.update_scenario(s, user_id))
+
+    

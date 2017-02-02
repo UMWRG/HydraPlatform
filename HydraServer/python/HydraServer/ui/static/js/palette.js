@@ -42,18 +42,19 @@ function handleDrop(e) {
 
     svg_topleft_x = svg_origin.x;
     svg_topleft_y = svg_origin.y;
+    if (map == null){
+        var nodex = e.clientX - svg_topleft_x - margin.left;
+        var nodey = e.clientY - svg_topleft_y - margin.top;
+    }else{
+        var layer_coords = map.mouseEventToLayerPoint(e) 
+        var nodex = layer_coords.x;
+        var nodey = layer_coords.y;
+    }
 
-    var nodex = e.clientX - svg_topleft_x - margin.left;
-    var nodey = e.clientY - svg_topleft_y - margin.top;
-
-    var nodex_nomargin =  e.clientX - svg_topleft_x;
-    var nodey_nomargin = e.clientY - svg_topleft_y;
-       
     var g = dragSrcEl.querySelector("g");
 
 
     console.log("Dropping "+g+" on "+nodex+" , "+nodey+".");
-    console.log("Dropping "+g+" on "+nodex_nomargin+" , "+nodey_nomargin+".");
     
     var newnode = svg.append('g')
       .html(g.innerHTML)
@@ -72,22 +73,31 @@ function handleDrop(e) {
             var t = template.templatetypes[i]
         }
     }
+   
 
-    if (currentTransform == null){
-        var realnodex = xScale.invert(nodex)
-    }else{
-        var realnodex = xScale.invert(currentTransform.invertX(nodex))
-    }
 
-    if (currentTransform == null){
-        var realnodey = yScale.invert(nodey)
+    if (map == null){ 
+        if (currentTransform == null){
+            var realnodex = xScale.invert(nodex)
+        }else{
+            var realnodex = xScale.invert(currentTransform.invertX(nodex))
+        }
+
+        if (currentTransform == null){
+            var realnodey = yScale.invert(nodey)
+        }else{
+            var realnodey = yScale.invert(currentTransform.invertY(nodey))
+        }
     }else{
-        var realnodey = yScale.invert(currentTransform.invertY(nodey))
+        realcoords = map.layerPointToLatLng(new L.Point(nodex, nodey))
+        realnodex = realcoords.lng;
+        realnodey = realcoords.lat;
+
     }
 
     node_id = add_node(default_name, type_id, realnodex, realnodey)
 
-    nodes_.push({
+    var data = {
         id          : node_id,
         name        : default_name,
         type        : t,
@@ -96,9 +106,27 @@ function handleDrop(e) {
         description : "",
         group       : 1, //These will be phased out
         res_type    : 'node'
-    })
+    }
+
+    if (map != null){
+        data.LatLng = new L.LatLng(realnodey, realnodex);
+
+        data.x_ = map.latLngToLayerPoint(data.LatLng).x;
+        data.y_ = map.latLngToLayerPoint(data.LatLng).y;
+
+    }
+
+    newnode.remove()
+
+    nodes_.push(data)
 
     redraw_nodes()
+
+    if (map != null){
+        update()
+    }
+
+
 
   return false;
 }
@@ -132,9 +160,8 @@ function activateCanvas(){
 }
 
 var nodetip = d3.tip()
-  .attr('class', 'd3-tip')
   .attr('class', 'd3tip')
-  .offset([-10, 40])
+  .offset([-10,20])
   .html(function(d) {
     return "<span>" + d.type_name + "</spsn>";
   })
@@ -159,7 +186,7 @@ function loadShapesIntoPalette(){
         }
     }else{
         typedict['NODE'] = [{'type_name': 'Default Node',
-                             'layout': {'shape':'circle', 'color':'black', 'width': '10', 'height': '10'}
+                             'layout': {'shape':'circle', 'color':'black', 'width': '15', 'height': '15'}
                        }]
     }
     
@@ -176,28 +203,53 @@ function loadShapesIntoPalette(){
       .append("svg")
       .call(nodetip)
 
+      grad = nodeEnterSvg.append('defs')
+        .append('radialGradient')
+        .attr('id', function(d){return 'nodegradient_'+d.type_name.replace(new RegExp(" ", 'g'), '')})
+      grad.append('stop')
+        .attr('offset', '10%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+        .attr('stop-opacity', "0.6")
+
+      grad.append('stop')
+        .attr('offset', '50%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+        .attr('stop-opacity', "0.8")
+
+      grad.append('stop')
+        .attr('offset', '40%')
+        .attr('stop-color', function(d) {
+            if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+        })
+
+
       nodeEnterSvg.attr("class", "palettesvg")
       .append('g')
       .attr('class', 'type')
       .attr('shape', function(d){if (d.layout.shape != undefined){return d.layout.shape}else{return 'circle'}})
-      .attr("transform", function(d) { return "translate(10,10)"; })
+      .attr("transform", function(d) { return "translate(15,15)"; })
       .append("path")
       .attr('resourcetype', function(d){return d.type_id})
       .style("stroke", function(d) {
           if (d.layout.border != undefined){return d.layout.border}else{return 'black'}
       })
       .style("fill", function(d) {
-          if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
+          return "url(#nodegradient_"+d.type_name.replace(new RegExp(" ", 'g'), '')+")"
+          //if (d.layout.color != undefined){return d.layout.color}else{return 'black'}
       })
       .attr("d", d3.symbol()
          .size(function(d) { 
              var height = d.layout.height
              if (height == undefined){
-                 height = 10
+                 height = 15
              }
              var width = d.layout.width
              if (width == undefined){
-                 width = 10
+                 width = 15
              }
 
              return height * width; } )
