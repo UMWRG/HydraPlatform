@@ -38,3 +38,16 @@ def get_project(project_id, user_id):
 
     return JSONObject(project)
 
+def delete_project(project_id, user_id):
+    """
+        Delete a project
+    """
+    hc.delete_project(project_id, user_id)
+
+
+def share_project(project_id, usernames, read_only, share, user_id):
+    """
+        Delete a project
+    """
+    hc.share_project(project_id, usernames, read_only, share, user_id)
+

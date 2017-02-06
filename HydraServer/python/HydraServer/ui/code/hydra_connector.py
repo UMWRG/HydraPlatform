@@ -4,6 +4,7 @@ from HydraServer.lib import template as tmpl
 from HydraServer.lib import scenario as scen
 from HydraServer.lib import attributes as attrs
 from HydraServer.lib import data  as data
+from HydraServer.lib import sharing  as sharing
 
 
 def load_network(network_id, user_id):
@@ -22,6 +23,12 @@ def get_projects(user_id):
 def get_project(project_id, user_id):
     project = proj.get_project(project_id, user_id=user_id)
     return project
+
+def delete_project(project_id, user_id):
+    proj.delete_project(project_id, user_id=user_id)
+
+def share_project(project_id, usernames, read_only, share, user_id):
+    sharing.share_project(project_id, usernames, read_only, share, user_id)
 
 def add_project(project, user_id):
     project = proj.add_project(project, user_id=user_id)

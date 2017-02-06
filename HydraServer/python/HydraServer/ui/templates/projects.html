@@ -9,6 +9,8 @@
   <script src="{{url_for('static', filename='js/projects.js')}}"></script>
   <script>
     var add_project_url = "{{url_for('do_create_project')}}"
+    var delete_project_url = "{{url_for('do_delete_project')}}"
+    var share_project_url = "{{url_for('do_share_project')}}"
     var go_project_url = "{{url_for('go_project', project_id=XXX)}}"
   </script>
 
@@ -21,34 +23,38 @@
 
         <div class="container-fluid grid">
         <h2>My Projects</h2>
-          <ul class="list-unstyled row">
-            {% for p in projects %}
-                <li id="project-{{p.project_id}}" class="col-sm-3">
-                    <a type="button"
-                       class="btn btn-lg link" 
-                       href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
-                        <span>
-                            <div class="head">{{p.project_name}}
-                            </div>
-                            <div class="summary">
-                                {%if p.networks|length == 0%}
-                                    Empty
-                                {%elif p.networks|length == 1%}
-                                    One network
-                                {%else%}
-                                    {{p.networks|length}} Networks
-                                {%endif%}
-                            </div>
-                        </span>
-                    </a>
+            <div id='projectlist'>
+              <ul class="list-unstyled row">
+                {% for p in projects %}
+                    <li id="project-{{p.project_id}}" class="listitem col-sm-3 col-md-3 col-lg-2 col-xl-1">
+                        <a type="button"
+                           class="btn btn-lg link" 
+                           href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
+                            <span>
+                                <div class="head">{{p.project_name}}
+                                </div>
+                                <div class="summary">
+                                    {%if p.networks|length == 0%}
+                                        Empty
+                                    {%elif p.networks|length == 1%}
+                                        One network
+                                    {%else%}
+                                        {{p.networks|length}} Networks
+                                    {%endif%}
+                                </div>
+                            </span>
+                        </a>
+                        <div class='btn btn-secondary delete-btn' data-target="#delete_project_modal" data-toggle="modal"><span class="fa fa-close"></span></div>
+                        <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt"></span></div>
+                    </li>
+                {% endfor %}
+                <li id="new-project" class="col-sm-3 col-md-4 col-lg-2">
+                    <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
+                        <span class="fa fa-plus "></span>
+                    </span>
                 </li>
-            {% endfor %}
-            <li id="new-project" class="col-sm-3">
-                <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
-                    <span class="fa fa-plus "></span>
-                </span>
-            </li>
-          </ul>
+              </ul>
+            </div>
         </div>
     </div>
 
@@ -77,6 +83,28 @@
           <div class="modal-footer">
             <button type="button" id="close-create-project-button" class="btn btn-default" data-dismiss="modal">Close</button>
             <button type="button" id="create-project-button" class="btn btn-success" data-dismiss="modal">Create</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="delete_project_modal" data-keyboard="false" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Delete <p class="name"></p></h4>
+          </div>
+          <div class="modal-body">
+              <form id="delete-project" action="create_project" type="POST">
+                    <input id="project-id-input" type="hidden" name="project_id" value=""></input></td>
+                    <input id="project-name-input" type="hidden" name="project_name" value=""></input></td>
+                  <p> Are you sure you want to delete project  </p> <p class='name'></p>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-delete-project-button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="delete-project-button" class="btn btn-danger">Delete</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

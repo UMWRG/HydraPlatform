@@ -331,7 +331,35 @@ def do_create_project():
 
     return proj.as_json()
 
+@app.route('/delete_project', methods=['POST'])
+def do_delete_project():
+    
+    user_id = session['user_id']
 
+    d = json.loads(request.get_data())
+
+    projutils.delete_project(d['project_id'], user_id) 
+    
+    commit_transaction()
+
+    return json.dumps({'status': 'OK'})
+
+@app.route('/share_project', methods=['POST'])
+def do_share_project():
+    
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    projutils.share_project(
+                    d['project_id'],
+                    d['usernames'],
+                    d['read_only'],
+                    d['share'], user_id) 
+    
+    commit_transaction()
+
+    return json.dumps({'status': 'OK'})
 
 
 def allowed_file (filename):

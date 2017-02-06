@@ -15,7 +15,8 @@
 
     <div id="network-container" class="container-fluid">
 
-        <h3>{{project.project_name}}</h3>
+        <h3>Project {{project.project_name}}</h3>
+        <h3>Networks</h3>
 
         <div class="container-fluid grid">
             <ul class="list-unstyled row">
@@ -33,6 +34,8 @@
                                 </div>
                             </span>
                         </a>
+                    <div class='btn btn-secondary delete-btn'><span class="fa fa-close"></span></div>
+                    <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt"></span></div>
                     </li>
                 {% endfor %}
                 <li type="button" class="col-sm-3"
