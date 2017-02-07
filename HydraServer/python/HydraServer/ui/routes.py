@@ -30,6 +30,7 @@ import code.attr_utilities as attrutils
 import code.template_utilities as tmplutils
 import code.dataset_utilities as datasetutils
 import code.scenario_utilities as scenarioutils
+import code.user_utilities as userutils
 
 from code.export_network import export_network_to_pywr_json, export_network_to_excel, export_network_to_csv
 
@@ -348,14 +349,22 @@ def do_delete_project():
 def do_share_project():
     
     user_id = session['user_id']
-
     d = json.loads(request.get_data())
+    log.info('Project sharing details: %s'%d)
+    
+    read_only = 'Y'
+    if d.get('allow-edit') is not None:
+        read_only = 'N'
+
+    share = 'N'
+    if d.get('allow-resharing') is not None:
+        share = 'Y'
 
     projutils.share_project(
                     d['project_id'],
                     d['usernames'],
-                    d['read_only'],
-                    d['share'], user_id) 
+                    read_only,
+                    share, user_id) 
     
     commit_transaction()
 
@@ -651,7 +660,9 @@ def import_uploader():
             return "Error, no network and scenario are specified ..."
         else:
             return import_app(network_id, scenario_id, app_name)
+    
     print "Work till here...", app_name
+    
     file = request.files[type]
     if app_name != 'run_gams_model' and app_name != 'run_pywr_app' :
         if (file.filename == '' ) :
@@ -687,7 +698,7 @@ def import_uploader():
     else:
         pid=type+ ' is not recognized.'
 
-    print "PID: ", pid
+    log.info("PID: ", pid)
     try:
         int (pid)
         return jsonify({}), 202, {'Address': url_for('appstatus',
@@ -699,7 +710,7 @@ def import_uploader():
 def import_app(network_id, scenario_id, app_name):
     basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
     directory = os.path.join(basefolder, 'temp')
-    print "ex_pywr: ", basefolder
+    log.info("ex_pywr: ", basefolder)
     delete_files_from_folder(directory)
     result=None
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
@@ -713,8 +724,8 @@ def import_app(network_id, scenario_id, app_name):
         return "application not recognized : "+app_name
     try:
         int(result)
-        print "URL: ", url_for('appstatus',task_id=result)
-        print "result ", result
+        log.info("URL: ", url_for('appstatus',task_id=result))
+        log.info( "result ", result)
         return jsonify({}), 202, {'Address': url_for('appstatus',
                                                      task_id=result), 'directory':directory}
     except:
@@ -723,14 +734,14 @@ def import_app(network_id, scenario_id, app_name):
 
 @app.route('/send_zip_files',  methods=['GET', 'POST'])
 def send_zip_files():
-        print "======>> Send methof id called ....", request.form
+        log.info("======>> Send method called ....", request.form)
 
         pars = json.loads(Markup(request.args.get('pars')).unescape())
-        print "Done 222"
+        
         network_id = pars['network_id']
         scenario_id = pars['scenario_id']
         directory = pars['directory']
-        print "Done 111", scenario_id
+        
         return redirect(url_for('go_export_network', network_id=network_id,
                             scenario_id=scenario_id, directory=directory))
 
@@ -739,8 +750,8 @@ def send_zip_files():
 def go_export_network(network_id, scenario_id, directory):
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
     create_zip_file(directory, zip_file_name)
-    print zip_file_name
-    print directory
+    log.info('Zip file name: %s', zip_file_name)
+    log.info('Directory: %s', directory)
 
     if not os.path.exists(zip_file_name):
         return "An error occurred!!!"
@@ -760,3 +771,16 @@ def do_clone_scenario():
     commit_transaction()
 
     return new_scenario.as_json()
+
+@app.route("/get_usernanmes_like", methods=['POST'])
+def get_usernames_like():
+    pars = request.form.to_dict()
+
+    user_id = session['user_id']
+
+    usernames = userutils.get_usernames_like(pars['q'], user_id)
+
+    return_data = [{'text':u, 'id':u} for u in usernames]
+
+    return json.dumps(return_data)
+

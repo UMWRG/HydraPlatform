@@ -44,8 +44,8 @@
                                 </div>
                             </span>
                         </a>
-                        <div class='btn btn-secondary delete-btn' data-target="#delete_project_modal" data-toggle="modal"><span class="fa fa-close"></span></div>
-                        <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt"></span></div>
+                        <div class='btn btn-secondary delete-btn' data-target="#delete_project_modal" data-toggle="modal"><span class="fa fa-trash"></span></div>
+                        <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt" data-toggle="modal" data-target="#share_project_modal"></span></div>
                     </li>
                 {% endfor %}
                 <li id="new-project" class="col-sm-3 col-md-4 col-lg-2">
@@ -98,7 +98,7 @@
           <div class="modal-body">
               <form id="delete-project" action="create_project" type="POST">
                     <input id="project-id-input" type="hidden" name="project_id" value=""></input></td>
-                    <input id="project-name-input" type="hidden" name="project_name" value=""></input></td>
+                    <input id="project-name" type="hidden" name="project_name" value=""></input></td>
                   <p> Are you sure you want to delete project  </p> <p class='name'></p>
               </form>
           </div>
@@ -109,6 +109,8 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    
+    {%include 'sharing/project_modal.html' %}
 
     {% include 'footer.html' %}
 </body>

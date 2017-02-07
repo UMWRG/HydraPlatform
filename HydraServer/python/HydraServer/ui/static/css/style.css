@@ -376,3 +376,8 @@ color: green;
 .modal { overflow: visible; }
 .modal-body { overflow-y: visible !important; }
 
+/*work around for truncated placeholder text*/
+.select2-container .select2-search, 
+    .select2-container .select2-search__field {
+        width: 100% !important;
+    }

@@ -5,6 +5,7 @@ from HydraServer.lib import scenario as scen
 from HydraServer.lib import attributes as attrs
 from HydraServer.lib import data  as data
 from HydraServer.lib import sharing  as sharing
+from HydraServer.lib import users  as users
 
 
 def load_network(network_id, user_id):
@@ -28,7 +29,7 @@ def delete_project(project_id, user_id):
     proj.delete_project(project_id, user_id=user_id)
 
 def share_project(project_id, usernames, read_only, share, user_id):
-    sharing.share_project(project_id, usernames, read_only, share, user_id)
+    sharing.share_project(project_id, usernames, read_only, share, user_id=user_id)
 
 def add_project(project, user_id):
     project = proj.add_project(project, user_id=user_id)
@@ -142,3 +143,6 @@ def clone_scenario(scenario_id, user_id):
 
 def update_scenario(scenario, user_id):
     return scen.update_scenario(scenario, user_id=user_id)
+
+def get_usernames_like(username, user_id):
+    return users.get_usernames_like(username, user_id=user_id) 
