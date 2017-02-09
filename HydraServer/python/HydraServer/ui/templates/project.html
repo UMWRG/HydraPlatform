@@ -6,7 +6,7 @@
     <title>Project {{project.project_name}}</title>
 
     <script src="{{url_for('static', filename='js/project.js')}}"></script>
-
+    
     <script>
     var project_id={{project.project_id}};
     var add_network_url = "{{url_for('do_create_network')}}"
@@ -19,7 +19,7 @@
         <h3>Networks</h3>
 
         <div class="container-fluid grid">
-            <ul class="list-unstyled row">
+            <ul id="networklist" class="list-unstyled row">
                 {% for network in project.networks %}
                     <li id="network_{{network.network_id}}"
                     class="network col-sm-3">
@@ -34,13 +34,13 @@
                                 </div>
                             </span>
                         </a>
-                    <div class='btn btn-secondary delete-btn'><span class="fa fa-trash"></span></div>
-                    <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt"></span></div>
+                    <div class='btn btn-secondary delete-btn' data-target="#delete_network_modal" data-toggle="modal"><span class="fa fa-trash"></span></div>
+                    <div class='btn btn-secondary share-btn' data-toggle="modal" data-target="#share_network_modal"><span class="fa fa-share-alt"></span></div>
                     </li>
                 {% endfor %}
                 <li type="button" class="col-sm-3"
                     data-toggle="modal" data-target="#add_network_modal">
-                        <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
+                        <span class="btn btn-lg link" data-toggle="modal" data-target="#add_network_modal">
                             <span class="glyphicon glyphicon-plus"></span>
                         </span>
                 </li>
@@ -62,7 +62,7 @@
                     <a data-toggle="tab" href="#create-network">Manual</a>
                 </li>
                 <li role="presentation" id="import-tab">
-                    <a data-toggle="tab" href="#import">Import<a>
+                    <a data-toggle="tab" href="#import">Import</a>
                 </li>
             </ul>
 
@@ -132,7 +132,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    {%include 'sharing/network_modal.html' %}
+
 {% include 'run_app.html' %}
 {% endblock %}
-
-

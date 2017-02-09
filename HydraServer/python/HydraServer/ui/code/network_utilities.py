@@ -1,6 +1,6 @@
 import hydra_connector as hc
 
-from HydraServer.ui.code.model import JSONObject 
+from HydraServer.ui.code.model import JSONObject
 
 import logging
 log = logging.getLogger(__name__)
@@ -165,7 +165,7 @@ def get_network (network_id, user_id):
 
             # Get the min, max x and y coords
     '''
-    extents = hc.get_network_extents(network_id,user_id) 
+    extents = hc.get_network_extents(network_id,user_id)
     log.info(node_coords)
 
     log.info("Network %s retrieved", network.network_name)
@@ -190,7 +190,7 @@ def get_network_simple(network_id, user_id):
     #Load the network's types
     for t in network.types:
         t.templatetype.typeattrs
-    
+
     network_j = JSONObject(network)
     network_j.name = network_j.network_name
     network_j.id = network_j.network_id
@@ -204,7 +204,7 @@ def get_node(node_id, user_id):
         for ta in t.templatetype.typeattrs:
             if ta.default_dataset_id:
                 ta.default_dataset
-    
+
     node_j = JSONObject(node)
     node_j.name = node_j.node_name
     node_j.id = node_j.node_id
@@ -270,3 +270,9 @@ def add_link(link, user_id):
     new_link = hc.add_link(link, user_id=user_id)
 
     return JSONObject(new_link)
+
+def share_network(network_id, usernames, read_only, share, user_id):
+    """
+        Share a network
+    """
+    hc.share_network(network_id, usernames, read_only, share, user_id)

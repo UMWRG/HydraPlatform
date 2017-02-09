@@ -1,7 +1,7 @@
 
 import hydra_connector as hc
 
-from HydraServer.ui.code.model import JSONObject 
+from HydraServer.ui.code.model import JSONObject
 
 import logging
 log = logging.getLogger(__name__)
@@ -50,4 +50,3 @@ def share_project(project_id, usernames, read_only, share, user_id):
         Delete a project
     """
     hc.share_project(project_id, usernames, read_only, share, user_id)
-

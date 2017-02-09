@@ -17,6 +17,9 @@ def load_network(network_id, user_id):
 def get_network_simple(network_id, user_id):
     return net.get_network_simple(network_id, user_id=user_id)
 
+def share_network(network_id, usernames, read_only, share, user_id):
+    sharing.share_network(network_id, usernames, read_only, share, user_id=user_id)
+
 def get_projects(user_id):
     projects = proj.get_projects(user_id, user_id=user_id)
     return projects
@@ -113,7 +116,7 @@ def delete_template(template_id, user_id):
 
 def get_all_templates(user_id, load_all=False):
     all_templates =  tmpl.get_templates(load_all=load_all, user_id=user_id)
-    return all_templates 
+    return all_templates
 
 def get_type(type_id, user_id):
     tmpltype =  tmpl.get_type(type_id, user_id=user_id)
@@ -145,4 +148,4 @@ def update_scenario(scenario, user_id):
     return scen.update_scenario(scenario, user_id=user_id)
 
 def get_usernames_like(username, user_id):
-    return users.get_usernames_like(username, user_id=user_id) 
+    return users.get_usernames_like(username, user_id=user_id)

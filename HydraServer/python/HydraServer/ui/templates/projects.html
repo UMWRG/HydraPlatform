@@ -1,10 +1,8 @@
-<html>
+{% extends 'page_layout.html' %}
+{% block title %}{{display_name}}'s Projects{% endblock %}
 
-    {% include 'master.html' %}
-
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>User ${display_name}'s Projects</title>
+{% block content %}
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
 
   <script src="{{url_for('static', filename='js/projects.js')}}"></script>
   <script>
@@ -14,12 +12,8 @@
     var go_project_url = "{{url_for('go_project', project_id=XXX)}}"
   </script>
 
-</head>
-
-<body>
-    {% include "header.html" %}
     <div id="project-container" class="container-fluid">
-        
+
 
         <div class="container-fluid grid">
         <h2>My Projects</h2>
@@ -28,7 +22,7 @@
                 {% for p in projects %}
                     <li id="project-{{p.project_id}}" class="listitem col-sm-3 col-md-3 col-lg-2 col-xl-1">
                         <a type="button"
-                           class="btn btn-lg link" 
+                           class="btn btn-lg link"
                            href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
                             <span>
                                 <div class="head">{{p.project_name}}
@@ -45,7 +39,7 @@
                             </span>
                         </a>
                         <div class='btn btn-secondary delete-btn' data-target="#delete_project_modal" data-toggle="modal"><span class="fa fa-trash"></span></div>
-                        <div class='btn btn-secondary share-btn'><span class="fa fa-share-alt" data-toggle="modal" data-target="#share_project_modal"></span></div>
+                        <div class='btn btn-secondary share-btn' data-toggle="modal" data-target="#share_project_modal"><span class="fa fa-share-alt"></span></div>
                     </li>
                 {% endfor %}
                 <li id="new-project" class="col-sm-3 col-md-4 col-lg-2">
@@ -109,9 +103,6 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
     {%include 'sharing/project_modal.html' %}
 
-    {% include 'footer.html' %}
-</body>
-</html>
+    {%endblock%}

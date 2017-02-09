@@ -3,20 +3,12 @@ $(document).ready(function() {
      $("#export_data").hide();
 })
 
-$(document).on("click", ".network", function(){
-   var net_id = this.id.split('_')[1];
-
-   window.location.href = go_network_url + net_id
-
-});
-
-
 $(document).on("click", "#create-network-button", function(event){
 
     event.preventDefault();
 
     var success = function(){
-        $("#close-create-network-button").click() 
+        $("#close-create-network-button").click()
         location.reload()
     }
 
@@ -31,7 +23,7 @@ $(document).on("click", "#create-network-button", function(event){
         var d = formdata[i]
         data[d['name']] = d['value']
     }
-    
+
     var typ = $("#network-template option:selected").val()
 
     if (typ == ""){
