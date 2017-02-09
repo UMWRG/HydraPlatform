@@ -317,6 +317,19 @@ def do_create_network():
 
     return net.as_json()
 
+@app.route('/delete_network', methods=['POST'])
+def do_delete_network():
+
+    user_id = session['user_id']
+
+    d = json.loads(request.get_data())
+
+    netutils.delete_network(d['network_id'], user_id)
+
+    commit_transaction()
+
+    return json.dumps({'status': 'OK'})
+
 @app.route('/create_project', methods=['POST'])
 def do_create_project():
 

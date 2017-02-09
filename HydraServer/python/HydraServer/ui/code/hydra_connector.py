@@ -18,7 +18,10 @@ def get_network_simple(network_id, user_id):
     return net.get_network_simple(network_id, user_id=user_id)
 
 def share_network(network_id, usernames, read_only, share, user_id):
-    sharing.share_network(network_id, usernames, read_only, share, user_id=user_id)
+    sharing.share_network(project_id, usernames, read_only, share, user_id=user_id)
+
+def delete_network(network_id, user_id):
+    net.set_network_status(network_id, 'X', user_id=user_id)
 
 def get_projects(user_id):
     projects = proj.get_projects(user_id, user_id=user_id)
@@ -137,9 +140,6 @@ def delete_link(link_id, user_id):
 
 def delete_resourcegroup(group_id, user_id):
     net.delete_resourcegroup(group_id, False, user_id=user_id)
-
-def delete_network(network_id, user_id):
-    net.delete_network(network_id, False, user_id=user_id)
 
 def clone_scenario(scenario_id, user_id):
     return scen.clone_scenario(scenario_id, user_id=user_id)

@@ -60,6 +60,12 @@ def create_network(network, user_id):
 
     return JSONObject(new_network)
 
+def delete_network(network_id, user_id):
+    """
+        Delete a network
+    """
+    hc.delete_network(network_id, user_id)
+
 def get_network (network_id, user_id):
     network = hc.load_network(network_id, user_id=user_id)
     network.id = network.network_id
