@@ -24,12 +24,12 @@
                 {% for network in project.networks %}
                 {%if network.status == 'A'%}
                     <li id="network_{{network.network_id}}"
-                    class="network col-sm-3">
+                    class="network col-sm-3 col-md-3 col-lg-3">
                         <a type="button"
                             class="btn btn-lg link"
                             href="{{url_for('go_network', network_id=network.network_id)}}"
                             alt="{{network.network_name}}"
->
+                        >
                             <span>
                                 <div class="head">
                                 {{network.network_name}}
@@ -41,7 +41,7 @@
                     </li>
                     {%endif%}
                 {% endfor %}
-                <li type="button" class="col-sm-3"
+                <li type="button" class="col-sm-3 col-md-3 col-lg-3"
                     data-toggle="modal" data-target="#add_network_modal">
                         <span class="btn btn-lg link" data-toggle="modal" data-target="#add_network_modal">
                             <span class="glyphicon glyphicon-plus"></span>

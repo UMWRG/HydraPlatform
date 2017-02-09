@@ -20,10 +20,10 @@
     var network_id={{network.network_id}};
     var data_={{node_name_map|tojson}};
     var projection = "{{network.projection}}";
-    {%if network.projection%} 
+    {%if network.projection%}
         var projection_crs = {{network.projection_crs|safe}}
     {%endif%}
-    
+
     function get_name(id)
     {
     value='None'
@@ -46,6 +46,7 @@
    var links_=[];
    var links_={{links_|tojson}};
 
+   var groups_=[]
 
     var min_x = {{extents['min_x'] if extents['min_x'] != None else 0}};
     var max_x = {{extents['max_x'] if extents['max_x'] != None else 100}};
@@ -53,46 +54,21 @@
     var max_y = {{extents['max_y'] if extents['max_y'] != None else 100}};
     var centre = [(min_x + max_x)/2, (min_y + max_y)/2];
 
-    var nodes = [];
-    var node_coords = {};
-    var lastNodeId = null;
-    {% for id, coord in node_coords.items()%}
-      nodes.push(
-        {
-          'id': {{id}},
-          'reflexive':false,
-          'x':{{coord[0]}},
-          'y':{{coord[1]}},
-        }
-      )
-      lastNodeId={{id}};
-      node_coords[{{id}}] = [{{coord[0]}}, {{coord[1]}}];
-    {% endfor %}
+    var template = {{template.as_json()|safe}};
 
-    var links = [];
-    {% for id, connected_nodes in links.items()%}
-        links.push(
-          {
-            'source': {{connected_nodes[0]}},
-            'target': {{connected_nodes[1]}},
-            'left'  : 'true',
-            'right' : 'false',
-          }
-        )
-    {% endfor %}
-        
-        var node_img="{{ url_for('static', filename='img/black_dot.png')}}";
+    var type_lookup = {'NODE':[], 'LINK':[], 'GROUP':[], 'NETWORK':[]}
+    for (var i=0; i<template.templatetypes.length; i++){
+      var typ = template.templatetypes[i];
+      type_lookup[typ.resource_type].push(typ);
+    }
 
-        var template = {{template.as_json()|safe}};
-
-
-        var add_node_url="{{url_for('do_add_node')}}";
-        var update_node_url="{{url_for('do_update_node')}}";
-        var add_link_url="{{url_for('do_add_link')}}";
-        var get_resource_data_url="{{url_for('do_get_resource_data')}}";
-        var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
-        var delete_resource_url="{{url_for('do_delete_resource')}}";
-        var clone_scenario_url="{{url_for('do_clone_scenario')}}";
+    var add_node_url="{{url_for('do_add_node')}}";
+    var update_node_url="{{url_for('do_update_node')}}";
+    var add_link_url="{{url_for('do_add_link')}}";
+    var get_resource_data_url="{{url_for('do_get_resource_data')}}";
+    var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
+    var delete_resource_url="{{url_for('do_delete_resource')}}";
+    var clone_scenario_url="{{url_for('do_clone_scenario')}}";
 
       </script>
 
@@ -109,7 +85,7 @@
 
       <div id="graph_container" class="network_container">
 
-    
+
             <div id="graph" class="left">
             </div>
 
@@ -136,7 +112,7 @@
                 </div>
             <div class="btn-group pull-right">
                 <label >
-                    <input id="label" type='checkbox' 
+                    <input id="label" type='checkbox'
                         onclick='changeNodesLableVisibility(this);'>
                         Display labels
                 </label>
@@ -210,6 +186,3 @@
 {% include 'network_modals.html' %}
 
 {% endblock %}
-
-
-

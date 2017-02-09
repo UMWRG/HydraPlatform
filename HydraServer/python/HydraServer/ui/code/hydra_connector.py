@@ -144,6 +144,9 @@ def delete_resourcegroup(group_id, user_id):
 def clone_scenario(scenario_id, user_id):
     return scen.clone_scenario(scenario_id, user_id=user_id)
 
+def add_scenario(scenario, user_id):
+    return scen.add_scenario(scenario.get('network_id'), scenario, user_id=user_id)
+
 def update_scenario(scenario, user_id):
     return scen.update_scenario(scenario, user_id=user_id)
 

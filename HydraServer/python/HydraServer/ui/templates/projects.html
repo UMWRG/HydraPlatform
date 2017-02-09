@@ -20,7 +20,7 @@
             <div id='projectlist'>
               <ul class="list-unstyled row">
                 {% for p in projects %}
-                    <li id="project-{{p.project_id}}" class="listitem col-sm-3 col-md-3 col-lg-2 col-xl-1">
+                    <li id="project-{{p.project_id}}" class="listitem col-sm-3 col-md-3 col-lg-3 col-xl-1">
                         <a type="button"
                            class="btn btn-lg link"
                            href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
@@ -42,7 +42,7 @@
                         <div class='btn btn-secondary share-btn' data-toggle="modal" data-target="#share_project_modal"><span class="fa fa-share-alt"></span></div>
                     </li>
                 {% endfor %}
-                <li id="new-project" class="col-sm-3 col-md-4 col-lg-2">
+                <li id="new-project" class="col-sm-3 col-md-3 col-lg-3">
                     <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
                         <span class="fa fa-plus "></span>
                     </span>

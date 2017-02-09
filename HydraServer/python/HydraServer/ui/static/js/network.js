@@ -51,24 +51,19 @@ var sig = {
     }
 
 $(document).ready(function(){
-    $('#nodetable').DataTable({
-        pageSize: 10,
-        sort: [true, true, true, true],
-        filters: [true, false, false, false],
-        filterText: 'Type to filter... '
-    }) ;
-
-    $('#linktable').DataTable({
-        pageSize: 10,
-        sort: [true, true, true, true],
-        filters: [true, false, false, false],
-        filterText: 'Type to filter... '
-    }) ;
-
-    $('#linktable_wrapper').addClass('hidden');
 
     if (Cookies.get("tab_selected") == "list"){
         $("#listtab a").click();
+        var tabselected=Cookies.get('node_link_selected')
+        if (tabselected=='node' || tabselected==undefined){
+          $("#nodetab a:first-child").tab('show')
+        }else if(tabselected=='link'){
+          $("#linktab a:first-child").tab('show')
+        }else if (tabselected == 'group'){
+          $("#grouptab a:first-child").tab('show')
+        }
+        initTables();
+
     } else if (Cookies.get("tab_selected") == "static"){
         $("#statictab a").click();
     }
@@ -76,27 +71,54 @@ $(document).ready(function(){
 });
 
 $(document).on('click', '#linktab', function(){
-    $('#nodetable').addClass('hidden');
-    $('#nodetable_wrapper').addClass('hidden');
-    $('#linktable').removeClass('hidden');
-    $('#linktable_wrapper').removeClass('hidden');
-    $('#nodetab').removeClass('selected');
-    $(this).addClass('selected');
-    Cookies.set("node_link_selected", "list")
+    Cookies.set("node_link_selected", "link", {path:window.location.pathname})
+    initTables()
 });
 
 $(document).on('click', '#nodetab', function(){
-    $('#linktable').addClass('hidden');
-    $('#linktable_wrapper').addClass('hidden');
-    $('#linktable_wrapper').removeClass('selected');
-    $('#nodetable').removeClass('hidden');
-    $('#nodetable_wrapper').removeClass('hidden');
-    $('#linktab').removeClass('selected');
-    $(this).addClass('selected');
-    Cookies.set("node_link_selected", "node")
+    Cookies.set("node_link_selected", "node",  {path:window.location.pathname})
+    initTables()
 });
 
+$(document).on('click', '#grouptab', function(){
+    Cookies.set("node_link_selected", "group",  {path:window.location.pathname})
+    initTables()
+});
 
+var initTables = function(){
+  var tabselected = Cookies.get("node_link_selected")
+  if (tabselected == 'group'){
+    if (!$('#grouptable').hasClass('dataTable')){
+      $('#grouptable').DataTable({
+          pageSize: 10,
+          sort: [true, true, true],
+          filters: [true, false, false],
+          filterText: 'Type to filter... ',
+          language: {
+            "emptyTable": "No groups in the network.  <div data-toggle='modal' data-target='#new_group_modal' class='btn btn-sm btn-primary'><span class='fa fa-plus'></span> Create A Group</div>"
+          }
+      }) ;
+    }
+  } else if (tabselected == 'node' || tabselected == undefined){
+    if (!$('#nodetable').hasClass('dataTable')){
+      $('#nodetable').DataTable({
+          pageSize: 10,
+          sort: [true, true, true, true],
+          filters: [true, false, false, false],
+          filterText: 'Type to filter... '
+      }) ;
+    }
+  }else if (tabselected == 'link'){
+    if (!$('#linktable').hasClass('dataTable')){
+      $('#linktable').DataTable({
+          pageSize: 10,
+          sort: [true, true, true],
+          filters: [true, false, false],
+          filterText: 'Type to filter... '
+      }) ;
+    }
+  }
+}
 $(document).on('click', '.expand_table', function(){
     var tbody = $(this).closest('thead').siblings('tbody')
     var hidden = tbody.is(':hidden');
@@ -173,24 +195,24 @@ $(document).on('click', '.attributes .attribute.timeseries', function(){
 });
 
 $(document).on('click', '#statictab', function(){
-    //$('#googleMap').addClass('hidden');     
+    //$('#googleMap').addClass('hidden');
     $('#graph_container').removeClass('hidden');
     $('#nodesandlinks').addClass('hidden');
     $('#nodetable').addClass('hidden');
     $(this).addClass('active');
-    //$('#mapstab').removeClass('selected');        
-    $('#listtab').removeClass('active');        
+    //$('#mapstab').removeClass('selected');
+    $('#listtab').removeClass('active');
     Cookies.set("tab_selected", "static")
 });
 
 //$(document).on('click', '#mapstab', function(){
-//    $('#graph_container').addClass('hidden');   
+//    $('#graph_container').addClass('hidden');
 //    $('#googleMap').removeClass('hidden');
 //    $('#nodesandlinks').addClass('hidden');
 //    $('#nodetable').addClass('hidden');
 //    $(this).addClass('selected');
 //    $('#statictab').removeClass('selected');
-//    $('#listtab').removeClass('selected');        
+//    $('#listtab').removeClass('selected');
 //    if (maps_initialized == false){
 //    	initialize();
 //    }
@@ -199,7 +221,7 @@ $(document).on('click', '#statictab', function(){
 //
 
 $(document).on('click', '#listtab', function(){
-    $('#graph_container').addClass('hidden');   
+    $('#graph_container').addClass('hidden');
     //$('#googleMap').addClass('hidden');
     $('#nodesandlinks').removeClass('hidden');
     $('#nodetable').removeClass('hidden');
@@ -208,6 +230,17 @@ $(document).on('click', '#listtab', function(){
     //$('#mapstab').removeClass('active');
     $('#statictab').removeClass('active');
     Cookies.set("tab_selected", "list")
+
+    var tabselected=Cookies.get('node_link_selected')
+    if (tabselected=='node' || tabselected==undefined){
+      $("#nodetab a:first-child").tab('show')
+    }else if(tabselected=='link'){
+      $("#linktab a:first-child").tab('show')
+    }else if (tabselected == 'group'){
+      $("#grouptab a:first-child").tab('show')
+    }
+    initTables();
+
 });
 
 $('#network-tab div').click(function (e) {
@@ -218,7 +251,7 @@ $('#network-tab div').click(function (e) {
 var updateNodeTimeout = null;
 
 $(document).on('input', "#resource-name input[name='resource_name']", function(){
-       
+
     if (updateNodeTimeout != null){
         console.log('clearing timeout')
         clearTimeout(updateNodeTimeout);
@@ -230,7 +263,7 @@ $(document).on('input', "#resource-name input[name='resource_name']", function()
     var name = $(this).val()
     var id = $("input[name='resource_id']", container).val()
     console.log("Name: " + name)
-    
+
     updateNodeTimeout = setTimeout(function(){update_resource_name(id, name, 'NODE')}, 300)
 
 })
@@ -244,9 +277,9 @@ function update_resource_name(node_id, name, resource_type)
     }
 
     var error = function(resp){
-        alert(resp)    
+        alert(resp)
     }
-    
+
     var nodedata = {
         name: name,
         id: node_id,
@@ -279,40 +312,19 @@ $(function() {
     });
  });
 
-  
+
 $(document).on('show.bs.modal', '#clone_scenario_modal', function (e) {
     var current_scenario = $('#scenario-picker option:selected')
     var scenario_id = current_scenario.val()
     //Set the clone to tbe the cuurent active scenario
-    $('.scenariopicker option[value='+scenario_id+']', $(this)).select()
-   
-
-     var scenario_names = []
+    $('#new-group-scenario-id-input').val('scenario_id');
 
 
-     $('#scenario-picker option').each(function(){
-        scenario_names.push($(this).text().trim())                
-     })
-
-     var this_scenario_name = current_scenario.text().trim()
-     var new_scenario_name = ""
-
-     for (var i=1; i<100; i++){
-        var prop_scenario_name = this_scenario_name + " " + i;
-        if (scenario_names.indexOf(prop_scenario_name) == -1){
-            new_scenario_name = prop_scenario_name;
-            break;
-        }
-     }
-
-     $("#scenario-name-input").val(new_scenario_name)
-
-
-}) 
+})
 
 $(document).on('hide.bs.modal', '#clone_scenario_modal', function (e) {
     $("#clone-scenario-button i").addClass('hidden')
-}) 
+})
 
 $(document).on('click', '#clone-scenario-button', function(e){
     e.preventDefault();
@@ -325,11 +337,11 @@ $(document).on('click', '#clone-scenario-button', function(e){
 
         $("#clone-scenario select").append("<option value='"+new_scenario.scenario_id+"'>"+new_scenario.scenario_name+"</option>")
         $("#clone-scenario select option[value="+new_scenario.scenario_id+"]").attr('selected','selected');
-        $('#clone_scenario_modal .selectpicker').selectpicker('refresh'); 
+        $('#clone_scenario_modal .selectpicker').selectpicker('refresh');
 
         $("#scenario-picker").append("<option value='"+new_scenario.scenario_id+"'>"+new_scenario.scenario_name+"</option>")
         $("#scenario-picker option[value="+new_scenario.scenario_id+"]").attr('selected','selected');
-        $('#sidebar_container .selectpicker').selectpicker('refresh'); 
+        $('#sidebar_container .selectpicker').selectpicker('refresh');
 
         scenario_id=new_scenario.scenario_id;
     }
@@ -347,6 +359,103 @@ $(document).on('click', '#clone-scenario-button', function(e){
         url : clone_scenario_url,
         data: JSON.stringify({scenario_id:scenario_id,
                 scenario_name:scenario_name}),
+        success: success,
+        error  : error,
+    })
+})
+
+
+
+$(document).on('show.bs.modal', '#new_group_modal', function (e) {
+    var current_scenario = $('#scenario-picker option:selected')
+    var scenario_id = current_scenario.val()
+    $("#new-group-scenario-id-input").val(scenario_id);
+    d3.select("#group-items-input option").remove()
+
+    var typeselect = d3.select("#group-type-input")
+    var grptypes = type_lookup['GROUP']
+    typeselect.selectAll('option')
+              .data(grptypes)
+              .enter()
+              .append('option')
+              .attr('value', function(d){
+                  return d.type_id
+                })
+              .text(function(d){
+                return d.type_name
+              })
+
+    var nodegrp = d3.select("#group-nodes-select")
+    nodegrp.selectAll('option')
+                      .data(nodes_)
+                      .enter()
+                      .append('option')
+                      .text(function(d){return d.name})
+                      .attr('value', function(d){return d.id})
+
+    var linkgrp = d3.select("#group-links-select")
+    linkgrp.selectAll('option')
+                      .data(links_)
+                      .enter()
+                      .append('option')
+                      .text(function(d){return d.name})
+                      .attr('value', function(d){return d.id})
+
+    var grpgrp = d3.select("#group-links-select")
+    grpgrp.selectAll('option')
+                      .data(groups_)
+                      .enter()
+                      .append('option')
+                      .text(function(d){return d.name})
+                      .attr('value', function(d){return d.id})
+
+    $('#new_group_modal .selectpicker').selectpicker('refresh');
+
+})
+
+$(document).on('hide.bs.modal', '#new_group_modal', function (e) {
+    $('#group-items-input option').remove();
+})
+
+$(document).on('click', '#create-group-button', function(e){
+    e.preventDefault();
+
+    var success = function(resp){
+        var newgroup = JSON.parse(resp)
+        $('#create-group-button').modal('hide');
+
+        var groupprops = Object.keys(newgroup)
+        var data = []
+        for (var i=0; i< grouprops.length; i++){
+          var propname = groupprops[i];
+          var propval  = newgroup[propname];
+          data.push({'name':propname, 'value': propval})
+        }
+        var newrow = d3.select('#grouptable')
+                          .append('tr')
+                          .data(data)
+        newrow.append('td').text(function(d){d.group_name})
+        newrow.append('td').text(function(d){d.typesummary[0].type_name})
+        newrow.append('td').text(function(d){d.resourcetypes})
+    }
+
+    var error = function(){
+        $("#create-group-button .modal-body").append(
+                            "<div>An error has occurred.</div>")
+    }
+
+    var group_name =  $("#group-name-input").val()
+    var group_type =  $("#group-type-input").val()
+    var scenario_id = $("#new-group-scenario-id-input").val(scenario_id);
+
+    $.ajax({
+        type: 'POST',
+        url : clone_scenario_url,
+        data: JSON.stringify(
+          {scenario_id : scenario_id,
+           types       : [{'type_id':group_type}],
+           name        : group_name
+         }),
         success: success,
         error  : error,
     })

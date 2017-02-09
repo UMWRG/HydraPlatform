@@ -1,59 +1,88 @@
 <div id="nodesandlinks" class="hidden">
-    <ul class="nav nav-tabs" role="tablist">
-        <li id="nodetab" class="tab active">
-            <a href="" role="tab" data-toggle="tab">
+    <ul class="nav nav-tabs">
+        <li id="nodetab">
+            <a href="#nodelist" role="tab" data-toggle="tab">
                 Nodes
             </a>
         </li>
-        <li id="linktab" class="tab">
-            <a href="" role="tab" data-toggle="tab">
+        <li id="linktab">
+            <a href="#linklist" role="tab" data-toggle="tab">
                 Links
             </a>
         </li>
+        <li id="grouptab">
+            <a href="#grouplist" role="tab" data-toggle="tab">
+                Groups
+            </a>
+        </li>
     </ul>
-    
-    <!--NODES-->
-    <table id="nodetable" class="display hidden">
-          <thead>
-            <tr>
-              <th>Node Name</th>
-              <th>Node Description</th>
-              <th>X</th>
-              <th>Y</th>
-            </tr>
-          </thead>
-          <tbody id='nodes'>
-          {% for node in network.nodes %}
-            <tr id="node_{{node.node_id}}" class="tablerow noderow">
-                <td>{{node.node_name}}</td>
-                <td>{{node.node_description}}</td>
-                <td>{{node.node_x}}</td>
-                <td>{{node.node_y}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
+
+    <div class="tab-content">
+      <div id="nodelist" class="tab-pane fade in active">
+        <table id="nodetable" class="display">
+            <thead>
+              <tr>
+                <th>Node Name</th>
+                <th>Node Description</th>
+                <th>X</th>
+                <th>Y</th>
+              </tr>
+            </thead>
+            <tbody id='nodes'>
+            {% for node in network.nodes %}
+              <tr id="node_{{node.node_id}}" class="tablerow noderow">
+                  <td>{{node.node_name}}</td>
+                  <td>{{node.node_description}}</td>
+                  <td>{{node.node_x}}</td>
+                  <td>{{node.node_y}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
+
+      <div id="linklist" class="tab-pane fade">
+        <table id="linktable" class="display">
+            <thead>
+              <tr>
+                <th>Link Name</th>
+                <th>Link Description</th>
+                <th>Start Node</th>
+                <th>End Node</th>
+              </tr>
+            </thead>
+            <tbody id='links'>
+            {% for link in network.links %}
+              <tr id="link_{{link.link_id}}" class="tablerow linkrow">
+                  <td>{{link.link_name}}</td>
+                  <td>{{link.link_description}}</td>
+                  <td>{{node_name_map[link.node_1_id]}}</td>
+                  <td>{{node_name_map[link.node_2_id]}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
       </table>
+    </div>
 
-      <!-- LINKS -->
-    <table id="linktable" class="display">
-          <thead>
-            <tr>
-              <th>Link Name</th>
-              <th>Link Description</th>
-              <th>Start Node</th>
-              <th>End Node</th>
-            </tr>
-          </thead>
-          <tbody id='links'>
-          {% for link in network.links %}
-            <tr id="link_{{link.link_id}}" class="tablerow linkrow">
-                <td>{{link.link_name}}</td>
-                <td>{{link.link_description}}</td>
-                <td>{{node_name_map[link.node_1_id]}}</td>
-                <td>{{node_name_map[link.node_2_id]}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-    </table>
+    <div id="grouplist" class="tab-pane fade">
+      <table id="grouptable" class="display">
+            <thead>
+              <tr>
+                <th>Group Name</th>
+                <th>Group Type</th>
+                <th>Contents</th>
+              </tr>
+            </thead>
+            <tbody id='groups'>
+            {% for g in network.resourcegroups %}
+              <tr id="group_{{g.resource_group_id}}" class="tablerow grouprow">
+                  <td>{{g.group_name}}</td>
+                  <td>{{g.typesummary[0].type_name}}</td>
+                  <td><div class="groupcontentsummary">{{g.resourcegroupitems|length}}</div> Nodes</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+      </table>
+    </div>
+  </div> <!-- tab content -->
 </div>
-

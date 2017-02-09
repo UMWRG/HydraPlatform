@@ -458,9 +458,17 @@ def go_network(network_id):
             network.projection = None
             network.projection_crs = ""
 
+    if len(network.scenarios) == 0:
+        default_scenario = {'name': 'Baseline', 'network_id': network.network_id}
+        s = scenarioutils.add_scenario(JSONObject(default_scenario), user_id)
+        scenario = s
+        network.scenarios.append(s)
+        commit_transaction()
+    else:
+        scenario = network.scenarios[0]
 
     return render_template('network.html',\
-                scenario_id=network.scenarios[0].scenario_id,
+                scenario_id=scenario.scenario_id,
                 node_coords=node_coords,\
                 links=links,\
                 username=session['username'],\

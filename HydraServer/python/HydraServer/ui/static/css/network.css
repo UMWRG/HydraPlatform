@@ -50,8 +50,11 @@ html, body, .row{
     margin  : 10px 0px 0px 0px;
 }
 
-#nodetable_wrapper{
+#nodesandlinks .dataTables_wrapper {
     padding: 10px;
+}
+#nodesandlinks .nav-tabs {
+    margin-left: 10px;
 }
 
 .main_content
@@ -67,7 +70,7 @@ html, body, .row{
     position: absolute;
     top: 140px;
     right: 130px;
-  
+
     border: 1px solid #aaa;
     border-radius: 4px;
     box-shadow: 0px 0px 2px #aaa;
@@ -212,5 +215,3 @@ text {
 .networkoptions{
     padding: 00px 20px 0px 100px;
 }
-
-

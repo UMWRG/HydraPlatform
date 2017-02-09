@@ -1,6 +1,6 @@
 import hydra_connector as hc
 
-from HydraServer.lib.objects import JSONObject 
+from HydraServer.lib.objects import JSONObject
 
 from network_utilities import get_resource
 
@@ -13,21 +13,21 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
     for rs in resource_scenarios:
         attr_id = rs.resourceattr.attr_id
 
-        res_scenarios[attr_id] =  JSONObject({'rs_id': res_id, 
+        res_scenarios[attr_id] =  JSONObject({'rs_id': res_id,
                  'ra_id': rs.resourceattr.resource_attr_id,
                  'attr_id': attr_id,
                  'dataset': rs.dataset,
                  'data_type': rs.dataset.data_type,
                 })
-    
-    
-    resource = get_resource(resource_type, res_id, user_id) 
-   
+
+
+    resource = get_resource(resource_type, res_id, user_id)
+
     ra_dict = {}
     if resource.attributes is not None:
         for ra in resource.attributes:
             ra_dict[ra.attr_id] = ra
-   
+
     #Identify any attributes which do not have data -- those not in ther resource attribute table, but in the type attribute table.
     for typ in resource.types:
         tmpltype = typ.templatetype
@@ -85,4 +85,6 @@ def clone_scenario(scenario_id, scenario_name, user_id):
     })
     return JSONObject(hc.update_scenario(s, user_id))
 
-    
+def add_scenario(scenario, user_id):
+    new_scenario = hc.add_scenario(scenario, user_id)
+    return JSONObject(new_scenario)
