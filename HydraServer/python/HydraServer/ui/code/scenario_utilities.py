@@ -88,3 +88,7 @@ def clone_scenario(scenario_id, scenario_name, user_id):
 def add_scenario(scenario, user_id):
     new_scenario = hc.add_scenario(scenario, user_id)
     return JSONObject(new_scenario)
+
+def add_resource_group_items(scenario_id, items, user_id):
+    newitems = hc.add_resourcegroupitems(scenario_id, items, user_id)
+    return [JSONObject(i) for i in newitems]

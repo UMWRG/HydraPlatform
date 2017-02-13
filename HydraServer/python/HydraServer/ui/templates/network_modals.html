@@ -45,7 +45,7 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="modal fade" tabindex="-1" role="dialog" id="new_group_modal">
+<div class="modal fade" tabindex="-1" role="dialog" id="group-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -54,7 +54,8 @@
       </div>
       <div class="modal-body">
           <form id="create-group" action="create_group" type="POST" class="tab-pane fade in active">
-            <input name="new-group-scenario-id-input" value="" type="hidden"></input>
+            <input id="group-scenario-id-input" name="scenario_id" value="" type="hidden"></input>
+            <input id="group-id-input" name="group_id" value="" type="hidden"></input>
             <table class="table">
                 <tr>
                     <td>
@@ -94,10 +95,38 @@
           </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="close-create-group-button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="create-group-button" class="btn btn-success">
+        <button type="button" id="close-group-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="create-group-button" class="btn btn-success hidden">
             <i class="fa fa-spinner fa-spin hidden"></i>
             Create
+        </button>
+        <button type="button" id="update-group-button" class="btn btn-success hidden">
+            <i class="fa fa-spinner fa-spin hidden"></i>
+            Save
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="delete-group-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Deleting <span class='group-name'></span></h4>
+      </div>
+      <div class="modal-body">
+          <form id="delete-group" action="create_group" type="POST" class="tab-pane fade in active">
+            <input id="delete-scenario-id-input" name="group-id" value="" type="hidden"></input>
+            Are you sure you want to delete <span class='group-name'></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-delete-group-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="delete-group-button" class="btn btn-danger">
+            <i class="fa fa-spinner fa-spin hidden"></i>
+            Delete
         </button>
       </div>
     </div><!-- /.modal-content -->

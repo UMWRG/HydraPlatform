@@ -277,6 +277,16 @@ def add_link(link, user_id):
 
     return JSONObject(new_link)
 
+def add_group(group, user_id):
+    """
+    Take a JSONObjhect link and pass it to Hydra Platform's add_group fn.
+    The ID of the network is contained in the group object.
+    """
+
+    new_group = hc.add_group(group, user_id=user_id)
+
+    return JSONObject(new_group)
+
 def share_network(network_id, usernames, read_only, share, user_id):
     """
         Share a network

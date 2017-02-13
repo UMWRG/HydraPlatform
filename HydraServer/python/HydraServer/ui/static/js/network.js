@@ -1,6 +1,9 @@
 
 
 $('#data').draggable()
+nodetable = null
+linktable = null
+grouptable = null
 
 get_node = function(node_id){
     $.ajax({url:"/node/"+node_id,
@@ -89,19 +92,19 @@ var initTables = function(){
   var tabselected = Cookies.get("node_link_selected")
   if (tabselected == 'group'){
     if (!$('#grouptable').hasClass('dataTable')){
-      $('#grouptable').DataTable({
+      grouptable = $('#grouptable').DataTable({
           pageSize: 10,
           sort: [true, true, true],
           filters: [true, false, false],
           filterText: 'Type to filter... ',
           language: {
-            "emptyTable": "No groups in the network.  <div data-toggle='modal' data-target='#new_group_modal' class='btn btn-sm btn-primary'><span class='fa fa-plus'></span> Create A Group</div>"
+            "emptyTable": "No groups in the network.  <div data-toggle='modal' data-target='#group-modal' class='new-group btn btn-sm btn-primary'><span class='fa fa-plus'></span> Create A Group</div>"
           }
       }) ;
     }
   } else if (tabselected == 'node' || tabselected == undefined){
     if (!$('#nodetable').hasClass('dataTable')){
-      $('#nodetable').DataTable({
+      nodetable = $('#nodetable').DataTable({
           pageSize: 10,
           sort: [true, true, true, true],
           filters: [true, false, false, false],
@@ -110,7 +113,7 @@ var initTables = function(){
     }
   }else if (tabselected == 'link'){
     if (!$('#linktable').hasClass('dataTable')){
-      $('#linktable').DataTable({
+      linktable = $('#linktable').DataTable({
           pageSize: 10,
           sort: [true, true, true],
           filters: [true, false, false],
@@ -365,11 +368,53 @@ $(document).on('click', '#clone-scenario-button', function(e){
 })
 
 
+$(document).on('click', '.edit-group', function(e){
+  $('#update-group-button').removeClass('hidden')
+  $('#create-group-button').addClass('hidden')
 
-$(document).on('show.bs.modal', '#new_group_modal', function (e) {
+  var row = $(this).closest('tr')
+
+  var group_name = $('td.group-name', row).text()
+  var group_id = row.attr('id').split('_')[1]
+
+  $("#group-id-input").val(group_id);
+  $("#group-name-input").val(group_name);
+
+  update_group_modal_inputs();
+
+  $('#group-modal').modal('show');
+
+})
+
+$(document).on('click', '.new-group', function(e){
+  $('#update-group-button').addClass('hidden')
+  $('#create-group-button').removeClass('hidden')
+
+  update_group_modal_inputs();
+
+  $('#group-modal').modal('show');
+})
+
+
+$(document).on('click', '.delete-group', function(e){
+  var row = $(this).closest('tr')
+  var group_name = $('td.group-name', row).text()
+   var modal = $('#delete-group-modal')
+   $('.group-name', modal).text(group_name);
+  $('#delete-group-modal').modal('show');
+})
+
+var update_group_modal_inputs = function(){
+    //Flag to indicate whether the group exists or whether it's being updated.
+    var is_new = false;
+    if ($("#update-group-button").hasClass('hidden')){
+      is_new = true;
+    }
+
     var current_scenario = $('#scenario-picker option:selected')
     var scenario_id = current_scenario.val()
-    $("#new-group-scenario-id-input").val(scenario_id);
+    var group_id =   $("#group-id-input").val();
+    $("#group-scenario-id-input").val(scenario_id);
     d3.select("#group-items-input option").remove()
 
     var typeselect = d3.select("#group-type-input")
@@ -385,35 +430,78 @@ $(document).on('show.bs.modal', '#new_group_modal', function (e) {
                 return d.type_name
               })
 
+    var items = []
+    if (resourcegroupitems['group-'+group_id] != undefined){
+      items = resourcegroupitems["group-"+group_id]
+    }
     var nodegrp = d3.select("#group-nodes-select")
     nodegrp.selectAll('option')
                       .data(nodes_)
                       .enter()
                       .append('option')
+                      .attr('ref-key', 'NODE')
                       .text(function(d){return d.name})
                       .attr('value', function(d){return d.id})
+                      .attr('selected', function(d){
+                        if (is_new == true){
+                          return false
+                        }else{
+                          var grpnodes = items['NODE']
+                          for (var i=0; i<grpnodes.length; i++){
+                            if (grpnodes[i].node_id == d.id){
+                              return true
+                            }
+                          }
+                        }
+                      })
 
     var linkgrp = d3.select("#group-links-select")
     linkgrp.selectAll('option')
                       .data(links_)
                       .enter()
                       .append('option')
+                      .attr('ref-key', 'LINK')
                       .text(function(d){return d.name})
                       .attr('value', function(d){return d.id})
+                      .attr('selected', function(d){
+                        if (is_new == true){
+                          return false
+                        }else{
+                          var grpnodes = items['LINK']
+                          for (var i=0; i<grpnodes.length; i++){
+                            if (grpnodes[i].link_id == d.id){
+                              return true
+                            }
+                          }
+                        }
+                      })
 
     var grpgrp = d3.select("#group-links-select")
     grpgrp.selectAll('option')
                       .data(groups_)
                       .enter()
                       .append('option')
+                      .attr('ref-key', 'GROUP')
                       .text(function(d){return d.name})
                       .attr('value', function(d){return d.id})
+                      .attr('selected', function(d){
+                        if (is_new == true){
+                          return false
+                        }else{
+                          var grpnodes = items['GROUP']
+                          for (var i=0; i<grpnodes.length; i++){
+                            if (grpnodes[i].group_id == d.id){
+                              return true
+                            }
+                          }
+                        }
+                      })
 
-    $('#new_group_modal .selectpicker').selectpicker('refresh');
+    $('#group-modal .selectpicker').selectpicker('refresh');
 
-})
+}
 
-$(document).on('hide.bs.modal', '#new_group_modal', function (e) {
+$(document).on('hide.bs.modal', '#group-modal', function (e) {
     $('#group-items-input option').remove();
 })
 
@@ -422,21 +510,36 @@ $(document).on('click', '#create-group-button', function(e){
 
     var success = function(resp){
         var newgroup = JSON.parse(resp)
-        $('#create-group-button').modal('hide');
+        $('#group-modal').modal('hide');
+
+        grouptable.destroy()
 
         var groupprops = Object.keys(newgroup)
-        var data = []
-        for (var i=0; i< grouprops.length; i++){
-          var propname = groupprops[i];
-          var propval  = newgroup[propname];
-          data.push({'name':propname, 'value': propval})
-        }
-        var newrow = d3.select('#grouptable')
+        var data = [newgroup]
+        var newrow = d3.select('#groups')
                           .append('tr')
                           .data(data)
-        newrow.append('td').text(function(d){d.group_name})
-        newrow.append('td').text(function(d){d.typesummary[0].type_name})
-        newrow.append('td').text(function(d){d.resourcetypes})
+        newrow.append('td').text(function(d){return d.group_name})
+        newrow.append('td').text(function(d){return d.group_description})
+        newrow.append('td').text(function(d){return d.resourcetypes})
+
+        var btntd = newrow.append('td');
+
+        btntd.append('span')
+        .attr('class', 'edit-group btn btn-default btn-s')
+        .attr('type', 'button')
+        .attr('id', function(d){return 'edit-group-'+d.group_id})
+        .append('span')
+        .attr('class', 'fa fa-pencil')
+
+        btntd.append('span')
+        .attr('class', 'delete-group btn btn-default btn-s btn-danger pull-right')
+        .attr('type', 'button')
+        .attr('id', function(d){return 'delete-group-'+d.group_id})
+        .append('span')
+        .attr('class', 'fa fa-trash')
+
+        initTables()
     }
 
     var error = function(){
@@ -446,15 +549,28 @@ $(document).on('click', '#create-group-button', function(e){
 
     var group_name =  $("#group-name-input").val()
     var group_type =  $("#group-type-input").val()
-    var scenario_id = $("#new-group-scenario-id-input").val(scenario_id);
+    var scenario_id = $("#new-group-scenario-id-input").val();
+
+    var items = []
+
+    var group_items =  $("#group-items-input option:selected").each(function(){
+      var $item = $(this)
+      var item = {'ref_key': $item.attr('ref-key'), 'ref_id': $item.val()}
+      items.push(item)
+    })
+
+    var group =  {'name': group_name,
+                  'types': [{'id':group_type}],
+                  'network_id'  : network_id
+                }
 
     $.ajax({
         type: 'POST',
-        url : clone_scenario_url,
+        url : add_group_url,
         data: JSON.stringify(
           {scenario_id : scenario_id,
-           types       : [{'type_id':group_type}],
-           name        : group_name
+           group       : group,
+           items       : items
          }),
         success: success,
         error  : error,

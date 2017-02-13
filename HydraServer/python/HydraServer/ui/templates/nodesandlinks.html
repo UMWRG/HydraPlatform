@@ -26,6 +26,7 @@
                 <th>Node Description</th>
                 <th>X</th>
                 <th>Y</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id='nodes'>
@@ -35,6 +36,12 @@
                   <td>{{node.node_description}}</td>
                   <td>{{node.node_x}}</td>
                   <td>{{node.node_y}}</td>
+                  <td>
+                    <span id="edit-node-{{node.node_id}}" type='button' class='edit-node btn btn-default btn-s'>
+                    <span class="fa fa-pencil"></span></span>
+                    <span id="delete-node-{{node.node_id}}" type='button' class='delete-node pull-right btn btn-default btn-s btn-danger'>
+                    <span class="fa fa-trash"></span></span>
+                  </td>
               </tr>
               {% endfor %}
             </tbody>
@@ -49,6 +56,7 @@
                 <th>Link Description</th>
                 <th>Start Node</th>
                 <th>End Node</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id='links'>
@@ -58,6 +66,12 @@
                   <td>{{link.link_description}}</td>
                   <td>{{node_name_map[link.node_1_id]}}</td>
                   <td>{{node_name_map[link.node_2_id]}}</td>
+                  <td>
+                    <span id="edit-link-{{link.link_id}}" type='button' class='edit-link btn btn-default btn-s'>
+                    <span class="fa fa-pencil"></span></span>
+                    <span id="delete-group-{{link.link_id}}" type='button' class='delete-link pull-right btn btn-default btn-s btn-danger'>
+                    <span class="fa fa-trash"></span></span>
+                  </td>
               </tr>
               {% endfor %}
             </tbody>
@@ -65,20 +79,34 @@
     </div>
 
     <div id="grouplist" class="tab-pane fade">
+      <div class='new-group btn btn-sm btn-primary'>
+        <span class='fa fa-plus'>
+        </span> Create A Group
+      </div>
       <table id="grouptable" class="display">
             <thead>
               <tr>
                 <th>Group Name</th>
                 <th>Group Type</th>
                 <th>Contents</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id='groups'>
             {% for g in network.resourcegroups %}
-              <tr id="group_{{g.resource_group_id}}" class="tablerow grouprow">
-                  <td>{{g.group_name}}</td>
-                  <td>{{g.typesummary[0].type_name}}</td>
-                  <td><div class="groupcontentsummary">{{g.resourcegroupitems|length}}</div> Nodes</td>
+              <tr id="group_{{g.group_id}}" class="tablerow grouprow">
+                  <td class="group-name">{{g.group_name}}</td>
+                  <td class="type-name">{%if g.types%}{{g.types[0].templatetype.type_name}}{%endif%}</td>
+                  <td class="contents"><div class="groupcontentsummary"> {{resourcegroupitems.get('group-'+g.group_id|string, {}).get('NODE', [])|length}}</div> Nodes</td>
+                  <td class="buttons">
+                    <span id="edit-group-{{g.group_id}}"
+                    type='button'
+                    class='edit-group btn btn-default btn-s'
+                    >
+                    <span class="fa fa-pencil"></span></span>
+                    <span id="delete-group-{{g.group_id}}" type='button' class='delete-group pull-right btn btn-default btn-s btn-danger'>
+                    <span class="fa fa-trash"></span></span>
+                  </td>
               </tr>
               {% endfor %}
             </tbody>

@@ -78,6 +78,10 @@ def add_link(link, user_id):
     new_link = net.add_link(link.network_id, link, user_id=user_id)
     return new_link
 
+def add_group(group, user_id):
+    new_group = net.add_group(group.network_id, group, user_id=user_id)
+    return new_group
+
 def get_all_attributes():
     return attrs.get_attributes()
 
@@ -147,8 +151,11 @@ def clone_scenario(scenario_id, user_id):
 def add_scenario(scenario, user_id):
     return scen.add_scenario(scenario.get('network_id'), scenario, user_id=user_id)
 
-def update_scenario(scenario, user_id):
-    return scen.update_scenario(scenario, user_id=user_id)
+def update_scenario(scenario, user_id, update_data=True, update_groups=True):
+    return scen.update_scenario(scenario, update_data=update_data, update_groups=update_groups, user_id=user_id)
 
 def get_usernames_like(username, user_id):
     return users.get_usernames_like(username, user_id=user_id)
+
+def add_resourcegroupitems(scenario_id, items, user_id):
+    return scen.add_resourcegroupitems(scenario_id, items, user_id=user_id)

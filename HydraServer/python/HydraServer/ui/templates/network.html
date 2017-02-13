@@ -11,14 +11,10 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
   <script>
 
-
-  // set up initial nodes and links
-  //  - nodes are known by 'id', not by index in array.
-  //  - reflexive edges are indicated on the node (as a bold black circle).
-  //  - links are always source < target; edge directions are set by 'left' and 'right'.
     var scenario_id={{scenario_id}};
     var network_id={{network.network_id}};
     var data_={{node_name_map|tojson}};
+    var resourcegroupitems = {{resourcegroupitems|tojson}}
     var projection = "{{network.projection}}";
     {%if network.projection%}
         var projection_crs = {{network.projection_crs|safe}}
@@ -65,6 +61,7 @@
     var add_node_url="{{url_for('do_add_node')}}";
     var update_node_url="{{url_for('do_update_node')}}";
     var add_link_url="{{url_for('do_add_link')}}";
+    var add_group_url="{{url_for('do_add_group')}}";
     var get_resource_data_url="{{url_for('do_get_resource_data')}}";
     var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
     var delete_resource_url="{{url_for('do_delete_resource')}}";
