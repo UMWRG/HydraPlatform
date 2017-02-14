@@ -97,7 +97,7 @@
               <tr id="group_{{g.group_id}}" class="tablerow grouprow">
                   <td class="group-name">{{g.group_name}}</td>
                   <td class="type-name">{%if g.types%}{{g.types[0].templatetype.type_name}}{%endif%}</td>
-                  <td class="contents"><div class="groupcontentsummary"> {{resourcegroupitems.get('group-'+g.group_id|string, {}).get('NODE', [])|length}}</div> Nodes</td>
+                  <td class="contents"><span class="groupcontentsummary"> {{resourcegroupitems.get('group-'+g.group_id|string, {}).get('NODE', [])|length}} Nodes</span></td>
                   <td class="buttons">
                     <span id="edit-group-{{g.group_id}}"
                     type='button'

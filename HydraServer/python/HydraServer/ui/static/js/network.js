@@ -458,6 +458,13 @@ var update_group_modal_inputs = function(){
               .text(function(d){
                 return d.type_name
               })
+              .attr('disabled', function(d){
+                if (is_new == true){
+                  return 'disabled'
+                }else{
+                  return false
+                }
+              })
 
     var items = []
     if (resourcegroupitems['group-'+group_id] != undefined){
@@ -578,7 +585,7 @@ $(document).on('click', '#create-group-button', function(e){
 
     var group_name =  $("#group-name-input").val()
     var group_type =  $("#group-type-input").val()
-    var scenario_id = $("#new-group-scenario-id-input").val();
+    var scenario_id = $("#group-scenario-id-input").val();
 
     var items = []
 
@@ -596,6 +603,80 @@ $(document).on('click', '#create-group-button', function(e){
     $.ajax({
         type: 'POST',
         url : add_group_url,
+        data: JSON.stringify(
+          {scenario_id : scenario_id,
+           group       : group,
+           items       : items
+         }),
+        success: success,
+        error  : error,
+    })
+})
+
+
+$(document).on('click', '#update-group-button', function(e){
+    e.preventDefault();
+
+    var group_id   =  $("#group-id-input").val()
+    var group_name =  $("#group-name-input").val()
+    var group_type =  $("#group-type-input").val()
+    var scenario_id = $("#group-scenario-id-input").val();
+
+    var success = function(resp){
+
+        var newgroup = JSON.parse(resp)
+        $('#group-modal').modal('hide');
+        num_nodes  = 0
+        num_links  = 0
+        num_groups = 0
+        total = 0
+        var items = newgroup.items;
+
+        $("#group_"+group_id+" .group-name").text(newgroup['group_name']);
+
+        for (var i=0; i< items.length; i++){
+          if (items[i].ref_key == 'NODE'){
+            num_nodes++;
+          }else if (items[i].ref_key == 'LINK'){
+            num_links++
+          }else if (items[i].ref_key == 'GROUP'){
+            num_groups++
+          }
+        }
+
+        if (items.length == 0){
+          var text = "Empty"
+        }else{
+          var text = "";
+          if (num_nodes > 0){text = text + "" + num_nodes + " Nodes"}
+          if (num_links > 0){text = text + ", " + num_links + " Links"}
+          if (num_groups > 0){text = text + ", " + num_groups + " Groups"}
+        }
+        var content_element = $("#group_"+group_id+" .contents").text(text)
+    }
+
+    var error = function(){
+        $("#group-modal .modal-body").append(
+                            "<div>An error has occurred.</div>")
+    }
+
+    var items = []
+
+    var group_items =  $("#group-items-input option:selected").each(function(){
+      var $item = $(this)
+      var item = {'ref_key': $item.attr('ref-key'), 'ref_id': $item.val()}
+      items.push(item)
+    })
+
+    var group =  {'id': group_id,
+                  'name': group_name,
+                  'types': [{'id':group_type}],
+                  'network_id'  : network_id
+                }
+
+    $.ajax({
+        type: 'POST',
+        url : update_group_url,
         data: JSON.stringify(
           {scenario_id : scenario_id,
            group       : group,

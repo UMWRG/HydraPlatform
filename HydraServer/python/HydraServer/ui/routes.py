@@ -645,21 +645,47 @@ def do_update_group():
     scenario_id = d['scenario_id']
     group_j = JSONObject(group)
 
-    newgroup = netutils.update_group(group_j, user_id)
+    updatedgroup = netutils.update_group(group_j, user_id)
 
-    json_items = []
+    s = scenarioutils.get_scenario(scenario_id, user_id)
+
+    old_group_items = []
+    new_group_items = []
+    existing_group_items = []
+    incoming_items = []
+    item_lookup = {}
+    new_item_lookup = {}
+    for rgi in s.resourcegroupitems:
+        if rgi.group_id == int(group['id']):
+            existing_group_items.append((rgi.ref_key, rgi.get_resource_id()))
+            item_lookup[(rgi.ref_key, rgi.get_resource_id())] = rgi
+
     for i in items:
-        json_items.append(JSONObject(i))
+        i['group_id'] = group['id']
+        incoming_items.append((i['ref_key'], int(i['ref_id'])))
+        new_item_lookup[(i['ref_key'], int(i['ref_id']))] = i
 
-    newitems = scenarioutils.update_resource_group_items(scenario_id, json_items, user_id)
+    existing_group_items = set(existing_group_items)
+    incoming_items = set(incoming_items)
+
+    items_to_delete = existing_group_items.difference(incoming_items)
+    items_to_add    = incoming_items.difference(existing_group_items)
+    items_to_keep    = incoming_items.intersection(existing_group_items)
+
+    items_to_keep = [JSONObject(item_lookup[k]) for k in items_to_keep]
+    item_ids_to_delete = [item_lookup[k].item_id for k in items_to_delete]
+    json_items_to_add = [JSONObject(new_item_lookup[k]) for k in items_to_add]
+
+    newitems = scenarioutils.add_resource_group_items(scenario_id, json_items_to_add, user_id)
+    scenarioutils.delete_resource_group_items(scenario_id, item_ids_to_delete, user_id)
 
     commit_transaction()
 
-    newgroup.items = newitems
+    updatedgroup.items = items_to_keep + newitems
 
-    app.logger.info("Group %s added. New ID of %s",newgroup.group_name, newgroup.group_id)
+    app.logger.info("Group %s updated.",updatedgroup.group_name)
 
-    return newgroup.as_json()
+    return updatedgroup.as_json()
 
 @app.route('/get_resource_data', methods=['POST'])
 def do_get_resource_data():

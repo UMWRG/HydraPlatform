@@ -7,6 +7,9 @@ from network_utilities import get_resource
 import logging
 log = logging.getLogger(__name__)
 
+def get_scenario (scenario_id, user_id):
+    return hc.get_scenario(scenario_id, user_id)
+
 def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
     res_scenarios={}
     resource_scenarios = hc.get_resource_data(resource_type, res_id, scenario_id, None, user_id)
@@ -92,3 +95,6 @@ def add_scenario(scenario, user_id):
 def add_resource_group_items(scenario_id, items, user_id):
     newitems = hc.add_resourcegroupitems(scenario_id, items, user_id)
     return [JSONObject(i) for i in newitems]
+
+def delete_resource_group_items(scenario_id, item_ids, user_id):
+    hc.delete_resourcegroupitems(scenario_id, item_ids, user_id)
