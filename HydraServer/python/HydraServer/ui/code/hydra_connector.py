@@ -82,6 +82,10 @@ def add_group(group, user_id):
     new_group = net.add_group(group.network_id, group, user_id=user_id)
     return new_group
 
+def delete_group(group_id, user_id):
+    #the second argument is to purge dsata. Ignore this for now
+    net.delete_group(group_id, False, user_id=user_id)
+
 def get_all_attributes():
     return attrs.get_attributes()
 

@@ -243,7 +243,7 @@ def delete_resource(resource_id, resource_type, user_id):
     elif resource_type == 'LINK':
         hc.delete_link(resource_id, user_id)
     elif resource_type == 'GROUP':
-        hc.delete_resourcegroup(resource_id, user_id)
+        hc.delete_group(resource_id, user_id)
     elif resource_type == 'NETWORK':
         hc.delete_network(resource_id, user_id)
 
@@ -286,6 +286,14 @@ def add_group(group, user_id):
     new_group = hc.add_group(group, user_id=user_id)
 
     return JSONObject(new_group)
+
+def update_group(group, user_id):
+    """
+    Take a JSONObjhect link and pass it to Hydra Platform's update_group fn.
+    """
+    updated_group = hc.update_group(group, user_id=user_id)
+
+    return JSONObject(updated_group)
 
 def share_network(network_id, usernames, read_only, share, user_id):
     """

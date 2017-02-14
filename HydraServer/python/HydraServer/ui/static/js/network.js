@@ -399,9 +399,38 @@ $(document).on('click', '.new-group', function(e){
 $(document).on('click', '.delete-group', function(e){
   var row = $(this).closest('tr')
   var group_name = $('td.group-name', row).text()
+  var group_id = row.attr('id').split('_')[1]
+  $("#delete-group-id-input").val(group_id)
    var modal = $('#delete-group-modal')
    $('.group-name', modal).text(group_name);
   $('#delete-group-modal').modal('show');
+})
+
+$(document).on('click', '#delete-group-button', function(e){
+  var group_id = $("#delete-group-id-input").val()
+
+  var success = function(resp){
+    $("#delete-group-modal").modal('hide');
+    $("#group_"+group_id).fadeOut({
+                    duration:500,
+                    complete:function(){
+                      $("#group_"+group_id).remove();}
+                    }
+              );
+  }
+
+  var error = function(resp){
+        $("#delete-group-modal .modal-body").append(
+                            "<div>An error has occurred.</div>")
+    }
+
+  $.ajax({
+      type: 'POST',
+      url : delete_resource_url,
+      data: JSON.stringify({id : group_id, resource_type:'GROUP'}),
+      success: success,
+      error  : error,
+    })
 })
 
 var update_group_modal_inputs = function(){
@@ -543,7 +572,7 @@ $(document).on('click', '#create-group-button', function(e){
     }
 
     var error = function(){
-        $("#create-group-button .modal-body").append(
+        $("#create-group-modal .modal-body").append(
                             "<div>An error has occurred.</div>")
     }
 

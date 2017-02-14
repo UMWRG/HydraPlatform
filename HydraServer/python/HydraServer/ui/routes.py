@@ -557,13 +557,13 @@ def do_delete_node():
 
     node_id = d['node_id']
 
-    newnode = netutils.delete_node(node_id, user_id)
+    netutils.delete_node(node_id, user_id)
 
     commit_transaction()
 
-    app.logger.info("node %s deleted. New ID of %s",node_id)
+    app.logger.info("node %s deleted.",node_id)
 
-    return newnode.as_json()
+    return 'OK'
 
 @app.route('/add_link', methods=['POST'])
 def do_add_link():
@@ -591,13 +591,13 @@ def do_delete_link():
 
     link_id = d['link_id']
 
-    newlink = netutils.delete_link(link_id, user_id)
+    netutils.delete_link(link_id, user_id)
 
     commit_transaction()
 
-    app.logger.info("link %s deleted. New ID of %s",link_id)
+    app.logger.info("link %s deleted.",link_id)
 
-    return newlink.as_json()
+    return 'OK'
 
 @app.route('/add_group', methods=['POST'])
 def do_add_group():
@@ -632,20 +632,32 @@ def do_add_group():
 
     return newgroup.as_json()
 
-@app.route('/delete_group', methods=['POST'])
-def do_delete_group():
+
+@app.route('/upgate_group', methods=['POST'])
+def do_update_group():
 
     user_id = session['user_id']
 
     d = json.loads(request.get_data())
 
-    group_id = d['group_id']
+    group  = d['group']
+    items  = d['items']
+    scenario_id = d['scenario_id']
+    group_j = JSONObject(group)
 
-    newgroup = netutils.delete_group(group_id, user_id)
+    newgroup = netutils.update_group(group_j, user_id)
+
+    json_items = []
+    for i in items:
+        json_items.append(JSONObject(i))
+
+    newitems = scenarioutils.update_resource_group_items(scenario_id, json_items, user_id)
 
     commit_transaction()
 
-    app.logger.info("Group %s deleted. New ID of %s",group_id)
+    newgroup.items = newitems
+
+    app.logger.info("Group %s added. New ID of %s",newgroup.group_name, newgroup.group_id)
 
     return newgroup.as_json()
 
