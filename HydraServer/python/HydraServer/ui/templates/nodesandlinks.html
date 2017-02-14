@@ -31,7 +31,7 @@
             </thead>
             <tbody id='nodes'>
             {% for node in network.nodes %}
-              <tr id="node_{{node.node_id}}" class="tablerow noderow">
+              <tr id="node_{{node.node_id}}" class="tablerow noderow resourcerow">
                   <td>{{node.node_name}}</td>
                   <td>{{node.node_description}}</td>
                   <td>{{node.node_x}}</td>
@@ -61,7 +61,7 @@
             </thead>
             <tbody id='links'>
             {% for link in network.links %}
-              <tr id="link_{{link.link_id}}" class="tablerow linkrow">
+              <tr id="link_{{link.link_id}}" class="tablerow linkrow resourcerow">
                   <td>{{link.link_name}}</td>
                   <td>{{link.link_description}}</td>
                   <td>{{node_name_map[link.node_1_id]}}</td>
@@ -94,7 +94,7 @@
             </thead>
             <tbody id='groups'>
             {% for g in network.resourcegroups %}
-              <tr id="group_{{g.group_id}}" class="tablerow grouprow">
+              <tr id="group_{{g.group_id}}" class="tablerow grouprow resourcerow">
                   <td class="group-name">{{g.group_name}}</td>
                   <td class="type-name">{%if g.types%}{{g.types[0].templatetype.type_name}}{%endif%}</td>
                   <td class="contents"><span class="groupcontentsummary"> {{resourcegroupitems.get('group-'+g.group_id|string, {}).get('NODE', [])|length}} Nodes</span></td>

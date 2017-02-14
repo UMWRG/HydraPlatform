@@ -8,9 +8,9 @@ $(document).on('click', '#data .close-resource-data', function(){
 
 
 $(document).on('click', '#data .save-resource-data', function(){
-    
+
     var container = $("#data table")
-    
+
     var rs_list = []
     $('tr.attribute', container).each(function(){
         var attr_id = $("input[name='attr_id']", this).val()
@@ -21,7 +21,7 @@ $(document).on('click', '#data .save-resource-data', function(){
         var value = $("input[name='value']", this).val()
         var name = $("input[name='dataset_name']", this).val()
         var metadata = $("input[name='metadata']", this).val()
-        
+
         if (dataset_id == ''){
            name = new Date().toJSON().slice(0,10);
         }
@@ -40,7 +40,7 @@ $(document).on('click', '#data .save-resource-data', function(){
         var rs = {
             id: rs_id,
             resource_attr_id: ra_id,
-            value: dataset, 
+            value: dataset,
             attr_id: attr_id,
             resource_id:current_res.id,
             resource_type:current_res_type
@@ -54,7 +54,7 @@ $(document).on('click', '#data .save-resource-data', function(){
         rs_list: rs_list,
         scenario_id: scenario_id
     }
-    
+
     var success = function(){
         get_resource_data(current_res_type, current_res)
     }
@@ -86,7 +86,7 @@ function drawTimeseriesGraph(script, graph_data, attr_name, t_table) {
                 alert("Could not load script " + script);
             }
     });
-    
+
     if(cur_table!=null)
         cur_table.hide();
         cur_table=t_table;
@@ -113,6 +113,14 @@ if(cur_table!=null)
     cur_table.show();
 }
 
+$(document).on("click", ".resourcerow", function(){
+  var res_details = $(this).attr('id').split('_');
+  var res_type = res_details[0]
+  var res_id = res_details[1]
+  var d = {'id':res_id}
+  get_resource_data(res_type, d)
+})
+
 function get_resource_data(res_type, d)
 {
     $( "#data" ).empty();
@@ -128,7 +136,7 @@ function get_resource_data(res_type, d)
         current_res_type = res_type;
         current_res = d
     }
-    
+
     var pars=
     {
         network_id: network_id,
@@ -150,11 +158,11 @@ function get_resource_data(res_type, d)
 
 function get_network_attributes()
 {
-   
+
     var d = {
         id:network_id,
     }
-    
+
     get_resource_data('NETWORK', d)
 }
 
@@ -177,11 +185,11 @@ $(document).on("click", "#create-attr-button", function(event){
         $("select.typeattrs").each(function(){
             $(this).append(new_attr_option)
         })
-        
+
         $('.selectpicker').selectpicker('refresh');
 
 
-        $("#close-create-attr-button").click() 
+        $("#close-create-attr-button").click()
     }
 
     var error = function(e){
