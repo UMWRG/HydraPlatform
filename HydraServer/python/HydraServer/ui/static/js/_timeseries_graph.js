@@ -1,5 +1,25 @@
 
-function draw_timeseries(graph_data, attr_name)
+function draw_timeseries(graph_data, attr_name){
+    ts_container = document.getElementById('ts-edit-inner');
+    Plotly.purge(ts_container);
+
+    var ts_x = []
+    var ts_y = []
+    graph_data.forEach(function(d) {
+      ts_x.push(d[0]);
+      ts_y.push(+d[1])
+    });
+
+    ts_container = document.getElementById('ts-edit-inner');
+
+    Plotly.plot( ts_container, [{
+        x: ts_x,
+        y: ts_y}], { 
+        margin: { t: 0 } } );
+
+}
+
+function draw_simple_timeseries(graph_data, attr_name)
 
 {
 

@@ -541,7 +541,7 @@ var insertModals = function(){
 
 var ts_modal = `
 <div class="modal fade" tabindex="-1" role="dialog" id="ts-editor">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -563,7 +563,7 @@ var ts_modal = `
 
 var array_modal = `
 <div class="modal fade" tabindex="-1" role="dialog" id="array-editor">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -586,7 +586,7 @@ var array_modal = `
 
 var metadata_modal = `
 <div class="modal fade" tabindex="-1" role="dialog" id="md-editor">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

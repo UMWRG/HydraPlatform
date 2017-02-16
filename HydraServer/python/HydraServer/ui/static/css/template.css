@@ -44,7 +44,7 @@ table tr.header{
 
 .ts_outer {
     position: relative;
-    width: 550px;
+    width: 100%;
     overflow: none;
     height: auto;
 }
