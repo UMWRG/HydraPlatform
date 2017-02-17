@@ -197,7 +197,7 @@ namespace HydraJsonClient
                 {
 
                     hydra_user uses = js.Deserialize<hydra_user>(res);
-                    user.sessonid = uses.session_id;
+                    user.sessonid = uses.sessionid;
                    
                 }
                 catch (System.Exception ex) {

@@ -33,7 +33,7 @@ namespace HydraJsonClient
           public int  user_id { get; set; }
 
 
-        [DataMember(Name = "session_id")]
-        public string session_id { get; set; }
+        [DataMember(Name = "sessionid")]
+        public string sessionid { get; set; }
     }
 }

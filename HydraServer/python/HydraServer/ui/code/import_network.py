@@ -11,7 +11,7 @@ def get_json_file(directory):
             return filename
     return None
 
-def import_network_from_pywr_json(project_id, directory, basefolder):
+def import_network_from_pywr_json(directory, basefolder):
     os.chdir(directory)
     json_file = get_json_file(directory)
     print "JSON File: ", json_file
@@ -25,11 +25,11 @@ def import_network_from_pywr_json(project_id, directory, basefolder):
     basefolder = os.path.sep.join(pp1)
     pywr_import=os.path.join(basefolder,"Apps","pywr_app", "Importer","PywrImporter.py")
     exe="python " + pywr_import
-    args={"f": json_file, 'p': project_id}
+    args={"f": json_file}
     return run_app(exe, args, False)
 
 
-def import_network_from_excel(project_id, directory, basefolder):
+def import_network_from_excel(directory, basefolder):
     os.chdir(directory)
     excel_file=None
     for file in os.listdir(directory):
@@ -47,7 +47,8 @@ def import_network_from_excel(project_id, directory, basefolder):
     return run_app(exe, args, False)
 
 
-def import_network_from_csv_files(project_id, directory, basefolder):
+def import_network_from_csv_files(directory, basefolder):
+    print "Running for csv files ..."
     os.chdir(directory)
     if not  os.path.exists('network.csv'):
         return "Network file (network.csv) is not found ...."

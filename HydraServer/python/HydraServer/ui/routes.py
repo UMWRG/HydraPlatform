@@ -861,16 +861,23 @@ def import_uploader():
         return run_pywr_app(network_id, scenario_id)
 
 
-    zip = zipfile.ZipFile(uploaded_file)
-    zip.extractall(extractedfolder)
+    print "1. app_name: "+app_name
 
-    project_id = request.form['project_id']
+    zip = zipfile.ZipFile(uploaded_file)
+    print "2. app_name: "+app_name
+
+    zip.extractall(extractedfolder)
+    print "3. app_name: "+app_name
+
+
+    #project_id = request.form['project_id']
+    print "app_name: "+app_name
     if(app_name== 'csv'):
-        pid = import_network_from_csv_files(project_id, extractedfolder, basefolder)
+        pid = import_network_from_csv_files(extractedfolder, basefolder)
     elif (app_name== 'pywr'):
-        pid=import_network_from_pywr_json(project_id, extractedfolder, basefolder)
+        pid=import_network_from_pywr_json(extractedfolder, basefolder)
     elif (app_name== 'excel'):
-        pid=import_network_from_excel(project_id, extractedfolder, basefolder)
+        pid=import_network_from_excel( extractedfolder, basefolder)
     else:
         pid=type+ ' is not recognized.'
 

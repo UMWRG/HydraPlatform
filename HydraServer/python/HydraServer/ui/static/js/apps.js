@@ -100,7 +100,8 @@ function update_progress_2(status_url, directory) {
                         setTimeout(function() {
                         pars={'network_id': network_id, 'scenario_id':scenario_id};
                         $( "#importModal" ).modal('hide');
-                       window.location.href = '/network?network_id='+network_id+'&scenario_id='+scenario_id;
+                       //window.location.href = '/network?network_id='+network_id+'&scenario_id='+scenario_id;
+                       window.location.href = '/network/'+network_id;
 
                     }, 3000);
                     }
@@ -145,6 +146,7 @@ $('#exportform').submit();
         }
 
 function import_csv(){
+    alert("Hellllooooooo");
     $("#runApp").show();
     $("#browse_div").show();
 
