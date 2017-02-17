@@ -1,6 +1,8 @@
 
 $(document).ready(function() {
-     $("#export_data").hide();
+    //$("#export_data").hide();
+    //$("#import_data").hide();
+    $("#data_exporter_importer").prop('disabled', true);
 })
 
 $(document).on("click", "#create-project-button", function(event){

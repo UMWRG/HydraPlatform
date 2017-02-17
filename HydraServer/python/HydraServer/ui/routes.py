@@ -870,14 +870,15 @@ def import_uploader():
     print "3. app_name: "+app_name
 
 
-    #project_id = request.form['project_id']
+    project_id = request.form['project_id']
+
     print "app_name: "+app_name
     if(app_name== 'csv'):
-        pid = import_network_from_csv_files(extractedfolder, basefolder)
+        pid = import_network_from_csv_files(project_id, extractedfolder, basefolder)
     elif (app_name== 'pywr'):
-        pid=import_network_from_pywr_json(extractedfolder, basefolder)
-    elif (app_name== 'excel'):
-        pid=import_network_from_excel( extractedfolder, basefolder)
+        pid=import_network_from_pywr_json(project_id, extractedfolder, basefolder)
+    elif (app_name== 'import_excel'):
+        pid=import_network_from_excel( project_id, extractedfolder, basefolder)
     else:
         pid=type+ ' is not recognized.'
 
