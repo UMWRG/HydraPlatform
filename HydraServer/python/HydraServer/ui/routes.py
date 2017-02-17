@@ -959,3 +959,30 @@ def get_usernames_like():
     return_data = [{'text':u, 'id':u} for u in usernames]
 
     return json.dumps(return_data)
+
+def do_get_resource_scenario():
+    pars= json.loads(request.get_data())
+    scenario_id   = pars['scenario_id']
+    resource_attr_id = pars['resource_attr_id']
+    log.info("Fetching resource scenario %s %s",resource_attr_id, scenario_id)
+    user_id       = session['user_id']
+   
+    rs = scenarioutils.get_resource_scenario(resource_attr_id, scenario_id, user_id)
+
+    return rs.as_json()
+
+def do_get_resource_scenarios():
+    pars= json.loads(request.get_data())
+    scenario_ids   = pars['scenario_ids']
+    resource_attr_id = pars['resource_attr_id']
+    log.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
+    user_id       = session['user_id']
+    
+    return_rs = []
+    for scenario_id in scenario_ids:
+        rs = scenarioutils.get_resource_scenario(resource_attr_id, scenario_id, user_id)
+        return_rs.append(rs.as_json)
+
+    return return_rs
+
+

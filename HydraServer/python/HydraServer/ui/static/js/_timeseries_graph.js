@@ -19,6 +19,45 @@ function draw_timeseries(graph_data, attr_name){
 
 }
 
+function get_resource_scenarios(){
+
+    var data = []
+
+//Get the resource_attr_id & scenario_ids
+    
+    var scenario_ids = []
+    d3.selectAll('#scenario-comparison option:checked').each(function(){
+        var opt = d3.select(this)
+        var scenario_id = opt.property(value)
+        scenario_ids.push(scenario_id)
+    })
+
+    var success = function(resp){
+
+        draw_timeseries(resp)
+
+    }
+
+    var error = function(){
+       $('#ts-edit-outer').append('An error has occurred') 
+    }
+
+    var data = {'scenario_ids': scenario_ids, 'resource_attr_id': resource_attr_id}
+
+    $.ajax({
+        url: get_resource_scenarios_url,
+        type: 'POST',
+        data: data,
+        success: success,
+        error: error
+    })
+
+}
+
+$(document).on('change', "#scenario-comparison", function(e){
+    get_resource_scenarios();
+})
+
 function draw_simple_timeseries(graph_data, attr_name)
 
 {
