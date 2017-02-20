@@ -215,9 +215,10 @@ var renderTimeseries = function(btn){
         columns: [
         {
             type: 'date',
-            dateFormat: 'DD/MM/YYYY',
+            dateFormat: 'YYYY-MM-DDTHH:MM:SSZ',
             strict: false,
-            defaultDate: '01/01/16',
+            defaultDate: new Date().toISOString(),
+
         },
         {},
         ]
@@ -378,6 +379,12 @@ var tsToHot = function(valuetext){
         hot_data[0].push(col)
         for (var t in ts[col]){
             var v = ts[col][t]
+
+            try{
+                t = new Date(t).toISOString()
+            }catch(e){
+                console.log('Value is not an ISO date time')
+            }
 
             if (idx == 1){
                 hot_data.push([t, v])// Add time and value
@@ -582,6 +589,7 @@ var ts_modal = `
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save">Save</button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
