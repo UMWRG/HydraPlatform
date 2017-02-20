@@ -124,7 +124,7 @@ function nodes_mouse_double_click(d)
 
 function nodes_mouse_click(d) {
    // unenlarge target node
-
+    console.log(d)
     $("#data").html("No Resource Selected.")
     current_res = null; 
     current_res_type = null;
@@ -191,7 +191,9 @@ function nodes_mouse_click(d) {
         }
 }
 
-d3.event.stopPropagation();
+if (d3.event != null){
+    d3.event.stopPropagation();
+}
 
 
 }
@@ -203,8 +205,9 @@ function links_mouse_click(d) {
    document.getElementById('search').value=d.name;
    tip.hide(d);
    get_resource_data('LINK', d)
-
-   d3.event.stopPropagation();
+   if (d3.event != null){
+        d3.event.stopPropagation();
+    }
 }
 
 function highlightNode(node){
@@ -279,62 +282,25 @@ function link_mouse_out(d) {
    }
 }
 
-function findResource() {
+function findResource(event, ui) {
+
+    $( ".selector" ).autocomplete( "close" );
+
+    var selectedVal = ui.item.value
     //find the node or links
-    var selectedVal = document.getElementById('search').value;
-    var sel=null;
     var node = svg.selectAll(".node");
-    if (selectedVal == "none")
-    {
-        node.style("stroke", "white").style("stroke-width", "1");
-    }
-    else
-    {
-        var selected = node.filter(function (d, i){
-        if(d.name == selectedVal)
-             {
-             d3.select(this);
-             svg.selectAll("line").style("stroke-width", 1.8);
-             svg.selectAll(".node").attr("r", 9);
-             d3.select(this).attr("r", 12);
-             tip.show;
+    var selected = node.filter(function (d, i){
+        if(d.name == selectedVal){
+            d3.selectAll('#schematicnode_'+d.id).each(nodes_mouse_click)
+        }
+    })
 
-             get_resesource_data('NODE', d)
-             sel=d;
-             return true;
-             }
-        else
-             return false;
-            });
-            if(sel==null)
-            {
-            var link = svg.selectAll(".link");
-        if (selectedVal == "none") {
-            link.style("stroke", "white").style("stroke-width", "1");
+    var link = svg.selectAll(".link");
+    var selected = link.filter(function (d, i){
+        if(d.name == selectedVal){
+            d3.selectAll('#schematiclink_'+d.id).each(links_mouse_click)
             }
-        else {
-            var selected = link.filter(function (d, i) {
-        if(d.name == selectedVal)
-             {
-                 d3.select(this);
-                 svg.selectAll("line").style("stroke-width", 1.8);
-                 svg.selectAll(".node").attr("r", 9);
-                 d3.select(this).style("stroke-width", 3);
-                 get_resource_data('LINK', d)
-                 sel=d;
-                 return true;
-             }
-        else
-             return false;
-            });
-            }
-            }
-
-        if(current_res!=null)
-            {
-             tip.hide(current_res);
-            }
-    }
+    })
 }
 
 function changeNodesLableVisibility(cb) {
