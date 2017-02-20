@@ -11,7 +11,7 @@ def get_json_file(directory):
             return filename
     return None
 
-def import_network_from_pywr_json(directory, basefolder):
+def import_network_from_pywr_json(project_id, directory, basefolder):
     os.chdir(directory)
     json_file = get_json_file(directory)
     print "JSON File: ", json_file
@@ -29,7 +29,7 @@ def import_network_from_pywr_json(directory, basefolder):
     return run_app(exe, args, False)
 
 
-def import_network_from_excel(directory, basefolder):
+def import_network_from_excel(project_id, directory, basefolder):
     os.chdir(directory)
     excel_file=None
     for file in os.listdir(directory):
@@ -39,15 +39,15 @@ def import_network_from_excel(directory, basefolder):
     if excel_file == None:
         return ["Excel file is not found ..."]
     pp = basefolder.split(os.path.sep)
-    pp1 = pp[0: (len(pp) - 1)]
+    pp1 = pp[0: (len(pp)    - 1)]
     basefolder = os.path.sep.join(pp1)
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
     exe=excel_import
-    args={"i": directory+os.path.sep+ excel_file ,"m": directory+os.path.sep+"template.xml"}
+    args={"i": directory+os.path.sep+ excel_file ,"m": directory+os.path.sep+"template.xml", "p": project_id}
     return run_app(exe, args, False)
 
 
-def import_network_from_csv_files(directory, basefolder):
+def import_network_from_csv_files(project_id, directory, basefolder):
     print "Running for csv files ..."
     os.chdir(directory)
     if not  os.path.exists('network.csv'):
@@ -60,7 +60,7 @@ def import_network_from_csv_files(directory, basefolder):
     exe="python " + csv_import
 
     if os.path.exists('network.csv'):
-        args = {'t': 'network.csv', 'm': 'template.xml', 'x': ''}
+        args = {'t': 'network.csv', 'm': 'template.xml', "p": project_id, 'x': ''}
     else:
         args={'t': 'network.csv', 'x':''}
     return run_app(exe, args, use_wd)

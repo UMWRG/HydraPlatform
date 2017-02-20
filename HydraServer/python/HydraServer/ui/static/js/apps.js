@@ -146,7 +146,6 @@ $('#exportform').submit();
         }
 
 function import_csv(){
-    alert("Hellllooooooo");
     $("#runApp").show();
     $("#browse_div").show();
 
@@ -183,7 +182,7 @@ function import_excel ()
     $(status_pan).hide();
     $("#help_message").show();
     $(_message).text("");
-    cur_name='excel';
+    cur_name='import_excel';
     $("#help_").text("Please upload the zip file which contains Excel file and template file.");
     $ ("#import_title").text("Import Hydra network from Excel");
     $( "#importModal" ).modal('show')
