@@ -210,6 +210,7 @@ def get_node(node_id, user_id):
         for ta in t.templatetype.typeattrs:
             if ta.default_dataset_id:
                 ta.default_dataset
+                ta.default_dataset.metadata
 
     node_j = JSONObject(node)
     node_j.name = node_j.node_name
@@ -220,6 +221,10 @@ def get_link(link_id, user_id):
     link = hc.get_link(link_id, user_id)
     for t in link.types:
         t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
     link_j = JSONObject(link)
     link_j.name = link_j.link_name
     link_j.id = link_j.link_id
@@ -229,6 +234,10 @@ def get_resourcegroup(group_id, user_id):
     group = hc.get_resourcegroup(group_id, user_id)
     for t in group.types:
         t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
     group_j = JSONObject(group)
 
     group_j.name = group_j.group_name
