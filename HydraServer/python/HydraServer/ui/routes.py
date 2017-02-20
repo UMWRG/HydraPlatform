@@ -4,6 +4,8 @@ import json
 from HydraServer.util.hdb import login_user
 from HydraServer.soap_server.hydra_base import get_session_db
 
+from HydraLib.HydraException import HydraError, PermissionError, ResourceNotFoundError
+
 from flask import render_template
 
 from werkzeug import secure_filename
@@ -694,7 +696,7 @@ def do_get_resource_data():
 
     pars= json.loads(request.get_data())
     network_id = pars['network_id']
-    scenario_id = pars['scenario_id']
+    scenario_id = int(pars['scenario_id'])
     resource_id= pars['res_id']
     resource_type=pars['resource_type']
 
@@ -960,6 +962,7 @@ def get_usernames_like():
 
     return json.dumps(return_data)
 
+@app.route("/get_resource_scenario", methods=['POST'])
 def do_get_resource_scenario():
     pars= json.loads(request.get_data())
     scenario_id   = pars['scenario_id']
@@ -971,18 +974,24 @@ def do_get_resource_scenario():
 
     return rs.as_json()
 
+@app.route("/get_resource_scenarios", methods=['POST'])
 def do_get_resource_scenarios():
     pars= json.loads(request.get_data())
     scenario_ids   = pars['scenario_ids']
-    resource_attr_id = pars['resource_attr_id']
+    resource_attr_id = int(pars['resource_attr_id'])
     log.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
     user_id       = session['user_id']
     
-    return_rs = []
+    return_rs = {}
     for scenario_id in scenario_ids:
-        rs = scenarioutils.get_resource_scenario(resource_attr_id, scenario_id, user_id)
-        return_rs.append(rs.as_json)
+        try:
+            rs = scenarioutils.get_resource_scenario(resource_attr_id, int(scenario_id), user_id)
+            return_rs[scenario_id] = rs
+        except ResourceNotFoundError, e:
+            log.warn("resource scenario for %s not found in scenario %s"%(resource_attr_id, scenario_id))
 
-    return return_rs
+    log.info('%s resource scenarios retrieved', len(return_rs))
+
+    return json.dumps(return_rs)
 
 
