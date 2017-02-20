@@ -34,10 +34,15 @@
      return value;
      }
 
-     var nodes_=[]
-     nodes_={{nodes_|tojson}};
-     attr_id_name={{attr_id_name|tojson}};
 
+    var scenario_name_lookup = {}
+    {% for s in network.scenarios%}
+        scenario_name_lookup[{{s.scenario_id}}] = "{{s.scenario_name}}";
+    {%endfor%}
+
+    var nodes_=[]
+    nodes_={{nodes_|tojson}};
+    attr_id_name={{attr_id_name|tojson}};
 
    var links_=[];
    var links_={{links_|tojson}};
@@ -67,6 +72,7 @@
     var update_resourcedata_url="{{url_for('do_update_resource_data')}}";
     var delete_resource_url="{{url_for('do_delete_resource')}}";
     var clone_scenario_url="{{url_for('do_clone_scenario')}}";
+    var get_resource_scenarios_url="{{url_for('do_get_resource_scenarios')}}";
 
       </script>
 

@@ -173,3 +173,6 @@ def add_resourcegroupitems(scenario_id, items, user_id):
 
 def delete_resourcegroupitems(scenario_id, item_ids, user_id):
     scen.delete_resourcegroupitems(scenario_id, item_ids, user_id=user_id)
+
+def get_resource_scenario(resource_attr_id, scenario_id, user_id):
+    return scen.get_resource_scenario(resource_attr_id, scenario_id, user_id=user_id)

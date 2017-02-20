@@ -98,3 +98,6 @@ def add_resource_group_items(scenario_id, items, user_id):
 
 def delete_resource_group_items(scenario_id, item_ids, user_id):
     hc.delete_resourcegroupitems(scenario_id, item_ids, user_id)
+
+def get_resource_scenario(resource_attr_id, scenario_id, user_id):
+    return  JSONObject(hc.get_resource_scenario(resource_attr_id, scenario_id, user_id))

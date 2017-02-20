@@ -1,4 +1,5 @@
 
+
 var defaultts =[
 ['Time', 'Value'],
 ['', '']
@@ -214,9 +215,10 @@ var renderTimeseries = function(btn){
         columns: [
         {
             type: 'date',
-            dateFormat: 'DD/MM/YYYY',
+            dateFormat: 'YYYY-MM-DDTHH:MM:SSZ',
             strict: false,
-            defaultDate: '01/01/16',
+            defaultDate: new Date().toISOString(),
+
         },
         {},
         ]
@@ -378,6 +380,12 @@ var tsToHot = function(valuetext){
         for (var t in ts[col]){
             var v = ts[col][t]
 
+            try{
+                t = new Date(t).toISOString()
+            }catch(e){
+                console.log('Value is not an ISO date time')
+            }
+
             if (idx == 1){
                 hot_data.push([t, v])// Add time and value
             }else{
@@ -486,6 +494,11 @@ $(document).on('click', '.dataset .ts-graph', function(){
 
     currentVal = $('input.timeseries', datasetcontainer)
 
+    $("#current_ra").remove()
+    var current_ra = $("input[name='ra_id']", datasetcontainer).clone()
+    current_ra.attr('id', 'current_ra')
+    $('#ts-editor .ts_outer').prepend(current_ra)
+
     var valuetext = currentVal.val()
 
     if (valuetext == ''){
@@ -497,7 +510,7 @@ $(document).on('click', '.dataset .ts-graph', function(){
     var graph_data = data.slice(1, data.length)
     var attr_name  = $("input[name='attr_name']", datasetcontainer).val()
 
-    setTimeout(function(){draw_timeseries(graph_data, attr_name)}, 300)
+    setTimeout(function(){draw_timeseries({scenario_id:graph_data}, attr_name)}, 300)
 })
 
 
@@ -527,7 +540,28 @@ var insertModals = function(){
             hot.destroy()
         }
         $('.ts_inner').empty()
+
     })
+
+    $('#ts-editor').on('show.bs.modal', function (e) {
+        
+        $('.ts_inner').empty()
+
+        $("#scenario-comparison").selectpicker('destroy')
+        $("#scenario-comparison").remove()
+        var s = $("#scenario-picker").clone()
+        $('#ts-outer').prepend(s)
+        $('#ts-editor .ts_outer').prepend(s)
+        s.removeClass('selectpicker')
+        s.attr('id', 'scenario-comparison')
+        s.attr('multiple', 'multiple')
+        s.attr('data-selected-text-format', 'count')
+        s.attr('data-actions-box', 'true')
+        s.attr('data-live-search', 'true')
+        s.selectpicker()
+
+    })
+
     $('#md-editor').on('hidden.bs.modal', function (e) {
         $('.ts_inner').empty()
     })
