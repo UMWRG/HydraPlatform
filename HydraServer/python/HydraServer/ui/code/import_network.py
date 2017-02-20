@@ -39,7 +39,7 @@ def import_network_from_excel(project_id, directory, basefolder):
     if excel_file == None:
         return ["Excel file is not found ..."]
     pp = basefolder.split(os.path.sep)
-    pp1 = pp[0: (len(pp) - 1)]
+    pp1 = pp[0: (len(pp)    - 1)]
     basefolder = os.path.sep.join(pp1)
     excel_import = os.path.join(basefolder, "Apps", "ExcelApp", "ExcelImporter", "ExcelImporter.exe")
     exe=excel_import
