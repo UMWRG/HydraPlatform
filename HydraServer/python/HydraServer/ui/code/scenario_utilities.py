@@ -60,6 +60,7 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                     d = tattr.default_dataset
                     #Hack to work with hashtables. REMOVE AFTER DEMO
                     if d.metadata.get('data_type') == 'hashtable':
+                        d.value = d.value.replace("\'", "")
                         df = pd.read_json(d.value)
                         d.value = df.transpose().to_json() 
                     res_scenarios[tattr.attr_id].dataset = d

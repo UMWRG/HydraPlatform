@@ -311,7 +311,8 @@ $(function() {
      res_names.push(links_[i].name);
     }
     $( "#search" ).autocomplete({
-       source: res_names
+       source: res_names,
+       select: findResource,
     });
  });
 

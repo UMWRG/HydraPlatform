@@ -150,7 +150,7 @@ var redraw_nodes = function(){
         .data(nodes_)
         .enter().append("g")
         .classed("node", true)
-        .attr("id", function(d) {return d.id;})
+        .attr("id", function(d) {return 'schematicnode_'+d.id;})
         .attr('shape', function(d){
             if (d.type.layout.shape != undefined){
                 return d.type.layout.shape
@@ -200,6 +200,7 @@ var redraw_links = function(){
     link = svg.selectAll(".link")
         .data(links_)
         .enter().append("line")
+        .attr("id", function(d) {return 'schematiclink_'+d.id;})
         .attr("class", "link")
         .style("stroke-dasharray", function(d){
             if (d.type.layout['linestyle'] != undefined){
