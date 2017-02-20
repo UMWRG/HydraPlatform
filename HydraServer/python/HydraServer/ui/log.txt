@@ -29,7 +29,7 @@ Found id and it --------------> Code MIN_CAP_OPT_1
 !!Progress 7/18
 !!Progress 8/18
 !!Progress 9/18
-Results file:  f:\work\HydraPlatform\HydraServer\python\HydraServer\ui\data\Models\3\_gams_py_gdb0.gdx
+Results file:  f:\work\HydraPlatform\HydraServer\python\HydraServer\ui\data\Models\4\_gams_py_gdb0.gdx
 !!Progress 10/18
 ========================>>>>>> <module 'gdxcc' from 'C:\GAMS\win64\24.7\apifiles\Python\api\gdxcc.pyc'>
 !!Progress 11/18
@@ -1105,8 +1105,8 @@ gdxvar.name:  ALPHA
 <plugin_result>
     <message>Run successfully</message>
     <plugin_name>GAMSAuto</plugin_name>
-    <network_id>3</network_id>
-    <scenario_id>3</scenario_id>
+    <network_id>4</network_id>
+    <scenario_id>4</scenario_id>
     <errors>
         
     </errors>
