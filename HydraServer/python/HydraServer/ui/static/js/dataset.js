@@ -1,4 +1,5 @@
 
+
 var defaultts =[
 ['Time', 'Value'],
 ['', '']
@@ -58,7 +59,7 @@ var updateInputs = function(element){
 
         $('.btn', $(this)).remove()
 
-        if (valueinput.hasClass('timeseries')){
+        if (valueinput.hasClass('hashtable')){
             valueinput.hide();
 
             $(this).append('<button class="btn btn-outline-primary btn-sm ts-edit" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-pencil"></span></button>')
@@ -193,7 +194,7 @@ var renderTimeseries = function(btn){
 
     var datasetcontainer = $(btn).closest('.dataset')
 
-    currentVal = $('input.timeseries', datasetcontainer)
+    currentVal = $('input.hashtable', datasetcontainer)
 
     var valuetext = currentVal.val()
 
@@ -204,6 +205,22 @@ var renderTimeseries = function(btn){
     }
     var container = document.getElementById("ts-edit-inner");
 
+    var columns = [
+        {
+            type: 'date',
+            dateFormat: 'YYYY-MM-DDTHH:MM:SSZ',
+            strict: false,
+            defaultDate: new Date().toISOString(),
+
+        }
+    ]
+    
+    //Add a column definition for each column
+    //ignoring the first column (time)
+    data[0].slice(1, data[0].length).forEach(function(d){
+        columns.push({})
+    })
+
     hot = new Handsontable(container, {
         data: data.slice(1, data.length), 
         rowHeaders: true,
@@ -211,15 +228,7 @@ var renderTimeseries = function(btn){
         contextMenu: true,
         stretchH: "all",
         contextMenuCopyPaste: true,
-        columns: [
-        {
-            type: 'date',
-            dateFormat: 'DD/MM/YYYY',
-            strict: false,
-            defaultDate: '01/01/16',
-        },
-        {},
-        ]
+        columns: columns,
     });
 
 
@@ -375,14 +384,22 @@ var tsToHot = function(valuetext){
     var idx = 1; //keeps track of the rows, which will be built up as we go thorugh the timeseries. starts at 1 because header is at row 0
     for (var col in ts){
         hot_data[0].push(col)
+        var i=1;
         for (var t in ts[col]){
             var v = ts[col][t]
+
+            try{
+                t = new Date(t).toISOString()
+            }catch(e){
+                console.log('Value is not an ISO date time')
+            }
 
             if (idx == 1){
                 hot_data.push([t, v])// Add time and value
             }else{
-                hot_data[idx].push(v)//No need for the time as it's already there.
+                hot_data[i].push(v)//No need for the time as it's already there.
             }
+            i++
             
         }
         idx++;
@@ -484,7 +501,12 @@ $(document).on('click', '.dataset .ts-graph', function(){
 
     var datasetcontainer = $(btn).closest('.dataset')
 
-    currentVal = $('input.timeseries', datasetcontainer)
+    currentVal = $('input.hashtable', datasetcontainer)
+
+    $("#current_ra").remove()
+    var current_ra = $("input[name='ra_id']", datasetcontainer).clone()
+    current_ra.attr('id', 'current_ra')
+    $('#ts-editor .ts_outer').prepend(current_ra)
 
     var valuetext = currentVal.val()
 
@@ -497,7 +519,7 @@ $(document).on('click', '.dataset .ts-graph', function(){
     var graph_data = data.slice(1, data.length)
     var attr_name  = $("input[name='attr_name']", datasetcontainer).val()
 
-    setTimeout(function(){draw_timeseries(graph_data, attr_name)}, 300)
+    setTimeout(function(){draw_timeseries({scenario_id:graph_data}, attr_name)}, 300)
 })
 
 
@@ -527,7 +549,28 @@ var insertModals = function(){
             hot.destroy()
         }
         $('.ts_inner').empty()
+
     })
+
+    $('#ts-editor').on('show.bs.modal', function (e) {
+        
+        $('.ts_inner').empty()
+
+        $("#scenario-comparison").selectpicker('destroy')
+        $("#scenario-comparison").remove()
+        var s = $("#scenario-picker").clone()
+        $('#ts-outer').prepend(s)
+        $('#ts-editor .ts_outer').prepend(s)
+        s.removeClass('selectpicker')
+        s.attr('id', 'scenario-comparison')
+        s.attr('multiple', 'multiple')
+        s.attr('data-selected-text-format', 'count')
+        s.attr('data-actions-box', 'true')
+        s.attr('data-live-search', 'true')
+        s.selectpicker()
+
+    })
+
     $('#md-editor').on('hidden.bs.modal', function (e) {
         $('.ts_inner').empty()
     })

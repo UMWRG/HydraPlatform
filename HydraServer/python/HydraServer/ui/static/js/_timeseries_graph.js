@@ -1,23 +1,81 @@
 
 function draw_timeseries(graph_data, attr_name){
+    //Draw a timeseries using plotly
+    //graph data is dict, keyed on scenario_id, where the value is a list of 
+    //key-value (time, value) pairs.
+    //A matching set of scenario ids must be supplied also
+    
     ts_container = document.getElementById('ts-edit-inner');
     Plotly.purge(ts_container);
-
-    var ts_x = []
-    var ts_y = []
-    graph_data.forEach(function(d) {
-      ts_x.push(d[0]);
-      ts_y.push(+d[1])
+    
+    var plot_data = [] 
+    var text = []
+    Object.keys(graph_data).forEach(function(s_id){
+        d = graph_data[s_id];
+        var tmp_x = [];
+        var tmp_y = [];
+        //t_v is time, value
+        d.forEach(function(t_v) {
+            tmp_x.push(t_v[0]);
+            tmp_y.push(t_v[1]);
+        });
+        plot_data.push({x:tmp_x, y:tmp_y, name: scenario_name_lookup[s_id]})
     });
 
     ts_container = document.getElementById('ts-edit-inner');
 
-    Plotly.plot( ts_container, [{
-        x: ts_x,
-        y: ts_y}], { 
-        margin: { t: 0 } } );
+    Plotly.plot( ts_container,
+                plot_data, 
+                { margin: { t: 0 } } );
 
 }
+
+function get_resource_scenarios(){
+    //Get the resource_attr_id & scenario_ids
+    
+    var scenario_ids = []
+    d3.selectAll('#scenario-comparison option:checked').each(function(){
+        var opt = d3.select(this)
+        var scenario_id = opt.property('value')
+        scenario_ids.push(scenario_id)
+    })
+
+    var success = function(resp){
+        
+        var new_data = resp
+        
+        hot_values = {}
+        Object.keys(new_data).forEach(function(s_id){
+            scen_data = tsToHot(new_data[s_id].dataset.value)
+            hot_values[s_id] = scen_data
+        })
+
+        draw_timeseries(hot_values)
+
+    }
+
+    var resource_attr_id = $('#current_ra').val()
+
+    var error = function(){
+       $('#ts-edit-outer').append('An error has occurred') 
+    }
+
+    var data = {'scenario_ids': scenario_ids, 'resource_attr_id': resource_attr_id}
+
+    $.ajax({
+        url: get_resource_scenarios_url,
+        type: 'POST',
+        dataType: 'json', 
+        data: JSON.stringify(data),
+        success: success,
+        error: error
+    })
+
+}
+
+$(document).on('change', "#scenario-comparison", function(e){
+    get_resource_scenarios();
+})
 
 function draw_simple_timeseries(graph_data, attr_name)
 

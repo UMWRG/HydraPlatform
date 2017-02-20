@@ -73,46 +73,6 @@ $(document).on('click', '#data .save-resource-data', function(){
 
 })
 
-function drawTimeseriesGraph(script, graph_data, attr_name, t_table) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false,           // <-- This is the key
-        success: function () {
-            draw_timeseries(graph_data, attr_name);
-        },
-            error: function ()
-            {
-                alert("Could not load script " + script);
-            }
-    });
-
-    if(cur_table!=null)
-        cur_table.hide();
-        cur_table=t_table;
-        cur_table.show();
-}
-
-function drawArrayGraph(script, graph_data, attr_name, t_table) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false,           // <-- This is the key
-        success: function () {
-            draw_timeseries(graph_data, attr_name);
-        },
-            error: function ()
-            {
-                alert("Could not load script " + script);
-            }
-    });
-
-if(cur_table!=null)
-    cur_table.hide();
-    cur_table=t_table;
-    cur_table.show();
-}
-
 $(document).on("click", ".resourcerow", function(){
   var res_details = $(this).attr('id').split('_');
   var res_type = res_details[0]
