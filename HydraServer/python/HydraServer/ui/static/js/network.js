@@ -446,6 +446,7 @@ var update_group_modal_inputs = function(){
     var group_id =   $("#group-id-input").val();
     $("#group-scenario-id-input").val(scenario_id);
     d3.select("#group-items-input option").remove()
+    d3.select("#group-type-input option").remove();
 
     var typeselect = d3.select("#group-type-input")
     var grptypes = type_lookup['GROUP']
@@ -461,9 +462,9 @@ var update_group_modal_inputs = function(){
               })
               .attr('disabled', function(d){
                 if (is_new == true){
-                  return 'disabled'
+                  return null 
                 }else{
-                  return false
+                  return 'disabled'
                 }
               })
 
@@ -481,12 +482,12 @@ var update_group_modal_inputs = function(){
                       .attr('value', function(d){return d.id})
                       .attr('selected', function(d){
                         if (is_new == true){
-                          return false
+                          return null 
                         }else{
                           var grpnodes = items['NODE']
                           for (var i=0; i<grpnodes.length; i++){
                             if (grpnodes[i].node_id == d.id){
-                              return true
+                              return 'selected'
                             }
                           }
                         }
@@ -502,12 +503,12 @@ var update_group_modal_inputs = function(){
                       .attr('value', function(d){return d.id})
                       .attr('selected', function(d){
                         if (is_new == true){
-                          return false
+                          return null
                         }else{
                           var grpnodes = items['LINK']
                           for (var i=0; i<grpnodes.length; i++){
                             if (grpnodes[i].link_id == d.id){
-                              return true
+                              return 'selected'
                             }
                           }
                         }
@@ -523,12 +524,12 @@ var update_group_modal_inputs = function(){
                       .attr('value', function(d){return d.id})
                       .attr('selected', function(d){
                         if (is_new == true){
-                          return false
+                          return null
                         }else{
                           var grpnodes = items['GROUP']
                           for (var i=0; i<grpnodes.length; i++){
                             if (grpnodes[i].group_id == d.id){
-                              return true
+                              return 'selected'
                             }
                           }
                         }
