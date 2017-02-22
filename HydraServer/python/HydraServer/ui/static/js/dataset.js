@@ -511,15 +511,14 @@ $(document).on('click', '.dataset .ts-graph', function(){
     var valuetext = currentVal.val()
 
     if (valuetext == ''){
-        data = defaultts;
+        data = '[]';
     }else{
-        data = tsToHot(valuetext)
+        data = valuetext;
     }
 
-    var graph_data = data.slice(1, data.length)
     var attr_name  = $("input[name='attr_name']", datasetcontainer).val()
-
-    setTimeout(function(){draw_timeseries({scenario_id:graph_data}, attr_name)}, 300)
+    var data_dict = {}
+    setTimeout(function(){draw_timeseries(data, attr_name)}, 300)
 })
 
 

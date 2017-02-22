@@ -116,4 +116,16 @@ def delete_resource_group_items(scenario_id, item_ids, user_id):
     hc.delete_resourcegroupitems(scenario_id, item_ids, user_id)
 
 def get_resource_scenario(resource_attr_id, scenario_id, user_id):
-    return  JSONObject(hc.get_resource_scenario(resource_attr_id, scenario_id, user_id))
+    rs = hc.get_resource_scenario(resource_attr_id, scenario_id, user_id)
+
+    jsonrs = JSONObject(rs)
+
+    #Hack to work with hashtables. REMOVE AFTER DEMO
+    if len(rs.dataset.metadata) > 0:
+        for m in rs.dataset.metadata:
+            if m.metadata_name == 'data_type' and m.metadata_val == 'hashtable':
+                df = pd.read_json(rs.dataset.value)
+                jsonrs.dataset.value = df.transpose().to_json() 
+                break
+
+    return jsonrs 

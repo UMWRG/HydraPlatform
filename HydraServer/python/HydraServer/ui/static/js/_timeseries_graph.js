@@ -1,33 +1,50 @@
 
-function draw_timeseries(graph_data, attr_name){
+function draw_timeseries(plot_data, attr_name){
     //Draw a timeseries using plotly
-    //graph data is dict, keyed on scenario_id, where the value is a list of 
-    //key-value (time, value) pairs.
-    //A matching set of scenario ids must be supplied also
-    
+    //
+    //Convert the value into a plotly-friendly format
+    if (typeof(plot_data)=='string'){
+        plot_data = tsToPlotly(plot_data)
+    }
+
     ts_container = document.getElementById('ts-edit-inner');
     Plotly.purge(ts_container);
     
-    var plot_data = [] 
-    var text = []
-    Object.keys(graph_data).forEach(function(s_id){
-        d = graph_data[s_id];
-        var tmp_x = [];
-        var tmp_y = [];
-        //t_v is time, value
-        d.forEach(function(t_v) {
-            tmp_x.push(t_v[0]);
-            tmp_y.push(t_v[1]);
-        });
-        plot_data.push({x:tmp_x, y:tmp_y, name: scenario_name_lookup[s_id]})
-    });
-
     ts_container = document.getElementById('ts-edit-inner');
 
     Plotly.plot( ts_container,
                 plot_data, 
-                { margin: { t: 0 } } );
+                { margin: { t: 20 } } );
 
+}
+
+var tsToPlotly = function(valuetext, s_id){
+    if (typeof(valuetext)=='string'){
+        var ts = JSON.parse(valuetext)
+    }else{
+        var ts = valuetext;
+    }
+    console.log('TS VAL')
+    console.log(ts)
+    //Use the current scenario if no scenario is explictly specified
+    if (s_id == undefined){
+       s_id = scenario_id;
+    }
+    plot_data = []
+    Object.keys(ts).forEach(function(colname){
+        var name = scenario_name_lookup[s_id]
+        if (colname != "0.0"){
+            name = name + ' ' + colname
+        }
+        var col = {x:[], y:[], name: name}
+        Object.keys(ts[colname]).forEach(function(time){
+            col['x'].push(time)
+            col['y'].push(ts[colname][time])
+        })
+        plot_data.push(col)
+    })
+
+    return plot_data 
 }
 
 function get_resource_scenarios(){
@@ -44,13 +61,13 @@ function get_resource_scenarios(){
         
         var new_data = resp
         
-        hot_values = {}
+        plot_values = []
         Object.keys(new_data).forEach(function(s_id){
-            scen_data = tsToHot(new_data[s_id].dataset.value)
-            hot_values[s_id] = scen_data
+            scen_data = tsToPlotly(new_data[s_id].dataset.value, s_id)
+            plot_values.push.apply(plot_values, scen_data)
         })
 
-        draw_timeseries(hot_values)
+        draw_timeseries(plot_values)
 
     }
 
