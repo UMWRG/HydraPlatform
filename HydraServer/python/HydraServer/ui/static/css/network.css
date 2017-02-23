@@ -6,20 +6,6 @@ html, body, .row{
     padding-top: 3px
 }
 
-#content{
-    position: absolute;
-    top: 50px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-}
-
-#footer{
-    position:absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-}
 .footer
 {
  border: none;

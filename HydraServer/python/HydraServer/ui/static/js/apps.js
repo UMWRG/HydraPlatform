@@ -23,6 +23,10 @@ $(document).ready( function() {
   });
 });
 
+$(document).on('show.bs.modal', '#importModal', function(){
+    $('#import_progressbar').hide();
+})
+
 $(document).on('click', '#runApp', function(e){
   e.preventDefault();
   run();
@@ -152,6 +156,7 @@ function import_csv(){
     $('#import_form')[0].reset();
     $("#runApp").prop("value", "Upload");
 
+    $("#import_progressbar").show()
     $("#import_progress_bar")
                   .css("width", 0 + "%")
                   .attr("aria-valuenow", 0)
@@ -174,6 +179,7 @@ function import_excel ()
 
     $('#import_form')[0].reset();
     $("#runApp").prop("value", "Upload");
+    $("#import_progressbar").show()
     $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -196,6 +202,7 @@ function import_pywr ()
     $("#runApp").prop("value", "Upload");
 
     $('#import_form')[0].reset();
+    $("#import_progressbar").show()
     $("#import_progress_bar")
                           .css("width", 0 + "%")
                           .attr("aria-valuenow", 0)
@@ -210,12 +217,13 @@ function import_pywr ()
 }
 
 function runPywrApp (){
+    $("#import_progressbar").show()
     $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
                       .text(0 + "%");
    $(status_pan).hide();
-   $("#runApp").hide();
+    $("#runApp").prop("value", "Run");
    $("#browse_div").hide();
    $("#help_message").show();
    $(_message).text("");
@@ -225,14 +233,13 @@ function runPywrApp (){
    $ ("#import_title").text("Run Pywr App");
    //$ ("#import_title").hide();
    $("#importModal" ).modal('show')
-   run();
 }
 
 function runGamsModel(){
     $("#browse_div").show();
-    $("#runApp").show();
     $("#runApp").prop("value", "Run");
     $('#import_form')[0].reset();
+    $("#import_progressbar").show()
     $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -242,7 +249,7 @@ function runGamsModel(){
    $(_message).text("");
    //$('input:file[name="import_file"]').attr('name', 'run_model');
    cur_name='run_gams_model';
-   $("#help_").text("Please upload the file which contains the GAMS code");
+   $("#help_").text("Please select the model file.");
    $ ("#import_title").text("Run GAMS model");
    $( "#importModal" ).modal('show')
 }
@@ -257,6 +264,7 @@ function cancel_app(){
 function export_csv()
 {
 
+ $("#import_progressbar").show()
  $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -277,6 +285,8 @@ function export_csv()
 
 function export_excel()
 {
+
+ $("#import_progressbar").show()
  $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
@@ -297,6 +307,7 @@ function export_excel()
 
 function export_pywr()
 {
+ $("#import_progressbar").show()
  $("#import_progress_bar")
                       .css("width", 0 + "%")
                       .attr("aria-valuenow", 0)
