@@ -200,5 +200,19 @@ text {
 
 
 .networkoptions{
-    padding: 00px 20px 0px 100px;
+    padding: 00px 20px 0px 10px;
+}
+
+.svg-buttons{
+    display: block;
+    width: 35px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.force-layout{
+    position:relative;
+    display: block;
+    margin-top: 10px;
+    margin-left: 10px;
 }
