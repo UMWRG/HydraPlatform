@@ -276,5 +276,108 @@ var zoom = function(){
 }
 
 svg.call(d3.zoom()
-        .scaleExtent([0.1,8])
+       .scaleExtent([0.1,8])
         .on("zoom", zoom));
+
+
+var create_force_layout = function(){
+    d3.select('#create-force-layout .fa-spinner').classed('hidden', false)
+    d3.select('#create-force-layout .fa-bomb').classed('hidden', true)
+    
+    //Add force layout properties to the force simulation
+    force.force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    force.nodes(nodes_).on('tick', forcetick)
+    force.on('end', show_force_save)
+
+    svg.call(d3.zoom()
+       .scaleExtent([0.1,8])
+        .on("zoom", forcezoom));
+
+    force.restart();
+
+}
+
+var show_force_save = function(){
+    d3.select('#create-force-layout .fa-spinner').classed('hidden', true)
+    d3.select('#create-force-layout .fa-bomb').classed('hidden', false)
+
+    d3.select('#save-force-layout').classed('hidden', false)
+    d3.select('#create-force-layout').classed('hidden', true)
+    
+    
+}
+
+var show_force_create = function(){
+    d3.select('#save-force-layout').classed('hidden', true) 
+    d3.select('#create-force-layout').classed('hidden', false)
+}
+
+var create_static_layout = function(){
+
+    //`ransform functions, used to convert the Hydra coordinates
+    //to coodrinates on the d3 svg
+    yScale = d3.scaleLinear()
+                           .domain([height, 0 ])
+                           .range([height,0]);
+    xScale = d3.scaleLinear()
+                          .domain([0, width])
+                          .range([0,width]);
+
+    //Add force layout properties to the force simulation
+    force.force("charge", null)
+        .force("center", null);
+
+
+
+    force.nodes(nodes_).on('tick', tick)
+
+    svg.call(d3.zoom()
+       .scaleExtent([0.1,8])
+        .on("zoom", zoom));
+
+    force.on('end', show_force_create)
+
+    force.restart();
+    
+
+}
+
+function forcetick() {
+
+        link
+        .attr('x1', function (d) { return d.source.x; })
+        .attr('y1', function (d) { return d.source.y; })
+        .attr('x2', function (d) { return d.target.x; })
+        .attr('y2', function (d) { return d.target.y; })
+
+        node.attr("transform", function(d){
+            return "translate(" + d.x + "," + d.y + ")";
+        });
+
+        text.attr("transform", function (d) {
+                return "translate(" + d.x+14 + "," + d.y + ")";
+            });
+  }
+
+//Need a different zoom function for force layout because there's no scales
+//required, as there are no x,y coordinates 
+var forcezoom = function(){
+
+    var transform = d3.event.transform
+
+    link
+        .attr('x1', function (d) { return transform.applyX(d.source.x); })
+        .attr('y1', function (d) { return transform.applyY(d.source.y); })
+        .attr('x2', function (d) { return transform.applyX(d.target.x); })
+        .attr('y2', function (d) { return transform.applyY(d.target.y); })
+
+    node.attr("transform", function(d){
+        return "translate(" + transform.applyX(d.x) + "," + transform.applyY(d.y) + ")";
+
+    });
+}
+
+d3.select('#create-force-layout').on('click', create_force_layout)
+d3.select('#save-force-layout').on('click', create_static_layout)
