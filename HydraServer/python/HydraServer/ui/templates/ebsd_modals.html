@@ -1,0 +1,33 @@
+
+<div class="modal fade" tabindex="-1" role="dialog" id="load-ebsd-data-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Load WRZ Data</h4>
+      </div>
+      <div class="modal-body">
+         <form id="load-ebsd-data-form" action="load_ebsd_data" method="POST" enctype="multipart/form-data" >
+            <input class="scenario-id-input" name="scenario_id" value="" type="hidden"></input>
+            <table class="table">
+                <tr>
+                    <td>
+                        <label>Select DO file</label>
+                    </td>
+                    <td>
+                        <input name="data_file" type='file'></input>
+                    </td>
+                </tr>
+            </table>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-ebsd-data-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="load-ebsd-data-button" class="btn btn-success">
+            <i class="fa fa-spinner fa-spin hidden"></i>
+            Upload
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

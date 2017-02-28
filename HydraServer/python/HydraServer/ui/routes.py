@@ -21,9 +21,6 @@ basefolder = os.path.dirname(__file__)
 
 from HydraServer.lib.objects import JSONObject, ResourceScenario
 
-import logging
-log = logging.getLogger(__name__)
-
 from code.app_utilities import delete_files_from_folder, create_zip_file
 
 import code.project_utilities as projutils
@@ -45,11 +42,12 @@ from HydraServer.db import commit_transaction, rollback_transaction
 global DATA_FOLDER
 DATA_FOLDER = 'python/HydraServer/ui/data'
 
-UPLOAD_FOLDER = 'uploaded_files'
+UPLOAD_FOLDER = os.path.realpath(os.path.join(DATA_FOLDER, 'uploaded_files'))
 TEMPLATE_FOLDER = 'hydra_templates'
 ALLOWED_EXTENSIONS = set(['zip'])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['TEMPLATE_FOLDER'] = TEMPLATE_FOLDER
+app.config['DATA_FOLDER'] = DATA_FOLDER
 
 
 # 'server/'
@@ -365,7 +363,7 @@ def do_share_project():
 
     user_id = session['user_id']
     d = json.loads(request.get_data())
-    log.info('Project sharing details: %s'%d)
+    app.logger.info('Project sharing details: %s'%d)
 
     read_only = 'Y'
     if d.get('allow-edit') is not None:
@@ -390,7 +388,7 @@ def do_share_network():
 
     user_id = session['user_id']
     d = json.loads(request.get_data())
-    log.info('network sharing details: %s'%d)
+    app.logger.info('network sharing details: %s'%d)
 
     read_only = 'Y'
     if d.get('allow-edit') is not None:
@@ -726,14 +724,14 @@ def do_update_resource_data():
 
     d = json.loads(request.get_data())
 
-    log.info(d)
+    app.logger.info(d)
 
     if len(d) == 0:
         return 'OK'
 
     rs_list = [ResourceScenario(rs) for rs in d['rs_list']]
 
-    log.info(rs_list)
+    app.logger.info(rs_list)
 
     scenarioutils.update_resource_data(d['scenario_id'], rs_list, user_id)
 
@@ -794,7 +792,7 @@ def run_pywr_app(network_id, scenario_id):
 
     exe="python " + exe
     args = {'t': network_id, 's': scenario_id}
-    log.info("Running Pywr App at %s with args %s", exe, args)
+    app.logger.info("Running Pywr App at %s with args %s", exe, args)
     pid=run_app(exe, args, False)
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
@@ -884,7 +882,7 @@ def import_uploader():
     else:
         pid=type+ ' is not recognized.'
 
-    log.info("PID: ", pid)
+    app.logger.info("PID: ", pid)
     try:
         int (pid)
         return jsonify({}), 202, {'Address': url_for('appstatus',
@@ -896,7 +894,7 @@ def import_uploader():
 def import_app(network_id, scenario_id, app_name):
     basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
     directory = os.path.join(basefolder, 'temp')
-    log.info("ex_pywr: ", basefolder)
+    app.logger.info("ex_pywr: ", basefolder)
     delete_files_from_folder(directory)
     result=None
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
@@ -910,8 +908,8 @@ def import_app(network_id, scenario_id, app_name):
         return "application not recognized : "+app_name
     try:
         int(result)
-        log.info("URL: ", url_for('appstatus',task_id=result))
-        log.info( "result ", result)
+        app.logger.info("URL: ", url_for('appstatus',task_id=result))
+        app.logger.info( "result ", result)
         return jsonify({}), 202, {'Address': url_for('appstatus',
                                                      task_id=result), 'directory':directory}
     except:
@@ -920,7 +918,7 @@ def import_app(network_id, scenario_id, app_name):
 
 @app.route('/send_zip_files',  methods=['GET', 'POST'])
 def send_zip_files():
-        log.info("======>> Send method called ....", request.form)
+        app.logger.info("======>> Send method called ....", request.form)
 
         pars = json.loads(Markup(request.args.get('pars')).unescape())
 
@@ -936,8 +934,8 @@ def send_zip_files():
 def go_export_network(network_id, scenario_id, directory):
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
     create_zip_file(directory, zip_file_name)
-    log.info('Zip file name: %s', zip_file_name)
-    log.info('Directory: %s', directory)
+    app.logger.info('Zip file name: %s', zip_file_name)
+    app.logger.info('Directory: %s', directory)
 
     if not os.path.exists(zip_file_name):
         return "An error occurred!!!"
@@ -948,7 +946,7 @@ def go_export_network(network_id, scenario_id, directory):
 def do_clone_scenario():
     pars= json.loads(request.get_data())
     scenario_id   = pars['scenario_id']
-    log.info("Cloning scenario %s", scenario_id)
+    app.logger.info("Cloning scenario %s", scenario_id)
     scenario_name = pars['scenario_name']
     user_id       = session['user_id']
 
@@ -975,7 +973,7 @@ def do_get_resource_scenario():
     pars= json.loads(request.get_data())
     scenario_id   = pars['scenario_id']
     resource_attr_id = pars['resource_attr_id']
-    log.info("Fetching resource scenario %s %s",resource_attr_id, scenario_id)
+    app.logger.info("Fetching resource scenario %s %s",resource_attr_id, scenario_id)
     user_id       = session['user_id']
    
     rs = scenarioutils.get_resource_scenario(resource_attr_id, scenario_id, user_id)
@@ -987,7 +985,7 @@ def do_get_resource_scenarios():
     pars= json.loads(request.get_data())
     scenario_ids   = pars['scenario_ids']
     resource_attr_id = int(pars['resource_attr_id'])
-    log.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
+    app.logger.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
     user_id       = session['user_id']
     
     return_rs = {}
@@ -998,7 +996,7 @@ def do_get_resource_scenarios():
         except ResourceNotFoundError, e:
             log.warn("resource scenario for %s not found in scenario %s"%(resource_attr_id, scenario_id))
 
-    log.info('%s resource scenarios retrieved', len(return_rs))
+    app.logger.info('%s resource scenarios retrieved', len(return_rs))
 
     return json.dumps(return_rs)
 

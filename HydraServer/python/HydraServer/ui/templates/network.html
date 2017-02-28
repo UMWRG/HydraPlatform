@@ -73,6 +73,7 @@
     var delete_resource_url="{{url_for('do_delete_resource')}}";
     var clone_scenario_url="{{url_for('do_clone_scenario')}}";
     var get_resource_scenarios_url="{{url_for('do_get_resource_scenarios')}}";
+    var upload_ebsd_data_url="{{url_for('do_upload_ebsd_data')}}";
 
       </script>
 
@@ -185,6 +186,9 @@
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
 <script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
+
+
+<script src="{{url_for('static', filename='js/ebsd.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/d3-context-menu.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>

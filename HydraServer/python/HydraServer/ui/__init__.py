@@ -55,6 +55,7 @@ admin.add_view(ModelView(model.RoleUser, db_session))
 
 app.debug = True
 from routes import * 
+from ebsd   import *
 
 if __name__ == "__main__":
 
