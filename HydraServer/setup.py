@@ -34,6 +34,7 @@ install_requires=[
     "spyne >= 2.12",
     "cherrypy",
     "python-dateutil",
+    "requests"
     ]
 
 if platform.system() == "Windows":  # only add winpaths when platform is Windows so that setup.py is universal
@@ -62,5 +63,6 @@ setup(
                     'eggsecutable = server:run',
                 ]
     },
-    zip_safe=False
+    zip_safe=False,
+    dependency_links=['http://cdn.mysql.com/Downloads/Connector-Python/mysql-connector-python-2.1.4.zip'],
 )
