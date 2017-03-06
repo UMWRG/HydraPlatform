@@ -29,7 +29,12 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
         if len(rs.dataset.metadata) > 0:
             for m in rs.dataset.metadata:
                 if m.metadata_name == 'data_type' and m.metadata_val == 'hashtable':
-                    df = pd.read_json(rs.dataset.value)
+                    #MORE HACK because of badly formatted output from the gams app. GRR!
+                    val = rs.dataset.value
+                    val = val.replace('\\', '')
+                    val = val.replace('"{', '{')
+                    val = val.replace('}"', '}')
+                    df = pd.read_json(val)
                     res_scenarios[attr_id].dataset.value = df.transpose().to_json() 
                     break
 
@@ -59,8 +64,7 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                 if tattr.default_dataset_id is not None:
                     d = tattr.default_dataset
                     #Hack to work with hashtables. REMOVE AFTER DEMO
-                    if d.metadata.get('data_type') == 'hashtable':
-                        d.value = d.value.replace("\'", "")
+                    if d.metadata.get('data_type') == 'hashtable' or d.metadata.get('data_type') == 'seasonal_hashtable':
                         df = pd.read_json(d.value)
                         d.value = df.transpose().to_json() 
                     res_scenarios[tattr.attr_id].dataset = d
