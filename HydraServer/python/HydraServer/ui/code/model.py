@@ -38,7 +38,7 @@ class JSONObject(dict):
             elif isinstance(v, list):
                 #another special case for datasets
                 if k == 'metadata':
-                    setattr(self, k, JSONObject(obj_dict.get_metadata_as_dict()))
+                    setattr(self, k, JSONObject(get_metadata_as_dict(v)))
                 else:
                     l = [JSONObject(item, obj_dict) for item in v]
                     setattr(self, k, l)
@@ -96,3 +96,9 @@ class JSONObject(dict):
             return str(self.properties)
         else:
             return None
+
+def get_metadata_as_dict(metadata):
+    m = {}
+    for db_m in metadata:
+        m[db_m.metadata_name] = db_m.metadata_val
+    return m
