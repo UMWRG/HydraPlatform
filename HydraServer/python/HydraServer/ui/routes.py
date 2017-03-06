@@ -21,7 +21,7 @@ basefolder = os.path.dirname(__file__)
 
 from HydraServer.lib.objects import JSONObject, ResourceScenario
 
-from code.app_utilities import delete_files_from_folder, create_zip_file
+from code.app_utilities import delete_files_from_folder, create_zip_file, get_apps_properties
 
 import code.project_utilities as projutils
 import code.network_utilities as netutils
@@ -759,11 +759,15 @@ def get_model_file (network_id, model_file):
     else:
         return None
 
-
-def get_pp_exe(app):
-    if app.lower()=='gams':
-        return os.path.join(basefolder, 'Apps', 'GAMSApp','GAMSAutoRun.exe' )
-    elif app.lower() == 'pywr':
+def get_pp_exe(app_):
+    if app_.lower()=='gams':
+        app= get_apps_properties("GAMSAuto")
+        if app != None:
+            if app['command'].lower().strip()=='exe':
+                return os.path.join(app['location'], app['main'])
+            else:
+                return app['command']+" "+os.path.join(app['location'], app['main'])
+    elif app_.lower() == 'pywr':
         return os.path.join(basefolder, 'Apps', 'Pywr_App', 'PywrAuto',  'PywrAuto.py')
 
 
@@ -780,7 +784,7 @@ def run_gams_app(network_id, scenario_id, model_file=None):
     if(model_file ==None):
         return jsonify({}), 202, {'Error': 'Model file is not available, please upload one'}
     args = get_app_args (network_id, scenario_id, model_file)
-    pid=run_app(exe, args)
+    pid=run_app(exe, args, False)
     return jsonify({}), 202, {'Address': url_for('appstatus',
                                                   task_id=pid)}
 

@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 import zipfile
+import json
 
 
 def delete_files_from_folder(path_,maxdepth=12):
@@ -113,3 +114,17 @@ def get_progress_from_output(output):
                 status='Running'
                 break
     return  status, progress, total
+	
+def get_apps_properties(app_name):
+    f = open(os.path.dirname(os.path.realpath(__file__))+"\\apps.json", 'r')
+    json_string = ""
+    while 1:
+        line = f.readline()
+        if not line: break
+        json_string += line
+    f.close()
+    apps = json.loads(json_string)
+    for app_ in apps:
+        if app_['name']==app_name:
+            return app_
+    return None
