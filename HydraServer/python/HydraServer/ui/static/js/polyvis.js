@@ -4,6 +4,6 @@ $(document).on('click', '.polyvis', function(e){
     
     var dataset_id = $("input[name='dataset_id']", container).val()
 
-    $window.open("/export_to_polyvis?dataset_id="+dataset_id,  '_blank')
+    window.open("/export_to_polyvis?dataset_id="+dataset_id,  '_blank')
 
 })
