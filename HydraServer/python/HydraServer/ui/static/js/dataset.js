@@ -69,6 +69,10 @@ var updateInputs = function(element){
             }else{
                 $(this).append('<button class="btn btn-outline-primary btn-sm ts-graph" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-area-chart"></span></button>')
             }
+
+            if (valueinput.hasClass('multiresult')){
+                $(this).append('<button class="btn btn-outline-primary btn-sm polyvis"><img src="'+img_url+'/Polyvis_16.png"></img></button>')
+            }
         }else if (valueinput.hasClass('array')){
             valueinput.hide();
             $(this).append('<button class="btn btn-outline-primary btn-sm array-edit" data-toggle="modal" data-target="#array-editor"><span class="fa fa-pencil"></span></button>')

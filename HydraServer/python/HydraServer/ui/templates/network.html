@@ -20,6 +20,8 @@
         var projection_crs = {{network.projection_crs|safe}}
     {%endif%}
 
+    var img_url = "{{url_for('static', filename='img/') }}"
+
     function get_name(id)
     {
     value='None'
@@ -185,6 +187,8 @@
 <script src="{{url_for('static', filename='js/moment.js')}}"></script>
 <script src="{{url_for('static', filename='js/dataset.js')}}"></script>
 <script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
+
+<script src="{{url_for('static', filename='js/polyvis.js')}}"></script>
 
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/d3-context-menu.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
