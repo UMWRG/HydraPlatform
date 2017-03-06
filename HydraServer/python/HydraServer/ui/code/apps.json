@@ -1,0 +1,4 @@
+[
+{"name": "GAMSAuto", "main": "GAMSAutoRun.py", "command":"python", "location":"F:\\work\\Apps\\GAMSApp\\Auto"},
+{"name": "Excel", "main": "", "command":"exe", "location":""}
+]
