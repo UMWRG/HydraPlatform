@@ -39,13 +39,13 @@ def create_zip_file(path, zip_file_name):
         for root, directories, files in files_directories_list:
             for directory in directories:
                 real_path = os.path.join(root, directory)
-                zip_path = real_path.replace(base_directory + '\\','')
+                zip_path = real_path.replace(base_directory + os.sep,'')
                 zip_file.write(real_path, zip_path)
             for file_name in files:
                 if file_name==os.path.basename(zip_file_name):
                     continue
                 real_path = os.path.join(root, file_name)
-                zip_path = real_path.replace(base_directory + '\\','')
+                zip_path = real_path.replace(base_directory + os.sep,'')
                 zip_file.write(real_path, zip_path)
     except Exception as e:
         print e
@@ -116,7 +116,7 @@ def get_progress_from_output(output):
     return  status, progress, total
 	
 def get_apps_properties(app_name):
-    f = open(os.path.dirname(os.path.realpath(__file__))+"\\apps.json", 'r')
+    f = open(os.path.dirname(os.path.realpath(__file__))+ os.sep + "apps.json", 'r')
     json_string = ""
     while 1:
         line = f.readline()
