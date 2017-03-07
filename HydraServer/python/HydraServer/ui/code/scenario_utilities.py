@@ -5,6 +5,7 @@ from HydraServer.lib.objects import JSONObject
 from network_utilities import get_resource
 import pandas as pd
 import logging
+import json
 log = logging.getLogger(__name__)
 
 def get_scenario (scenario_id, user_id):
@@ -30,11 +31,18 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
             for m in rs.dataset.metadata:
                 if m.metadata_name == 'data_type' and m.metadata_val == 'hashtable':
                     #MORE HACK because of badly formatted output from the gams app. GRR!
-                    val = rs.dataset.value
-                    val = val.replace('\\', '')
-                    val = val.replace('"{', '{')
-                    val = val.replace('}"', '}')
-                    df = pd.read_json(val)
+                    
+                    try:
+                        val = rs.dataset.value
+                        df = pd.read_json(val)
+                    except:
+                        try:
+                            #As a backup, let's try see if it's a flat dict. 
+                            val_dict = eval(rs.dataset.value)
+                            df = pd.read_json(json.dumps({0:val_dict})).transpose()
+                        except:
+                            raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
+
                     res_scenarios[attr_id].dataset.value = df.transpose().to_json() 
                     break
 
