@@ -407,6 +407,7 @@ function delete_resource(d)
        data : JSON.stringify(nodedata),
        success: success,
        error: error,
+       async: false,
     })
 
     }
@@ -436,6 +437,7 @@ function update_node(node_id, name, x, y)
        data : JSON.stringify(nodedata),
        success: success,
        error: error,
+       async: false,
     })
 
     return node_id;
