@@ -18,7 +18,7 @@ if (min_y == max_y){
 //`ransform functions, used to convert the Hydra coordinates
 //to coodrinates on the d3 svg
 var yScale = d3.scaleLinear()
-                       .domain([min_y, max_y ])
+                       .domain([max_y, min_y ])
                        .range([height,0]);
 var xScale = d3.scaleLinear()
                       .domain([min_x, max_x])
@@ -276,7 +276,7 @@ var zoom = function(){
 }
 
 svg.call(d3.zoom()
-       .scaleExtent([0.1,8])
+       .scaleExtent([0.01,100])
         .on("zoom", zoom));
 
 
@@ -316,20 +316,22 @@ var show_force_create = function(){
 
 var create_static_layout = function(){
 
+
+    d3.select('#save-force-layout .fa-spinner').classed('hidden', false)
+    d3.select('#save-force-layout .fa-save').classed('hidden', true)
+
     //`ransform functions, used to convert the Hydra coordinates
     //to coodrinates on the d3 svg
-    yScale = d3.scaleLinear()
-                           .domain([height, 0 ])
-                           .range([height,0]);
-    xScale = d3.scaleLinear()
-                          .domain([0, width])
-                          .range([0,width]);
+    //yScale = d3.scaleLinear()
+    //                       .domain([height, 0 ])
+    //                       .range([height,0]);
+    //xScale = d3.scaleLinear()
+    //                      .domain([0, width])
+    //                      .range([0,width]);
 
     //Add force layout properties to the force simulation
     force.force("charge", null)
         .force("center", null);
-
-
 
     force.nodes(nodes_).on('tick', tick)
 
@@ -337,10 +339,18 @@ var create_static_layout = function(){
        .scaleExtent([0.1,8])
         .on("zoom", zoom));
 
-    force.on('end', show_force_create)
-
     force.restart();
-    
+
+
+    for (var i=0; i<nodes_.length; i++){
+        var n = nodes_[i]
+        update_node(n.id, n.name, n.x, n.y)
+    }
+        
+    d3.select('#save-force-layout .fa-spinner').classed('hidden', true)
+    d3.select('#save-force-layout .fa-save').classed('hidden', false)
+
+    show_force_create()
 
 }
 
