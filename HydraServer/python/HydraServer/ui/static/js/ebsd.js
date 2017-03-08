@@ -1,3 +1,5 @@
+var current_solution = null;
+
 $(document).on('show.bs.modal', '#load-ebsd-data-modal', function(){
     $('#load-ebsd-data-modal input[name=scenario_id]').val(scenario_id);
     $('#load-ebsd-data-modal .alert').remove()
@@ -40,3 +42,76 @@ $(document).on('click', '#load-ebsd-data-button', function(){
     
 
 })
+
+/*Look for the 'COST' attribute on the network and use it to find
+* the solution names, and their respective costs*/
+function update_solution_select()
+{
+    $( "#solution-select" ).empty();
+
+    var error = function(resp) {
+       // alert('Unexpected error');
+    }
+
+    var success = function(data, status, request) {
+        var resp = JSON.parse(data)
+        var rs_list = resp.resourcescenarios
+        var attr_map = resp.attr_id_name_map
+        
+        for (var attr_id in rs_list){
+            if (attr_map[attr_id] == 'COST'){
+                var costval = JSON.parse(rs_list[attr_id].dataset.value)
+                var costs = costval[0]
+                var soln_names = Object.keys(costs)
+                var solns = []
+                for (var i=0; i<soln_names.length; i++){
+                    //Set a default of the first (optimal) solution
+                    if (i == 0){current_solution=soln_names[i]}
+
+                    solns.push({'name': soln_names[i], 'cost':costs[i]})
+                }
+                var s = d3.select('#solution-select') 
+                s.selectAll('option').data(solns)
+                .enter()
+                .append('option')
+                .attr('value', function(d, i){
+                  return d.name
+                })
+                .text(function(d, i){
+                    return d.name + " (" + d.cost.toFixed(2) + ")"
+                })
+                break
+            }
+        }
+
+        $('#solution-select').selectpicker('refresh')
+        
+    }
+
+    var pars=
+    {
+        network_id: network_id,
+        scenario_id: scenario_id,
+        res_id: network_id,
+        resource_type:'NETWORK',
+        raw : 'Y',
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: get_resource_data_url,
+        data:  JSON.stringify(pars),
+        success: success,
+        error:error,
+    });
+
+}
+
+$(document).ready(update_solution_select)
+
+
+$(document).on('change', '#solution-select', function(){
+    current_solution = $(this).val();
+})
+
+

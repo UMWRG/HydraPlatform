@@ -28,23 +28,9 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
 
         #Hack to work with hashtables. REMOVE AFTER DEMO
         if len(rs.dataset.metadata) > 0:
-            for m in rs.dataset.metadata:
-                if m.metadata_name == 'data_type' and m.metadata_val == 'hashtable':
-                    #MORE HACK because of badly formatted output from the gams app. GRR!
-                    
-                    try:
-                        val = rs.dataset.value
-                        df = pd.read_json(val)
-                    except:
-                        try:
-                            #As a backup, let's try see if it's a flat dict. 
-                            val_dict = eval(rs.dataset.value)
-                            df = pd.read_json(json.dumps({0:val_dict})).transpose()
-                        except:
-                            raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
-
-                    res_scenarios[attr_id].dataset.value = df.transpose().to_json() 
-                    break
+            m = rs.dataset.get_metadata_as_dict()
+            v = res_scenarios[attr_id].dataset.value 
+            res_scenarios[attr_id].dataset.value = _transform_value(v, m)
 
     resource = get_resource(resource_type, res_id, user_id)
 
@@ -72,9 +58,7 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                 if tattr.default_dataset_id is not None:
                     d = tattr.default_dataset
                     #Hack to work with hashtables. REMOVE AFTER DEMO
-                    if d.metadata.get('data_type') == 'hashtable' or d.metadata.get('data_type') == 'seasonal_hashtable':
-                        df = pd.read_json(d.value)
-                        d.value = df.transpose().to_json() 
+                    d.value = _transform_value(d.value, d.metadata)
                     res_scenarios[tattr.attr_id].dataset = d
 
             else:
@@ -131,13 +115,40 @@ def get_resource_scenario(resource_attr_id, scenario_id, user_id):
     rs = hc.get_resource_scenario(resource_attr_id, scenario_id, user_id)
 
     jsonrs = JSONObject(rs)
-
+    
     #Hack to work with hashtables. REMOVE AFTER DEMO
     if len(rs.dataset.metadata) > 0:
-        for m in rs.dataset.metadata:
-            if m.metadata_name == 'data_type' and m.metadata_val == 'hashtable':
-                df = pd.read_json(rs.dataset.value)
-                jsonrs.dataset.value = df.transpose().to_json() 
-                break
+        m = rs.dataset.get_metadata_as_dict()
+        jsonrs.dataset.value = _transform_value(jsonrs.dataset.value, m)
 
     return jsonrs 
+
+def _transform_value(value, metadata):
+    if metadata.get('data_type') == 'hashtable' and metadata.get('sol_type') == None:
+        try:
+            df = pd.read_json(value)
+            return df.transpose().to_json() 
+        except:
+            raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
+    elif metadata.get('sol_type') == 'MGA':
+        try:
+
+            val = json.loads(value)
+            
+            transposed_dict = {}
+            for solname, soldata in val.items():
+                df = pd.read_json(json.dumps(soldata))
+                new_df = df.transpose().to_json()
+                transposed_dict[solname] = json.loads(new_df)
+            
+            return json.dumps(transposed_dict) 
+        except:
+            try:
+                #As a backup, let's try see if it's a flat dict. 
+                val_dict = eval(value)
+                df = pd.read_json(json.dumps({0:val_dict}))
+                return df.to_json() 
+            except:
+                raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
+    else:
+        return value

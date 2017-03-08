@@ -63,7 +63,13 @@ function get_resource_scenarios(){
         
         plot_values = []
         Object.keys(new_data).forEach(function(s_id){
-            scen_data = tsToPlotly(new_data[s_id].dataset.value, s_id)
+            var dataset = new_data[s_id].dataset
+            if (dataset.metadata != undefined && dataset.metadata.sol_type=='MGA'){
+                var tmp_val = JSON.parse(dataset.value)[current_solution]
+                scen_data = tsToPlotly(tmp_val, s_id)
+            }else{
+                scen_data = tsToPlotly(dataset.value, s_id)
+            }
             plot_values.push.apply(plot_values, scen_data)
         })
 

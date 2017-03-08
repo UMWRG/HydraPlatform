@@ -87,7 +87,12 @@ function get_resource_data(res_type, d)
     $("#timeseries_g" ).empty();
 
     var error = function(resp) {
-        alert('Unexpected error');
+        if (resp.Error != undefined){
+            err_msg = "<div class='alert alert-danger'>An error has occurred: "+r.Error+"</div>" 
+        }else{
+            err_msg = "<div class='alert alert-danger'>An error has occurred.</div>"
+        }
+        $('#data').html(err_msg)
     }
 
     var success = function(data, status, request) {

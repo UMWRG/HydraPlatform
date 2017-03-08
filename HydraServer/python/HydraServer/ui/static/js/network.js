@@ -1,5 +1,4 @@
 
-
 $('#data').draggable()
 nodetable = null
 linktable = null

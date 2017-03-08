@@ -698,6 +698,10 @@ def do_get_resource_data():
     resource_id= pars['res_id']
     resource_type=pars['resource_type']
 
+    ##This flag indicates that just the RSs should be returned as json rather
+    ##than the rendered attributes html
+    raw = pars.get('raw', 'N')
+
     app.logger.info("Getting resource attributes for: %s", str(pars))
     resource, resource_scenarios=scenarioutils.get_resource_data(network_id,
                                                   scenario_id,
@@ -707,8 +711,11 @@ def do_get_resource_data():
 
     attr_id_name_map = netutils.get_attr_id_name_map()
 
-
-    return render_template('attributes.html',
+    if raw.lower() == 'y':
+        json_resp = json.dumps({'resourcescenarios':resource_scenarios, 'attr_id_name_map': attr_id_name_map})
+        return json_resp
+    else:
+        return render_template('attributes.html',
                            attr_id_name_map=attr_id_name_map,
                            resource_scenarios=resource_scenarios.values(),
                            resource=resource,
