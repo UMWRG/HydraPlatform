@@ -46,8 +46,14 @@ function get_resource_scenarios(){
         
         hot_values = {}
         Object.keys(new_data).forEach(function(s_id){
-            scen_data = tsToHot(new_data[s_id].dataset.value)
-            hot_values[s_id] = scen_data
+            var dataset = new_data[s_id].dataset
+            if (dataset.metadata != undefined && dataset.metadata.sol_type=='MGA'){
+                var tmp_val = JSON.parse(dataset.value)[current_solution]
+                scen_data = tsToPlotly(tmp_val, s_id)
+            }else{
+                scen_data = tsToPlotly(dataset.value, s_id)
+            }
+            plot_values.push.apply(plot_values, scen_data)
         })
 
         draw_timeseries(hot_values)

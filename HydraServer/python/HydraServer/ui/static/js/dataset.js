@@ -202,6 +202,17 @@ var renderTimeseries = function(btn){
 
     var valuetext = currentVal.val()
 
+    metadata = $("input[name='metadata']", datasetcontainer)
+
+    var m = JSON.parse(metadata.val())
+    if (m.sol_type == 'MGA'){
+        if (current_solution != null && current_solution != undefined){
+            var tmp_val = JSON.parse(valuetext)[current_solution]
+            valuetext = JSON.stringify(tmp_val)
+        }
+    }
+    
+
     if (valuetext == ''){
         data = defaultts;
     }else{
@@ -513,6 +524,16 @@ $(document).on('click', '.dataset .ts-graph', function(){
     $('#ts-editor .ts_outer').prepend(current_ra)
 
     var valuetext = currentVal.val()
+
+    metadata = $("input[name='metadata']", datasetcontainer)
+
+    var m = JSON.parse(metadata.val())
+    if (m.sol_type == 'MGA'){
+        if (current_solution != null && current_solution != undefined){
+            var tmp_val = JSON.parse(valuetext)[current_solution]
+            valuetext = JSON.stringify(tmp_val)
+        }
+    }
 
     if (valuetext == ''){
         data = defaultts;
