@@ -24,11 +24,10 @@ import hashlib
 import subprocess
 
 from lxml import etree
+from flask import jsonify
 from datetime import datetime
 
 from HydraLib import config
-
-from app_util import scan_installed_apps
 
 log = logging.getLogger(__name__)
 
@@ -76,6 +75,7 @@ class App(object):
     """
 
     def __init__(self, pxml=None):
+        self.info = dict()
         self._from_xml(pxml=pxml)
 
     @property
@@ -102,19 +102,28 @@ class App(object):
 
         return "success"
 
+    def info_as_json(self):
+        """Return App info as json string.
+        """
+        return jsonify(self.info)
+
     def _from_xml(self, pxml=None):
-        """Initialise app from a given plugin.xml file.
+        """Initialise app info from a given plugin.xml file.
         """
         self.pxml = pxml
         with open(self.pxml, 'r') as pluginfile:
             xmlroot = etree.parse(pluginfile).getroot()
 
-        self.name = xmlroot.find('plugin_name').text
-        self.description = xmlroot.find('plugin_description').text
-        self.dir = xmlroot.find('plugin_dir').text
-        self.mandatory_args = \
+        log.info("Loading xml: %s." % self.pxml)
+        self.info['name'] = xmlroot.find('plugin_name').text
+        self.info['description'] = xmlroot.find('plugin_description').text
+        self.info['category'] = xmlroot.find('plugin_category').text
+        self.info['command'] = xmlroot.find('plugin_command').text
+        self.info['shell'] = xmlroot.find('plugin_shell').text
+        self.info['location'] = xmlroot.find('plugin_location').text
+        self.info['mandatory_args'] = \
                 self._parse_args(xmlroot.find('mandatory_args'))
-        self.non_mandatory_args = \
+        self.info['non_mandatory_args'] = \
                 self._parse_args(xmlroot.find('non_mandatory_args'))
 
     def _parse_args(self, argroot):
