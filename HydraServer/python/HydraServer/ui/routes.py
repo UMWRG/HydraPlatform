@@ -995,3 +995,76 @@ def do_get_resource_scenarios():
     return json.dumps(return_rs)
 
 
+## Stuff added to run apps installed on the server
+
+from .code.app_registry import AppInterface
+
+appinterface = AppInterface()
+
+
+@app.route('/app/installed', methods=['GET'])
+def get_installed_apps():
+    """Returns information on all installed apps as list of dict of the form
+
+        [{'id': 'a8f43cfadc154b1dfbc98aa13aca38b8',
+          'name': 'Debug Plugin',
+          'description': 'A plugin that records input parameters ...'},
+         ]
+    """
+    return jsonify(appinterface.installed_apps_as_dict())
+
+
+@app.route('/app/info/<app_id>', methods=['GET'])
+def get_app_info(app_id):
+    """Returns the contents of the 'plugin.xml' as json string, except for the
+    parts that are not of general interest, such as location and the exact
+    command, etc.
+    """
+    return jsonify(appinterface.app_info(app_id))
+
+
+@app.route('/app/run', methods=['POST'])
+def run_app():
+    """To run an app the following information needs to be transmitted as a json
+    string:
+    {'id': 'the app id',
+     'network_id': number,
+     'scenario_id': number,
+     'user_id': 'user which requests to run app (string)',
+     'options': {'option1': value1, 'option2': value2, ... }
+     }
+
+    'options' is allowed to be empty; entries in the options dict need to
+    correspond to a 'name' of a mandatory or non-mandatory argument or a switch
+    of an app.
+    """
+
+    parameters = json.loads(request.get_data())
+    job_id = appinterface.run_app(parameters['id'],
+                                  parameters['network_id'],
+                                  parameters['scenario_id'],
+                                  parameters['user_id'],
+                                  options=parameters['options'])
+    return jsonify(job_id)
+
+@app.route('/app/status', methods=['POST'])
+def job_status():
+    """Get the job status for a given network or a given user by transmitting a
+    json string that looks like this 
+        '{"network_id": "3"}' 
+    or this 
+        '{"user_id": "whatever the user is identified by"}'
+    or this 
+        '{"job_id": "job_id" }'
+    or any combination of the above, like this 
+        '{"network_id": "3",
+        "user_id": "whatever the user is identified by"}'
+    """
+    parameters = json.loads(request.get_data())
+
+    status = \
+        appinterface.get_status(network_id=getattr(parameters, 'network_id', None),
+                                user_id=getattr(parameters, 'user_id', None),
+                                job_id=getattr(parameters, 'job_id', None))
+
+    return jsonify(status)
