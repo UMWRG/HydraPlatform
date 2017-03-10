@@ -1030,7 +1030,6 @@ def run_app():
     {'id': 'the app id',
      'network_id': number,
      'scenario_id': number,
-     'user_id': 'user which requests to run app (string)',
      'options': {'option1': value1, 'option2': value2, ... }
      }
 
@@ -1043,7 +1042,7 @@ def run_app():
     job_id = appinterface.run_app(parameters['id'],
                                   parameters['network_id'],
                                   parameters['scenario_id'],
-                                  parameters['user_id'],
+                                  session['user_id'],
                                   options=parameters['options'])
     return jsonify(job_id)
 
@@ -1059,6 +1058,9 @@ def job_status():
     or any combination of the above, like this 
         '{"network_id": "3",
         "user_id": "whatever the user is identified by"}'
+
+    Here, the user_id needs to be sent explicitly because it is allowed to be
+    empty/non-existent.
     """
     parameters = json.loads(request.get_data())
 

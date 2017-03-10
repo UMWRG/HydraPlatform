@@ -51,7 +51,8 @@ class AppInterface(object):
         for key, app in self.app_registry.installed_apps.iteritems():
             appinfo = dict(id=key,
                            name=app.info['name'],
-                           description=app.info['description'])
+                           description=app.info['description'],
+                           category=app.info['category'])
             installedapps.append(appinfo)
 
         return installedapps
@@ -62,7 +63,7 @@ class AppInterface(object):
     def run_app(self, app_id, network_id, scenario_id, user, options={}):
         app = self.app_registry.installed_apps[app_id]
         appjob = Job()
-        appjob.create(app, network_id, scenario_id, user, options)
+        appjob.create(app, network_id, scenario_id, str(user), options)
         self.job_queue.enqueue(appjob)
         return dict(jobid=appjob.id)
 
@@ -78,13 +79,13 @@ class AppInterface(object):
             matching_jobs = []
             for jid, job in self.job_queue.jobs.iteritems():
                 if network_id is not None and user_id is not None:
-                    if job.network_id == network_id and job.owner == user_id: 
+                    if job.network_id == network_id and job.owner == str(user_id): 
                         matching_jobs.append(job)
                 elif network_id is not None:
                     if job.network_id == network_id:
                         matching_jobs.append(job)
                 elif user_id is not None:
-                    if job.owner == user_id:
+                    if job.owner == str(user_id):
                         matching_jobs.append(job)
 
             response = []
@@ -211,9 +212,9 @@ class App(object):
 
     def _get_switch(self, resource):
         if resource == 'network':
-            keywords = ['net', 'network']
+            keywords = ['net', ]
         elif resource == 'scenario':
-            keywords = ['scen', 'scenario']
+            keywords = ['scen', ]
         else:  # handle other options
             keywords = [resource]
 
