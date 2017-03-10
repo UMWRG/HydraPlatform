@@ -461,17 +461,18 @@ def scan_installed_apps(plugin_path):
 # for testing only
 if __name__ == '__main__':
     appinterface = AppInterface()
-    job1 = appinterface.run_app('a8f43cfadc154b1dfbc98aa13aca38b8', 1, 1,
+
+    job1 = appinterface.run_app('b62f5945ee6e53130432c1747b27905e', 1, 1,
                                 'root', 
                                 options={'dummyswitch': True,
                                          'dummy3': 3.14,
                                          'failswitch': False})
-    job2 = appinterface.run_app('a8f43cfadc154b1dfbc98aa13aca38b8', 1, 1,
+    job2 = appinterface.run_app('b62f5945ee6e53130432c1747b27905e', 1, 1,
                                 'another_user', 
                                 options={'dummyswitch': True,
                                          'dummy3': 3.14,
                                          'failswitch': False})
-    job3 = appinterface.run_app('a8f43cfadc154b1dfbc98aa13aca38b8', 2, 1,
+    job3 = appinterface.run_app('b62f5945ee6e53130432c1747b27905e', 2, 1,
                                 'root', 
                                 options={'failswitch': True, 'dummy3': 3.14})
 
