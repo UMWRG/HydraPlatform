@@ -43,6 +43,16 @@ $(document).on('click', '#load-ebsd-data-button', function(){
 
 })
 
+
+$(document).on('click', '#get-ebsd-results', function(){
+ 
+    soln_id = $('#solution-select').val();
+
+    window.location.href=get_ebsd_results_url + "/" + scenario_id + "/" + soln_id;
+
+})
+
+
 /*Look for the 'COST' attribute on the network and use it to find
 * the solution names, and their respective costs*/
 function update_solution_select()

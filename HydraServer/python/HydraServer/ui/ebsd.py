@@ -60,6 +60,26 @@ def do_upload_ebsd_data():
 
     return jsonify({'status': 'OK', 'message': 'Data saved successfully'})
 
+@app.route('/get_ebsd_results/<scenario_id>/<result_id>')
+@app.route('/get_ebsd_results')
+def do_get_ebsd_results(scenario_id, result_id):
+    """
+        Generate an excel file from the results of the ebse model (mga or non-mga).
+        Mga / non mga is indicated by use of result ID.
+
+        if no result id is provided to an mga scenario, an exception is thrown
+    """
+    app.logger.info("Generating excel file...")
+
+    user_id = session['user_id']
+
+    scenario = scenarioutils.get_scenario(scenario_id, user_id)
+
+
+    app.logger.info("File export complete.")
+
+    return jsonify({'adsf':'asdf'})
+
 def _process_data_file(data_file, network_id, scenario_id, user_id):
     """
         Process the data file containing WRZ DO data amongst other things 
