@@ -414,25 +414,25 @@ class Job(object):
     def is_queued(self):
         """Convenience function.
         """
-        return True if self.status == 'queued' else False
+        return self.status == 'queued'
 
     @property
     def is_running(self):
         """Convenience function.
         """
-        return True if self.status == 'running' else False
+        return self.status == 'running'
 
     @property
     def is_finished(self):
         """Convenience function.
         """
-        return True if self.status == 'finished' else False
+        return self.status == 'finished'
 
     @property
     def is_failed(self):
         """Convenience function.
         """
-        return True if self.status == 'failed' else False
+        return self.status == 'failed'
 
 
 def scan_installed_apps(plugin_path):
