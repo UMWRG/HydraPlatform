@@ -48,7 +48,7 @@ $(document).on('click', '#get-ebsd-results', function(){
  
     soln_id = $('#solution-select').val();
 
-    window.location.href=get_ebsd_results_url + "/" + scenario_id + "/" + soln_id;
+    window.location.href=get_ebsd_results_url + "/scenario/" + scenario_id + "/solution/" + soln_id;
 
 })
 
