@@ -200,7 +200,7 @@ text {
 
 
 .networkoptions{
-    padding: 00px 20px 0px 10px;
+    padding: 00px 20px 0px 50px;
 }
 
 .svg-buttons{
@@ -216,3 +216,19 @@ text {
     margin-top: 10px;
     margin-left: 10px;
 }
+
+#content{
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#footer{
+    position:absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
