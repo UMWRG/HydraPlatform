@@ -128,7 +128,7 @@
                 </label>
             </div>
             </div> <!--networkoptions -->
-
+            {%if network.projection == None%}
             <div class="btn-group-vertical svg-buttons">
                 <button id="zoom-in" type='button' class='btn btn-sm btn-default'>
                     <span class="fa fa-plus"></span>
@@ -146,7 +146,7 @@
                 <span class="fa fa-spinner fa-spin hidden"></span>
                 <span class="fa fa-save"></span>
             </button>
-
+            {%endif%}
         </div> <!-- graph_container -->
         <div id="data" class="data_container" draggable=draggable>
             <div class="default-message">No Resource Selected.</div>
