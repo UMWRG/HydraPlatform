@@ -37,6 +37,10 @@
     list-style-type: none;
 }
 
+.filtercontent.fullwidth .btn-group, .filtercontent.fullwidth .btn-group, .filtercontent.fullwidth .btn{
+    width: 100% !important;
+}
+
 .options .filterheading{
     border-bottom: 1px solid;
     border-color: #e7e7e7;
