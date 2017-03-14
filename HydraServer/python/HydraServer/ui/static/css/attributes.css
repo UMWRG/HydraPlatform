@@ -49,3 +49,7 @@
     max-height: 400px;
     overflow-y: scroll;
 }
+
+.dataset input.scalar{
+    max-width: 75%;
+}
