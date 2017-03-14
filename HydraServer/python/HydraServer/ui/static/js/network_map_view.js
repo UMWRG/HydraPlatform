@@ -112,6 +112,9 @@ function dragged(d) {
     node.attr("transform", function(d){
         return "translate(" + d.x_ + "," + d.y_ + ")";
     });
+    text.attr("transform", function(d){
+        return "translate(" + d.x_ + "," + d.y_ + ")";
+    });
 
     if (link != undefined){
 
@@ -242,6 +245,14 @@ force.force('link').links(links_)
 var update = function(){
 
     node.attr("transform",
+        function(d) {
+                 d.x_ = map.latLngToLayerPoint(d.LatLng).x;
+                d.y_ = map.latLngToLayerPoint(d.LatLng).y;
+                return "translate(" + d.x_ + "," + d.y_ + ")";
+        }
+    );
+
+    text.attr("transform",
         function(d) {
                  d.x_ = map.latLngToLayerPoint(d.LatLng).x;
                 d.y_ = map.latLngToLayerPoint(d.LatLng).y;
