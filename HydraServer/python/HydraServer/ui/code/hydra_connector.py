@@ -50,6 +50,15 @@ def get_link(link_id, user_id):
 def get_resourcegroup(resourcegroup_id, user_id):
     return net.get_resourcegroup(resourcegroup_id, user_id=user_id)
 
+def get_node_by_name(network_id, node_name, user_id):
+    return net.get_node_by_name(network_id, node_name, user_id=user_id)
+
+def get_link_by_name(network_id, link_name, user_id):
+    return net.get_link_by_name(network_id, link_name, user_id=user_id)
+
+def get_resourcegroup_by_name(network_id, resourcegroup_name, user_id):
+    return net.get_resourcegroup_by_name(network_id, resourcegroup_name, user_id=user_id)
+
 def get_attributes_for_resource(network_id, scenario_id, resource, ids, include_metadata):
     return net.get_attributes_for_resource(network_id, scenario_id, resource, ids, include_metadata)
 
@@ -107,6 +116,10 @@ def add_dataset(dataset, user_id):
                     user_id=user_id,
                     flush=True)
     return new_dataset
+
+def get_dataset(dataset_id, user_id):
+    dataset = data.get_dataset(dataset_id, user_id=user_id)
+    return dataset
 
 def add_template(template, user_id):
     new_tmpl =  tmpl.add_template(template, user_id=user_id)

@@ -99,7 +99,7 @@ def get_network (network_id, user_id):
 
         node_name_map.append({'id': node.node_id, 'name': node.node_name, 'name': node.node_name, 'description':node.description})
         nodes_.append(
-            {'id': node.node_id, 'x': float(node.node_x), 'y': float(node.node_y),'fx': float(node.node_x), 'fy': float(node.node_y),
+            {'id': node.node_id, 'x': float(node.node_x), 'y': float(node.node_y),
              'name': node.node_name, 'type': nodetype, 'res_type': 'node'})
 
     links = {}
@@ -191,6 +191,17 @@ def get_resource(resource_type, resource_id, user_id, scenario_id=None):
         network = get_network_simple(resource_id, user_id)
         return network
 
+def get_resource_by_name(network_id, resource_type, resource_name, user_id):
+    resource_type = resource_type.upper()
+    if resource_type == 'NODE':
+        return get_node_by_name(network_id, resource_name, user_id)
+    elif resource_type == 'LINK':
+        return get_link_by_name(network_id, resource_name, user_id)
+    elif resource_type == 'GROUP':
+        return get_resourcegroup_by_name(network_id, resource_name, user_id)
+    else:
+        return None
+
 def get_network_simple(network_id, user_id):
     network = hc.get_network_simple(network_id, user_id)
     #Load the network's types
@@ -210,6 +221,7 @@ def get_node(node_id, user_id):
         for ta in t.templatetype.typeattrs:
             if ta.default_dataset_id:
                 ta.default_dataset
+                ta.default_dataset.metadata
 
     node_j = JSONObject(node)
     node_j.name = node_j.node_name
@@ -220,6 +232,10 @@ def get_link(link_id, user_id):
     link = hc.get_link(link_id, user_id)
     for t in link.types:
         t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
     link_j = JSONObject(link)
     link_j.name = link_j.link_name
     link_j.id = link_j.link_id
@@ -229,6 +245,54 @@ def get_resourcegroup(group_id, user_id):
     group = hc.get_resourcegroup(group_id, user_id)
     for t in group.types:
         t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
+    group_j = JSONObject(group)
+
+    group_j.name = group_j.group_name
+    group_j.id = group_j.group_id
+
+    return group_j
+
+
+def get_node_by_name(network_id, node_name, user_id):
+    node = hc.get_node_by_name(network_id, node_name, user_id)
+    #Load the node's types
+    for t in node.types:
+        t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
+
+    node_j = JSONObject(node)
+    node_j.name = node_j.node_name
+    node_j.id = node_j.node_id
+    return node_j
+
+def get_link_by_name(network_id, link_name, user_id):
+    link = hc.get_link_by_name(network_id, link_name, user_id)
+    for t in link.types:
+        t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
+    link_j = JSONObject(link)
+    link_j.name = link_j.link_name
+    link_j.id = link_j.link_id
+    return link_j
+
+def get_resourcegroup_by_name(network_id, group_name, user_id):
+    group = hc.get_resourcegroup_by_name(network_id, group_name, user_id)
+    for t in group.types:
+        t.templatetype.typeattrs
+        for ta in t.templatetype.typeattrs:
+            if ta.default_dataset_id:
+                ta.default_dataset
+                ta.default_dataset.metadata
     group_j = JSONObject(group)
 
     group_j.name = group_j.group_name

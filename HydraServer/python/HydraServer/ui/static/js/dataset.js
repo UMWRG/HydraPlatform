@@ -59,7 +59,7 @@ var updateInputs = function(element){
 
         $('.btn', $(this)).remove()
 
-        if (valueinput.hasClass('timeseries')){
+        if (valueinput.hasClass('hashtable')){
             valueinput.hide();
 
             $(this).append('<button class="btn btn-outline-primary btn-sm ts-edit" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-pencil"></span></button>')
@@ -68,6 +68,10 @@ var updateInputs = function(element){
                 $(this).append('<button class="btn btn-outline-primary btn-sm ts-graph" data-toggle="modal" data-target="#ts-editor" disabled><span class="fa fa-area-chart"></span></button>')
             }else{
                 $(this).append('<button class="btn btn-outline-primary btn-sm ts-graph" data-toggle="modal" data-target="#ts-editor"><span class="fa fa-area-chart"></span></button>')
+            }
+
+            if (valueinput.hasClass('multiresult')){
+                $(this).append('<button class="btn btn-outline-primary btn-sm polyvis"><img src="'+img_url+'/Polyvis_16.png"></img></button>')
             }
         }else if (valueinput.hasClass('array')){
             valueinput.hide();
@@ -194,9 +198,20 @@ var renderTimeseries = function(btn){
 
     var datasetcontainer = $(btn).closest('.dataset')
 
-    currentVal = $('input.timeseries', datasetcontainer)
+    currentVal = $('input.hashtable', datasetcontainer)
 
     var valuetext = currentVal.val()
+
+    metadata = $("input[name='metadata']", datasetcontainer)
+
+    var m = JSON.parse(metadata.val())
+    if (m.sol_type == 'MGA'){
+        if (current_solution != null && current_solution != undefined){
+            var tmp_val = JSON.parse(valuetext)[current_solution]
+            valuetext = JSON.stringify(tmp_val)
+        }
+    }
+    
 
     if (valuetext == ''){
         data = defaultts;
@@ -205,6 +220,22 @@ var renderTimeseries = function(btn){
     }
     var container = document.getElementById("ts-edit-inner");
 
+    var columns = [
+        {
+            type: 'date',
+            dateFormat: 'YYYY-MM-DDTHH:MM:SSZ',
+            strict: false,
+            defaultDate: new Date().toISOString(),
+
+        }
+    ]
+    
+    //Add a column definition for each column
+    //ignoring the first column (time)
+    data[0].slice(1, data[0].length).forEach(function(d){
+        columns.push({})
+    })
+
     hot = new Handsontable(container, {
         data: data.slice(1, data.length), 
         rowHeaders: true,
@@ -212,16 +243,7 @@ var renderTimeseries = function(btn){
         contextMenu: true,
         stretchH: "all",
         contextMenuCopyPaste: true,
-        columns: [
-        {
-            type: 'date',
-            dateFormat: 'YYYY-MM-DDTHH:MM:SSZ',
-            strict: false,
-            defaultDate: new Date().toISOString(),
-
-        },
-        {},
-        ]
+        columns: columns,
     });
 
 
@@ -377,6 +399,7 @@ var tsToHot = function(valuetext){
     var idx = 1; //keeps track of the rows, which will be built up as we go thorugh the timeseries. starts at 1 because header is at row 0
     for (var col in ts){
         hot_data[0].push(col)
+        var i=1;
         for (var t in ts[col]){
             var v = ts[col][t]
 
@@ -389,8 +412,9 @@ var tsToHot = function(valuetext){
             if (idx == 1){
                 hot_data.push([t, v])// Add time and value
             }else{
-                hot_data[idx].push(v)//No need for the time as it's already there.
+                hot_data[i].push(v)//No need for the time as it's already there.
             }
+            i++
             
         }
         idx++;
@@ -492,7 +516,7 @@ $(document).on('click', '.dataset .ts-graph', function(){
 
     var datasetcontainer = $(btn).closest('.dataset')
 
-    currentVal = $('input.timeseries', datasetcontainer)
+    currentVal = $('input.hashtable', datasetcontainer)
 
     $("#current_ra").remove()
     var current_ra = $("input[name='ra_id']", datasetcontainer).clone()
@@ -500,6 +524,16 @@ $(document).on('click', '.dataset .ts-graph', function(){
     $('#ts-editor .ts_outer').prepend(current_ra)
 
     var valuetext = currentVal.val()
+
+    metadata = $("input[name='metadata']", datasetcontainer)
+
+    var m = JSON.parse(metadata.val())
+    if (m.sol_type == 'MGA'){
+        if (current_solution != null && current_solution != undefined){
+            var tmp_val = JSON.parse(valuetext)[current_solution]
+            valuetext = JSON.stringify(tmp_val)
+        }
+    }
 
     if (valuetext == ''){
         data = defaultts;

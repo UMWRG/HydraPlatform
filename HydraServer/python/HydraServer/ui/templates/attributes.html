@@ -9,6 +9,7 @@
 </button>
 </div>
 
+<div class="data-table-container">
 <table type="table" class="table">
     <tr id="resource-name" style="border-bottom:2px solid black">
         <td>Name</td>
@@ -42,23 +43,29 @@
                 {%endif%}
                 ></input>
                 <input type="hidden" name="dataset_name" value="{{rs.dataset.data_name}}"></input>
+                <input type="hidden" name="data_type" value="{%if data_type%}{{data_type}}{%else%}'scalar'{%endif%}"></input>
                 {%if data_type == "descriptor"%}
-                    <input type="hidden" name="data_type" value="descriptor"></input>
-                    <input type="text" name="value"  value={%if rs.dataset and rs.dataset.value%}{{rs.dataset.value}}{%else%}""{%endif%}  class="{{data_type}}"></input>
+                    {%if rs.dataset and rs.dataset.metadata and rs.dataset.metadata.get('sol_type') == 'MGA'%}
+                        <input type="hidden" name="value"  value={%if rs.dataset.value%}'{{rs.dataset.value|safe}}'{%else%}""{%endif%}   class="multiresult polyvis hashtable"></input>
+                    {%elif rs.dataset and rs.dataset.metadata and rs.dataset.metadata.get('data_type') in ('hashtable', 'hashtable_seasonal')%}
+                        <input type="hidden" name="value"  value={%if rs.dataset.value%}{{rs.dataset.value|safe}}{%else%}""{%endif%}   class="hashtable"></input>
+                    {%else%}
+                        <input type="text" name="value"  value={%if rs.dataset and rs.dataset.value%}{{rs.dataset.value|safe}}{%else%}""{%endif%}  class="{{data_type}}"></input>
+                    {%endif%}
                 {%elif data_type == "scalar"%}
 
-                    <input type="hidden" name="data_type" value="scalar"></input>
                     <input type="number" name="value"  step="any" value={%if rs.dataset and rs.dataset.value not in ('', None)%}{{rs.dataset.value}}{%else%}""{%endif%}  class="{{data_type}}"></input>
                 {%elif data_type == "array"%}
 
-                    <input type="hidden" name="data_type" value="array"></input>
-                    <input type="hidden" name="value" value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value}}'{%else%}""{%endif%} class="{{data_type}}"></input>
+                    {%if rs.dataset and rs.dataset.metadata and rs.dataset.metadata.get('data_type') in ('hashtable', 'hashtable_seasonal')%}
+                        <input type="hidden" name="value"  value={%if rs.dataset.value%}{{rs.dataset.value|safe}}{%else%}""{%endif%}   class="{{data_type}} hashtable"></input>
+                    {%else%}
+                        <input type="hidden" name="value" value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value}}'{%else%}""{%endif%} class="{{data_type}}"></input>
+                    {%endif%}
                 {%elif data_type == "timeseries"%}
 
-                    <input type="hidden" name="data_type" value="timeseries"></input>
-                    <input type="hidden" name="value"  value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value}}'{%else%}""{%endif%}   class="{{data_type}}"></input>
+                    <input type="hidden" name="value"  value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value}}'{%else%}""{%endif%}   class="{{data_type}} hashtable"></input>
                 {%else%}
-                    <input type="hidden" name="data_type" value="scalar"></input>
                     <input type="number" name="value" step="any" class="{{data_type}}" value={%if rs.dataset and rs.dataset.value not in (None, '')%}{{rs.dataset.value}}{%else%}""{%endif%}></input>
                 {%endif%}
                 </div>
@@ -66,6 +73,7 @@
         </tr>
     {%endfor%}
 </table>
+</div><!--data table container-->
 </form>
 
 <div class="btn-group" role="group" aria-label="...">

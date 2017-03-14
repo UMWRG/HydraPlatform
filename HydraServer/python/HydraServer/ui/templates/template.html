@@ -383,35 +383,7 @@ var add_attr_url = "{{url_for('do_create_attr')}}"
 </table>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="add_attr_modal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Create an Attribute</h4>
-      </div>
-      <div class="modal-body">
-          <form id="create-attr" action="create_attr" type="POST">
-            <table class="table">
-            <tr>
-                <td><label for="attr-name-input">Name*</label></td>
-                <td><input id="attr-name-input" type="text" name="name" value=""></input></td>
-            </tr>
-            <tr>
-                <td><label for="attr-description-input">Dimension</label></td>
-                <td><input id="attr-description-input" type="text" name="dimen" value=""></input></td>
-            </tr>
-            </table>
-          </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="close-create-button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="create-attr-button" class="btn btn-success" data-dismiss="modal">Create</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+{%include 'attribute_modals.html'%}
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="delete_type_modal">

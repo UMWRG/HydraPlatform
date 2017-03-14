@@ -3,8 +3,9 @@ import hydra_connector as hc
 from HydraServer.lib.objects import JSONObject
 
 from network_utilities import get_resource
-
+import pandas as pd
 import logging
+import json
 log = logging.getLogger(__name__)
 
 def get_scenario (scenario_id, user_id):
@@ -15,6 +16,8 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
     resource_scenarios = hc.get_resource_data(resource_type, res_id, scenario_id, None, user_id)
     for rs in resource_scenarios:
         attr_id = rs.resourceattr.attr_id
+        #Load the dataset's metadata
+        rs.dataset.metadata                
 
         res_scenarios[attr_id] =  JSONObject({'rs_id': res_id,
                  'ra_id': rs.resourceattr.resource_attr_id,
@@ -23,6 +26,11 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                  'data_type': rs.dataset.data_type,
                 })
 
+        #Hack to work with hashtables. REMOVE AFTER DEMO
+        if len(rs.dataset.metadata) > 0:
+            m = rs.dataset.get_metadata_as_dict()
+            v = res_scenarios[attr_id].dataset.value 
+            res_scenarios[attr_id].dataset.value = _transform_value(v, m)
 
     resource = get_resource(resource_type, res_id, user_id)
 
@@ -48,7 +56,11 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                 })
 
                 if tattr.default_dataset_id is not None:
-                    res_scenarios[tattr.attr_id].dataset = tattr.default_dataset
+                    d = tattr.default_dataset
+                    #Hack to work with hashtables. REMOVE AFTER DEMO
+                    d.value = _transform_value(d.value, d.metadata)
+                    res_scenarios[tattr.attr_id].dataset = d
+
             else:
                 res_scenarios[tattr.attr_id].is_var = tattr.attr_is_var
                 res_scenarios[tattr.attr_id].data_type = tattr.data_type

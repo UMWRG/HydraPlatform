@@ -7,6 +7,8 @@
     background: -webkit-linear-gradient(#aaa, #ccc); /* Standard syntax */
     border-radius: 4px 4px 0px 0px;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .menubar button{
@@ -41,4 +43,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+}
+
+.data-table-container {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.dataset input.scalar{
+    max-width: 75%;
 }
