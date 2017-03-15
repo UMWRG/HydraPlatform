@@ -38,7 +38,9 @@ from code.export_network import export_network_to_pywr_json, export_network_to_e
 
 from code.import_network import import_network_from_csv_files, import_network_from_excel, import_network_from_pywr_json
 
-from . import app
+from . import app, appinterface
+
+
 
 from HydraServer.db import commit_transaction, rollback_transaction
 
@@ -122,7 +124,7 @@ def check_session(req):
 
     return sess_info
 
-@app.route('/header', methods=['GET'])
+@app.route('/about', methods=['GET'])
 def go_about():
     return render_template('about.html')
 
@@ -479,6 +481,18 @@ def go_network(network_id):
         else:
             rgi_lookup[key][rgi.ref_key].append(JSONObject(rgi))
 
+    available_apps_by_category = {}
+    available_apps_by_id = {}
+    for a in appinterface.installed_apps_as_dict():
+        category = a['category']
+        if available_apps_by_category.get(category):
+            available_apps_by_category[category].append(a)
+        else:
+            available_apps_by_category[category] = [a]
+        available_apps_by_id[a['id']] = a
+
+    app.logger.info(available_apps_by_category)
+
     return render_template('network.html',\
                 scenario_id=scenario.scenario_id,
                 node_coords=node_coords,\
@@ -493,7 +507,9 @@ def go_network(network_id):
                 links_=links_, \
                 attr_id_name=attr_id_name_map,\
                 template = tmpl,\
-                type_layout_map=type_layout_map)
+                type_layout_map=type_layout_map,\
+                apps = JSONObject(available_apps_by_category),\
+                app_dict = JSONObject(available_apps_by_id))
 
 
 @app.route('/delete_resource', methods=['POST'])
@@ -1000,80 +1016,3 @@ def do_get_resource_scenarios():
     log.info('%s resource scenarios retrieved', len(return_rs))
 
     return json.dumps(return_rs)
-
-
-## Stuff added to run apps installed on the server
-
-from .code.app_registry import AppInterface
-
-appinterface = AppInterface()
-
-
-@app.route('/app/installed', methods=['GET'])
-def get_installed_apps():
-    """Returns information on all installed apps as list of dict of the form
-
-        [{'id': 'a8f43cfadc154b1dfbc98aa13aca38b8',
-          'name': 'Debug Plugin',
-          'description': 'A plugin that records input parameters ...'},
-         ]
-    """
-    return jsonify(appinterface.installed_apps_as_dict())
-
-
-@app.route('/app/info/<app_id>', methods=['GET'])
-def get_app_info(app_id):
-    """Returns the contents of the 'plugin.xml' as json string, except for the
-    parts that are not of general interest, such as location and the exact
-    command, etc.
-    """
-    return jsonify(appinterface.app_info(app_id))
-
-
-@app.route('/app/run', methods=['POST'])
-def run_app():
-    """To run an app the following information needs to be transmitted as a json
-    string:
-    {'id': 'the app id',
-     'network_id': number,
-     'scenario_id': number,
-     'options': {'option1': value1, 'option2': value2, ... }
-     }
-
-    'options' is allowed to be empty; entries in the options dict need to
-    correspond to a 'name' of a mandatory or non-mandatory argument or a switch
-    of an app.
-    """
-
-    parameters = json.loads(request.get_data())
-    job_id = appinterface.run_app(parameters['id'],
-                                  parameters['network_id'],
-                                  parameters['scenario_id'],
-                                  session['user_id'],
-                                  options=parameters['options'])
-    return jsonify(job_id)
-
-@app.route('/app/status', methods=['POST'])
-def job_status():
-    """Get the job status for a given network or a given user by transmitting a
-    json string that looks like this 
-        '{"network_id": "3"}' 
-    or this 
-        '{"user_id": "whatever the user is identified by"}'
-    or this 
-        '{"job_id": "job_id" }'
-    or any combination of the above, like this 
-        '{"network_id": "3",
-        "user_id": "whatever the user is identified by"}'
-
-    Here, the user_id needs to be sent explicitly because it is allowed to be
-    empty/non-existent.
-    """
-    parameters = json.loads(request.get_data())
-
-    status = \
-        appinterface.get_status(network_id=getattr(parameters, 'network_id', None),
-                                user_id=getattr(parameters, 'user_id', None),
-                                job_id=getattr(parameters, 'job_id', None))
-
-    return jsonify(status)

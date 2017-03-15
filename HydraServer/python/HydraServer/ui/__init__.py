@@ -24,8 +24,10 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
 
-admin = Admin(app, name='microblog', template_mode='bootstrap3')
+from app_manager import appmanager, appinterface
+app.register_blueprint(appmanager)
 
+admin = Admin(app, name='microblog', template_mode='bootstrap3')
 
 class UserView(ModelView):
     form_excluded_columns = ('password')
