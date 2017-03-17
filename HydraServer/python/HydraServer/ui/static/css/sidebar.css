@@ -113,7 +113,7 @@ text-overflow: ellipsis;
 }
 .jobstatus .icon{
     padding-right: 10px;
-    float:right;
+    margin-left: 15px;
 }
 .jobstatus.queued{
     background-color: #fcf8e3;
@@ -135,4 +135,6 @@ text-overflow: ellipsis;
     border-color: #ebcccc;
     color: #a94442;
 }
-.jobstat
+.jobstatus{
+    width: 100%;
+}
