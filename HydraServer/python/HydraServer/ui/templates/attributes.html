@@ -48,9 +48,9 @@
                     {%if rs.dataset and rs.dataset.metadata and rs.dataset.metadata.get('sol_type') == 'MGA'%}
                         <input type="hidden" name="value"  value={%if rs.dataset.value%}'{{rs.dataset.value|safe}}'{%else%}""{%endif%}   class="multiresult polyvis hashtable"></input>
                     {%elif rs.dataset and rs.dataset.metadata and rs.dataset.metadata.get('data_type') in ('hashtable', 'hashtable_seasonal')%}
-                        <input type="hidden" name="value"  value={%if rs.dataset.value%}{{rs.dataset.value|safe}}{%else%}""{%endif%}   class="hashtable"></input>
+                        <input type="hidden" name="value"  value={%if rs.dataset.value%}'{{rs.dataset.value|safe}}'{%else%}""{%endif%}   class="hashtable"></input>
                     {%else%}
-                        <input type="text" name="value"  value={%if rs.dataset and rs.dataset.value%}{{rs.dataset.value|safe}}{%else%}""{%endif%}  class="{{data_type}}"></input>
+                        <input type="text" name="value"  value={%if rs.dataset and rs.dataset.value%}'{{rs.dataset.value|safe}}'{%else%}""{%endif%}  class="{{data_type}}"></input>
                     {%endif%}
                 {%elif data_type == "scalar"%}
 

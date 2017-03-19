@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import os
+import copy
 import json
 from . import app
 from flask import request, jsonify, abort, session, send_from_directory
@@ -243,7 +244,7 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
         #'Total Water Available For Use': '',
         
     }
-    
+
     #These are the attributes which we know where they should go wihin Hydra.
     #This should be unnecessary when we have a full map of input files to hydra attributes
     known_attrs = attr_name_map.keys()
@@ -256,7 +257,8 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
     for a in all_attributes:
         if a.attr_name in attr_name_map.values():
             attr_id_map[a.attr_name] = a.attr_id
-
+    
+    data_template = None
     wrzs = None
     wrz_nodes = []
     #Key = WRZ name
@@ -286,6 +288,10 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
 
             data = row[5:]
             data = data.replace(np.NaN, 0.0)
+
+            if data_template is None:
+                data_template = copy.deepcopy(data)
+                data_template[:]=0
             
             db_attr_name = attr_name_map[attr_name]
             attr_id = attr_id_map[db_attr_name]
@@ -294,20 +300,34 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
                 attributes[wrzname][attr_id][scenarioname] = dict(data)
             else:
                 attributes[wrzname][attr_id] = {scenarioname : dict(data)}
+    
+    for wrzname in attributes.keys():
+        for attr_id in attributes[wrzname].keys():
+            for s in xl_df.keys():
+                if s not in attributes[wrzname][attr_id].keys(): 
+                    attributes[wrzname][attr_id][s] = dict(data_template)
 
     attr_ids = attr_id_map.values()
     new_rs = []
     for n in wrz_nodes:
         for a in n.attributes:
             if a.attr_id in attr_ids:
+                
+                ##Insurance policy to ensure the conversion functions are doing
+                #the right thing
+                vala = scenarioutils._hashtable_to_seasonal(attributes[n.node_name.lower()][a.attr_id])
+                valb = scenarioutils._seasonal_to_hashtable(vala)
+                assert valb ==attributes[n.node_name.lower()][a.attr_id] 
+
+
                 new_rs.append(
                     JSONObject(dict(
                         resource_attr_id = a.resource_attr_id,
                         value =dict(
                             name      = 'EBSD dataset from file %s' % (data_file.filename),
                             type      =  'descriptor',        
-                            value     = json.dumps(attributes[n.node_name.lower()][a.attr_id]),
-                            metadata  =  {'data_type': 'hashtable'}
+                            value     = json.dumps(scenarioutils._hashtable_to_seasonal(attributes[n.node_name.lower()][a.attr_id])),
+                            metadata  =  {'type': 'hashtable_seasonal', 'data_type': 'hashtable'}
                         )
                     ))
                 )
@@ -316,11 +336,3 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
         r.value = Dataset(r.value)
 
     scenarioutils.update_resource_data(scenario_id, new_rs, user_id)
-
-
-
-
-
-
-
-            

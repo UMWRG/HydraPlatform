@@ -81,6 +81,9 @@ def add_resource_attribute(resource_type, resource_id, attr_id, is_var, user_id)
 def update_resource_data(scenario_id, rs_list, user_id):
 
     for rs in rs_list:
+
+        rs.value.value = _transform_value(rs.value.value, rs.value.get_metadata_as_dict(), reverse=True)
+
         if rs.resource_attr_id in (None, '', 'None'):
             ra = add_resource_attribute(rs.resource_type, rs.resource_id, rs.attr_id, 'N', user_id)
             rs['resource_attr_id'] = ra.resource_attr_id
@@ -123,13 +126,22 @@ def get_resource_scenario(resource_attr_id, scenario_id, user_id):
 
     return jsonrs 
 
-def _transform_value(value, metadata):
+def _transform_value(value, metadata, reverse=False):
     if metadata.get('data_type') == 'hashtable' and metadata.get('sol_type') == None:
         try:
             df = pd.read_json(value)
             return df.transpose().to_json() 
         except:
             raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
+    elif metadata.get('data_type') == 'hashtable_seasonal' or metadata.get('type') == 'hashtable_seasonal':
+        try:
+            if reverse is True:
+                return json.dumps(_hashtable_to_seasonal(value))
+            else:
+                return json.dumps(_seasonal_to_hashtable(value))
+
+        except:
+            raise Exception("Unable to parse seasonal hashtable. Not valid JSON or it's not pandas compatible.")
     elif metadata.get('sol_type') == 'MGA':
         try:
 
@@ -152,3 +164,64 @@ def _transform_value(value, metadata):
                 raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
     else:
         return value
+
+def _hashtable_to_seasonal(hashtable):
+    """
+        Convert a regular hashtable into a 'seasonal_hashtable' as used by the
+        gams app. This should be removed when the gams app is updated to use hashtables
+        instead of seasonal hashtables.
+
+        {'NYAA': {'2015-16':1, '2016-17':1}...}
+        [['2015-16', '2016-17'], [{'NYAA':1, 'DYAA':1}, {'NYAA':1, 'DYAA':1}]
+    """
+    if isinstance(hashtable, str) or isinstance(hashtable, unicode):
+        hashtable = eval(hashtable)
+
+    scenarionames = hashtable.keys()
+
+    #get the keys from the first sub-hashtable to make the first list
+    years = hashtable[scenarionames[0]].keys()
+    subhashables = []
+
+    for year in years:
+        subhashtable = {}
+        for scenarioname in scenarionames:
+            subhashtable[scenarioname] = hashtable[scenarioname][year]
+
+        subhashables.append(subhashtable)
+
+    return [years,subhashables]
+
+def _seasonal_to_hashtable(seasonal):
+    """
+        Convert a 'seasonal_hashtable' as used by the
+        gams app into a regular hashtable to display in the UI.
+        This should be removed when the gams app is updated to use hashtables
+        instead of seasonal hashtables.
+
+        [['2015-16', '2016-17'], [{'NYAA':1, 'DYAA':1}, {'NYAA':1, 'DYAA':1}]
+        {'NYAA': {'2015-16':1, '2016-17':1}...}
+    """
+    if isinstance(seasonal, str) or isinstance(seasonal, unicode):
+        seasonal = eval(seasonal)
+
+    years = seasonal[0]
+    subhashtables = seasonal[1]
+
+    for i, s in enumerate(subhashtables):
+        if isinstance(s, str) or isinstance(s, unicode):
+            subhashtables[i] = eval(s)
+
+    columns = subhashtables[0].keys()
+
+    hashtable = {}
+
+    for c in columns:
+        hashtable[c] = {}
+
+    for i, year in enumerate(years):
+        for c in columns:
+            hashtable[c][year] = subhashtables[i][c]
+
+    return hashtable
+
