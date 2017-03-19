@@ -105,3 +105,36 @@ text-overflow: ellipsis;
 .scenariopicker{
     max-width: 150px;
 }
+
+.jobstatus{
+    padding: 5px;
+    border-radius: .25rem;
+    margin: 0 0.25rem 0.25rem 0.25rem;
+}
+.jobstatus .icon{
+    padding-right: 10px;
+    margin-left: 15px;
+}
+.jobstatus.queued{
+    background-color: #fcf8e3;
+    border-color: #faf2cc;
+    color: #8a6d3b;
+}
+.jobstatus.running{
+    background-color: #d9edf7;
+    border-color: #bcdff1;
+    color: #31708f;
+}
+.jobstatus.finished{
+    background-color: #dff0d8;
+    border-color: #d0e9c6;
+    color: #3c763d;
+}
+.jobstatus.failed{
+    background-color: #f2dede;
+    border-color: #ebcccc;
+    color: #a94442;
+}
+.jobstatus{
+    width: 100%;
+}

@@ -20,6 +20,9 @@
         var projection_crs = {{network.projection_crs|safe}}
     {%endif%}
 
+    var apps = {{apps|tojson}} 
+    var app_dict = {{app_dict|tojson}} 
+
     var img_url = "{{url_for('static', filename='img/') }}"
 
     function get_name(id)
@@ -103,6 +106,7 @@
                 <input id="search" type="text" class="form-control" placeholder="Search for...">
                 </div><!-- /input-group -->
                 </div>
+
                 <div class="btn-group" role="group" aria-label="...">
                 <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -112,6 +116,27 @@
                     <ul class="dropdown-menu" aria-labelledby="runmodeldropdown" style="top:30px">
                         <li><a href="#" onclick="runGamsModel()" >GAMS</a></li>
                         <li><a href="#" onclick="runPywrApp()">Pywr</a></li>
+                    </ul>
+                </div>
+                </div>
+
+                <div class="btn-group" role="group" aria-label="...">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Run a Model
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="runmodeldropdown" style="top:30px">
+                        {%for app in apps['model']%}
+                            <li>
+                                <a href="#" data-toggle='modal'
+                                        class='modelrun'
+                                        data-target='#run_app_modal'
+                                        app-id='{{app.id}}'
+                                        id='app-{{app.id}}'>{{app.name}}
+                                </a>
+                            </li>
+                        {%endfor%}
                     </ul>
                 </div>
                 </div>
@@ -193,9 +218,12 @@
 
 <script src="{{url_for('static', filename='js/polyvis.js')}}"></script>
 
+<<<<<<< HEAD
 
 <script src="{{url_for('static', filename='js/ebsd.js')}}"></script>
 
+=======
+>>>>>>> job_queue
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/d3-context-menu.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
@@ -203,10 +231,14 @@
 
 {% include 'run_app.html' %}
 
+{% include 'app_manager/run_app_modal.html' %}
+{% include 'app_manager/app_status_modal.html' %}
+
 {% include 'nodesandlinks.html' %}
 
 {% include 'network_modals.html' %}
 {% include 'ebsd_modals.html' %}
+
 
 
 {% endblock %}

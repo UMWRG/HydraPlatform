@@ -313,6 +313,7 @@ color: green;
 
 .grid .link span .summary{
     font-size: 12pt;
+    white-space: pre-line;
 }
 
 .grid .link span .head{

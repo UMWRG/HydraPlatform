@@ -35,7 +35,9 @@ from code.export_network import export_network_to_pywr_json, export_network_to_e
 
 from code.import_network import import_network_from_csv_files, import_network_from_excel, import_network_from_pywr_json
 
-from . import app
+from . import app, appinterface
+
+
 
 from HydraServer.db import commit_transaction, rollback_transaction
 
@@ -120,7 +122,7 @@ def check_session(req):
 
     return sess_info
 
-@app.route('/header', methods=['GET'])
+@app.route('/about', methods=['GET'])
 def go_about():
     return render_template('about.html')
 
@@ -477,6 +479,18 @@ def go_network(network_id):
         else:
             rgi_lookup[key][rgi.ref_key].append(JSONObject(rgi))
 
+    available_apps_by_category = {}
+    available_apps_by_id = {}
+    for a in appinterface.installed_apps_as_dict():
+        category = a['category']
+        if available_apps_by_category.get(category):
+            available_apps_by_category[category].append(a)
+        else:
+            available_apps_by_category[category] = [a]
+        available_apps_by_id[a['id']] = a
+
+    app.logger.info(available_apps_by_category)
+
     return render_template('network.html',\
                 scenario_id=scenario.scenario_id,
                 node_coords=node_coords,\
@@ -491,7 +505,9 @@ def go_network(network_id):
                 links_=links_, \
                 attr_id_name=attr_id_name_map,\
                 template = tmpl,\
-                type_layout_map=type_layout_map)
+                type_layout_map=type_layout_map,\
+                apps = JSONObject(available_apps_by_category),\
+                app_dict = JSONObject(available_apps_by_id))
 
 
 @app.route('/delete_resource', methods=['POST'])
@@ -1010,5 +1026,3 @@ def do_get_resource_scenarios():
     app.logger.info('%s resource scenarios retrieved', len(return_rs))
 
     return json.dumps(return_rs)
-
-
