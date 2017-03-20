@@ -39,6 +39,7 @@
      return value;
      }
 
+    var scenario_summaries = {{scenarios|safe}}
 
     var scenario_name_lookup = {}
     {% for s in network.scenarios%}
@@ -127,7 +128,7 @@
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="runmodeldropdown" style="top:30px">
-                        {%for app in apps['model']%}
+                        {%for app in apps.get('model', [])%}
                             <li>
                                 <a href="#" data-toggle='modal'
                                         class='modelrun'
@@ -218,12 +219,8 @@
 
 <script src="{{url_for('static', filename='js/polyvis.js')}}"></script>
 
-<<<<<<< HEAD
-
 <script src="{{url_for('static', filename='js/ebsd.js')}}"></script>
 
-=======
->>>>>>> job_queue
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/d3-context-menu.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
 <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
@@ -238,7 +235,5 @@
 
 {% include 'network_modals.html' %}
 {% include 'ebsd_modals.html' %}
-
-
 
 {% endblock %}

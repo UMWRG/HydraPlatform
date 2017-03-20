@@ -6,6 +6,8 @@ from HydraServer.soap_server.hydra_base import get_session_db
 
 from HydraLib.HydraException import HydraError, PermissionError, ResourceNotFoundError
 
+from HydraLib.hydra_dateutil import ordinal_to_timestamp
+
 from flask import render_template
 
 from werkzeug import secure_filename
@@ -469,6 +471,20 @@ def go_network(network_id):
     else:
         scenario = network.scenarios[0]
 
+    scenario_summaries = {}
+    for s in network.scenarios:
+        test = ordinal_to_timestamp(s.start_time)
+        scenobj = dict( 
+            start_time = str(ordinal_to_timestamp(s.start_time)),
+            end_time   = str(ordinal_to_timestamp(s.end_time)),
+            time_step  = s.time_step,
+            locked     = s.locked,
+            status     = s.status,
+            description = s.scenario_description,
+            name        = s.scenario_name,
+        )
+        scenario_summaries[s.scenario_id] = scenobj
+
     rgi_lookup = {}
     for rgi in scenario.resourcegroupitems:
         key = 'group-' + str(rgi.group_id)
@@ -503,6 +519,7 @@ def go_network(network_id):
                 network=network,\
                 nodes_=nodes_,\
                 links_=links_, \
+                scenarios=json.dumps(scenario_summaries),\
                 attr_id_name=attr_id_name_map,\
                 template = tmpl,\
                 type_layout_map=type_layout_map,\
