@@ -1,0 +1,15 @@
+<plugin_result>
+    <message>Data import was successful.</message>
+    <plugin_name>Pywr importer</plugin_name>
+    <network_id>165</network_id>
+    <scenario_id>165</scenario_id>
+    <errors>
+        
+    </errors>
+    <warnings>
+        
+    </warnings>
+    <files>
+        
+    </files>
+</plugin_result>

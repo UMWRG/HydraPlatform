@@ -1,0 +1,423 @@
+{% extends "page_layout.html" %}
+{% block title %}
+{%if not new%}
+    {{template.template_name}}
+{%else%}
+    New Template
+{%endif%}
+{% endblock %}
+{% block content %}
+<script>
+
+var add_dataset_url = "{{url_for('do_create_dataset')}}"
+var add_attr_url = "{{url_for('do_create_attr')}}"
+{%if new%}
+    var isnew = 'Y';
+    var save_template_url = "{{url_for('do_create_template')}}"
+    var template_id='';
+{%else%}
+   var isnew = 'N';
+   var save_template_url = "{{url_for('do_update_template')}}"
+   var template_id = {{template.template_id}};
+{%endif%}
+</script>
+<h3>
+    {%if not new%}
+        {{template.template_name}}
+    {%else%}
+        New Template
+    {%endif%}
+
+</h3> 
+
+    <table id="templatetable" type="table" class="table">
+        <tbody class="general">
+            <tr class=""><td></td><td class="header">Template Name</td><td><input name="template_name" 
+                    value="{%if not new%}{{template.template_name}}{%endif%}"
+                        type="text"></input></td></tr>
+                <tr class="header">
+                    <td class='togglesection'><span class="fa fa-minus"></span></td>
+                    <td>Network Details</td>
+                    <td>
+                    </td>
+                </tr>
+            {%if new==False%}
+                {% for resourcetype in template.templatetypes%}
+                    {% if resourcetype.resource_type == 'NETWORK'%}
+                    <tr class="resourcetype networktype" id="{{resourcetype.type_id}}">
+                        <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Network Type 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value="{{resourcetype.type_name}}"></input>
+                                    </td>
+
+                                    {%include 'typeattributes.html'%}
+                                </tr>
+
+                                    {%include 'attributedetails.html'%}
+                            </table>
+                        </td>
+                    </tr>
+
+                    {%endif%}
+                {%endfor%}
+            {%else%}        
+                    <tr class="resourcetype networktype" style='display:none'>
+                        <td></td>
+                        <td>Network Type:<input name="name" type="text">
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td class="typeattrs">Attributes:
+                                        <select  class="selectpicker" multiple=multiple>
+                                            {%for attr in all_attrs%}
+                                            <option value="{{attr.attr_id}}">
+                                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                                            </option>
+                                            {%endfor%}
+                                        </select>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" 
+                                            data-toggle="modal" data-target="#add_attr_modal">
+                                            <span class="glyphicon glyphicon-plus"></span> 
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+            {%endif%}
+        </tbody>
+        <tbody class="nodetypes">
+                <tr class="header">
+                    <td class='togglesection'><span class="fa fa-plus"></span></td>
+                    <td>Nodes</td>
+                    <td>
+                        <button id="addnodetype" type="button" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        Add Node Type
+                        </button>
+                    </td>
+                </tr>
+            {%if not new%}
+                {% for resourcetype in template.templatetypes%}
+                    {% if resourcetype.resource_type == 'NODE'%}
+                    <tr class="resourcetype nodetype" id="{{resourcetype.type_id}}" style='display:none'>
+                        <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Name 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value="{{resourcetype.type_name}}"></input>
+                                    </td>
+
+                                    {%include 'typeattributes.html'%}
+                                    <td class="typelayout">
+                                        <select class="selectpicker shapeselector">
+                                            <option name="circle" {%if resourcetype.layout['shape'] == 'circle'%}selected=selected{%endif%}>Circle</option>
+                                            <option name="diamond" {%if resourcetype.layout['shape'] == 'diamond'%}selected=selected{%endif%}>Diamond</option>
+                                            <option name="cross" {%if resourcetype.layout['shape'] == 'cross'%}selected=selected{%endif%}>Cross</option>
+                                            <option name="triangle" {%if resourcetype.layout['shape'] == 'triangle'%}selected=selected{%endif%}>Triangle</option>
+                                            <option name="square" {%if resourcetype.layout['shape'] == 'square'%}selected=selected{%endif%}>Square</option>
+                                            <option name="star"{%if resourcetype.layout['shape'] == 'star'%}selected=selected{%endif%}>Star</option>
+                                            <option name="wye" {%if resourcetype.layout['shape'] == 'wye'%}selected=selected{%endif%}>Wye</option>
+                                        </select>
+
+                                        <input class="colorpicker" type='color' value="{{resourcetype.layout['color']}}"></input>
+                                    </td>
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                    {%include 'attributedetails.html'%}
+                            </table>
+                        </td>
+                    </tr>
+
+                    {%endif%}
+                {%endfor%}
+            {%endif%}
+        </tbody>
+        <tbody class="linktypes">
+        <tr class="header">
+            <td class='togglesection'><span class="fa fa-plus"></span></td>
+            <td>Links</td>
+            <td>
+                <button id="addlinktype" type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Add Link Type
+                </button>
+            </td>
+        </tr>
+        {%if not new%}
+        {% for resourcetype in template.templatetypes%}
+            {% if resourcetype.resource_type == 'LINK'%}
+                <tr class="resourcetype linktype" id="{{resourcetype.type_id}}" style='display:none'>
+                      <td class="toggleattributedetails">
+                            <span class="glyphicon glyphicon-chevron-right"></span></td>
+ 
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Name 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value="{{resourcetype.type_name}}"></input>
+                                    </td>
+
+                                    {%include 'typeattributes.html'%}
+                                    <td class="typelayout">
+                                        <div>
+                                        Style:
+                                        <select class="linestyle">
+                                            <option name="solid" {%if resourcetype.layout['linestyle'] == 'solid'%}selected=selected{%endif%}>Solid</option>
+                                            <option name="dashed" {%if resourcetype.layout['linestyle'] == 'dashed'%}selected=selected{%endif%}>Dashed</option>
+                                        </select>
+                                        </div>
+                                        <div>
+                                        Width:
+                                        <input class="linewidth" type='range' name="points" min="1" max="4" value="{%if resourcetype.layout.get('width') != None%}{{ resourcetype.layout.get('width')}}{%else%}1{%endif%}">
+                                        </div>
+                                        <div>
+                                        Color:
+                                        <input class="colorpicker" type='color' value="{{resourcetype.layout['color']}}"></input>
+                                        </div>
+                                    </td>
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                    {%include 'attributedetails.html'%}
+                            </table>
+                        </td>
+                    </tr>
+
+            {%endif%}
+        {%endfor%}
+        {%endif%}
+        </tbody>
+        <tbody class="grouptypes">
+        <tr class="header">
+            <td class='togglesection'><span class="fa fa-plus"></span></td>
+            <td>Groups</td>
+            <td>
+                <button id="addgrouptype" type="button" class="btn btn-primary">
+                    <span  class="glyphicon glyphicon-plus"></span>
+                    Add Group Type
+                </button>
+            </td>
+        </tr>
+        {%if not new%}
+        {% for resourcetype in template.templatetypes%}
+            {% if resourcetype.resource_type == 'GROUP'%}
+                <tr class="resourcetype grouptype"  id="{{resourcetype.type_id}}" style='display:none'>
+                        <td></td>
+                        <td colspan="2">
+                            <table class="table">
+                                <tr>
+                                    <td>Name 
+                                        <input 
+                                        name="name" 
+                                        type="text"
+                                        value="{{resourcetype.type_name}}"></input>
+                                    </td>
+                                    {%include 'typeattributes.html'%}
+                                    <td class="deletetype">
+                                          <button type="button" class="btn btn-danger btn-small" 
+                                            data-toggle="modal" data-target="#delete_type_modal">
+                                            <span class="glyphicon glyphicon-remove"></span> 
+                                        </button>
+                                    </td>
+                                </tr>
+                                    {%include 'attributedetails.html'%}
+                            </table>
+                        </td>
+                    </tr>
+
+            {%endif%}
+        {%endfor%}
+        {%endif%}
+        </tbody>
+    </table>
+    <div class="form-footer">
+        <button class="btn btn-success" id="save-template-button">Save</button>
+    </div>
+
+<table id="nodetypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr class="">
+                    <td>Name <input name="name" type="text"></input></td>
+                    {%include 'typeattributes.html'%}
+
+                    <td class="typelayout">
+                        <select class="shapeselector">
+                            <option name="circle">Circle</option>
+                            <option name="diamond">Diamond</option>
+                            <option name="cross">Cross</option>
+                            <option name="triangle">Triangle</option>
+                            <option name="square">Square</option>
+                            <option name="star">Star</option>
+                            <option name="wye">Wye</option>
+                        </select>
+                        <input class="colorpicker" type='color'></input>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table id="linktypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr>
+                    <td>Name <input name="name" type="text"></input></td>
+
+                    {%include 'typeattributes.html'%}
+                    <td class="typelayout">
+                        <div>
+                        Style:
+                        <select class="linestyle">
+                            <option name="solid">Solid</option>
+                            <option name="dashed">Dashed</option>
+                        </select>
+                        </div>
+                        <div>
+                        Width:
+                        <input class="linewidth" type='range' name="points" min="1" max="4">
+                        </div>
+                        <div>
+                        Color:
+                        <input class="colorpicker" type='color'></input>
+                        </div>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+
+<table id="grouptypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr>
+                    <td>Name <input name="name" type="text"></input></td>
+                    <td class="">Attributes:
+                        {%include 'typeattributes.html'%}
+                    </td>
+                    <td class="typelayout">
+                        <input class="colorpicker" type='color'></input>
+                    </td>
+                    <td class="deletetype">
+                          <button type="button" class="btn btn-danger btn-small" 
+                            data-toggle="modal" data-target="#delete_type_modal">
+                            <span class="glyphicon glyphicon-remove"></span> 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table id="attrdetailstemplate" style="display:none">
+    <tbody class="attributedetails">
+        <tr class="attributedetail">
+            <td class="attr-name"></td>
+            <td>Variable? <input type="checkbox" name="is_var"></input></td>
+            <td class="datatypecontainer">
+                <select name="data_type" class="data_types selectpicker">
+                    <option value="scalar" selected>Single Number</option>
+                    <option value="timeseries">Time Series</option>
+                    <option value="array">Array</option>
+                    <option value="descriptor">Free Text</option>
+                </select>
+            </td>
+            <td class="defautvaluecontainer dataset">
+                <input name="attr_id" type="hidden">
+                <input type="hidden" name="attr_name" class="attr-name" value=""></input>
+                <input name="value" type="number" class="scalar" value=""></input>
+                <input name="metadata" type="hidden" value=""></input>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+{%include 'attribute_modals.html'%}
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="delete_type_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Are you sure?</h4>
+      </div>
+      <div class="modal-body">
+          This action will permanently remove this type from the template.
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-create-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="create-attr-button" class="btn btn-danger" data-dismiss="modal">Remove</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+
+
+<script src="{{url_for('static', filename='js/template.js')}}"></script>
+<script src="{{url_for('static', filename='js/handsontable.full.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/pikaday.js')}}"></script>
+<script src="{{url_for('static', filename='js/moment.js')}}"></script>
+<script src="{{url_for('static', filename='js/dataset.js')}}"></script>
+<script src="{{url_for('static', filename='js/attributes.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3.v4.min.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/d3-tip.js')}}"></script>
+<script type='text/javascript' src="{{url_for('static', filename='js/plotly-latest.min.js')}}"></script>
+<script src="{{url_for('static', filename='js/_timeseries_graph.js')}}"></script>
+
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/template.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/handsontable.full.min.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/pikaday.css') }}"/>
+{% endblock %}

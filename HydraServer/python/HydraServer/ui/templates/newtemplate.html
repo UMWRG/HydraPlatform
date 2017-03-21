@@ -1,0 +1,126 @@
+{% extends "page_layout.html" %}
+{% block title %}Create a New Template{% endblock %}
+{% block content %}
+<h3>Create a New Template</h3> 
+<form>
+
+    <table id="newtemplatetable" type="table" class="table">
+        <tbody class="general">
+        <tr><td></td><td>Name</td><td><input name="template_name" type="text"></input></td></tr>
+        <!--<tr><td></td><td>Description</td><td><input name="template_description" type="text"></input></td></tr>-->
+        <tr class="resourcetype networktype">
+            <td></td>
+            <td colspan="2">
+                <table class="table">
+                    <tr>
+                        <td>Network Type:<input name="name" type="text"></input></td>
+                        <td class="typeattrs">Attributes:
+                            <select class="selectpicker" multiple=multiple>
+                                {%for attr in all_attrs%}
+                                <option value="{{attr.attr_id}}">
+                                    {{attr.attr_name}} ({{attr.attr_dimen}})
+                                </option>
+                                {%endfor%}
+                            </select>
+                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#add_attr_modal"><span class="glyphicon glyphicon-plus"></span> New Attribute</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        <tr>
+        </tbody>
+        <tbody class="nodetypes">
+        <tr class="header">
+            <td>-</td>
+            <td>Nodes</td>
+            <td>
+                <button id="addnodetype" type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span></button>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="linktypes">
+        <tr class="header">
+            <td>-</td>
+            <td>Links</td>
+            <td>
+                <button id="addlinktype" type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span></button>
+            </td>
+        </tr>
+        </tbody>
+        <tbody class="grouptypes">
+        <tr class="header">
+            <td>-</td>
+            <td>Groups</td>
+            <td>
+                <button id="addgrouptype" type="button" class="btn btn-primary">
+                    <span  class="glyphicon glyphicon-plus"></span>
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="form-footer">
+        <button class="btn btn-success" id="create-template-button">Save</button>
+    </div>
+</form>
+
+<table id="resourcetypetemplate" style="display:none">
+    <tr class="resourcetype">
+        <td></td>
+        <td colspan="2">
+            <table class="table">
+                <tr>
+                    <td>Name <input name="name" type="text"></input></td>
+                    <td class="typeattrs">Attributes:
+                        <select class="" multiple=multiple>
+                            {%for attr in all_attrs%}
+                            <option value="{{attr.attr_id}}">
+                                {{attr.attr_name}} ({{attr.attr_dimen}})
+                            </option>
+                            {%endfor%}
+                        </select>
+                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#add_attr_modal"><span class="glyphicon glyphicon-plus"></span> New Attribute</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    <tr>
+</table>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="add_attr_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Create an Attribute</h4>
+      </div>
+      <div class="modal-body">
+          <form id="create-attr" action="create_attr" type="POST">
+            <table class="table">
+            <tr>
+                <td><label for="attr-name-input">Name*</label></td>
+                <td><input id="attr-name-input" type="text" name="name" value=""></input></td>
+            </tr>
+            <tr>
+                <td><label for="attr-description-input">Dimension</label></td>
+                <td><input id="attr-description-input" type="text" name="dimen" value=""></input></td>
+            </tr>
+            </table>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-create-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="create-attr-button" class="btn btn-success" data-dismiss="modal">Create</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="{{url_for('static', filename='js/newtemplate.js')}}"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/newtemplate.css') }}"/>
+
+<script src="{{url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/bootstrap-select.min.css') }}"/>
+{% endblock %}

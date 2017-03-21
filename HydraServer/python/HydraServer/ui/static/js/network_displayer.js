@@ -1,546 +1,393 @@
-var toLocaleFormat = d3.time.format("%Y-%m-%d");
+var map = null;
 
-var current_res=null;
-
-var display=true;
-var cur_table=null;
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
-    var width  = (900- margin.left - margin.right),
-    height = (700-margin.top - margin.bottom);
-    colors = d3.scale.category10();
+var graph_width = document.getElementById('graph').clientWidth
 
-    //`ransform functions, used to convert the Hydra coordinates
-    //to coodrinates on the d3 svg
-  var y = d3.scale.linear()
-                           .domain([min_y, max_y ])
-                           .range([height,0]);
-  var x = d3.scale.linear()
-                          .domain([min_x, max_x])
-                          .range([0,width]);
+var width  = (graph_width - margin.left - margin.right),
+height = (700-margin.top - margin.bottom);
+colors = d3.scaleOrdinal(d3.schemeCategory10);
 
-//Set up the colour scale
-var color = d3.scale.category20();
+if (min_x == max_x){
+    max_x = max_x * 100;
+}
+if (min_y == max_y){
+    max_y = max_y * 100;
+}
+
+//`ransform functions, used to convert the Hydra coordinates
+//to coodrinates on the d3 svg
+var yScale = d3.scaleLinear()
+                       .domain([max_y, min_y ])
+                       .range([height,0]);
+var xScale = d3.scaleLinear()
+                      .domain([min_x, max_x])
+                      .range([0,width]);
+
+
+
+function dragged(d) {
+    if( d3.select(this).classed('selected') == false){
+
+        return
+    }
+
+    var mouse = d3.mouse(svg.node());
+
+    if (currentTransform == null){
+        d.x = xScale.invert(mouse[0]);
+        d.y = yScale.invert(mouse[1]);
+        node.attr("transform", function(d){
+            return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
+        });
+    }else{
+        d.x = xScale.invert(currentTransform.invertX(mouse[0]));
+        d.y = yScale.invert(currentTransform.invertY(mouse[1]));
+        node.attr("transform", function(d){
+            return "translate(" + currentTransform.applyX(xScale(d.x)) + "," + currentTransform.applyY(yScale(d.y)) + ")";
+        });
+    }
+    tick()
+}
+
+//Node drag
+var drag = d3.drag()
+         .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
 
  //Set up the force layout
-var force = d3.layout.force()
-    .charge(-120)
-    .linkDistance(30)
-    .size([width + margin.left + margin.right, height+ margin.top + margin.bottom])
-    .on("tick", tick);
-force.gravity(0);
-
-
-var drag = force.drag()
-    .on("dragstart", dragstart);
-
-var tip = d3.tip()
-  .attr('class', 'd3-tip')
-  .offset([-10, 0])
-  .html(function(d) {
-  return "<strong>name: </strong><span style='color:red'>" + d.name+" </span>" +"<strong>type: </strong><span style='color:red'>" + d.type + "</span>";
-  //return "<strong>Name:</strong> <span style='color:red'>" + d.name + "</span>";
-  })
+var force = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) { return d.id }))
 
 //Append a SVG to the body of the html page. Assign this SVG as an object to svg
 var svg = d3.select("#graph").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height+ margin.top + margin.bottom)
     .attr("transform","translate(" + margin.left + "," + margin.top + ")")
-    .attr("clsss", "left");
+    .on("click", function(d){
+        svg.selectAll(".node").each(function(d){tip.hide(d)})
+        svg.selectAll(".node path").style('stroke', "");
+        svg.selectAll(".node path").style('stroke-width',  "");
+        svg.selectAll("path.selected").attr("d", normalnode)
+        svg.selectAll("path.selected").classed("selected", false)
+        d3.selectAll('.node').on("mousedown.drag", null);
+        
+        $("#data").html("No Resource Selected.")
+        current_res = null; 
+        current_res_type = null;
 
+        if (drag_line != null){
+            drag_line.remove()
+            drag_line = null
+            start_node = null;
+        }
+    })
+    .on("mousemove", function(){
+    if (drag_line != null){
+        if (currentTransform){
+            drag_line.attr('d', 'M' + currentTransform.applyX(xScale(start_node.datum().x)) + ',' + currentTransform.applyY(yScale(start_node.datum().y)) + 'L' + d3.mouse(svg.node())[0] + ',' + d3.mouse(svg.node())[1]);
+        }else{
+            drag_line.attr('d', 'M' + xScale(start_node.datum().x) + ',' + yScale(start_node.datum().y) + 'L' + d3.mouse(svg.node())[0] + ',' + d3.mouse(svg.node())[1]);
+        }
+    }
+    })
+    .call(tip)
 
-    // .call(d3.behavior.zoom().on("zoom", redraw));
-
-svg.call(tip);
-
-//Read the data from the mis element
-//var mis = document.getElementById('mis').innerHTML;
-//graph = JSON.parse(nodes);
 
 //Creates the graph data structure out of the json data
-force.nodes(nodes_)
-    .links(links_)
-    .start();
+force.restart();
 
-//Create all the line svgs but without locations yet
-var link = svg.selectAll("links_")
-    .data(links_)
-    .enter().append("line")
-    .attr("class", "link")
-     //.style("stroke-dasharray", ("3, 3"))
-     .style("marker-end", 'None')
-    .style("stroke-width", 1.8)
-     .style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); })
-    .attr('x1', function (d) { return self.x(d.source.x); })
-    .attr('y1', function (d) { return self.y(d.source.y); })
-    .attr('x2', function (d) { return self.x(d.target.x); })
-    .attr('y2', function (d) { return self.y(d.target.y); })
-    .on('mouseover', mouse_in) //Added
-    .on('mouseout', link_mouse_out) //Added
-    .on("click", links_mouse_click);
+var tick = function() {
+    if ((d3.event == null || d3.event.transform == undefined) && currentTransform == null){
+
+        if (link != undefined){
+
+            link
+            .attr('x1', function (d) { return xScale(d.source.x); })
+            .attr('y1', function (d) { return yScale(d.source.y); })
+            .attr('x2', function (d) { return xScale(d.target.x); })
+            .attr('y2', function (d) { return yScale(d.target.y); })
+        }
+
+        if (node != undefined){
+            node.attr("transform", function(d){
+                return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
+            });
+        }
+
+        if (text != undefined){
+            text.attr("transform", function (d) {
+                    return "translate(" + xScale(d.x)+14 + "," + yScale(d.y) + ")";
+                });
+        }
+    }else{
+        zoom();
+    }
+    force.stop()
+}
 
 //Do the same with the circles for the nodes - no
-var node = svg.selectAll("nodes_")
-    .data(nodes_)
-    .enter().append("circle")
-    .attr("class", "node")
-    .attr("id", function(d) {return d.id;})
-    .attr('cx', function(d){return self.x((d.x));})
-    .attr('cy', function(d){return self.y((d.y));})
-    .attr("r", 9)
-    .style("fill", function (d) {
-    return color(d.group);
-})
-    .on('mouseover', mouse_in) //Added
-    .on('mouseout', node_mouse_out) //Added
-    .on("click", nodes_mouse_click)
-        .on("dblclick", nodes_mouse_double_click);
+var node = null; 
+var link = null; 
+var text = null;
+var start_node = null;
 
- var text = svg.append("g").selectAll("node")
-    .data(nodes_)
-    .enter().append("text")
-     .attr("x",function(d){return self.x((d.x))+8;})
-    .attr("y", function(d){return self.y((d.y))+8;})
-    .text(function(d) { return d.name; })
-    .style("visibility", "hidden");
+var redraw_nodes = function(){
+    
+    nodes_.forEach(function(d) {
+        if (d.type.layout == undefined){
+            d.type.layout = {}
+        }else{
+            if (typeof(d.type.layout) == 'string'){
+                d.type.layout = JSON.parse(d.type.layout)
+            }
+        }
+    });
+   svg.selectAll(".node").remove()
 
+    node = svg.selectAll(".node")
+        .data(nodes_)
+        .enter().append("g")
+        .classed("node", true)
+        .attr("id", function(d) {return 'schematicnode_'+d.id;})
+        .attr('shape', function(d){
+            if (d.type.layout.shape != undefined){
+                return d.type.layout.shape
+            }else{
+                return 'circle'
+            }})
+        .attr('resourcetype', function(d){return d.type.type_id})
+    
+        node
+        .append('path')
+        .style("fill", function(d) {
+            var l = d.type.layout;
+            if (l.color != undefined){return l.color}else{return 'black'}
+          })
 
+        .attr("d", normalnode)
+        .on('mouseover', node_mouse_in) //Added
+        .on('mouseout', node_mouse_out) //Added
+        .on("click", nodes_mouse_click)
+        .on("dblclick", nodes_mouse_double_click)
+        .on('contextmenu', d3.contextMenu(menu));
 
-//giving the SVGs co-ordinates - the force layout is generating the co-ordinates which this code is using to update the attributes of the SVG elements
-//force.on("tick", function () {
-// node.attr('cx', function (d) { return self.x(d.x); });
-//  link.attr('x1', function (d) { return self.x(d.source.x); })
- //   .attr('x2', function (d) { return self.x(d.target.x); });
-//});
+    text = svg.append("g").selectAll(".node")
+        .data(nodes_)
+        .enter().append("text")
+        .text(function(d) { return d.name; })
+        .style("visibility", "hidden")
+        .style("font", "12px sans-serif");
 
-/*
-    link.attr("x1", function (d) {
-        return d.source.x;
-    })
-        .attr("y1", function (d) {
-        return d.source.y;
-    })
-        .attr("x2", function (d) {
-        return d.target.x;
-    })
-        .attr("y2", function (d) {
-        return d.target.y;
+    tick()
+}
+
+var redraw_links = function(){
+
+    links_.forEach(function(d) {
+        if (d.type.layout == undefined){
+            d.type.layout = {}
+        }else{
+            if (typeof(d.type.layout) == 'string'){
+                d.type.layout = JSON.parse(d.type.layout)
+            }
+        }
     });
 
-    node.attr("cx", function (d) {
-        return d.x;
-    })
-        .attr("cy", function (d) {
-        return d.y;
-    });
-});
-*/
-// Per-type markers, as they don't inherit styles.
+   svg.selectAll(".link").remove()
+    //Create all the line svgs but without locations yet
+    link = svg.selectAll(".link")
+        .data(links_)
+        .enter().append("line")
+        .attr("id", function(d) {return 'schematiclink_'+d.id;})
+        .attr("class", "link")
+        .style("stroke-dasharray", function(d){
+            if (d.type.layout['linestyle'] != undefined){
+                var style = d.type.layout['linestyle']
+                if (style == 'dashed'){
+                        return (4, 4)
+                }else if (style == 'dotted'){
+                        return (2, 2)
+                }else{
+                        return ""
+                }
+                }else{
+                    return ''
+                }
+        })
+         .style('stroke-width',  function(d) { 
+              if (d.type.layout['width'] != undefined){return d.type.layout['width']+'px'}else{return '2px'}
+        })
+         .style('stroke',  function(d) { 
+              if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
+        })
+        .on('mouseover', link_mouse_in) //Added
+        .on('mouseout', link_mouse_out) //Added
+        .on("click", links_mouse_click);
+   tick() 
+}
 
-svg.append("defs").selectAll("marker")
-    .data(["suit", "licensing", "resolved"])
-  .enter().append("marker")
-    .attr("id", function(d) { return d; })
-    .attr("viewBox", "0 -5 10 10")
-    .attr("refX", 25)
-    .attr("refY", 0)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto")
-  .append("path")
-    .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-    .style("stroke", "#4679BD")
-    .style("opacity", "0.6");
 
-    force.on("tick",tick);
+redraw_links()
+redraw_nodes()
 
+force.nodes(nodes_).on('tick', tick)
+force.force('link').links(links_)
+tick()
 
+var zoom = function(){
 
-function tick() {
-
+    if (d3.event == null){
+        if (currentTransform != null){
+            var transform = currentTransform;
+        }else{
+            return;
+        }
+    }else{
+        var transform = d3.event.transform;
+        if (transform != undefined){
+            currentTransform = transform;
+        }else{
+            var transform = currentTransform;
+        }
     }
 
-function nodes_mouse_double_click(d)
-{
-  d3.selectAll('.node')  //here's how you get all the nodes
-    .each(function(d) {
-    d3.select(this).classed("fixed", d.fixed = true);
-    d3.select(this).on(".drag", null);
-    });
-           d3.select(this).call(drag);
-}
-function dragstart (d)
-{
-}
- function nodes_mouse_click(d) {
-   // unenlarge target node
-   //
-   tip.hide(d);
-   svg.selectAll("line").style("stroke-width", 1.8);
-   svg.selectAll(".node").attr("r", 9);
-   d3.select(this).attr("r", 12);
-   document.getElementById('search').value=d.name;
-   display_node_attributes(d);
-   }
-   function display_node_attributes(d)
-   {
-    $( "#data" ).empty();
-     $("#timeseries_g" ).empty();
+    if (link != undefined){
 
-   current_res=d;
-   var table = $('<table></table>').addClass('foo');
-
-  var count=0;
-
-   for (i in nodes_attrs)
-   {
-     if (d.id==nodes_attrs[i].id)
-     {
-     if(count==0)
-       $( "#data" ).append(  '<h4>Attributes for node: '+d.name+'</h4>');
-       count+=1;
-     create_table(nodes_attrs[i]);
-        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
-     }
-   }
-}
- function links_mouse_click(d) {
-   // unenlarge target node
-   //
-
-   // unenlarge target node
-   //
-
-
-   svg.selectAll("line").style("stroke-width", 1.8);
-   svg.selectAll(".node").attr("r", 9);
-   d3.select(this).style("stroke-width", 3);
-  document.getElementById('search').value=d.name;
-   tip.hide(d);
-   display_link_attributes(d)
-   }
-
-function display_link_attributes(d) {
- $( "#data" ).empty();
-   $( "#timeseries_g" ).empty();
-   var count=0;
-   current_res=d;
-   for (i in links_attrs)
-   {
-     if (d.id==links_attrs[i].id)
-     {
-     if(count==0)
-       $( "#data" ).append(  '<h4>Attributes for link: '+d.name+'</h4>');
-       count+=1;
-     create_table(links_attrs[i]);
-        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
-     }
-   }
-   d3.select(this).style('stroke',  function(d) {get_node_attributes(d.id, d.node_name)});
-}
-
-function node_mouse_out(d) {
-   if(current_res == null || d!=current_res)
-   {
-      tip.hide(d);
-      d3.select(this).style('stroke', '#999');
-   }
+        link
+        .attr('x1', function (d) { return transform.applyX(xScale(d.source.x)); })
+        .attr('y1', function (d) { return transform.applyY(yScale(d.source.y)); })
+        .attr('x2', function (d) { return transform.applyX(xScale(d.target.x)); })
+        .attr('y2', function (d) { return transform.applyY(yScale(d.target.y)); })
     }
 
-function mouse_in(d) {
-   // show  resource tip and change border
-   if(display)
-{
-   tip.show(d);
-   d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).darker().toString(); });
-   }
-   //svg.selectAll("text").remove()
-   //svg.selectAll("text").style("visibility", "hidden");
+    if (node != undefined){
+        node.attr("transform", function(d){
+            return "translate(" + transform.applyX(xScale(d.x)) + "," + transform.applyY(yScale(d.y)) + ")";
+        });
+    }
+    
+    if (text != undefined){
+        text.attr("transform", function (d) {
+                return "translate(" + transform.applyX(self.xScale(d.x))+14 + "," + transform.applyY(self.yScale(d.y)) + ")";
+            });
+    }
 }
 
-function link_mouse_out(d) {
-   // hide resource tip and change border
-   //d3.select(this).style('stroke',  function(d) { return d3.rgb(colors(d.id)).lighter().toString(); });
+svg.call(d3.zoom()
+       .scaleExtent([0.01,100])
+        .on("zoom", zoom));
 
-   if(current_res == null || d!=current_res)
-   {
-       tip.hide(d);
-       d3.select(this).style('stroke', '#999');
-   }
-   //svg.selectAll("text").style("visibility", "visible");
+
+var create_force_layout = function(){
+    d3.select('#create-force-layout .fa-spinner').classed('hidden', false)
+    d3.select('#create-force-layout .fa-bomb').classed('hidden', true)
+    
+    //Add force layout properties to the force simulation
+    force.force("charge", d3.forceManyBody())
+        .force("center", d3.forceCenter(width / 2, height / 2));
+
+    force.nodes(nodes_).on('tick', forcetick)
+    force.on('end', show_force_save)
+
+    svg.call(d3.zoom()
+       .scaleExtent([0.1,8])
+        .on("zoom", forcezoom));
+
+    force.restart();
+
 }
 
-function hid_res(d)
-{
-   tip.hide(d);
-   d3.select(this).style('stroke', '#999');
+var show_force_save = function(){
+    d3.select('#create-force-layout .fa-spinner').classed('hidden', true)
+    d3.select('#create-force-layout .fa-bomb').classed('hidden', false)
+
+    d3.select('#save-force-layout').classed('hidden', false)
+    d3.select('#create-force-layout').classed('hidden', true)
+    
+    
 }
 
-
-function get_node_attributes(id, name){
+var show_force_create = function(){
+    d3.select('#save-force-layout').classed('hidden', true) 
+    d3.select('#create-force-layout').classed('hidden', false)
 }
- function redraw() {
-     // d3.select(this).attr('transform', '');
 
-      svg.attr("transform",
-          "translate(" + d3.event.translate + ")"
-          + " scale(" + d3.event.scale + ")");
+var create_static_layout = function(){
 
-/*
-          link.attr("x1", function (d) { return  self.x(d.source.x); })
-            .attr("y1", function (d) { return self.y(d.source.y);  })
-            .attr("x2", function (d) { return self.x(d.target.x); })
-            .attr("y2", function (d) { return self.y(d.target.y); });
 
-        node.attr("transform", function (d) {
-            return "translate(" + self.x(d.x) + "," + self.y(d.y) + ")";
+    d3.select('#save-force-layout .fa-spinner').classed('hidden', false)
+    d3.select('#save-force-layout .fa-save').classed('hidden', true)
+
+    //`ransform functions, used to convert the Hydra coordinates
+    //to coodrinates on the d3 svg
+    //yScale = d3.scaleLinear()
+    //                       .domain([height, 0 ])
+    //                       .range([height,0]);
+    //xScale = d3.scaleLinear()
+    //                      .domain([0, width])
+    //                      .range([0,width]);
+
+    //Add force layout properties to the force simulation
+    force.force("charge", null)
+        .force("center", null);
+
+    force.nodes(nodes_).on('tick', tick)
+
+    svg.call(d3.zoom()
+       .scaleExtent([0.1,8])
+        .on("zoom", zoom));
+
+    force.restart();
+
+
+    for (var i=0; i<nodes_.length; i++){
+        var n = nodes_[i]
+        update_node(n.id, n.name, n.x, n.y)
+    }
+        
+    d3.select('#save-force-layout .fa-spinner').classed('hidden', true)
+    d3.select('#save-force-layout .fa-save').classed('hidden', false)
+
+    show_force_create()
+
+}
+
+function forcetick() {
+
+        link
+        .attr('x1', function (d) { return d.source.x; })
+        .attr('y1', function (d) { return d.source.y; })
+        .attr('x2', function (d) { return d.target.x; })
+        .attr('y2', function (d) { return d.target.y; })
+
+        node.attr("transform", function(d){
+            return "translate(" + d.x + "," + d.y + ")";
         });
 
+        text.attr("transform", function (d) {
+                return "translate(" + d.x+14 + "," + d.y + ")";
+            });
+  }
 
-*/
-    }
+//Need a different zoom function for force layout because there's no scales
+//required, as there are no x,y coordinates 
+var forcezoom = function(){
 
-function create_table(res) {
-        t_table=null;
-        var table = $('<table></table>').addClass('table');
-        //alert(nodes_attrs[i].attrr_name+", "+nodes_attrs[i].type+", "+nodes_attrs[i].values);
-        var name_row = $("<tr/>");
-        var name_ = $('<th></th>').text('Attribute name ' );
-        name_row.append(name_);
+    var transform = d3.event.transform
 
-        var res_name = $('<th></th>').text(res.attrr_name);
-        name_row.append(res_name);
-        table.append(name_row);
+    link
+        .attr('x1', function (d) { return transform.applyX(d.source.x); })
+        .attr('y1', function (d) { return transform.applyY(d.source.y); })
+        .attr('x2', function (d) { return transform.applyX(d.target.x); })
+        .attr('y2', function (d) { return transform.applyY(d.target.y); })
 
-        var type_row = $("<tr/>");
-        var type_ = $('<th></th>').text('Type ' );
-        type_row.append(type_);
+    node.attr("transform", function(d){
+        return "translate(" + transform.applyX(d.x) + "," + transform.applyY(d.y) + ")";
 
-        var res_type = document.createElement("th");
-
-         if(res.type == 'timeseries')
-               res_type.innerHTML ='<a href="#">'+res.type+'</a>';
-        else
-               res_type.innerHTML =res.type;
-
-         type_row.append(res_type);
-        table.append(type_row);
-        var graph_data={};
-
-        if(res.type == 'timeseries')
-        {
-        //alert('Time series found')
-        graph_data=[];
-          var date_row = $("<tr/>");
-           var date_ = $('<th ></th>').text('Date ' );
-           var value_ = $('<th></th>').text('Value ' );
-
-           date_row.append(date_);
-           date_row.append(value_);
-
-         var t_table = $('<table></table>').addClass('table');
-         t_table.append(date_row);
-
-         for (j in res.values)
-        {
-           //alert(res.values[j].date);
-            var value_row = $("<tr/>");
-
-           var date=new Date(res.values[j].date);
-           var formateddate=toLocaleFormat(date);
-
-           var thread=$ ('<tr></tr>');
-           var res_date = $('<th></th>').text(formateddate);
-           var res_value = $('<th></th>').text(res.values[j].value);
-
-           graph_data.push(
-        {
-          'date': date,
-          'value':res.values[j].value,
-        }
-        )
-           value_row.append(res_date);
-           value_row.append(res_value);
-
-           //value_row.append(res_value);
-           t_table.append(value_row);
-
-        }
-        res_type.innerHTML ='<a href="#">'+res.type+'</a>';
-        res_type.onclick =(function(){
-        draw_graph('../static/js/_timeseries_graph.js', graph_data, res.attrr_name, t_table);
     });
-
-        }
-        else
-        {
-        var v_row = $("<tr/>");
-        var v_title_ = $('<th></th>').text('Value ' );
-        v_row.append(v_title_);
-
-        var vv_ = $('<th></th>').text(res.values);
-        v_row.append(vv_);
-        table.append(v_row);
-        }
-    $('#data').append(table);
-     if(t_table!=null)
-     {
-          $('#data').append(t_table);
-          t_table.hide();
-          }
-   }
-
-function searchNode() {
-// to be deleted  later
-//alert("HI ....")
-$.getJSON('/_add_numbers',{ "a": 15, "b": 30 }, function(data) {
-				   //alert("HI ....22: "+data.result)
-				});
-// end of to be deleted
-    //find the node or links
-    var selectedVal = document.getElementById('search').value;
-    var sel=null;
-    var node = svg.selectAll(".node");
-    if (selectedVal == "none") {
-        node.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = node.filter(function (d, i){
-         if(d.name == selectedVal)
-         {
-
-         d3.select(this);
-         svg.selectAll("line").style("stroke-width", 1.8);
-         svg.selectAll(".node").attr("r", 9);
-         d3.select(this).attr("r", 12);
-         tip.show;
-
-         display_node_attributes(d);
-         sel=d;
-         return true;
-         }
-         else
-            return false;
-        });
-        if(sel==null)
-        {
-        var link = svg.selectAll(".link");
-    if (selectedVal == "none") {
-        link.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = link.filter(function (d, i) {
-         if(d.name == selectedVal)
-         {
-             d3.select(this);
-             svg.selectAll("line").style("stroke-width", 1.8);
-             svg.selectAll(".node").attr("r", 9);
-             d3.select(this).style("stroke-width", 3);
-           display_link_attributes(d);
-
-         sel=d;
-         return true;
-         }
-         else
-            return false;
-        });
-
-        }
-        }
-
-
-        if(current_res!=null)
-        {
-                    tip.hide(current_res);
-          }
-
-         //var link = svg.selectAll(".link")
-        //link.style("opacity", "0");
-        //d3.selectAll(".node, .link").transition()
-        //  .duration(5000)
-        //.style("opacity", 1);
-        //alert(d.name);
-    }
 }
 
-function draw_graph(script, graph_data, attr_name, t_table) {
-    $.ajax({
-        url: script,
-        dataType: "script",
-        async: false,           // <-- This is the key
-        success: function () {
-            draw_timeseries(graph_data, attr_name);
-        },
-        error: function () {
-            alert("Could not load script " + script);
-        }
-    });
-
-if(cur_table!=null)
-    cur_table.hide();
-    cur_table=t_table;
-    cur_table.show();
-
-
-}
-
-
-
-function changeNodesLable(cb) {
- if (cb.checked) {
- display=false;
-               svg.selectAll("text").style("visibility", "visible");
-
-        }
-        else
-        {
-        display=true;
-                svg.selectAll("text").style("visibility", "hidden");
-        }
-}
-
-function changeLinkDirection(cb) {
- if (cb.checked)
-        {
-        display=false;
-             svg.selectAll("line").style("marker-end",  "url(#suit)");
-        }
-        else
-        {
-        display=true;
-            svg.selectAll("line").style("marker-end", 'None');
-
-        }
-}
-function simulateClick(elem /* Must be the element, not d3 selection */) {
-    var evt = document.createEvent("MouseEvents");
-
-    evt.initMouseEvent(
-        "click", /* type */
-        true, /* canBubble */
-        true, /* cancelable */
-        window, /* view */
-        0, /* detail */
-        0, /* screenX */
-        0, /* screenY */
-        0, /* clientX */
-        0, /* clientY */
-        false, /* ctrlKey */
-        false, /* altKey */
-        false, /* shiftKey */
-        false, /* metaKey */
-        0, /* button */
-        null); /* relatedTarget */
-
-    elem.dispatchEvent(evt);
-
-}
-
-function create_project_tree()
-    {
-
-var project_list=$( "#LinkedList1" )
-for (node in nodes_)
-    {
-    }
-}
-
+d3.select('#create-force-layout').on('click', create_force_layout)
+d3.select('#save-force-layout').on('click', create_static_layout)

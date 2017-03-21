@@ -1,0 +1,84 @@
+{% extends "page_layout.html" %}
+{% block title %}Templates{% endblock %}
+{% block content %}
+    <script>
+        var go_new_template_url = "{{url_for('go_new_template')}}"
+        var go_template_url = "{{url_for('go_template', template_id=XXX)}}"
+        var load_template_url = "{{url_for('do_load_template')}}"
+    </script>
+
+    <div id="template-container" class="container-fluid">
+
+        <h3>Templates</h3>
+
+        <div class="container-fluid grid">
+            <ul class="list-unstyled row">
+                {% for t in templates %}
+                    <li id="template-{{t.template_id}}" class="col-sm-3">
+                        <a type="button"
+                           class="btn btn-lg link"
+                           href="{{url_for('go_template', template_id=t.template_id)}}">
+                        {{t.template_name}}
+                        </a>
+                    </li>
+                {% endfor %}
+                <li id="add-template" class="col-sm-3">
+                        <a type="button"
+                           data-toggle="modal"
+                           data-target="#new-template-container"
+                           class="btn btn-lg link new-btn">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </a>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+
+<!-- the tabindex here is to allow 'esc' to close the dialog box -->
+<div id="new-template-container" class="modal fade bs-example-modal-lg" tabindex=-1>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create a New Template</h4>
+      </div>
+      <div class="modal-body">
+        <div id="new-template">
+            <select id="template-choice" class="" style="display:inline-block">
+                <option value="manual" selected="selected">Build a template manually</option>
+                <option value="external">Load a template from XML</option>
+            </select>
+           <div>
+           <form  id="import_form" method="post" enctype=multipart/form-data style="display:none">
+                <div class="col-lg-6 col-sm-6 col-12">
+
+                       <div class="input-group"  id="browse_div">
+                           <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                Browse&hellip;
+                                <input type="file" name="import_file"  id="import_file" style="display:none" multiple>
+                            </span>
+                        </label>
+                        <input type="text" class="form-control" readonly>
+                    </div>
+               <span class="help-block">
+                        <file></file>
+                    </span>
+                </div>
+           </form>
+           </div>
+        </div><!--new-template-->
+      </div> <!-- modal body -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="go-add-template" class="btn btn-primary">Go</button>
+      </div> <!-- model footer -->
+    </div><!-- modal content -->
+  </div><!-- modal-dialog -->
+</div>
+
+<script src="{{url_for('static', filename='js/templates.js')}}"></script>
+
+{% endblock %}
+

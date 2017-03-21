@@ -1,0 +1,184 @@
+{%block imports%}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/sidebar.css') }}"/>
+<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/palette.css') }}"/>
+
+{%endblock%}
+
+<div id="sidebar_container" class="col-md-2">
+<!--<div id="sidebar_button" class="btn btn-primary btn-lg">
+    <span class="glyphicon glyphicon-chevron-right"><span>
+</div>    -->
+
+<script>
+    var get_all_templates_url = "{{url_for('do_get_all_templates')}}"
+</script>
+
+<div id="sidebar" class="hidden-menu-left">
+    <ul class="options nav navbar-nav">
+        <li id="" class="menusection">
+            <div class="filterheading">
+                {{network.network_name}}
+            </div>
+        
+            <div class='filtercontent'>
+                <ul>
+                    <li>
+                        <h4>Network Type:</h4>
+                        {%if network.types|length > 0%}
+                            {{network.types[0].templatetype.type_name}} ( {{template.template_name}})
+                        {%else%}
+                            <button type=button class="btn btn-default btn-s" data-toggle="modal" data-target="#apply-template-container">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        {%endif%}
+                    </li>
+
+                    <li>
+                        <h4>Projection:</h4>
+                        {{network.projection}}
+                    </li>
+                    <li>
+                        <h4>Attributes:</h4>
+                        <a href="#" onclick="get_network_attributes()">View Attributes</a>
+                    </li>
+
+                </ul>
+            </div>
+        </li>
+        <li id="scenarios" class="menusection">
+            <div class="filterheading">Scenarios
+            </div>
+        
+            <div class='filtercontent'>
+                <select id="scenario-picker" class="scenariopicker selectpicker">
+                    {% for s in network.scenarios%}
+                    <option value="{{s.scenario_id}}">
+                        {{s.scenario_name}}
+                    </option>
+                    {%endfor%}
+                </select>
+                <div class="btn-group new-scenario">
+                    <button id="new-scenario" type="button" class="btn btn-default btn-s"data-toggle="modal" data-target="#clone_scenario_modal">
+                        <span class="fa fa-clone"></span>
+                    </button>
+                </div>
+            </div>
+        </li>
+        <li id="scenarios" class="menusection">
+
+            <div class="filterheading">EBSD
+            </div>
+
+            <div class='filtercontent'>
+                <select id="solution-select" class="selectpicker"></select>
+            </div>
+        
+            <div class='filtercontent'>
+                <div class="btn-group">
+                    <button id="do-modal" type="button" class="btn btn-default btn-s"data-toggle="modal" data-target="#load-do-modal">
+                        <span class="fa fa-upload"></span> Upload DO
+                    </button>
+                </div>
+            </div>
+        </li>
+        <li id="nodes" class="menusection">
+            <div class="filterheading">Nodes
+            </div>
+        
+            <div id="palette" class='filtercontent'>
+            </div>
+        </li>
+        <li id= "links" class="menusection">
+            <div class="filterheading">Links
+            </div>
+            <div class='filtercontent'>
+                        <button id="nolink" type='button' class="btn btn-default btn-xs linkbutton">
+                            <span class="fa fa-crosshairs"></span> 
+                        </button>
+              {%for tmpltype in template.templatetypes%}
+                    {%if tmpltype.resource_type == 'LINK'%}
+                        <button id="link-type-{{tmpltype.type_id}}" type='button' class="btn btn-default btn-xs linkbutton">
+                            
+                            {%if tmpltype.layout['linestyle']%}
+                            <div title="{{tmpltype.type_id}}" style="width:40px; border:3px {{tmpltype.layout['linestyle']}} {{tmpltype.layout['color']}}"></div>
+                            {%endif%}
+                        </button>
+                    {%endif%}
+                {%endfor%}
+            </div>
+        </li>
+        <li id="notes" class="menusection">
+            <div class="noteheading" >
+            <h3> Notes </h3>
+                <div id="new-note-btn" class="btn btn-primary btn-small" data-toggle="modal" data-target="#new-note-container">
+    <span class="glyphicon glyphicon-pencil"></span>
+            </div>
+            </div>
+            <div class="filtercontent">
+            <ul class="list-group">
+            {% for n in notes %}
+                <li class="list-group-item" title="{{n.text}}" data-toggle="tooltip" data-placement="right">
+                    {{n.author.username}} @ {{n.cr_date}}
+                </li>
+            {% endfor %}
+            </ul>
+            </div> <!-- filtercontent -->
+        </li>
+        
+    <ul>
+</div><!-- sidebar menu-->
+</div> <!--sidebar container-->
+
+
+<!-- the tabindex here is to allow 'esc' to close the dialog box -->
+<div id="apply-template-container" class="modal fade bs-example-modal-lg" tabindex=-1>
+
+    <form method="POST" url="{{ url_for('do_apply_template_to_network') }}" enctype="multipart/form-data">
+    <input type="hidden" name="network_id" value="{{network.id}}"></input>
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Find a template to use</h4>
+      </div>
+      <div class="modal-body">
+            <select id="template-select" class="selectpicker">
+            </select>
+      </div> <!-- modal body -->
+      <div class="modal-footer">
+        <button type="button" id="close-note" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="note-commit" class="btn btn-primary">Save</button>
+      </div> <!-- model footer -->
+    </div><!-- modal content -->
+  </div><!-- modal-dialog -->
+    </form>
+</div>
+
+
+<!-- the tabindex here is to allow 'esc' to close the dialog box -->
+<div id="new-note-container" class="modal fade bs-example-modal-lg" tabindex=-1>
+
+    <form method="POST" url="{{ url_for('do_add_network_note', network_id=XXX, note_text=XXX) }}" enctype="multipart/form-data">
+<input type="hidden" name="network_id" value="{{network.id}}"></input>
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Note</h4>
+      </div>
+      <div class="modal-body">
+            <div id="new-note">
+                <textarea type="input" name="note_text" id="new_note_text" value="" style="width:100%; height: 90px"></textarea>
+            </div>
+      </div> <!-- modal body -->
+      <div class="modal-footer">
+        <button type="button" id="close-note" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="note-commit" class="btn btn-primary">Save</button>
+      </div> <!-- model footer -->
+    </div><!-- modal content -->
+  </div><!-- modal-dialog -->
+    </form>
+</div>
+

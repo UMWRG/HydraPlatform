@@ -1,33 +1,108 @@
-<html>
+{% extends 'page_layout.html' %}
+{% block title %}{{display_name}}'s Projects{% endblock %}
 
-    {% include 'master.html' %}
+{% block content %}
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
 
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type" py:replace="''"/>
-  <title>User ${display_name}'s Projects</title>
-</head>
+  <script src="{{url_for('static', filename='js/projects.js')}}"></script>
+  <script>
+    var add_project_url = "{{url_for('do_create_project')}}"
+    var delete_project_url = "{{url_for('do_delete_project')}}"
+    var share_project_url = "{{url_for('do_share_project')}}"
+    var go_project_url = "{{url_for('go_project', project_id=XXX)}}"
+  </script>
 
-<body>
-    {% include "header.html" %}
-    <div class="container-fixed">
+    <div id="project-container" class="container-fluid">
 
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>Project Name</th>
-              <th>Project Description</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for p in projects %}
-            <tr>
-                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_name }}</a></td>
-                <td><a href="{{ url_for('go_project', project_id=p.project_id, _external=True) }}">{{ p.project_description }}</a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+        <div class="container-fluid grid">
+        <h2>My Projects</h2>
+            <div id='projectlist'>
+              <ul class="list-unstyled row">
+                {% for p in projects %}
+                    <li id="project-{{p.project_id}}" class="listitem col-sm-3 col-md-3 col-lg-3 col-xl-1">
+                        <a type="button"
+                           class="btn btn-lg link"
+                           href="{{url_for('go_project', project_id=p.project_id, _external=True) }}">
+                            <span>
+                                <div class="head">{{p.project_name}}
+                                </div>
+                                <div class="summary">
+                                    {%if p.networks|length == 0%}
+                                        Empty
+                                    {%elif p.networks|length == 1%}
+                                        One network
+                                    {%else%}
+                                        {{p.networks|length}} Networks
+                                    {%endif%}
+                                </div>
+                            </span>
+                        </a>
+                        <div class='btn btn-secondary delete-btn' data-target="#delete_project_modal" data-toggle="modal"><span class="fa fa-trash"></span></div>
+                        <div class='btn btn-secondary share-btn' data-toggle="modal" data-target="#share_project_modal"><span class="fa fa-share-alt"></span></div>
+                    </li>
+                {% endfor %}
+                <li id="new-project" class="col-sm-3 col-md-3 col-lg-3">
+                    <span class="btn btn-lg link" data-toggle="modal" data-target="#add_project_modal">
+                        <span class="fa fa-plus "></span>
+                    </span>
+                </li>
+              </ul>
+            </div>
+        </div>
     </div>
-    {% include 'footer.html' %}
-</body>
-</html>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="add_project_modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create a Project</h4>
+          </div>
+          <div class="modal-body">
+              <form id="create-project" action="create_project" type="POST">
+                <table class="table">
+                <tr>
+                    <td><label for="project-name-input">Name*</label></td>
+                    <td><input id="project-name-input" type="text" name="name" value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="project-description-input">Description</label></td>
+                    <td><input id="project-description-input" type="text" name="description" value=""></input></td>
+                </tr>
+                </table>
+                <div>* This is mandatory</div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-create-project-button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="create-project-button" class="btn btn-success" data-dismiss="modal">Create</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="delete_project_modal" data-keyboard="true" data-backdrop="modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Delete <p class="name"></p></h4>
+          </div>
+          <div class="modal-body">
+              <form id="delete-project" action="create_project" type="POST">
+                    <input id="project-id-input" type="hidden" name="project_id" value=""></input></td>
+                    <input id="project-name" type="hidden" name="project_name" value=""></input></td>
+                  <p> Are you sure you want to delete project  </p> <p class='name'></p>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="close-delete-project-button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="delete-project-button" class="btn btn-danger">Delete</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    {%include 'sharing/project_modal.html' %}
+
+    {%endblock%}

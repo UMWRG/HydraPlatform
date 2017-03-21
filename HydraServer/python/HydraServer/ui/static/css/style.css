@@ -1,3 +1,8 @@
+#main_menu{
+    border-radius: 0px;
+    margin-bottom: 0px;
+}
+
 /* TurboGears flash bootstrap look */
 #flash > div {
   padding: 8px 35px 8px 14px;
@@ -206,10 +211,13 @@ td:first-child {
   border-left: 1px solid #cecfd5;
 }
 
-
-tbody tr:hover {
-  background: yellow;
+tr.header td:first-child{
+    font-weight: bold;
 }
+
+/*tbody tr:hover {
+  background: #EAEAEA;
+}*/
 
 .sub
 {
@@ -278,5 +286,98 @@ color: green;
 .dropdown-submenu:hover>a:after{border-left-color:#555;}
 .dropdown-submenu.pull-left{float:none;}.dropdown-submenu.pull-left>.dropdown-menu{left:-100%;margin-left:10px;-webkit-border-radius:6px 0 6px 6px;-moz-border-radius:6px 0 6px 6px;border-radius:6px 0 6px 6px;}
 
+/*Grid styling*/
 
+.grid .link {
+        width: 100%;
+        height: 270px;
+        padding:5px;
+        margin-top: 20px;
+        border-radius:8px;
+        display:table;
+        text-align:center;
+        box-shadow: 0px 0px 5px #999;
+        color: black;
+}
+.grid .link:hover{
+        border: 2px solid black;
+    }
 
+.grid .link span{
+        display:table-cell;
+        vertical-align:middle;
+        font-size:18pt;
+        max-width: 100px;
+
+        }
+
+.grid .link span .summary{
+    font-size: 12pt;
+}
+
+.grid .link span .head{
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.grid li:nth-child(even) .link {background: #e7e7e7}
+.grid li:nth-child(odd) .link {background: #fff;}
+
+.grid li.network:nth-child(even) .link {border: 2px solid #0f223f;}
+.grid li.network:nth-child(odd) .link {border: 2px solid #315082;}
+.grid li.network .link:hover{
+        border: 4px solid black;
+    }
+
+.grid .new-btn span {font-size: 22pt; margin-top: 50px}
+
+.grid .delete-btn{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-color: red;
+}
+
+.grid .delete-btn:hover{
+    color: red;
+    border-color: red;
+}
+
+.grid .share-btn{
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.grid .share-btn:hover{
+    color: blue;
+    border-color: #e9e9e9;
+}
+
+.grid .listitem {
+    -webkit-animation: fadeOut 500ms;
+    -moz-animation: fadeOut 500ms;
+    animation: fadeOut 500ms;
+}
+
+/*timeseries tooltips*/
+.d3tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  z-index: 2000;
+}
+
+/*Help get drop-downs work in modals*/
+.modal { overflow: visible; }
+.modal-body { overflow-y: visible !important; }
+
+/*work around for truncated placeholder text*/
+.select2-container .select2-search, 
+    .select2-container .select2-search__field {
+        width: 100% !important;
+    }

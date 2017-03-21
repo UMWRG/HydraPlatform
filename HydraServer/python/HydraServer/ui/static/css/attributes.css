@@ -1,0 +1,55 @@
+.menubar {
+    width: 100%;
+    background: #e5e5e5;
+    padding: 3px 2px 2px 2px;
+    background: linear-gradient(#aaa, #ccc); /* Standard syntax */
+    background: -moz-linear-gradient(#aaa, #ccc); /* Standard syntax */
+    background: -webkit-linear-gradient(#aaa, #ccc); /* Standard syntax */
+    border-radius: 4px 4px 0px 0px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.menubar button{
+    font-size: 6pt;
+}
+.manubar .left{
+    float:   left;
+    height:  15px;
+    padding: 0px;
+}
+
+.manubar .right{
+    float:   right;
+    height:  15px;
+    padding: 0px;
+}
+
+.ts_outer{
+    position:relative;
+}
+.ts_inner{
+    position:relative;
+}
+
+.ts_inner svg{
+    position:relative;
+}
+
+
+.attr_name{
+    width: 95px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.data-table-container {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.dataset input.scalar{
+    max-width: 75%;
+}

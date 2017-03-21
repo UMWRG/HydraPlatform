@@ -1,0 +1,50 @@
+tr.resourcetype table{
+    width:100%;
+    border: none;
+    margin-bottom: 10px;
+}
+
+tr.resourcetype table td{
+    border: none;
+}
+tr.resourcetype table tr{
+    border: none;
+}
+
+
+.form-footer{
+    text-align: right;
+}
+
+table td.header{
+    font-weight: bold;
+}
+table tr.header{
+    font-weight: bold;
+    background: #e9e9e9;
+}
+
+.colorpicker{
+    border: 1px solid #666666;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    vertical-align: middle;
+    padding: 0px;
+}
+
+.attributedetails{
+    display:None;
+    background:#ddd;
+    color:#000;
+}
+.attributedetails input{
+    color:#000;
+}
+
+.ts_outer {
+    position: relative;
+    width: 100%;
+    overflow: none;
+    height: auto;
+}

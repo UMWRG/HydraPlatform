@@ -1,0 +1,32 @@
+<div class="modal fade" role="dialog" id="share_network_modal" data-keyboard="true" data-backdrop="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Share <p class="name"></p></h4>
+      </div>
+      <div class="modal-body">
+          <form id="share-network" action="create_network" type="POST">
+                <input id="share-network-id" type="hidden" name="network_id" value=""></input></td>
+                <input id="share-network-name" type="hidden" name="network_name" value=""></input></td>
+                <select id="share-usernames" name="usernames" multiple='multiple' style="width: 100%">
+                </select>
+                <br><br>
+                <input type='checkbox' id='allow-resharing' name='allow-resharing'></input>
+                <label for='allow-resharing'>Allow users to re-share Network?</label>
+                <br><br>
+                <input type='checkbox' id='allow-edit' name='allow-edit' checked></input>
+                <label for='allow-edit'>Allow users to edit the Network?</label>
+
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-share-network-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="share-network-button" class="btn btn-primary">Share</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>var share_network_url      = "{{url_for('do_share_network')}}"</script>
+<script>var get_usernames_like_url = "{{url_for('get_usernames_like')}}"</script>
+<script src="{{url_for('static', filename='js/sharing/network.js')}}"></script>

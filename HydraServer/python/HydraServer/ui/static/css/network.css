@@ -1,38 +1,76 @@
+html, body, .row{
+    height: 100%
+}
+
+.row {
+    padding-top: 3px
+}
+
 .footer
 {
- clear: both;
+ border: none;
 }
 
-.network_container
+#graph-container{
+    height: 100%;
+}
+
+
+#graph_container{
+    padding-top: 10px;
+    height: 100%;
+}
+
+#graph
 {
-width: 1900px;
-height 800px;
-//border: 1px solid red;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 43px;
+    right: 0;
 }
 
-.graph
+#tab-contents
 {
-width: 900px;
-height 750px;
-float: left;
+    padding : 0px;
+    margin  : 10px 0px 0px 0px;
 }
 
-.data_
+#nodesandlinks .dataTables_wrapper {
+    padding: 10px;
+}
+#nodesandlinks .nav-tabs {
+    margin-left: 10px;
+}
+
+.main_content
 {
-  width: 350px;
-  height 750pxpx;
-  float: left;
-  padding-top: 20px;
-  padding-right: 30px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  border: 2px;
-  margin: auto;
-  overflow-y:scroll;
-  display:block;
+    padding-left: 0px;
+    padding-right: 0px;
+    height: 100%;
 }
 
-timeseries_gr
+.data_container
+{
+    width: 350px;
+    position: absolute;
+    top: 140px;
+    right: 130px;
+
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    box-shadow: 0px 0px 2px #aaa;
+    padding: 5px;
+    z-index: 1000;
+
+}
+.data_container table
+{
+    margin: auto;
+    margin-bottom: 5px;
+}
+
+.timeseries_gr
 {
       float: right;
       width: 550px;
@@ -64,20 +102,16 @@ float: left;
   fill: black ;
 }
 
-.node text {
-  font: 9px helvetica;
-}
+
 .link {
   stroke: #999;
   stroke-opacity: .6;
 }
 
-.node text {
-  font: 9px helvetica;
-}
+
 
 .node text {
-  font: 9px helvetica;
+  font: 19px helvetica;
 }
 
 d3-tip {
@@ -90,11 +124,11 @@ d3-tip :hover {
 }
 
 
-.table {
+/*.table {
   border-collapse: collapse;
   width: 300px;
   height: 600 px;
-}
+}*/
 
 th, td {
   padding: 0.25rem;
@@ -102,12 +136,13 @@ th, td {
   border: 1px solid #ccc;
 }
 
-tbody tr:nth-child(odd) {
+#data tbody tr {
   background: #eee;
+  opacity: 0.9;
 }
 
 tbody tr:hover {
-  background: yellow;
+  background: #e7e7e7;
 }
 
 .attr_table
@@ -161,5 +196,39 @@ text {
   font: 10px sans-serif;
   pointer-events: none;
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+
+.networkoptions{
+    padding: 00px 20px 0px 50px;
+}
+
+.svg-buttons{
+    display: block;
+    width: 35px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.force-layout{
+    position:relative;
+    display: block;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#content{
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#footer{
+    position:absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 

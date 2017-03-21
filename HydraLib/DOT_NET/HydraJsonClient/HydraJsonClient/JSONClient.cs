@@ -104,28 +104,28 @@ namespace HydraJsonClient
             }
             catch (System.Net.WebException ex)
             {
-                string errormessage = "";
+                string errormessage = "1: ";
                 try
                 {
                     using (var streamReader = new StreamReader(ex.Response.GetResponseStream()))
                     {
                         errormessage = streamReader.ReadToEnd();
-                        MessagesWriter.writeErrorMessage(ex.Message + "\nDetailed server response: " + errormessage, "", "");
+                        MessagesWriter.writeErrorMessage("2: "+ex.Message + "\nDetailed server response: " + errormessage, "", "");
                     }
                 }
                 catch (System.NullReferenceException ex2)
                 {
-                    MessagesWriter.writeErrorMessage("No connection can be established ");
+                    MessagesWriter.writeErrorMessage("3: No connection can be established ");
                 }
 
             }
             catch (System.NullReferenceException ex)
             {
-                MessagesWriter.writeErrorMessage(ex.Message, "", "");
+                MessagesWriter.writeErrorMessage("4: "+ex.Message, "", "");
             }
             catch (Exception ex)
             {
-                MessagesWriter.writeErrorMessage(ex.Message, "", "");
+                MessagesWriter.writeErrorMessage(""+ex.Message, "", "");
             }
             return result;
         }
@@ -144,7 +144,12 @@ namespace HydraJsonClient
                 httpWebRequest.ProtocolVersion = HttpVersion.Version10;
                 httpWebRequest.Method = "POST";
                 addCookie();
+<<<<<<< HEAD
                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+=======
+                httpWebRequest.Headers.Add("sessionid", user.sessonid);
+                 using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+>>>>>>> ui_editing
                     {                   
                         streamWriter.Write(request);
                         streamWriter.Flush();
@@ -188,7 +193,22 @@ namespace HydraJsonClient
 
          void getUser()
             {            
+<<<<<<< HEAD
                 callServer("login", user.getLoginParameters()); 
+=======
+                string res = callServer(user.getLoginParameters()); 
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                try
+                {
+
+                    hydra_user uses = js.Deserialize<hydra_user>(res);
+                    user.sessonid = uses.session_id;
+                   
+                }
+                catch (System.Exception ex) {
+                MessagesWriter.writeErrorMessage(ex.Message, "", "");
+            }       
+>>>>>>> ui_editing
             }
 
 
