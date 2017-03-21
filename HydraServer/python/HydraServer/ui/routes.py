@@ -475,9 +475,9 @@ def go_network(network_id):
     for s in network.scenarios:
         test = ordinal_to_timestamp(s.start_time)
         scenobj = dict( 
-            start_time = str(ordinal_to_timestamp(s.start_time)),
-            end_time   = str(ordinal_to_timestamp(s.end_time)),
-            time_step  = s.time_step,
+            start_time = str(ordinal_to_timestamp(s.start_time)) if s.start_time else '',
+            end_time   = str(ordinal_to_timestamp(s.end_time)) if s.end_time else '',
+            time_step  = s.time_step if s.time_step else '',
             locked     = s.locked,
             status     = s.status,
             description = s.scenario_description,
