@@ -37,9 +37,8 @@
     position:relative;
 }
 
-
 .attr_name{
-    width: 95px;
+    width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
@@ -52,4 +51,8 @@
 
 .dataset input.scalar{
     max-width: 75%;
+}
+
+#resource-name input{
+    width: 150px;
 }
