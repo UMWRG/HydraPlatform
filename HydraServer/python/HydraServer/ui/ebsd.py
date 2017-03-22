@@ -81,17 +81,18 @@ def do_get_ebsd_results(scenario_id, solution_id):
 
     flow_df, cols = _get_flow_data(scenario, solution_id)
 
-    balance_df = _get_balance_data(scenario, solution_id, cols)
+    wrz_dfs = _get_balance_data(scenario, solution_id, cols)
     
 
     writer = pd.ExcelWriter('/tmp/EBSD_Results.xlsx', engine='xlsxwriter')
     flow_df.to_excel(writer, sheet_name='Flows')
-    balance_df.to_excel(writer, sheet_name='Balance')
+    for wrz_name, balance_df in wrz_dfs.items():
+        balance_df.to_excel(writer, sheet_name=wrz_name)
     
     workbook = writer.book
     #Formatting...
-    worksheet = writer.sheets['Flows']
-    worksheet = writer.sheets['Balance']
+    #worksheet = writer.sheets['Flows']
+    #worksheet = writer.sheets['Balance']
 
     writer.save()
     
@@ -101,38 +102,199 @@ def do_get_ebsd_results(scenario_id, solution_id):
 
 def _get_balance_data(scenario, solution_id, cols):
     n = scenario.network
-    
-#    for ra in n.attributes:
-#        if ra.attr.attr_name.lower() == 'cost':
-#            ra_id = ra.resource_attr_id 
-#            break
-#
-#    for rs in scenario.resourcescenarios:
-#        if rs.resource_attr_id == ra_id:
-#            costval = rs.dataset.value
-#            all_results = json.loads(costval)
-#            import pudb; pudb.set_trace()
-#            sample_df = pd.read_json(json.dumps(all_results['0'])).transpose()
-#            
 
-    balance_cols = pd.MultiIndex.from_tuples(cols)
+    #dict of dataframes, keyed on wrz name.
+    balance_dict = {}
+
+    ra_dict = {'NODE':{}, 'LINK': {}, 'GROUP':{}, 'NETWORK':{}}
+    for rs in scenario.resourcescenarios:
+        ra = rs.resourceattr
+        resource_id = rs.resourceattr.get_resource_id()
+        if ra_dict[ra.ref_key].get(resource_id) is None:
+            ra_dict[ra.ref_key][resource_id] = {ra.resource_attr_id:rs}
+        else:
+            ra_dict[ra.ref_key][resource_id][ra.resource_attr_id] = rs
+
+    #Dict keyed on wrz name, containing sub-dicts describing such things as
+    #the in links and out links and attributes 
+    wrz_info = {}
+    for n in n.nodes:
+        if n.types[0].templatetype.type_name == 'demand':
+            wrz_data = _get_wrz_data(n, ra_dict, solution_id)
+            wrz_df = _make_balance_df(wrz_data, cols)
+            balance_dict[n.node_name] = wrz_df
+
+    return balance_dict 
+
+def _get_wrz_data(n, ra_dict, solution_id):
+
+    mga_attrs = ['BALANCE', 'AVAILABLE_DO', 'DI_THR_DATA', 'TOTAL_EXISTING_IMPORT', 'TOTAL_EXISTING_EXPORT']
+
+    in_links = n.links_from
+    out_links = n.links_to
+
+    attributes = ra_dict['NODE'].get(n.node_id, {}) 
+    rs_dict = {}
+    for ra_id in attributes:
+        rs = attributes[ra_id]
+        attr_name = rs.resourceattr.attr.attr_name
+        if attr_name not in mga_attrs:
+            continue
+
+        if rs.dataset.get_metadata_as_dict().get('sol_type') is None:
+            continue
+        val = eval(rs.dataset.value)[solution_id]
+        rs_dict[attr_name] = pd.read_json(json.dumps(val)).transpose()
+
+
+    existing_imports = _get_imports(in_links, ra_dict, solution_id)
+
+    existing_exports = _get_exports(out_links, ra_dict, solution_id)
+
+    selected_options = _get_selected_options(n, ra_dict, solution_id)
+
+    wrz_data = {'in': existing_imports, 'out':existing_exports, 'attributes':rs_dict, 'selected':selected_options}
+
+    return wrz_data
+
+
+def _make_balance_df(wrz_data, cols):
+    """
+        wrz data is a dict with
+        'in' (a list of link objects),
+        'out' (a list of link objects) and
+        'attributes'  a dict, keyed on attr_name and valued as a
+                      JSON string ready for panda-fication
+    """
+
+    attr_idx_map = dict(
+          AVAILABLE_DO = ('Initial Supply demand Balance', 'AVAILABLE_DO'),
+          BALANCE = ('Final Supply Demand Balance', ''),
+          DI_THR_DATA  = ('Initial Supply demand Balance', 'DI_THR_DATA'),
+          TOTAL_EXISTING_IMPORT = ('Initial Supply demand Balance', 'TOTAL_EXISTING_IMPORT'),
+          TOTAL_EXISTING_EXPORT = ('Initial Supply demand Balance', 'TOTAL_EXISTING_EXPORT'),
+    )
+
 
     idx_data = [
-            ('Initial Supply demand Balance', 'Available DO'),
+            ('Initial Supply demand Balance', 'AVAILABLE_DO'),
             ('Initial Supply demand Balance', 'DI_THR_DATA'),
             ('Initial Supply demand Balance', 'TOTAL_EXISTING_IMPORT'),
             ('Initial Supply demand Balance', 'TOTAL_EXISTING_EXPORT'),
-            ('Exisiting Imports', 'test'),
-            ('Exisiting Exports', 'test'),
-            ('Selected Options', 'test', 'test1'),
-            ('Final Supply Demand Balance', 'bal'),
           ]
+   
 
+    for nodename in wrz_data['in']:
+        idx_data.append(('Existing Imports', nodename))
+
+    for nodename in wrz_data['out']:
+        idx_data.append(('Existing Exports', nodename))
+
+    for nodename in wrz_data['selected']:
+        idx_data.append(('Selected Options', nodename))
+
+    idx_data.append(('Final Supply Demand Balance', ''),)
+
+    balance_cols = pd.MultiIndex.from_tuples(cols)
+    
     idx = pd.MultiIndex.from_tuples(idx_data)
 
     xl_df = pd.DataFrame(index=idx, columns=balance_cols)
 
+    for nodename in wrz_data['in']:
+        df = wrz_data['in'][nodename]
+        for c in df.columns:
+            for i in df.index:
+                xl_df[c, i][('Existing Imports', nodename)] = df[c][i]
+
+    for nodename in wrz_data['out']:
+        df = wrz_data['out'][linkname]
+        for c in df.columns:
+            for i in df.index:
+                xl_df[c, i][('Existing Exports', nodename)] = df[c][i]
+
+    for nodename in wrz_data['selected']:
+        df = wrz_data['selected'][nodename]
+        for c in df.columns:
+            for i in df.index:
+                xl_df[c, i][('Selected Options', nodename)] = df[c][i]
+
+    for attr_name in wrz_data['attributes']:
+        df = wrz_data['attributes'][attr_name]
+        idx = attr_idx_map[attr_name]
+        for  c in df.columns:
+            for i in df.index:
+                xl_df[(c, i)][idx] = df[c][i]
+
     return xl_df
+
+def _get_imports(links, ra_dict, solution_id):
+    imports = {}
+    for l in links:
+        attributes = ra_dict['LINK'].get(l.link_id, {})
+        for ra_id in attributes:
+            rs = attributes[ra_id]
+            ra = rs.resourceattr
+            if ra.attr.attr_name == 'EXISTING_LINKS':
+                if len(rs.dataset.value) == 0:
+                    continue
+                val = eval(rs.dataset.value)[solution_id]
+                link_df = pd.read_json(json.dumps(val)).transpose()
+                imports[l.node_b.node_name] = link_df
+    
+    return imports
+
+def _get_exports(links, ra_dict, solution_id):
+    imports = {}
+    for l in links:
+        attributes = ra_dict['LINK'].get(l.link_id, {})
+        for ra_id in attributes:
+            rs = attributes[ra_id]
+            ra = rs.resourceattr
+            if ra.attr.attr_name == 'EXISTING_LINKS':
+                if len(rs.dataset.value) == 0:
+                    continue
+                val = eval(rs.dataset.value)[solution_id]
+                link_df = pd.read_json(json.dumps(val)).transpose()
+                imports[l.node_a.node_name] = link_df
+    
+    return imports
+
+def _get_selected_options(wrz, ra_dict, solution_id):
+    selected = {}
+
+    inlinks = wrz.links_from
+    outlinks = wrz.links_to
+
+    for l in inlinks:
+        attributes = ra_dict['LINK'].get(l.link_id, {})
+        for ra_id in attributes:
+            rs = attributes[ra_id]
+            ra = rs.resourceattr
+            if ra.attr.attr_name == 'OPTIONAL_LINKS':
+                if len(rs.dataset.value) == 0:
+                    continue
+                val = eval(rs.dataset.value)[solution_id]
+                if not val:
+                    continue
+                link_df = pd.read_json(json.dumps(val)).transpose()
+                selected[l.node_a.node_name] = link_df 
+
+    for l in outlinks:
+        attributes = ra_dict['LINK'].get(l.link_id, {})
+        for ra_id in attributes:
+            rs = attributes[ra_id]
+            ra = rs.resourceattr
+            if ra.attr.attr_name == 'OPTIONAL_LINKS':
+                if len(rs.dataset.value) == 0:
+                    continue
+                val = eval(rs.dataset.value)[solution_id]
+                if not val:
+                    continue
+                link_df = pd.read_json(json.dumps(val)).transpose()
+                selected[l.node_b.node_name] = link_df
+
+    return selected
 
 def _get_flow_data(scenario, solution_id):
     app.logger.info('Getting Flow Data')
@@ -164,17 +326,23 @@ def _get_flow_data(scenario, solution_id):
                 jn_attr_id = a.attr_id
                 link_jns[ra.link.link_name] = rs.dataset.value
 
-
     app.logger.info("Flow data extracted")
     flow_dfs = {}
+    sample_df = None
     for linkname in flows:
+
+        if flows[linkname] in ('NULL', None, ''):
+            continue
+
         try:
             all_results = json.loads(flows[linkname])
         except:
+            app.logger.critical(flows[linkname])
             raise Exception("Flow value on link %s is not valid. Unable to parse JSON."%(linkname))
+
         result = all_results.get(str(solution_id))
         if result is None:
-            raise Exception("Unable to find data for sultion %s on link %s "%(solution_id, linkname))
+            raise Exception("Unable to find data for sulution %s on link %s "%(solution_id, linkname))
 
         #
         flowdf = pd.read_json(json.dumps(result)).transpose()
@@ -184,8 +352,10 @@ def _get_flow_data(scenario, solution_id):
         y = x.all()
 
         if y.all() == False:
-            flow_dfs[linkname] = pd.read_json(json.dumps(result)).transpose()
-        
+            val = pd.read_json(json.dumps(result)).transpose()
+            flow_dfs[linkname] = val
+            if sample_df is None or (len(val.index) > len(sample_df.index)):
+                sample_df = val
 
     app.logger.info("Flow data converted to dataframes")
 
@@ -196,9 +366,6 @@ def _get_flow_data(scenario, solution_id):
         ('Link', 'Jn'),
         ('Link', 'To'),
     ]
-
-    #Get the column from the 1st entry in the flow_dfs
-    sample_df = flow_dfs.values()[0]
 
     for c in sample_df.columns:
         for i in sample_df.index:
