@@ -29,7 +29,6 @@ def do_upload_ebsd_data():
             scenario_id: int
             data_file: xlsfile
     """
-    app.logger.info('test')
 
     data = request.get_data()
     user_id = session['user_id']
@@ -400,14 +399,16 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
 
     attr_name_map = {
         'Distribution Input': 'DI',
+        'Distribution Input (normal year)': 'DI',
         'Target Headroom' : 'THR',
-        #'Potable Water Imported': ''
-        #'Potable Water Exported': '',
-        #'Deployable Output (baseline profile without reductions)': '',
-        #'Baseline forecast changes to Deployable Output': '',
-        #'Treatment Works Losses': '',
-        #'Outage allowance': '',
-        #'Water Available For Use (own sources)': '',
+        #'Potable Water Imported': '' #Not used by original macro
+        #'Potable Water Exported': '', # Not used by original macro
+        #'Deployable Output (baseline profile without reductions)': '', #Not used by original macro
+        'Baseline forecast changes to Deployable Output': 'Change_DO', 
+        'Treatment Works Losses': 'PL_RWLOU',
+        'Outage allowance': 'PL_RWLOU',
+        'Raw Water Losses and Operational Use': 'PL_RWLOU',
+        #'Water Available For Use (own sources)': '', #Not used by original macro
         #'Total Water Available For Use': '',
         
     }
@@ -420,11 +421,13 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
     all_attributes = attrutils.get_all_attributes() 
 
     attr_id_map = {}
+    reverse_attr_id_map = {}
 
     for a in all_attributes:
         if a.attr_name in attr_name_map.values():
             attr_id_map[a.attr_name] = a.attr_id
-    
+            reverse_attr_id_map[a.attr_id] = a.attr_name
+     
     data_template = None
     wrzs = None
     wrz_nodes = []
@@ -452,7 +455,7 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
 
             if attr_name not in known_attrs:
                 continue
-
+            
             data = row[5:]
             data = data.replace(np.NaN, 0.0)
 
@@ -464,28 +467,41 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
             attr_id = attr_id_map[db_attr_name]
 
             if attributes[wrzname].get(attr_id):
-                attributes[wrzname][attr_id][scenarioname] = dict(data)
+                #Some attributes are made up of the addition of multiple attributes (PL_RWLOU, for example)
+                previousdata = attributes[wrzname][attr_id].get(scenarioname)
+                if previousdata is not None:
+                    attributes[wrzname][attr_id][scenarioname] = previousdata.add(data)
+                else:
+                    attributes[wrzname][attr_id][scenarioname] = data
             else:
-                attributes[wrzname][attr_id] = {scenarioname : dict(data)}
+                attributes[wrzname][attr_id] = {scenarioname : data}
+
     
     for wrzname in attributes.keys():
         for attr_id in attributes[wrzname].keys():
             for s in xl_df.keys():
                 if s not in attributes[wrzname][attr_id].keys(): 
-                    attributes[wrzname][attr_id][s] = dict(data_template)
+                    attr_name = reverse_attr_id_map[attr_id]
+                    #Some attribute / scenario combos are all 0, while others take the values from the DYAA scenario.
+                    if attr_name in ('Change_DO', 'PL_RWLOU'):
+                        attributes[wrzname][attr_id][s] = attributes[wrzname][attr_id]['DYAA']
+                    else:
+                        attributes[wrzname][attr_id][s] = data_template
+                attributes[wrzname][attr_id][s] = dict(attributes[wrzname][attr_id][s])
 
     attr_ids = attr_id_map.values()
     new_rs = []
+    #Set the values on the actual attributes.
     for n in wrz_nodes:
         for a in n.attributes:
             if a.attr_id in attr_ids:
                 
+                val = attributes[n.node_name.lower()][a.attr_id]
                 ##Insurance policy to ensure the conversion functions are doing
                 #the right thing
-                vala = scenarioutils._hashtable_to_seasonal(attributes[n.node_name.lower()][a.attr_id])
+                vala = scenarioutils._hashtable_to_seasonal(val)
                 valb = scenarioutils._seasonal_to_hashtable(vala)
-                assert valb ==attributes[n.node_name.lower()][a.attr_id] 
-
+                assert valb == val
 
                 new_rs.append(
                     JSONObject(dict(
@@ -493,8 +509,8 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
                         value =dict(
                             name      = 'EBSD dataset from file %s' % (data_file.filename),
                             type      =  'descriptor',        
-                            value     = json.dumps(scenarioutils._hashtable_to_seasonal(attributes[n.node_name.lower()][a.attr_id])),
-                            metadata  =  {'type': 'hashtable_seasonal', 'data_type': 'hashtable'}
+                            value     = json.dumps(val),
+                            metadata  =  {'type': 'hashtable_seasonal'}
                         )
                     ))
                 )
@@ -502,4 +518,4 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
     for r in new_rs:
         r.value = Dataset(r.value)
 
-    scenarioutils.update_resource_data(scenario_id, new_rs, user_id)
+    newdatasts = scenarioutils.update_resource_data(scenario_id, new_rs, user_id)
