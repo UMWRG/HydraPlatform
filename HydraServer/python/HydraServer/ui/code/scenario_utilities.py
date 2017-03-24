@@ -26,12 +26,6 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
                  'data_type': rs.dataset.data_type,
                 })
 
-        #Hack to work with hashtables. REMOVE AFTER DEMO
-        if len(rs.dataset.metadata) > 0:
-            m = rs.dataset.get_metadata_as_dict()
-            v = res_scenarios[attr_id].dataset.value 
-            res_scenarios[attr_id].dataset.value = _transform_value(v, m)
-
     resource = get_resource(resource_type, res_id, user_id)
 
     ra_dict = {}
@@ -57,8 +51,6 @@ def get_resource_data(network_id, scenario_id, resource_type, res_id, user_id):
 
                 if tattr.default_dataset_id is not None:
                     d = tattr.default_dataset
-                    #Hack to work with hashtables. REMOVE AFTER DEMO
-                    d.value = _transform_value(d.value, d.metadata)
                     res_scenarios[tattr.attr_id].dataset = d
 
             else:

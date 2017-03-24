@@ -2,7 +2,6 @@ from flask import  request, session, redirect, url_for, escape, send_file, jsoni
 import json
 
 from HydraServer.util.hdb import login_user
-from HydraServer.soap_server.hydra_base import get_session_db
 
 from HydraLib.HydraException import HydraError, PermissionError, ResourceNotFoundError
 
@@ -54,7 +53,6 @@ app.config['TEMPLATE_FOLDER'] = TEMPLATE_FOLDER
 
 # 'server/'
 @app.route('/')
-@requires_login
 def index():
     app.logger.info("Index")
     session_info = request.environ.get('beaker.session')
@@ -74,7 +72,6 @@ def index():
 
 # 'server/login'
 @app.route('/login', methods=['GET', 'POST'])
-@requires_login
 def do_login():
     app.logger.info("Received login request.")
     if request.method == 'POST':
@@ -88,6 +85,12 @@ def do_login():
         request.environ['beaker.session']['username'] = request.form['username']
         request.environ['beaker.session']['user_id'] = user_id
         request.environ['beaker.session'].save()
+        
+        import pudb; pudb.set_trace()
+
+        session['username'] = request.form['username']
+        session['user_id'] = user_id
+        session['session_id'] = request.environ['beaker.session'].id
 
         app.logger.info("Good login %s. Redirecting to index (%s)"%(request.form['username'], url_for('index')))
 
@@ -105,6 +108,9 @@ def do_logout():
     app.logger.info("Logging out %s", request.environ['beaker.session']['username'])
     # remove the username from the session if it's there
     request.environ['beaker.session'].delete()
+    session.pop('username', None)
+    session.pop('user_id', None)
+    session.pop('session_id', None)
     app.logger.info(request.environ.get('beaker.session'))
     return redirect(url_for('index', _external=True))
 

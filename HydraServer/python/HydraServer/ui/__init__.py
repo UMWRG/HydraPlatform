@@ -9,6 +9,8 @@ from wtforms import PasswordField
 import os
 import bcrypt
 
+from functools import wraps
+
 pp = os.path.realpath(__file__).split('\\')
 pp1 = pp[0: (len(pp) - 1)]
 basefolder_ = '\\'.join(pp1)
@@ -29,7 +31,8 @@ def requires_login(func):
         try:
             user_id = beaker_session['user_id']
             return func(*args, **kwargs)
-        except:
+        except Exception, e:
+            log.exception(e)
             app.logger.warn("Not logged in.")
             return redirect(url_for('index'))
 
