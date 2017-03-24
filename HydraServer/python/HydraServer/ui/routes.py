@@ -86,8 +86,6 @@ def do_login():
         request.environ['beaker.session']['user_id'] = user_id
         request.environ['beaker.session'].save()
         
-        import pudb; pudb.set_trace()
-
         session['username'] = request.form['username']
         session['user_id'] = user_id
         session['session_id'] = request.environ['beaker.session'].id
