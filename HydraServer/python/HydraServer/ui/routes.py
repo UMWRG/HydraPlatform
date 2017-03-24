@@ -2,7 +2,6 @@ from flask import  request, session, redirect, url_for, escape, send_file, jsoni
 import json
 
 from HydraServer.util.hdb import login_user
-from HydraServer.soap_server.hydra_base import get_session_db
 
 from HydraLib.HydraException import HydraError, PermissionError, ResourceNotFoundError
 
@@ -37,9 +36,7 @@ from code.export_network import export_network_to_pywr_json, export_network_to_e
 
 from code.import_network import import_network_from_csv_files, import_network_from_excel, import_network_from_pywr_json
 
-from . import app, appinterface
-
-
+from . import app, appinterface, requires_login
 
 from HydraServer.db import commit_transaction, rollback_transaction
 
@@ -58,13 +55,14 @@ app.config['DATA_FOLDER'] = DATA_FOLDER
 @app.route('/')
 def index():
     app.logger.info("Index")
-    app.logger.info("Session: %s", session)
-    if 'username' not in session:
+    session_info = request.environ.get('beaker.session')
+    app.logger.info("Session: %s", session_info)
+    if 'user_id' not in session_info:
         app.logger.info("Going to login page.")
         return render_template('login.html', msg="")
     else:
-        user_id = session['user_id']
-        username = escape(session['username'])
+        user_id = session_info['user_id']
+        username = escape(session_info['username'])
         projects = projutils.get_projects(user_id)
         app.logger.info("Logged in. Going to projects page.")
         return render_template('projects.html',
@@ -78,14 +76,19 @@ def do_login():
     app.logger.info("Received login request.")
     if request.method == 'POST':
         try:
-            user_id, api_session_id = login_user(request.form['username'], request.form['password'])
-        except:
+            user_id = login_user(request.form['username'], request.form['password'])
+        except Exception, e:
+            app.logger.exception(e)
             app.logger.warn("Bad login for user %s", request.form['username'])
             return render_template('login.html',  msg="Unable to log in")
 
+        request.environ['beaker.session']['username'] = request.form['username']
+        request.environ['beaker.session']['user_id'] = user_id
+        request.environ['beaker.session'].save()
+        
         session['username'] = request.form['username']
         session['user_id'] = user_id
-        session['session_id'] = api_session_id
+        session['session_id'] = request.environ['beaker.session'].id
 
         app.logger.info("Good login %s. Redirecting to index (%s)"%(request.form['username'], url_for('index')))
 
@@ -98,49 +101,42 @@ def do_login():
                            msg="")
 
 @app.route('/do_logout', methods=['GET', 'POST'])
+@requires_login
 def do_logout():
-    app.logger.info("Logging out %s", session['username'])
+    app.logger.info("Logging out %s", request.environ['beaker.session']['username'])
     # remove the username from the session if it's there
+    request.environ['beaker.session'].delete()
     session.pop('username', None)
     session.pop('user_id', None)
     session.pop('session_id', None)
-    app.logger.info(session)
+    app.logger.info(request.environ.get('beaker.session'))
     return redirect(url_for('index', _external=True))
 
 # set the secret key.  keep this really secret:
 app.secret_key = '\xa2\x98\xd5\x1f\xcd\x97(\xa4K\xbfF\x99R\xa2\xb4\xf4M\x13R\xd1]]\xec\xae'
 
-def check_session(req):
-    session_db = get_session_db()
-
-    session_id = request.headers.get('session_id')
-
-    sess_info = session_db.get(session_id)
-
-    if sess_info is None:
-        raise Exception("No Session")
-
-    sess_info = {'user_id':sess_info[0], 'username':sess_info[1]}
-
-    return sess_info
 
 @app.route('/about', methods=['GET'])
+@requires_login
 def go_about():
     return render_template('about.html')
 
 @app.route('/templates', methods=['GET'])
+@requires_login
 def go_templates():
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     all_templates = tmplutils.get_all_templates(user_id)
     return render_template('templates.html', templates=all_templates)
 
 @app.route('/get_templates', methods=['GET'])
+@requires_login
 def do_get_all_templates():
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     all_templates = tmplutils.get_all_templates(user_id)
     return all_templates
 
 @app.route('/newtemplate', methods=['GET'])
+@requires_login
 def go_new_template():
     all_attributes = attrutils.get_all_attributes()
     return render_template('template.html',
@@ -149,9 +145,10 @@ def go_new_template():
                           )
 
 @app.route('/template/<template_id>', methods=['GET'])
+@requires_login
 def go_template(template_id):
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     all_attributes = attrutils.get_all_attributes()
     tmpl = tmplutils.get_template(template_id, user_id)
 
@@ -177,9 +174,10 @@ def go_template(template_id):
 
 
 @app.route('/create_attr', methods=['POST'])
+@requires_login
 def do_create_attr():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -192,9 +190,10 @@ def do_create_attr():
     return newattr.as_json()
 
 @app.route('/create_dataset', methods=['POST'])
+@requires_login
 def do_create_dataset():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -208,9 +207,10 @@ def do_create_dataset():
     return newdataset.as_json()
 
 @app.route('/create_template', methods=['POST'])
+@requires_login
 def do_create_template():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -224,6 +224,7 @@ def do_create_template():
 
 
 @app.route('/load_template', methods=['POST'])
+@requires_login
 def do_load_template():
 
     now = datetime.datetime.now().strftime("%y%m%d%H%M")
@@ -232,7 +233,7 @@ def do_load_template():
     if not os.path.exists(basefolder):
         os.mkdir(basefolder)
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     template_file = request.files['import_file']
 
@@ -249,9 +250,10 @@ def do_load_template():
     return newtemplate.as_json()
 
 @app.route('/update_template', methods=['POST'])
+@requires_login
 def do_update_template():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -264,9 +266,10 @@ def do_update_template():
     return newtemplate.as_json()
 
 @app.route('/delete_template', methods=['POST'])
+@requires_login
 def do_delete_template(template_id):
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     status = delete_template(template_id, user_id)
 
@@ -275,9 +278,10 @@ def do_delete_template(template_id):
     return status
 
 @app.route('/apply_template_to_network', methods=['POST'])
+@requires_login
 def do_apply_template_to_network(template_id, network_id):
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     apply_template_to_network(template_id, network_id, user_id)
 
@@ -286,11 +290,12 @@ def do_apply_template_to_network(template_id, network_id):
     return redirect(url_for('go_network', network_id=network_id))
 
 @app.route('/project/<project_id>', methods=['GET'])
+@requires_login
 def go_project(project_id):
     """
         Get a user's projects
     """
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     project = projutils.get_project(project_id, user_id)
     app.logger.info("Project %s retrieved", project.project_name)
     '''
@@ -305,9 +310,10 @@ def go_project(project_id):
                                )
 
 @app.route('/create_network', methods=['POST'])
+@requires_login
 def do_create_network():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -322,9 +328,10 @@ def do_create_network():
     return net.as_json()
 
 @app.route('/delete_network', methods=['POST'])
+@requires_login
 def do_delete_network():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -335,9 +342,10 @@ def do_delete_network():
     return json.dumps({'status': 'OK'})
 
 @app.route('/create_project', methods=['POST'])
+@requires_login
 def do_create_project():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -350,9 +358,10 @@ def do_create_project():
     return proj.as_json()
 
 @app.route('/delete_project', methods=['POST'])
+@requires_login
 def do_delete_project():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -363,9 +372,10 @@ def do_delete_project():
     return json.dumps({'status': 'OK'})
 
 @app.route('/share_project', methods=['POST'])
+@requires_login
 def do_share_project():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     d = json.loads(request.get_data())
     app.logger.info('Project sharing details: %s'%d)
 
@@ -388,9 +398,10 @@ def do_share_project():
     return json.dumps({'status': 'OK'})
 
 @app.route('/share_network', methods=['POST'])
+@requires_login
 def do_share_network():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
     d = json.loads(request.get_data())
     app.logger.info('network sharing details: %s'%d)
 
@@ -420,16 +431,18 @@ def allowed_file (filename):
         return False
 
 @app.route('/add_network_note/<network_id>/<note_text>', methods=['GET'])
+@requires_login
 def do_add_network_note(network_id, note_text):
     pass
 
 @app.route('/network/<network_id>', methods=['GET'])
+@requires_login
 def go_network(network_id):
     """
         Get a network
     """
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     node_coords, links, node_name_map, extents, network, nodes_, links_ = netutils.get_network(network_id, user_id)
 
@@ -528,9 +541,10 @@ def go_network(network_id):
 
 
 @app.route('/delete_resource', methods=['POST'])
+@requires_login
 def do_delete_resource():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -547,9 +561,10 @@ def do_delete_resource():
     return 'OK'
 
 @app.route('/add_node', methods=['POST'])
+@requires_login
 def do_add_node():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -565,9 +580,10 @@ def do_add_node():
 
 
 @app.route('/update_node', methods=['POST'])
+@requires_login
 def do_update_node():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -582,9 +598,10 @@ def do_update_node():
     return updatednode.as_json()
 
 @app.route('/delete_node', methods=['POST'])
+@requires_login
 def do_delete_node():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -599,9 +616,10 @@ def do_delete_node():
     return 'OK'
 
 @app.route('/add_link', methods=['POST'])
+@requires_login
 def do_add_link():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -616,9 +634,10 @@ def do_add_link():
     return newlink.as_json()
 
 @app.route('/delete_link', methods=['POST'])
+@requires_login
 def do_delete_link():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -633,9 +652,10 @@ def do_delete_link():
     return 'OK'
 
 @app.route('/add_group', methods=['POST'])
+@requires_login
 def do_add_group():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -667,9 +687,10 @@ def do_add_group():
 
 
 @app.route('/upgate_group', methods=['POST'])
+@requires_login
 def do_update_group():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -721,9 +742,10 @@ def do_update_group():
     return updatedgroup.as_json()
 
 @app.route('/get_resource_data', methods=['POST'])
+@requires_login
 def do_get_resource_data():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     pars= json.loads(request.get_data())
     network_id = pars['network_id']
@@ -758,9 +780,10 @@ def do_get_resource_data():
 
 
 @app.route('/update_resourcedata', methods=['POST'])
+@requires_login
 def do_update_resource_data():
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     d = json.loads(request.get_data())
 
@@ -843,6 +866,7 @@ def run_pywr_app(network_id, scenario_id):
 
 
 @app.route('/status/<task_id>')
+@requires_login
 def appstatus(task_id):
     task, progress , total, status=get_app_progress(task_id)
     if task == True:
@@ -860,6 +884,7 @@ def appstatus(task_id):
     return jsonify(response)
 
 @app.route('/import_uploader', methods=['POST'])
+@requires_login
 def import_uploader():
     uploaded_file=None
     basefolder = os.path.join(os.path.dirname(os.path.realpath(__file__)), UPLOAD_FOLDER)
@@ -961,6 +986,7 @@ def import_app(network_id, scenario_id, app_name):
         return "Error: "+result
 
 @app.route('/send_zip_files',  methods=['GET', 'POST'])
+@requires_login
 def send_zip_files():
         app.logger.info("======>> Send method called ....", request.form)
 
@@ -975,6 +1001,7 @@ def send_zip_files():
 
 
 @app.route('/header/ <network_id>, <scenario_id>, <directory>' , methods=['POST','GET'])
+@requires_login
 def go_export_network(network_id, scenario_id, directory):
     zip_file_name = os.path.join(directory, ('network_' + network_id + '.zip'))
     create_zip_file(directory, zip_file_name)
@@ -987,12 +1014,13 @@ def go_export_network(network_id, scenario_id, directory):
     return send_file(zip_file_name, as_attachment=True)
 
 @app.route("/clone_scenario", methods=['POST'])
+@requires_login
 def do_clone_scenario():
     pars= json.loads(request.get_data())
     scenario_id   = pars['scenario_id']
     app.logger.info("Cloning scenario %s", scenario_id)
     scenario_name = pars['scenario_name']
-    user_id       = session['user_id']
+    user_id       = request.environ['beaker.session']['user_id']
 
     new_scenario = scenarioutils.clone_scenario(scenario_id, scenario_name, user_id)
 
@@ -1001,10 +1029,11 @@ def do_clone_scenario():
     return new_scenario.as_json()
 
 @app.route("/get_usernames_like", methods=['POST'])
+@requires_login
 def get_usernames_like():
     pars = request.form.to_dict()
 
-    user_id = session['user_id']
+    user_id = request.environ['beaker.session']['user_id']
 
     usernames = userutils.get_usernames_like(pars['q'], user_id)
 
@@ -1013,24 +1042,26 @@ def get_usernames_like():
     return json.dumps(return_data)
 
 @app.route("/get_resource_scenario", methods=['POST'])
+@requires_login
 def do_get_resource_scenario():
     pars= json.loads(request.get_data())
     scenario_id   = pars['scenario_id']
     resource_attr_id = pars['resource_attr_id']
-    app.logger.info("Fetching resource scenario %s %s",resource_attr_id, scenario_id)
-    user_id       = session['user_id']
+    log.info("Fetching resource scenario %s %s",resource_attr_id, scenario_id)
+    user_id       = request.environ['beaker.session']['user_id']
    
     rs = scenarioutils.get_resource_scenario(resource_attr_id, scenario_id, user_id)
 
     return rs.as_json()
 
 @app.route("/get_resource_scenarios", methods=['POST'])
+@requires_login
 def do_get_resource_scenarios():
     pars= json.loads(request.get_data())
     scenario_ids   = pars['scenario_ids']
     resource_attr_id = int(pars['resource_attr_id'])
-    app.logger.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
-    user_id       = session['user_id']
+    log.info("Fetching multiple resource scenarios %s %s",resource_attr_id, scenario_ids)
+    user_id       = request.environ['beaker.session']['user_id']
     
     return_rs = {}
     for scenario_id in scenario_ids:

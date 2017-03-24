@@ -9,6 +9,8 @@ from wtforms import PasswordField
 import os
 import bcrypt
 
+from functools import wraps
+
 pp = os.path.realpath(__file__).split('\\')
 pp1 = pp[0: (len(pp) - 1)]
 basefolder_ = '\\'.join(pp1)
@@ -16,6 +18,25 @@ basefolder_ = '\\'.join(pp1)
 basefolder = os.path.dirname(__file__)
 
 app = Flask(__name__)
+
+
+def requires_login(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        try:
+            beaker_session = request.environ['beaker.session']
+        except:
+            app.logger.critical("No beaker information found!")
+            return redirect(url_for('index'))
+        try:
+            user_id = beaker_session['user_id']
+            return func(*args, **kwargs)
+        except Exception, e:
+            log.exception(e)
+            app.logger.warn("Not logged in.")
+            return redirect(url_for('index'))
+
+    return wrapped
 
 #For use by the admin app, as it can't use zope transactions 
 db_url = config.get('mysqld', 'url')
