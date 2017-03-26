@@ -44,7 +44,7 @@ def requires_login(func):
             rollback_transaction()
             traceback.print_exc(file=sys.stdout)
             code = "HydraError %s"%e.code
-            raise HydraServiceError(e.message, code)
+            raise Exception(e.message, code)
         except Exception, e:
             log.exception(e)
             app.logger.warn("Not logged in.")
