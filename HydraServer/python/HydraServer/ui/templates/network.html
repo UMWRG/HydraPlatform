@@ -40,7 +40,7 @@
      }
 
     var scenario_summaries = {{scenarios|safe}}
-
+    
     var scenario_name_lookup = {}
     {% for s in network.scenarios%}
         scenario_name_lookup[{{s.scenario_id}}] = "{{s.scenario_name}}";
