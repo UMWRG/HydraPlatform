@@ -73,7 +73,7 @@ function update_solution_select()
                 var costval = JSON.parse(rs_list[attr_id].dataset.value)
                 var costs = Object.values(costval)[0]
                 var soln_names = Object.keys(costs)
-                sol_names.sort()
+                soln_names.sort()
                 var solns = []
                 for (var i=0; i<soln_names.length; i++){
                     //Set a default of the first (optimal) solution
