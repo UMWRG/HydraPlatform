@@ -13,7 +13,7 @@ import traceback
 
 from HydraLib.HydraException import HydraError
 
-from HydraServer.db import commit_transaction, rollback_transaction
+from HydraServer.db import commit_transaction, rollback_transaction, close_session
 
 from functools import wraps
 
@@ -37,8 +37,15 @@ def requires_login(func):
             return redirect(url_for('index'))
 
         try:
-            user_id = beaker_session['user_id']
-            return func(*args,**kwargs)
+            #Manually expire the DB session so it can pick up changes made
+            #by other processes.
+            close_session()
+
+            fn = func(*args,**kwargs)
+            
+            close_session()
+
+            return fn
         except HydraError as e:
             log.critical(e)
             rollback_transaction()
