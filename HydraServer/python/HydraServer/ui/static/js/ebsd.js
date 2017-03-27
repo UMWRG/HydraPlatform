@@ -71,7 +71,7 @@ function update_solution_select()
         for (var attr_id in rs_list){
             if (attr_map[attr_id] == 'COST'){
                 var costval = JSON.parse(rs_list[attr_id].dataset.value)
-                var costs = costval[0]
+                var costs = Object.values(costval)[0]
                 var soln_names = Object.keys(costs)
                 var solns = []
                 for (var i=0; i<soln_names.length; i++){

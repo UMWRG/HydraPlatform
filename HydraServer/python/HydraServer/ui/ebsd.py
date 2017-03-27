@@ -510,7 +510,7 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
                             name      = 'EBSD dataset from file %s' % (data_file.filename),
                             type      =  'descriptor',        
                             value     = json.dumps(val),
-                            metadata  =  {'type': 'hashtable_seasonal'}
+                            metadata  =  {'type': 'hashtable_seasonal', "sub_key": "SCENARIO", "key": "yr"}
                         )
                     ))
                 )
