@@ -9,6 +9,12 @@ from wtforms import PasswordField
 import os
 import bcrypt
 
+import traceback
+
+from HydraLib.HydraException import HydraError
+
+from HydraServer.db import commit_transaction, rollback_transaction, close_session
+
 from functools import wraps
 
 pp = os.path.realpath(__file__).split('\\')
@@ -23,18 +29,35 @@ app = Flask(__name__)
 def requires_login(func):
     @wraps(func)
     def wrapped(*args, **kwargs):
+
         try:
             beaker_session = request.environ['beaker.session']
         except:
             app.logger.critical("No beaker information found!")
             return redirect(url_for('index'))
+
         try:
-            user_id = beaker_session['user_id']
-            return func(*args, **kwargs)
+            #Manually expire the DB session so it can pick up changes made
+            #by other processes.
+            close_session()
+
+            fn = func(*args,**kwargs)
+            
+            close_session()
+
+            return fn
+        except HydraError as e:
+            log.critical(e)
+            rollback_transaction()
+            traceback.print_exc(file=sys.stdout)
+            code = "HydraError %s"%e.code
+            raise Exception(e.message, code)
         except Exception, e:
             log.exception(e)
             app.logger.warn("Not logged in.")
-            return redirect(url_for('index'))
+            traceback.print_exc(file=sys.stdout)
+            rollback_transaction()
+            raise Exception (e.message)
 
     return wrapped
 
@@ -45,7 +68,7 @@ db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))
 
-from app_manager import appmanager, appinterface
+from app_manager import appmanager, appinterface 
 app.register_blueprint(appmanager)
 
 admin = Admin(app, name='microblog', template_mode='bootstrap3')

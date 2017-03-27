@@ -38,7 +38,7 @@ from code.import_network import import_network_from_csv_files, import_network_fr
 
 from . import app, appinterface, requires_login
 
-from HydraServer.db import commit_transaction, rollback_transaction
+from HydraServer.db import commit_transaction, rollback_transaction, DBSession
 
 global DATA_FOLDER
 DATA_FOLDER = 'python/HydraServer/ui/data'
@@ -61,6 +61,8 @@ def index():
         app.logger.info("Going to login page.")
         return render_template('login.html', msg="")
     else:
+        #Manually expire all db sessions?
+        DBSession.remove()
         user_id = session_info['user_id']
         username = escape(session_info['username'])
         projects = projutils.get_projects(user_id)
