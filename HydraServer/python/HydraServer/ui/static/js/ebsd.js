@@ -77,8 +77,8 @@ function update_solution_select()
                 for (var i=0; i<soln_names.length; i++){
                     //Set a default of the first (optimal) solution
                     if (i == 0){current_solution=soln_names[i]}
-
-                    solns.push({'name': soln_names[i], 'cost':costs[i]})
+                    var soln_name = soln_names[i]
+                    solns.push({'name': soln_name, 'cost':costs[soln_name]})
                 }
                 var s = d3.select('#solution-select') 
                 s.selectAll('option').data(solns)
