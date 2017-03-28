@@ -34,7 +34,8 @@ install_requires=[
     "spyne >= 2.12",
     "cherrypy",
     "python-dateutil",
-    "requests"
+    "requests",
+    "cheroot"
     ]
 
 if platform.system() == "Windows":  # only add winpaths when platform is Windows so that setup.py is universal
