@@ -37,8 +37,9 @@
 /* Footer styling */
 .footer {
     margin-top: 45px;
-    padding: 35px 30px 36px;
     border-top: 1px solid #e5e5e5;
+    padding-right: 1em;
+    padding-left: 1em;
 }
 
 .footer p {
