@@ -14,6 +14,51 @@ var drag_line = null;
 //Set up the color scale
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
+var visible_nodes = [];
+var visible_links = [];
+
+//Not all nodes in the network are necessarily useful in the map, so don't
+//show nodes with a layout attribute of hidden (doesn't matter what the key is. Just
+//the presence of a hidden element is enough
+function set_visible_nodes(){
+    visible_nodes = []
+    visible_node_ids = []
+    visible_links = []
+
+    
+    nodes_.forEach(function(d) {
+        if (d.type.layout == undefined){
+            d.type.layout = {}
+        }else{
+            if (typeof(d.type.layout) == 'string'){
+                d.type.layout = JSON.parse(d.type.layout)
+            }
+        }
+        if (d.layout == undefined){
+            d.layout = {}
+        }else{
+            if (typeof(d.layout) == 'string'){
+                d.layout = JSON.parse(d.layout)
+            }
+        }
+
+        if (d.type.layout.hidden==undefined && d.layout.hidden == undefined){
+            visible_nodes.push(d)
+            visible_node_ids.push(d.id)
+        }
+    });
+
+    links_.forEach(function(d){
+        if ((d.source in visible_node_ids) || (d.target in visible_node_ids)){
+            visible_links.push(d)
+        }
+    })
+    
+}
+
+set_visible_nodes()
+
+
 var menu = [
     {
         title: 'Delete',

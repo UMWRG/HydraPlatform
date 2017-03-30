@@ -120,6 +120,8 @@ function handleDrop(e) {
 
     nodes_.push(data)
 
+    set_visible_nodes()
+
     redraw_nodes()
 
     if (map != null){

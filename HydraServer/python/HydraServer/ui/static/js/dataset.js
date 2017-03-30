@@ -1,5 +1,6 @@
 
 
+
 var defaultts =[
 ['Time', 'Value'],
 ['', '']
@@ -32,18 +33,6 @@ var createDataset = function(dataset){
     return new_dataset
 }
 
-
-$(document).on('ready', function(){
-
-    //Find all dataset input fields and convert them to buttons or other input types if necessary
-    //
-    
-    insertModals()
-
-    updateInputs();
-
-
-})
 
 var updateInputs = function(element){
     //Find all input elements with a dataset class. If they have an array
@@ -604,7 +593,14 @@ var insertModals = function(){
     })
 }
 
+$(document).on('ready', function(){
 
+    //Find all dataset input fields and convert them to buttons or other input types if necessary
+    insertModals()
+    updateInputs();
+
+
+})
 
 var ts_modal = `
 <div class="modal fade" tabindex="-1" role="dialog" id="ts-editor">

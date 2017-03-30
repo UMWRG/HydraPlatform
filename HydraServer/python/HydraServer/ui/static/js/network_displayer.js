@@ -2,11 +2,11 @@ var map = null;
 
 var margin = {'top': 60, 'right': 40, 'bottom': 60, 'left': 100};
 
-var graph_width = document.getElementById('graph').clientWidth
+var graph_width = document.getElementById('graph').clientWidth;
 
-var width  = (graph_width - margin.left - margin.right),
-height = (700-margin.top - margin.bottom);
-colors = d3.scaleOrdinal(d3.schemeCategory10);
+var width  = (graph_width - margin.left - margin.right);
+var height = (700-margin.top - margin.bottom);
+var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
 if (min_x == max_x){
     max_x = max_x * 100;
@@ -23,7 +23,6 @@ var yScale = d3.scaleLinear()
 var xScale = d3.scaleLinear()
                       .domain([min_x, max_x])
                       .range([0,width]);
-
 
 
 function dragged(d) {
@@ -135,19 +134,10 @@ var start_node = null;
 
 var redraw_nodes = function(){
     
-    nodes_.forEach(function(d) {
-        if (d.type.layout == undefined){
-            d.type.layout = {}
-        }else{
-            if (typeof(d.type.layout) == 'string'){
-                d.type.layout = JSON.parse(d.type.layout)
-            }
-        }
-    });
    svg.selectAll(".node").remove()
 
     node = svg.selectAll(".node")
-        .data(nodes_)
+        .data(visible_nodes)
         .enter().append("g")
         .classed("node", true)
         .attr("id", function(d) {return 'schematicnode_'+d.id;})
@@ -174,7 +164,7 @@ var redraw_nodes = function(){
         .on('contextmenu', d3.contextMenu(menu));
 
     text = svg.append("g").selectAll(".node")
-        .data(nodes_)
+        .data(visible_nodes)
         .enter().append("text")
         .text(function(d) { return d.name; })
         .style("visibility", "hidden")
@@ -185,7 +175,7 @@ var redraw_nodes = function(){
 
 var redraw_links = function(){
 
-    links_.forEach(function(d) {
+    visible_links.forEach(function(d) {
         if (d.type.layout == undefined){
             d.type.layout = {}
         }else{
@@ -198,7 +188,7 @@ var redraw_links = function(){
    svg.selectAll(".link").remove()
     //Create all the line svgs but without locations yet
     link = svg.selectAll(".link")
-        .data(links_)
+        .data(visible_links)
         .enter().append("line")
         .attr("id", function(d) {return 'schematiclink_'+d.id;})
         .attr("class", "link")
@@ -222,8 +212,8 @@ var redraw_links = function(){
          .style('stroke',  function(d) { 
               if (d.type.layout['color'] != undefined){return d.type.layout['color']}else{return 'black'}
         })
-        .on('mouseover', link_mouse_in) //Added
-        .on('mouseout', link_mouse_out) //Added
+        .on('mouseover', link_mouse_in)
+        .on('mouseout', link_mouse_out)
         .on("click", links_mouse_click);
    tick() 
 }
@@ -232,8 +222,8 @@ var redraw_links = function(){
 redraw_links()
 redraw_nodes()
 
-force.nodes(nodes_).on('tick', tick)
-force.force('link').links(links_)
+force.nodes(visible_nodes).on('tick', tick)
+force.force('link').links(visible_links)
 tick()
 
 var zoom = function(){
@@ -288,7 +278,7 @@ var create_force_layout = function(){
     force.force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    force.nodes(nodes_).on('tick', forcetick)
+    force.nodes(visible_nodes).on('tick', forcetick)
     force.on('end', show_force_save)
 
     svg.call(d3.zoom()
@@ -333,7 +323,7 @@ var create_static_layout = function(){
     force.force("charge", null)
         .force("center", null);
 
-    force.nodes(nodes_).on('tick', tick)
+    force.nodes(visible_nodes).on('tick', tick)
 
     svg.call(d3.zoom()
        .scaleExtent([0.1,8])
@@ -342,8 +332,8 @@ var create_static_layout = function(){
     force.restart();
 
 
-    for (var i=0; i<nodes_.length; i++){
-        var n = nodes_[i]
+    for (var i=0; i<visible_nodes.length; i++){
+        var n = visible_nodes[i]
         update_node(n.id, n.name, n.x, n.y)
     }
         

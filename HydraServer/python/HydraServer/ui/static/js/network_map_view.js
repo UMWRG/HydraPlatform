@@ -75,8 +75,8 @@ var svg = d3.select("#graph").select("svg")
 
     g = svg.append("g");
 
-for (var i = 0, len = nodes_.length; i < len; i++) {
-         d=nodes_[i];
+for (var i = 0, len = visible_nodes.length; i < len; i++) {
+         d=visible_nodes[i];
 
         var proj_xy = proj4(source,dest,[d.x,d.y])
 
@@ -145,19 +145,10 @@ var start_node = null;
 
 var redraw_nodes = function(){
     
-    nodes_.forEach(function(d) {
-        if (d.type.layout == undefined){
-            d.type.layout = {}
-        }else{
-            if (typeof(d.type.layout) == 'string'){
-                d.type.layout = JSON.parse(d.type.layout)
-            }
-        }
-    });
    g.selectAll(".node").remove()
 
     node = g.selectAll(".node")
-        .data(nodes_)
+        .data(visible_nodes)
         .enter().append("g")
         .classed("node", true)
         .classed("context-menu-one", true)
@@ -186,7 +177,7 @@ var redraw_nodes = function(){
         .on("dblclick", nodes_mouse_double_click)
 
     text = g.append("g").selectAll(".node")
-        .data(nodes_)
+        .data(visible_nodes)
         .enter().append("text")
         .text(function(d) { return d.name; })
         .style("visibility", "hidden")
@@ -196,7 +187,7 @@ var redraw_nodes = function(){
 
 var redraw_links = function(){
 
-    links_.forEach(function(d) {
+    visible_links.forEach(function(d) {
         if (d.type.layout == undefined){
             d.type.layout = {}
         }else{
@@ -209,7 +200,7 @@ var redraw_links = function(){
    g.selectAll(".link").remove()
     //Create all the line svgs but without locations yet
     link = g.selectAll(".link")
-        .data(links_)
+        .data(visible_links)
         .enter().append("line")
         .attr("class", "link")
         .style("stroke-dasharray", function(d){
@@ -239,8 +230,8 @@ var redraw_links = function(){
 
 
 
-force.nodes(nodes_).on('tick', update)
-force.force('link').links(links_)
+force.nodes(visible_nodes).on('tick', update)
+force.force('link').links(visible_links)
 
 var update = function(){
 
