@@ -8,22 +8,21 @@ var width  = (graph_width - margin.left - margin.right);
 var height = (700-margin.top - margin.bottom);
 var colors = d3.scaleOrdinal(d3.schemeCategory10);
 
-if (min_x == max_x){
-    max_x = max_x * 100;
-}
-if (min_y == max_y){
-    max_y = max_y * 100;
+var yScale = null;
+var xScale = null;
+
+var reset_scales = function(){
+    //`ransform functions, used to convert the Hydra coordinates
+    //to coodrinates on the d3 svg
+    yScale = d3.scaleLinear()
+                           .domain([max_y, min_y ])
+                           .range([height,0]);
+    xScale = d3.scaleLinear()
+                          .domain([min_x, max_x])
+                          .range([0,width]);
 }
 
-//`ransform functions, used to convert the Hydra coordinates
-//to coodrinates on the d3 svg
-var yScale = d3.scaleLinear()
-                       .domain([max_y, min_y ])
-                       .range([height,0]);
-var xScale = d3.scaleLinear()
-                      .domain([min_x, max_x])
-                      .range([0,width]);
-
+reset_scales()
 
 function dragged(d) {
     if( d3.select(this).classed('selected') == false){

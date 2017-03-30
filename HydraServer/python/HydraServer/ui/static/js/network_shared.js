@@ -17,14 +17,28 @@ var color = d3.scaleOrdinal(d3.schemeCategory20);
 var visible_nodes = [];
 var visible_links = [];
 
+var compare_numbers = function(a, b){
+    if (a < b){
+        return -1
+    }else if (a > b){
+        return 1;
+    }else{
+        return 0
+    }
+}
+
 //Not all nodes in the network are necessarily useful in the map, so don't
 //show nodes with a layout attribute of hidden (doesn't matter what the key is. Just
 //the presence of a hidden element is enough
 function set_visible_nodes(){
+    //reset globals
     visible_nodes = []
-    visible_node_ids = []
     visible_links = []
 
+    //locals
+    var visible_node_ids = []
+    var x_coords = []
+    var y_coords = []
     
     nodes_.forEach(function(d) {
         if (d.type.layout == undefined){
@@ -45,8 +59,19 @@ function set_visible_nodes(){
         if (d.type.layout.hidden==undefined && d.layout.hidden == undefined){
             visible_nodes.push(d)
             visible_node_ids.push(d.id)
+            x_coords.push(parseFloat(d.x))
+            y_coords.push(parseFloat(d.y))
         }
+
     });
+    
+    x_coords.sort(compare_numbers)
+    y_coords.sort(compare_numbers)
+    min_x = x_coords[0]
+    min_y = y_coords[0]
+    max_x = x_coords[x_coords.length-1]
+    max_y = y_coords[y_coords.length-1]
+    centre = [(min_x + max_x)/2, (min_y + max_y)/2];
 
     links_.forEach(function(d){
         if ((d.source in visible_node_ids) || (d.target in visible_node_ids)){
