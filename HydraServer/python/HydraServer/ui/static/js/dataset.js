@@ -553,10 +553,6 @@ $(document).on('change', '.dataset input[name="value"]',function(){
 
 var insertModals = function(){
 
-    $('body').append(ts_modal)
-    $('body').append(array_modal)
-    $('body').append(metadata_modal)
-    
     $('#ts-editor').on('hidden.bs.modal', function (e) {
         if (hot != null){
             hot.destroy()
@@ -601,71 +597,3 @@ $(document).on('ready', function(){
 
 
 })
-
-var ts_modal = `
-<div class="modal fade" tabindex="-1" role="dialog" id="ts-editor">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"></h4>
-      </div>
-      <div class="modal-body">
-        <div class="ts_outer">
-            <div class='ts_inner' id='ts-edit-inner'>
-            </div>
-        </div> <!-- ts outer -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary save">Save</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->`;
-
-var array_modal = `
-<div class="modal fade" tabindex="-1" role="dialog" id="array-editor">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title"></h4>
-      </div>
-      <div class="modal-body">
-        <div class="ts_outer">
-            <div class='ts_inner' id='array-edit-inner'>
-            </div>
-        </div> <!-- ts outer -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary save">Save</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->`;
-
-
-var metadata_modal = `
-<div class="modal fade" tabindex="-1" role="dialog" id="md-editor">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Metadata</h4>
-      </div>
-      <div class="modal-body">
-        <div class="ts_outer">
-            <div class='ts_inner' id='md-edit-inner'> 
-            </div>
-        </div> <!-- ts outer -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary save">Save</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->`;
-
