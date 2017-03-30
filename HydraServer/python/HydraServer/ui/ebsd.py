@@ -82,8 +82,11 @@ def do_get_ebsd_results(scenario_id, solution_id):
 
     wrz_dfs = _get_balance_data(scenario, solution_id, cols)
     
+    folder = os.tempnam()
+    outputname = 'EBSD_Results_%s_%s.xlsx'%(scenario.scenario_name, solution_id)
+    location = os.path.join(folder, outputname)
 
-    writer = pd.ExcelWriter('/tmp/EBSD_Results.xlsx', engine='xlsxwriter')
+    writer = pd.ExcelWriter(location, engine='xlsxwriter')
     flow_df.to_excel(writer, sheet_name='Flows')
     for wrz_name, balance_df in wrz_dfs.items():
         balance_df.to_excel(writer, sheet_name=wrz_name)
@@ -97,7 +100,7 @@ def do_get_ebsd_results(scenario_id, solution_id):
     
     app.logger.info("File export complete.")
     
-    return send_from_directory('/tmp/','EBSD_Results.xlsx', as_attachment=True)
+    return send_from_directory(location, as_attachment=True)
 
 def _get_balance_data(scenario, solution_id, cols):
     n = scenario.network
