@@ -127,13 +127,7 @@ def get_resource_scenario(resource_attr_id, scenario_id, user_id):
     return jsonrs 
 
 def _transform_value(value, metadata, reverse=False):
-    if metadata.get('data_type') == 'hashtable' and metadata.get('sol_type') == None:
-        try:
-            df = pd.read_json(value)
-            return df.transpose().to_json() 
-        except:
-            raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
-    elif metadata.get('data_type') == 'hashtable_seasonal' or metadata.get('type') == 'hashtable_seasonal':
+    if metadata.get('data_type') == 'hashtable_seasonal' or metadata.get('type') == 'hashtable_seasonal':
         try:
             if reverse is True:
                 return json.dumps(_hashtable_to_seasonal(value))
@@ -142,6 +136,13 @@ def _transform_value(value, metadata, reverse=False):
 
         except:
             raise Exception("Unable to parse seasonal hashtable. Not valid JSON or it's not pandas compatible.")
+
+    elif metadata.get('data_type') == 'hashtable' and metadata.get('sol_type') == None:
+        try:
+            df = pd.read_json(value)
+            return df.transpose().to_json() 
+        except:
+            raise Exception("Unable to parse hashtable. Not valid JSON or it's not pandas compatible.")
     elif metadata.get('sol_type') == 'MGA':
         try:
 
