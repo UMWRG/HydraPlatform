@@ -130,54 +130,6 @@ def get_network (network_id, user_id):
                        'type': linktype, 'name': link.link_name, 'res_type': 'link'})
 
 
-    '''
-    nodes_attrs = []
-    for node_ in network.nodes:
-        ress = get_resource_data('NODE', node_.node_id, scenario_id, None, session)
-        for res in ress:
-            attrr_name_ = attr_id_name[res.resourceattr.attr_id]
-            try:
-                vv = json.loads(res.dataset.value)
-            except:
-                vv = res.dataset.value
-
-            if (res.dataset.data_type == "timeseries"):
-                values_ = []
-                for index in vv.keys():
-                    for date_ in sorted(vv[index].keys()):
-                        value = vv[index][date_]
-                        values_.append({'date': date_, 'value': value})
-                vv = values_
-            metadata = set_metadata(get_dict(res.dataset)['metadata'])
-
-            nodes_attrs.append({'id': node_.node_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
-                                'type': res.dataset.data_type, 'values': vv, 'metadata':metadata })
-
-    links_attrs = []
-    for link_ in network.links:
-        ress = get_resource_data('LINK', link_.link_id, scenario_id, None, session)
-        for res in ress:
-            attrr_name_ = attr_id_name[res.resourceattr.attr_id]
-            try:
-                vv = json.loads(res.dataset.value)
-            except:
-                vv = res.dataset.value
-
-            if (res.dataset.data_type == "timeseries"):
-                values_ = []
-                for index in vv.keys():
-                    for date_ in sorted(vv[index].keys()):
-                        value = vv[index][date_]
-                        values_.append({'date': date_, 'value': value})
-                vv = values_
-            metadata=set_metadata(get_dict(res.dataset)['metadata'])
-
-            links_attrs.append({'id': link_.link_id, 'attr_id': res.resourceattr.attr_id, 'attrr_name': attrr_name_,
-                                'type': res.dataset.data_type, 'values': vv, 'metadata':metadata})
-
-
-            # Get the min, max x and y coords
-    '''
     extents = hc.get_network_extents(network_id,user_id)
     log.info(node_coords)
 
