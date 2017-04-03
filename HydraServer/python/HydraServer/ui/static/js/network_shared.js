@@ -27,6 +27,17 @@ var compare_numbers = function(a, b){
     }
 }
 
+function inArray(myArray,myValue){
+    var inArray = false;
+    for (var i=0; i<myArray.length; i++){
+        if (myValue == myArray[i]){
+            return true
+        }
+    }
+    return false
+};
+
+
 //Not all nodes in the network are necessarily useful in the map, so don't
 //show nodes with a layout attribute of hidden (doesn't matter what the key is. Just
 //the presence of a hidden element is enough
@@ -74,7 +85,10 @@ function set_visible_nodes(){
     centre = [(min_x + max_x)/2, (min_y + max_y)/2];
 
     links_.forEach(function(d){
-        if ((d.source in visible_node_ids) || (d.target in visible_node_ids)){
+        if (d.source == 45 || d.target == 45){
+            console.log(d)
+        }
+        if (inArray(visible_node_ids, d.source)==true && inArray(visible_node_ids, d.target)==true){
             visible_links.push(d)
         }
     })
