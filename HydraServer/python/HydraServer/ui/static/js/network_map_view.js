@@ -127,6 +127,16 @@ function dragged(d) {
 
 }
 
+function dragended(d)
+{
+    if( d3.select(this).classed('selected') == false){
+        return
+    }
+    var newxy = proj4(dest,source,[d.x,d.y])
+    console.log("New coords: "+newxy[1]+", " + newxy[0])
+    update_node(d.id, d.name, newxy[0], newxy[1]);
+ }
+
 //Node drag
 var drag = d3.drag()
          .on("start", dragstarted)
