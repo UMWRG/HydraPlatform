@@ -120,9 +120,8 @@
                     </ul>
                 </div>
                 </div>
-
-                <div class="btn-group" role="group" aria-label="...">
-                <div class="dropdown">
+                
+                {% if apps %}
                     <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Run a Model
                         <span class="caret"></span>
@@ -141,6 +140,7 @@
                     </ul>
                 </div>
                 </div>
+                {%endif%}
             <div class="btn-group pull-right">
                 <label >
                     <input id="label" type='checkbox'
