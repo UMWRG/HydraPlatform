@@ -64,7 +64,7 @@ $(document).on('click', '#run-ebsd-model-button', function(){
         }catch (err){
             text = "Unknown error.";
         }
-        $("#run-ebsd-model .modal-body").prepend(
+        $("#run-ebsd-modal .modal-body").prepend(
                             "<div class='alert alert-danger'>An error has occurred: "+text+"</div>")
         
     }
