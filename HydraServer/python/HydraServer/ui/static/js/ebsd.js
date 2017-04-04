@@ -40,9 +40,47 @@ $(document).on('click', '#load-ebsd-data-button', function(){
         error: error
     })
     
-
 })
 
+
+$(document).on('click', '#run-ebsd-model-button', function(){
+
+    $("#run-ebsd-model-button i.fa-spin").removeClass('hidden')
+    $("#run-ebsd-model-button i.fa-play").addClass('hidden')
+
+    var success = function(resp){
+        $("#run-ebsd-model-button i.fa-spinner").addClass('hidden')
+        $("#run-ebsd-model-button i.fa-play").removeClass('hidden')
+        $('#run-ebsd-modal').modal('hide')
+        poll_jobs()
+    }
+
+    var error = function(resp){
+        r = JSON.parse(resp.responseText)
+        $("#run-ebsd-model-button i.fa-spinner").addClass('hidden')
+        $("#run-ebsd-model-button i.fa-play").removeClass('hidden')
+        $("#run-ebsd-model-button .modal-body").prepend(
+                            "<div class='alert alert-danger'>An error has occurred: "+r.Error+"</div>")
+        
+    }
+
+    var form_data = new FormData($('#run-ebsd-model-form')[0])
+   // data.append('scenario_id', $('#load-ebsd-data-form input[name=scenario_id]').val())
+   // data.append('data_file', $('#load-ebsd-data-form input[name=data_file]').val())
+
+    $.ajax({
+        type: 'POST',
+        url: run_ebsd_model_url,
+        data: form_data, 
+        processData: false,
+        type: 'post',
+        contentType: false,
+        cache: false,
+        success: success,
+        error: error
+    })
+    
+})
 
 $(document).on('click', '#get-ebsd-results', function(){
  

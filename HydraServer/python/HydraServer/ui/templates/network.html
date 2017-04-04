@@ -108,20 +108,9 @@
                 </div><!-- /input-group -->
                 </div>
 
-                <div class="btn-group" role="group" aria-label="...">
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Run a Model
-                    <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="runmodeldropdown" style="top:30px">
-                        <li><a href="#" onclick="runGamsModel()" >GAMS</a></li>
-                        <li><a href="#" onclick="runPywrApp()">Pywr</a></li>
-                    </ul>
-                </div>
-                </div>
-                
                 {% if apps %}
+                <div class="btn-group" role="group" aria-label="...">
+                <div class="dropdown hidden">
                     <button class="btn btn-default dropdown-toggle" type="button" id="runmodeldropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Run a Model
                         <span class="caret"></span>

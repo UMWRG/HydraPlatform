@@ -1,4 +1,4 @@
-
+<script>var run_ebsd_model_url = "{{url_for('run_ebsd_model')}}"</script>
 <div class="modal fade" tabindex="-1" role="dialog" id="load-ebsd-data-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -12,7 +12,7 @@
             <table class="table">
                 <tr>
                     <td>
-                        <label>Select DO file</label>
+                        <label>Select Data file</label>
                     </td>
                     <td>
                         <input name="data_file" type='file'></input>
@@ -26,6 +26,45 @@
         <button type="button" id="load-ebsd-data-button" class="btn btn-success">
             <i class="fa fa-spinner fa-spin hidden"></i>
             Upload
+        </button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="run-ebsd-modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Choose your Scenarios</h4>
+      </div>
+      <div class="modal-body">
+         <form id="run-ebsd-model-form" action="run_ebsd_model" method="POST" enctype="multipart/form-data" >
+            {%for app in apps.get('model', [])%}
+                {%if app.name == 'GAMS Automatic run'%}
+                    <input name="app_id" value="{{app.id}}" type="hidden"></input>
+                {%endif%}
+            {%endfor%}
+            <input value="{{network.network_id}}" type="hidden" name="network_id"></input>
+            <select name="scenario_id" multiple class='selectpicker'>
+                {%for s in network.scenarios%}
+                    <option value="{{s.scenario_id}}"
+                            {%if s.scenario_id == scenario_id%}
+                                selected
+                            {%endif%}
+                    >{{s.scenario_name}}</option>
+                {%endfor%}
+            </select>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="close-ebsd-run-button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="run-ebsd-model-button" class="btn btn-success">
+            <i class="fa fa-spinner fa-spin hidden"></i>
+            <i class="fa fa-play"></i>
+            Run
         </button>
       </div>
     </div><!-- /.modal-content -->

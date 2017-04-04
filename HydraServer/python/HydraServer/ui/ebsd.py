@@ -7,6 +7,8 @@ from . import app
 from flask import request, jsonify, abort, session, send_from_directory
 import datetime
 
+import os
+
 from code import scenario_utilities as scenarioutils
 from code import attr_utilities as attrutils
 from code import network_utilities as netutils
@@ -16,6 +18,7 @@ from werkzeug.exceptions import InternalServerError
 from HydraLib.HydraException import HydraError, ResourceNotFoundError
 from HydraServer.lib.objects import JSONObject, Dataset
 
+from . import appinterface 
 
 
 from HydraServer.db import commit_transaction, rollback_transaction
@@ -522,3 +525,35 @@ def _process_data_file(data_file, network_id, scenario_id, user_id):
         r.value = Dataset(r.value)
 
     newdatasts = scenarioutils.update_resource_data(scenario_id, new_rs, user_id)
+
+
+
+@app.route('/run_ebsd_model', methods=['POST'])
+def run_ebsd_model():
+    """To run an app the following information needs to be transmitted as a json
+    string:
+    {'id': 'the app id',
+     'network_id': number,
+     'scenario_id': number,
+     'options': {'option1': value1, 'option2': value2, ... }
+     }
+
+    'options' is allowed to be empty; entries in the options dict need to
+    correspond to a 'name' of a mandatory or non-mandatory argument or a switch
+    of an app.
+    """
+
+    app_id = request.values['app_id']
+    network_id = request.values['network_id']
+    scenario_id = request.values.getlist('scenario_id')
+    default_model_file =  os.path.join(os.path.expanduser('~'), 'EBSD.gms')
+    model_file = os.environ.get('EBSD_MODEL', default_model_file)
+
+    for s_id in scenario_id:
+        job_id = appinterface.run_app(app_id,
+                              network_id,
+                              s_id,
+                              session['user_id'],
+                              options={'gams-model':model_file})
+
+    return jsonify(job_id)
