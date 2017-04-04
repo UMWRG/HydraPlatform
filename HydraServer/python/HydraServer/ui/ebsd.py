@@ -554,6 +554,10 @@ def run_ebsd_model():
                               network_id,
                               s_id,
                               session['user_id'],
-                              options={'gams-model':model_file})
+                              options={
+                                  'gams-model':model_file,
+                                  'session_id': session['session_id'],
+                                  'server_url': request.url_root,
+                              })
 
     return jsonify(job_id)
