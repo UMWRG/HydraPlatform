@@ -61,7 +61,7 @@ $(document).on('click', '#run-ebsd-model-button', function(){
         try{
             r = JSON.parse(resp.responseText)
             text = r.error
-        }catch{
+        }catch (err){
             text = "Unknown error.";
         }
         $("#run-ebsd-model .modal-body").prepend(
