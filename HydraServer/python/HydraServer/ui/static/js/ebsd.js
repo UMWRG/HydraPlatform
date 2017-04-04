@@ -56,11 +56,16 @@ $(document).on('click', '#run-ebsd-model-button', function(){
     }
 
     var error = function(resp){
-        r = JSON.parse(resp.responseText)
         $("#run-ebsd-model-button i.fa-spinner").addClass('hidden')
         $("#run-ebsd-model-button i.fa-play").removeClass('hidden')
+        try{
+            r = JSON.parse(resp.responseText)
+            text = r.error
+        }catch{
+            text = "Unknown error.";
+        }
         $("#run-ebsd-model-button .modal-body").prepend(
-                            "<div class='alert alert-danger'>An error has occurred: "+r.Error+"</div>")
+                            "<div class='alert alert-danger'>An error has occurred: "+text+"</div>")
         
     }
 
