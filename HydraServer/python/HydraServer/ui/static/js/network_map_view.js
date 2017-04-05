@@ -1,4 +1,3 @@
-
 var dest = new proj4.Proj('EPSG:4326');
 var source = new proj4.Proj(projection_crs);
 
@@ -164,7 +163,7 @@ var redraw_nodes = function(){
         .classed("context-menu-one", true)
         .classed("btn", true)
         .classed("btn-neutral", true)
-        .attr("id", function(d) {return d.id;})
+        .attr("id", function(d) {return 'schematicnode_'+d.id;})
         .attr('shape', function(d){
             if (d.type.layout.shape != undefined){
                 return d.type.layout.shape
