@@ -1,4 +1,3 @@
-
 var dest = new proj4.Proj('EPSG:4326');
 var source = new proj4.Proj(projection_crs);
 
@@ -127,6 +126,16 @@ function dragged(d) {
 
 }
 
+function dragended(d)
+{
+    if( d3.select(this).classed('selected') == false){
+        return
+    }
+    var newxy = proj4(dest,source,[d.x,d.y])
+    console.log("New coords: "+newxy[1]+", " + newxy[0])
+    update_node(d.id, d.name, newxy[0], newxy[1]);
+ }
+
 //Node drag
 var drag = d3.drag()
          .on("start", dragstarted)
@@ -154,7 +163,7 @@ var redraw_nodes = function(){
         .classed("context-menu-one", true)
         .classed("btn", true)
         .classed("btn-neutral", true)
-        .attr("id", function(d) {return d.id;})
+        .attr("id", function(d) {return 'schematicnode_'+d.id;})
         .attr('shape', function(d){
             if (d.type.layout.shape != undefined){
                 return d.type.layout.shape
