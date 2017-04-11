@@ -80,6 +80,7 @@ def do_login():
         try:
             user_id = login_user(request.form['username'], request.form['password'])
         except Exception, e:
+            rollback_transaction()
             app.logger.exception(e)
             app.logger.warn("Bad login for user %s", request.form['username'])
             return render_template('login.html',  msg="Unable to log in")
