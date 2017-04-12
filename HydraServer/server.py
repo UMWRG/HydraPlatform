@@ -74,10 +74,12 @@ from HydraServer.soap_server.sharing import SharingService
 from spyne.util.wsgi_wrapper import WsgiMounter
 import socket
 
+try:
+    from hwi import app as ui_app
+except:
+    ui_app = None
 
 from beaker.middleware import SessionMiddleware
-from HydraServer.ui import app as ui_app
-
 
 applications = [
     AuthenticationService,
@@ -281,13 +283,17 @@ json_application = s.create_json_application()
 jsonp_application = s.create_jsonp_application()
 http_application = s.create_http_application()
 
-wsgi_application = WsgiMounter({
-    config.get('hydra_server', 'soap_path', 'soap'): soap_application,
-    config.get('hydra_server', 'json_path', 'json'): json_application,
-    'jsonp': jsonp_application,
-    config.get('hydra_server', 'http_path', 'http'): http_application,
-    '': ui_app,
-})
+apps = {
+        config.get('hydra_server', 'soap_path', 'soap'): soap_application,
+        config.get('hydra_server', 'json_path', 'json'): json_application,
+        'jsonp': jsonp_application,
+        config.get('hydra_server', 'http_path', 'http'): http_application,
+}
+
+if ui_app is not None:
+    apps[''] = ui_app
+
+wsgi_application = WsgiMounter(apps)
 
 for server in wsgi_application.mounts.values():
     server.max_content_length = 100 * 0x100000 # 10 MB
@@ -307,8 +313,6 @@ if __name__ == '__main__':
 
     args = sys.argv
     
-    print args
-
     if len(args) > 1:
         port = int(args[1])
     else:
