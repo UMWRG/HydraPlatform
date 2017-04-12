@@ -56,7 +56,7 @@ def get_datetime(timestamp):
     """
     #First try to use date util. Failing that, continue
     try:
-        parsed_dt = parse(timestamp, dayfirst=True)
+        parsed_dt = parse(timestamp, dayfirst=False)
         if parsed_dt.tzinfo is None:
             return parsed_dt
         else:
@@ -117,6 +117,13 @@ def timestamp_to_ordinal(timestamp):
 def ordinal_to_timestamp(date):
     if date is None:
         return None
+
+    if type(date) in (str, unicode):
+        try:
+            date = Decimal(date)
+        except:
+            log.warning("Unable to convert %s to a timestamp" % (date))
+            return date
 
     day = int(date)
     time = date - day

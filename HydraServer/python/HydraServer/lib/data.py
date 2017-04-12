@@ -578,6 +578,7 @@ def _bulk_insert_data(bulk_data, user_id=None, source=None):
     metadata         = {}
     #This is what gets returned.
     for d in bulk_data:
+        log.info(d.data_hash)
         dataset_dict = new_data[d.data_hash]
         current_hash = d.data_hash
 
@@ -696,6 +697,8 @@ def _process_incoming_data(data, user_id=None, source=None):
 
         if d.metadata is not None:
             metadata_dict = json.loads(d.metadata)
+        else:
+            metadata_dict={}
 
         metadata_keys = [k.lower() for k in metadata_dict]
         if user_id is not None and 'user_id' not in metadata_keys:

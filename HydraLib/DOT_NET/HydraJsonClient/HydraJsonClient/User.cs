@@ -26,25 +26,25 @@ using System.Runtime.Serialization;
 
 namespace HydraJsonClient
 {
-     
-   public class User
-    {   
-    public string user_name {get; set;}    
-    public string password { get; set; }    
-    public int  user_id {get; set;}
-    public string sessonid { get; set; }
 
-    public User(string user_name, string password, string sessionid) 
+    public class User
+    {
+        public string user_name { get; set; }
+        public string password { get; set; }
+        public int user_id { get; set; }
+        public string sessonid { get; set; }
+
+        public User(string user_name, string password, string sessionid)
         {
             this.user_name = user_name;
             this.password = password;
             this.sessonid = sessionid;
-        }        
+        }
 
-    public string getLoginParameters()
+        public string getLoginParameters()
         {
-           return  "{\"login\": {\"username\": \""+user_name+"\", \"password\": \""+password+"\"}}";
-            
+            return "{\"login\": {\"username\": \"" + user_name + "\", \"password\": \"" + password + "\"}}";
+
         }
     }
 }

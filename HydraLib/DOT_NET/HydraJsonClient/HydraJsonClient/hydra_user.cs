@@ -26,11 +26,11 @@ using System.Runtime.Serialization;
 
 namespace HydraJsonClient
 {
-      [DataContract]
+    [DataContract]
     public class hydra_user
     {
         [DataMember(Name = "user_id")]
-          public int  user_id { get; set; }
+        public int user_id { get; set; }
 
 
         [DataMember(Name = "session_id")]

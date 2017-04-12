@@ -11,7 +11,7 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with HydraPlatform.  If not, see <http://www.gnu.org/licenses/>
 #
@@ -33,18 +33,23 @@ getcontext().prec = 26
 
 from spyne.application import Application
 from spyne.protocol.soap import Soap11
-from spyne.protocol.json import JsonDocument
+from spyne.protocol.json import JsonDocument, JsonP
 from spyne.protocol.http import HttpRpc
 
 import spyne.decorator
 
 from spyne.error import Fault, ArgumentError
 
-import HydraServer.plugins 
+from HydraServer.db import connect
+connect()
+
+import HydraServer.plugins
 from HydraServer.db.model import create_resourcedata_view
 create_resourcedata_view()
 
 from HydraServer.util.hdb import make_root_user
+
+
 
 from HydraServer.soap_server.network import NetworkService
 from HydraServer.soap_server.project import ProjectService
@@ -61,7 +66,6 @@ from HydraServer.soap_server.rules import RuleService
 from HydraServer.soap_server.notes import NoteService
 from HydraServer.soap_server.hydra_base import AuthenticationService,\
     LogoutService,\
-    get_session_db,\
     AuthenticationError,\
     ObjectNotFoundError,\
     HydraServiceError,\
@@ -69,6 +73,13 @@ from HydraServer.soap_server.hydra_base import AuthenticationService,\
 from HydraServer.soap_server.sharing import SharingService
 from spyne.util.wsgi_wrapper import WsgiMounter
 import socket
+
+try:
+    from hwi import app as ui_app
+except:
+    ui_app = None
+
+from beaker.middleware import SessionMiddleware
 
 applications = [
     AuthenticationService,
@@ -100,18 +111,16 @@ import datetime
 import traceback
 
 from cheroot.wsgi import Server
-from HydraServer.db import commit_transaction, rollback_transaction 
+from HydraServer.db import commit_transaction, rollback_transaction, close_session
 
 log = logging.getLogger(__name__)
 
 def _on_method_call(ctx):
+
+    env = ctx.transport.req_env
+
     if ctx.function == AuthenticationService.login:
         return
-
-    if ctx.in_body_doc.get('sessionid'):
-        session_id=ctx.in_body_doc['sessionid'][0]
-    else:
-        session_id=ctx.in_header.sessionid
 
     if ctx.in_object is None:
         raise ArgumentError("RequestHeader is null")
@@ -119,16 +128,20 @@ def _on_method_call(ctx):
     if ctx.in_header is None:
         raise AuthenticationError("No headers!")
 
-    session_db = get_session_db()
-    sess_info  = session_db.get(session_id)
-    if sess_info is None:
-        raise Fault("No Session")
+    session = env['beaker.session']
 
-    ctx.in_header.user_id  = sess_info[0]
-    ctx.in_header.username = sess_info[1]
+    if session.get('user_id') is None:
+        raise Fault("No Session!")
+
+    ctx.in_header.user_id = session['user_id']
+    ctx.in_header.username = session['username']
+
 
 def _on_method_context_closed(ctx):
+    log.info("Committing...")
     commit_transaction()
+    log.info("Closing session")
+    close_session()
 
 class HydraSoapApplication(Application):
     """
@@ -157,24 +170,23 @@ class HydraSoapApplication(Application):
 
             start = datetime.datetime.now()
             res =  ctx.service_class.call_wrapper(ctx)
-
             log.info("Call took: %s"%(datetime.datetime.now()-start))
             return res
-        except HydraError, e:
+        except HydraError as e:
             log.critical(e)
             rollback_transaction()
             traceback.print_exc(file=sys.stdout)
             code = "HydraError %s"%e.code
             raise HydraServiceError(e.message, code)
-        except ObjectNotFoundError, e:
+        except ObjectNotFoundError as e:
             log.critical(e)
             rollback_transaction()
             raise
-        except Fault, e:
+        except Fault as e:
             log.critical(e)
             rollback_transaction()
             raise
-        except Exception, e:
+        except Exception as e:
             log.critical(e)
             traceback.print_exc(file=sys.stdout)
             rollback_transaction()
@@ -204,6 +216,14 @@ class HydraServer():
                 )
         return app
 
+    def create_jsonp_application(self):
+
+        app = HydraSoapApplication(applications, tns='hydra.base',
+                    in_protocol=HttpRpc(validator='soft'),
+                    out_protocol=JsonP("hydra_cb")
+                )
+        return app
+
     def create_http_application(self):
 
         app = HydraSoapApplication(applications, tns='hydra.base',
@@ -212,8 +232,8 @@ class HydraServer():
                 )
         return app
 
-    def run_server(self):
-        
+    def run_server(self, port=None):
+
         log.info("home_dir %s",config.get('DEFAULT', 'home_dir'))
         log.info("hydra_base_dir %s",config.get('DEFAULT', 'hydra_base_dir'))
         log.info("common_app_data_folder %s",config.get('DEFAULT', 'common_app_data_folder'))
@@ -224,17 +244,20 @@ class HydraServer():
         log.info("result_file %s",config.get('plugin', 'result_file'))
         log.info("plugin_xsd_path %s",config.get('plugin', 'plugin_xsd_path'))
         log.info("log_config_path %s",config.get('logging_conf', 'log_config_path'))
-        
-        port = config.getint('hydra_server', 'port', 8080)
+
+        if port is None:
+            port = config.getint('hydra_server', 'port', 8080)
+
         domain = config.get('hydra_server', 'domain', '127.0.0.1')
-       
+
         check_port_available(domain, port)
 
         spyne.const.xml_ns.DEFAULT_NS = 'soap_server.hydra_complexmodels'
-        cp_wsgi_application = Server((domain,port), application, numthreads=2)
+        cp_wsgi_application = Server((domain,port), application, numthreads=10)
 
         log.info("listening to http://%s:%s", domain, port)
         log.info("wsdl is at: http://%s:%s/soap/?wsdl", domain, port)
+
         try:
             cp_wsgi_application.start()
         except KeyboardInterrupt:
@@ -256,18 +279,42 @@ def check_port_available(domain, port):
 s = HydraServer()
 soap_application = s.create_soap_application()
 json_application = s.create_json_application()
+jsonp_application = s.create_jsonp_application()
 http_application = s.create_http_application()
 
-application = WsgiMounter({
-    config.get('hydra_server', 'soap_path', 'soap'): soap_application,
-    config.get('hydra_server', 'json_path', 'json'): json_application,
-    config.get('hydra_server', 'http_path', 'http'): http_application,
-})
+apps = {
+        config.get('hydra_server', 'soap_path', 'soap'): soap_application,
+        config.get('hydra_server', 'json_path', 'json'): json_application,
+        'jsonp': jsonp_application,
+        config.get('hydra_server', 'http_path', 'http'): http_application,
+}
 
-for server in application.mounts.values():
+if ui_app is not None:
+    apps[''] = ui_app
+
+wsgi_application = WsgiMounter(apps)
+
+for server in wsgi_application.mounts.values():
     server.max_content_length = 100 * 0x100000 # 10 MB
+
+# Configure the SessionMiddleware
+session_opts = {
+    'session.type': 'file',
+    'session.cookie_expires': True,
+    'session.data_dir':'/tmp',
+    'session.file_dir':'/tmp/auth',
+}
+application = SessionMiddleware(wsgi_application, session_opts)
 
 #To kill this process, use this command:
 #ps -ef | grep 'server.py' | grep 'python' | awk '{print $2}' | xargs kill
 if __name__ == '__main__':
-    s.run_server()
+
+    args = sys.argv
+    
+    if len(args) > 1:
+        port = int(args[1])
+    else:
+        port = None
+
+    s.run_server(port=port)
