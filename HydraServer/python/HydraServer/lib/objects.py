@@ -30,6 +30,9 @@ class JSONObject(dict):
             obj = obj_dict.__dict__
         elif isinstance(obj_dict, dict):
             obj = obj_dict
+        elif hasattr(obj_dict, '_asdict'):
+            #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
+            obj = obj_dict._asdict()            
         else:
             #last chance...try to cast it as a dict. Do this for sqlalchemy result proxies.
             try:
