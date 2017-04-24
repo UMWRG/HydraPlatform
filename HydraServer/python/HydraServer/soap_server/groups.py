@@ -54,7 +54,7 @@ class ResourceGroupService(HydraService):
             group_id (int): The ID of the group to remove
 
         Returns:
-            String: 'OK'
+            Unicode: 'OK'
 
         Raises:
             ResourceNotFoundError: IF the resource group is not found.

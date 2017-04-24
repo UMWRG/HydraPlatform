@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with HydraPlatform.  If not, see <http://www.gnu.org/licenses/>
 #
-from spyne.model.primitive import Mandatory, String, Unicode
+from spyne.model.primitive import Mandatory, Unicode
 from spyne.error import Fault
 from spyne.model.complex import ComplexModel
 from spyne.decorator import rpc
@@ -111,7 +111,7 @@ class ObjectNotFoundError(HydraServiceError):
 class LogoutService(HydraService):
     __tns__      = 'hydra.authentication'
 
-    @rpc(Mandatory.String, _returns=String,
+    @rpc(Mandatory.Unicode, _returns=Unicode,
                                                     _throws=AuthenticationError)
     def logout(ctx, username):
 
