@@ -864,13 +864,17 @@ def get_resource_data(ref_key, ref_id, scenario_id, type_id,**kwargs):
         return the resource scenarios for the attributes
         within the type.
     """
-
+    
     user_id = kwargs.get('user_id')
+    
+    #THis can be either a single ID or list, so make them consistent
+    if not isinstance(scenario_id, list):
+        scenario_id = [scenario_id]
 
     resource_data_qry = DBSession.query(ResourceScenario).filter(
         ResourceScenario.dataset_id   == Dataset.dataset_id,
         ResourceAttr.resource_attr_id == ResourceScenario.resource_attr_id,
-        ResourceScenario.scenario_id == scenario_id,
+        ResourceScenario.scenario_id.in_(scenario_id),
         ResourceAttr.ref_key == ref_key,
         or_(
             ResourceAttr.network_id==ref_id,

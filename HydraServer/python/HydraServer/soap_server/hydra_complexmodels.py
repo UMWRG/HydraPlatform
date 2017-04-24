@@ -1164,7 +1164,7 @@ class Network(Resource):
         self.project_id = parent.project_id
         self.id         = parent.network_id
         self.name       = parent.network_name
-        self.description = parent.network_description
+        self.description = parent.network_description if parent.network_description else ''
         self.created_by  = parent.created_by
         self.cr_date     = str(parent.cr_date)
         self.layout = self.get_outgoing_layout(parent.layout)

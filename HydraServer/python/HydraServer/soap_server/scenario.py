@@ -201,7 +201,7 @@ class ScenarioService(HydraService):
         data_cm = [Dataset(d) for d in scenario_data]
         return data_cm
 
-    @rpc(Integer, Integer, Integer(min_occurs=0, max_occurs=1), _returns=SpyneArray(ResourceScenario))
+    @rpc(Integer, Integer(min_occurs=1, max_occurs='unbounded'), Integer(min_occurs=0, max_occurs=1), _returns=SpyneArray(ResourceScenario))
     def get_node_data(ctx, node_id, scenario_id, type_id):
         """
             Get all the resource scenarios for a given node 
