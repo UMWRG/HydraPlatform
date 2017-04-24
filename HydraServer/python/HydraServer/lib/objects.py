@@ -25,14 +25,14 @@ class JSONObject(dict):
                 assert isinstance(obj, dict), "JSON string does not evaluate to a dict"
             except Exception:
                 raise ValueError("Unable to read string value. Make sure it's JSON serialisable")
+        elif hasattr(obj_dict, '_asdict') and obj_dict._asdict is not None:
+            #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
+            obj = obj_dict._asdict()            
         elif hasattr(obj_dict, '__dict__'):
             #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
             obj = obj_dict.__dict__
         elif isinstance(obj_dict, dict):
             obj = obj_dict
-        elif hasattr(obj_dict, '_asdict'):
-            #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
-            obj = obj_dict._asdict()            
         else:
             #last chance...try to cast it as a dict. Do this for sqlalchemy result proxies.
             try:
