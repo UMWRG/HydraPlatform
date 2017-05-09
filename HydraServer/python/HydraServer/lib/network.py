@@ -1841,7 +1841,7 @@ def get_scenarios(network_id,**kwargs):
     user_id = kwargs.get('user_id')
     try:
         net_i = DBSession.query(Network).filter(Network.network_id == network_id).one()
-        net_i.check_write_permission(user_id=user_id)
+        net_i.check_read_permission(user_id=user_id)
     except NoResultFound:
         raise ResourceNotFoundError("Network %s not found"%(network_id))
 
