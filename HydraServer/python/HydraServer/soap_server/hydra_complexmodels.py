@@ -492,11 +492,11 @@ class TypeAttr(HydraComplexModel):
     _type_info = [
         ('attr_id',            Integer(min_occurs=1, max_occurs=1)),
         ('attr_name',          Unicode(default=None)),
-        ('type_id',            Integer(default=None)),
+        ('type_id',            Integer(min_occurs=0, max_occurs=1, default=None)),
         ('data_type',          Unicode(default=None)),
         ('dimension',          Unicode(default=None)),
         ('unit',               Unicode(default=None)),
-        ('default_dataset',    Integer(default=None)),
+        ('default_dataset_id', Integer(default=None)),
         ('data_restriction',   AnyDict(default=None)),
         ('is_var',             Unicode(default=None)),
         ('description',        Unicode(default=None)),
@@ -521,7 +521,7 @@ class TypeAttr(HydraComplexModel):
         self.type_id   = parent.type_id
         self.data_type = parent.data_type
         self.unit      = parent.unit
-        self.default_dataset = self.default_dataset
+        self.default_dataset_id = self.default_dataset_id
         self.description = parent.description
         self.properties = self.get_outgoing_layout(parent.properties)
         self.cr_date = str(parent.cr_date)
@@ -551,7 +551,7 @@ class TemplateType(HydraComplexModel):
         ('resource_type', Unicode(values=['GROUP', 'NODE', 'LINK', 'NETWORK'], default=None)),
         ('alias',       Unicode(default=None)),
         ('layout',      AnyDict(min_occurs=0, max_occurs=1, default=None)),
-        ('template_id', Integer(min_occurs=1, default=None)),
+        ('template_id', Integer(min_occurs=0, max_occurs=1, default=None)),
         ('typeattrs',   SpyneArray(TypeAttr)),
         ('cr_date',     Unicode(default=None)),
     ]
