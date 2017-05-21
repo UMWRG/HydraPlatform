@@ -76,11 +76,16 @@ namespace HydraJsonClient
             string result = "";
             try
             {
+                Random random = new Random();
+                int randomNumber = random.Next(0, 100);
+
                 Hashtable jsontable = new Hashtable();
                 jsontable.Add(function, args);
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 js.MaxJsonLength = 50000000;
                 string request = js.Serialize(jsontable);
+                if (function == "update_network")
+                File.WriteAllText("c:\\temp\\network___"+ randomNumber + ".dat", request);
                 httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
                 httpWebRequest.KeepAlive = false;
                 httpWebRequest.Timeout = System.Threading.Timeout.Infinite;

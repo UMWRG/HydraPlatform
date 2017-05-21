@@ -33,7 +33,7 @@ namespace HydraJsonClient.Hydra_Project
         public string description { get; set; }
         public int network_id { get; set; }
         public string cr_date { get; set; }
-        public object[] attributes { get; set; }
+        public RecourseAttribute [] attributes { get; set; }
         public int id { get; set; }
         public Res_Type[] types { get; set; }
         public string type { get; set; }
@@ -42,8 +42,7 @@ namespace HydraJsonClient.Hydra_Project
 
          public Resourcegroup()
         {
-            attributes = new object[0];
-            status = "A";
+           status = "A";
         }
     }
 }
