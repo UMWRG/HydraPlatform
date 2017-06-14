@@ -135,7 +135,7 @@ class Dataset(Base, Inspect):
             if type(val) != str:
                 val = json.dumps(val)
 
-            if len(val) > config.get('DATA', 'compression_threshold', 1000):
+            if len(val) > config.get('db', 'compression_threshold', 5000):
                 self.value = zlib.compress(val)
             else:
                 self.value = val
@@ -158,7 +158,7 @@ class Dataset(Base, Inspect):
                 #Epoch doesn't work here because dates before 1970 are not supported
                 #in read_json. Ridiculous.
                 json_value =  timeseries_pd.to_json(date_format='iso', date_unit='ns')
-                if len(json_value) > config.get('DATA', 'compression_threshold', 1000):
+                if len(json_value) > config.get('db', 'compression_threshold', 5000):
                     self.value = zlib.compress(json_value)
                 else:
                     self.value = json_value
