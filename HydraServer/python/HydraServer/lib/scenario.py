@@ -591,7 +591,7 @@ def update_resourcedata(scenario_id, resource_scenarios,**kwargs):
 
     _check_can_edit_scenario(scenario_id, kwargs['user_id'])
 
-    scen_i = _get_scenario(scenario_id)
+    scen_i = _get_scenario(scenario_id, False, False)
 
     res = []
     for rs in resource_scenarios:
@@ -911,7 +911,7 @@ def get_resource_data(ref_key, ref_id, scenario_id, type_id,**kwargs):
     return resource_data
 
 def _check_can_edit_scenario(scenario_id, user_id):
-    scenario_i = _get_scenario(scenario_id)
+    scenario_i = _get_scenario(scenario_id, False, False)
 
     scenario_i.network.check_write_permission(user_id)
 
@@ -956,7 +956,7 @@ def delete_resourcegroupitems(scenario_id, item_ids, **kwargs):
         Delete specified items in a group, in a scenario.
     """
     user_id = int(kwargs.get('user_id'))
-    scenario = _get_scenario(scenario_id)
+    scenario = _get_scenario(scenario_id, include_data=False, include_items=False)
     _check_network_ownership(scenario.network_id, user_id)
     for item_id in item_ids:
         rgi = DBSession.query(ResourceGroupItem).\
@@ -984,7 +984,7 @@ def add_resourcegroupitems(scenario_id, items, scenario=None, **kwargs):
     user_id = int(kwargs.get('user_id'))
 
     if scenario is None:
-        scenario = _get_scenario(scenario_id)
+        scenario = _get_scenario(scenario_id, include_data=False, include_items=False)
 
     _check_network_ownership(scenario.network_id, user_id)
 
