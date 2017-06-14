@@ -19,6 +19,10 @@ class JSONObject(dict):
         Pass in a nested dictionary, a SQLAlchemy object or a JSON string.
     """
     def __init__(self, obj_dict, parent=None):
+        if isinstance(obj_dict, JSONObject):
+            self = obj_dict
+            return
+
         if isinstance(obj_dict, str) or isinstance(obj_dict, unicode):
             try:
                 obj = json.loads(obj_dict)
@@ -27,7 +31,7 @@ class JSONObject(dict):
                 raise ValueError("Unable to read string value. Make sure it's JSON serialisable")
         elif hasattr(obj_dict, '_asdict') and obj_dict._asdict is not None:
             #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
-            obj = obj_dict._asdict()            
+            obj = obj_dict._asdict()
         elif hasattr(obj_dict, '__dict__'):
             #A special case, trying to load a SQLAlchemy object, which is a 'dict' object
             obj = obj_dict.__dict__
@@ -94,7 +98,7 @@ class JSONObject(dict):
                 if isinstance(v, datetime):
                     v = str(v)
 
-                setattr(self, k, v)
+                setattr(self, str(k), v)
 
     def __getattr__(self, name):
         return self.get(name, None)
@@ -108,9 +112,11 @@ class JSONObject(dict):
         return json.dumps(self)
 
     def get_layout(self):
-        return None
-        if hasattr(self, 'layout'):
-            return self.layout
+        if self.get('layout') is not None:
+            if isinstance(self.layout, str):
+                return self.layout
+            else:
+                return json.dumps(self.layout)
         else:
             return None
 
