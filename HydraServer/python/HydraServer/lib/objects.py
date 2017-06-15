@@ -19,10 +19,6 @@ class JSONObject(dict):
         Pass in a nested dictionary, a SQLAlchemy object or a JSON string.
     """
     def __init__(self, obj_dict, parent=None):
-        if isinstance(obj_dict, JSONObject):
-            self = obj_dict
-            return
-
         if isinstance(obj_dict, str) or isinstance(obj_dict, unicode):
             try:
                 obj = json.loads(obj_dict)
@@ -46,7 +42,9 @@ class JSONObject(dict):
                 raise ValueError("Unrecognised value. It must be a valid JSON dict, a SQLAlchemy result or a dictionary.")
 
         for k, v in obj.items():
-            if isinstance(v, dict):
+            if isinstance(v, JSONObject):
+                setattr(self, k, v)
+            elif isinstance(v, dict):
                 setattr(self, k, JSONObject(v, obj_dict))
             elif isinstance(v, list):
                 #another special case for datasets, to convert a metadata list into a dict
@@ -93,7 +91,6 @@ class JSONObject(dict):
                     #We're only interested in dicts
                     if not isinstance(v, dict):
                         continue
-                    v = JSONObject(v)
 
                 if isinstance(v, datetime):
                     v = str(v)
@@ -136,6 +133,10 @@ class ResourceScenario(JSONObject):
 
 
 class Dataset(JSONObject):
+    
+    def __init__(self, obj_dict, parent=None):
+        super(JSONObject, self).__init__(obj_dict, parent=None)
+
     def parse_value(self):
         """
             Turn the value of an incoming dataset into a hydra-friendly value.
