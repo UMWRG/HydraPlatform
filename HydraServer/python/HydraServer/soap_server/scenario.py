@@ -315,6 +315,30 @@ class ScenarioService(HydraService):
 
         return ra_cms
 
+    @rpc(Integer(min_occurs=1, max_occurs='unbounded'), Integer(min_occurs=1, max_occurs='unbounded'), _returns=SpyneArray(ResourceScenario))
+    def get_resourcescenarios(ctx, resource_attr_id, scenario_id):
+        """
+            Get all the resource scenarios from a list of scenarios and resource scenarios
+            Return a list of resource scenarios.
+        """
+
+        if not isinstance(resource_attr_id, list):
+            resource_attr_id = [resource_attr_id]
+
+        if not isinstance(scenario_id, list):
+            scenario_id = [scenario_id]
+
+        resource_scenarios = scenario.get_resourcescenarios(resource_attr_id, scenario_id, **ctx.in_header.__dict__)
+
+        rs_cms = []
+        for rs in resource_scenarios:
+            rs_cms.append(ResourceScenario(rs))
+
+        return rs_cms
+
+
+
+
     @rpc(Integer(min_occurs=1, max_occurs='unbounded'), Integer, Integer, _returns=SpyneArray(ResourceScenario))
     def copy_data_from_scenario(ctx, resource_attr_ids, source_scenario_id, target_scenario_id):
         """

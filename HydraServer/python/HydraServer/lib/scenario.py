@@ -938,6 +938,31 @@ def get_attribute_datasests(attr_id, scenario_id, **kwargs):
 
     return ras
 
+
+def get_resourcescenarios(resource_attr_ids, scenario_ids, **kwargs):
+    """
+        Retrieve all the datasets in a scenario for a given attribute.
+        Also return the resource attributes so there is a reference to the node/link
+    """
+    
+    #Make sure the resource_attr_ids are valid
+    check_ra_qry  = DBSession.query(ResourceAttr).filter(ResourceAttr.resource_attr_id.in_(resource_attr_ids)).all()
+    if len(check_ra_qry) != len(resource_attr_ids):
+        raise HydraError("Unrecognised resource attribues %s were found in list"%(resource_attr_ids,))
+
+    #Make sure the scenario ids are valid
+    scen_qry = DBSession.query(Scenario).filter(Scenario.scenario_id.in_(scenario_ids)).all()
+    if len(scen_qry) != len(scenario_ids):
+        raise HydraError("Unrecognised resource attribues %s were found in list"%(scenario_ids,))
+
+    rs_result = DBSession.query(ResourceScenario).filter(
+                ResourceScenario.scenario_id.in_(scenario_ids),
+                ResourceScenario.resource_attr_id.in_(resource_attr_ids)
+            ).all()
+
+    return rs_result
+
+
 def get_resourcegroupitems(group_id, scenario_id, **kwargs):
 
     """
