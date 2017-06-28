@@ -696,7 +696,7 @@ def _process_incoming_data(data, user_id=None, source=None):
         data_dict['value'] = db_val
 
         if d.metadata is not None:
-            if isinstance(d.metadata, str):
+            if isinstance(d.metadata, str) or isinstance(d.metadata, unicode):
                 metadata_dict = json.loads(d.metadata)
             else:
                 metadata_dict=d.metadata
