@@ -355,6 +355,50 @@ def apply_template_to_network(template_id, network_id, **kwargs):
         if len(templates) > 0:
             assign_type_to_resource(templates[0].type_id, 'GROUP', group_i.group_id,**kwargs)
 
+def set_network_template(template_id, network_id, **kwargs):
+    """
+       Apply an existing template to a network. Used when a template has changed, and additional attributes
+       must be added to the network's elements.
+    """
+
+    resource_types = []
+
+    #There should only ever be one matching type, but if there are more,
+    #all we can do is pick the first one.
+    try: 
+        network_type = DBSession.query(ResourceType).filter(ResourceType.ref_key=='NETWORK',
+                                                            ResourceType.network_id==network_id,
+                                                            ResourceType.type_id==TemplateType.type_id,
+                                                            TemplateType.template_id==template_id).one()
+        resource_types.append(network_type)
+
+    except NoResultFound:
+        log.info("No network type to set.")
+        pass
+
+    node_types = DBSession.query(ResourceType).filter(ResourceType.ref_key=='NODE',
+                                                        ResourceType.node_id==Node.node_id,
+                                                        Node.network_id==network_id,
+                                                        ResourceType.type_id==TemplateType.type_id,
+                                                        TemplateType.template_id==template_id).all()
+    link_types = DBSession.query(ResourceType).filter(ResourceType.ref_key=='LINK',
+                                                        ResourceType.link_id==Link.link_id,
+                                                        Link.network_id==network_id,
+                                                        ResourceType.type_id==TemplateType.type_id,
+                                                        TemplateType.template_id==template_id).all()
+    group_types = DBSession.query(ResourceType).filter(ResourceType.ref_key=='GROUP',
+                                                        ResourceType.group_id==ResourceGroup.group_id,
+                                                        ResourceGroup.network_id==network_id,
+                                                        ResourceType.type_id==TemplateType.type_id,
+                                                        TemplateType.template_id==template_id).all()
+    
+    resource_types.extend(node_types)
+    resource_types.extend(link_types)
+    resource_types.extend(group_types)
+
+    assign_types_to_resources(resource_types)
+
+    log.info("Finished setting network template")
 
 def remove_template_from_network(network_id, template_id, remove_attrs, **kwargs):
     """
@@ -480,35 +524,34 @@ def assign_types_to_resources(resource_types,**kwargs):
     link_ids = []
     grp_ids  = []
     for resource_type in resource_types:
-        ref_id  = resource_type.ref_id
         ref_key = resource_type.ref_key
         if resource_type.ref_key == 'NETWORK':
-            net_id = ref_id
+            net_id = resource_type.network_id
         elif resource_type.ref_key == 'NODE':
-            node_ids.append(ref_id)
+            node_ids.append(resource_type.node_id)
         elif resource_type.ref_key == 'LINK':
-            link_ids.append(ref_id)
+            link_ids.append(resource_type.link_id)
         elif resource_type.ref_key == 'GROUP':
-            grp_ids.append(ref_id)
+            grp_ids.append(resource_type.group_id)
     if net_id:
         net = DBSession.query(Network).filter(Network.network_id==net_id).one()
     nodes = _get_nodes(node_ids)
     links = _get_links(link_ids)
     groups = _get_groups(grp_ids)
     for resource_type in resource_types:
-        ref_id  = resource_type.ref_id
         ref_key = resource_type.ref_key
         type_id = resource_type.type_id
         if ref_key == 'NETWORK':
             resource = net 
         elif ref_key == 'NODE':
-            resource = nodes[ref_id]
+            resource = nodes[resource_type.node_id]
         elif ref_key == 'LINK':
-            resource = links[ref_id] 
+            resource = links[resource_type.link_id] 
         elif ref_key == 'GROUP':
-            resource = groups[ref_id]
+            resource = groups[resource_type.group_id]
 
         ra, rt, rs= set_resource_type(resource, type_id, types)
+
         if rt is not None:
             res_types.append(rt)
         if len(ra) > 0:
