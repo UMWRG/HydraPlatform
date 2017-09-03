@@ -560,15 +560,28 @@ def assign_types_to_resources(resource_types,**kwargs):
             res_scenarios.extend(rs)
 
     log.info("Retrieved all the appropriate resources")
+    new_res_types = []
+    new_res_attrs = []
+    new_ras       = []
     if len(res_types) > 0:
-        DBSession.execute(ResourceType.__table__.insert(), res_types)
+        new_res_types = DBSession.execute(ResourceType.__table__.insert(), res_types)
     if len(res_attrs) > 0:
-        DBSession.execute(ResourceAttr.__table__.insert(), res_attrs)
+        new_res_attrs = DBSession.execute(ResourceAttr.__table__.insert(), res_attrs)
+
+        new_ras = DBSession.query(ResourceAttr).filter(and_(ResourceAttr.resource_attr_id>=new_res_attrs.lastrowid, ResourceAttr.resource_attr_id<(new_res_attrs.lastrowid+len(res_attrs)))).all()
+
+    ra_map = {}
+    for ra in new_ras:
+        ra_map[(ra.ref_key, ra.attr_id, ra.node_id, ra.link_id, ra.group_id, ra.network_id)] = ra.resource_attr_id
+
+    for rs in res_scenarios:
+        rs['resource_attr_id'] = ra_map[(rs['ref_key'], rs['attr_id'], rs['node_id'], rs['link_id'], rs['group_id'], rs['network_id'])]
+
     if len(res_scenarios) > 0:
         DBSession.execute(ResourceScenario.__table__.insert(), res_scenarios)
 
     #Make DBsession 'dirty' to pick up the inserts by doing a fake delete. 
-    DBSession.query(Attr).filter(Attr.attr_id==None).delete()
+    DBSession.query(ResourceAttr).filter(ResourceAttr.attr_id==None).delete()
 
     ret_val = [t for t in types.values()]
     return ret_val
@@ -802,8 +815,9 @@ def set_resource_type(resource, type_id, types={}, **kwargs):
     #This is a dict as the length of the list may not match the new_res_attrs 
     #Keyed on attr_id, as resource_attr_id doesn't exist yet, and there should only
     #be one attr_id per template.
-    new_res_scenarios = {}
+    new_res_scenarios = []
     for attr_id in missing_attr_ids:
+
         ra_dict = dict(
             ref_key = ref_key,
             attr_id = attr_id,
@@ -815,18 +829,22 @@ def set_resource_type(resource, type_id, types={}, **kwargs):
 
         )
         new_res_attrs.append(ra_dict)
-        
-
 
         if type_attrs[attr_id]['default_dataset_id'] is not None:
             if hasattr(resource, 'network'):
                 
-                new_res_scenarios[attr_id] =  dict()
                 for s in resource.network.scenarios:
-                    new_res_scenarios[attr_id][s.scenario_id] =  dict(
+                    new_res_scenarios.append(dict(
                         dataset_id = type_attrs[attr_id]['default_dataset_id'],
-                        scenario_id = s.scenario_id
-                    )
+                        scenario_id = s.scenario_id,
+                        #Not stored in the DB, but needed to connect the RA ID later.
+                        attr_id = attr_id,
+                        ref_key = ref_key,
+                        node_id    = ra_dict['node_id'],
+                        link_id    = ra_dict['link_id'],
+                        group_id   = ra_dict['group_id'],
+                        network_id = ra_dict['network_id'],
+                    ))
 
 
     resource_type = None
