@@ -32,7 +32,6 @@ class HydraResource(object):
         self.attributes = []
         self.groups = []
         self.template = dict()
-        self.template[None] = []
 
     def add_attribute(self, attr, res_attr, res_scen):
         attribute = HydraAttribute(attr, res_attr, res_scen)
@@ -55,11 +54,8 @@ class HydraResource(object):
             for obj_type in types:
                 # Add resource type to template dictionary
                 if obj_type.template_id not in self.template.keys():
-                    self.template[obj_type.template_id] = []
-                self.template[obj_type.template_id].append(obj_type.name)
-                # Add resource type to default entry holding all resource types
-                if obj_type.name not in self.template[None]:
-                    self.template[None].append(obj_type.name)
+                    self.template[obj_type.template_id] = None
+                self.template[obj_type.template_id] = obj_type.name
 
     def group(self, group_id):
         self.groups.append(group_id)
@@ -72,7 +68,7 @@ class HydraResource(object):
 
     def _get_attr_by_name(self, attr_name):
         for attr in self.attributes:
-            if attr.name == attr_name:
+            if attr.name.lower() == attr_name.lower():
                 return attr
 
     def _get_attr_by_id(self, attr_id):
@@ -157,7 +153,7 @@ class HydraNetwork(HydraResource):
                             res_attr, resource_scenarios.get(res_attr.id))
                 new_group.set_type(resgroup.types)
                 if new_group.ID in groupgroups.keys():
-                    new_group.group(groupgroups[new_group.ID])
+                    new_group.groups = groupgroups[new_group.ID]
                 self.add_group(new_group)
                 del new_group
         log.info("Loading nodes")
@@ -176,8 +172,7 @@ class HydraNetwork(HydraResource):
 
             new_node.set_type(node.types)
             if new_node.ID in nodegroups.keys():
-                for gid in nodegroups[new_node.ID]:
-                    new_node.group(gid)
+                new_node.groups = nodegroups[new_node.ID]
             self.add_node(new_node)
             del new_node
 
@@ -196,7 +191,7 @@ class HydraNetwork(HydraResource):
                                            resource_scenarios.get(res_attr.id))
             new_link.set_type(link.types)
             if new_link.ID in linkgroups.keys():
-                new_link.group(linkgroups[new_link.ID])
+                new_link.groups = linkgroups[new_link.ID]
             self.add_link(new_link)
             del new_link
 
@@ -279,7 +274,7 @@ class HydraNetwork(HydraResource):
     def _get_nodes_by_type(self, node_type):
         nodes = []
         for node in self.nodes:
-            if node_type in node.template[None]:
+            if node_type in node.template.values():
                 nodes.append(node)
         return nodes
 
@@ -303,7 +298,7 @@ class HydraNetwork(HydraResource):
     def _get_links_by_type(self, link_type):
         links = []
         for link in self.links:
-            if link_type in link.template[None]:
+            if link_type in link.template.values():
                 links.append(link)
         return links
 
@@ -327,7 +322,7 @@ class HydraNetwork(HydraResource):
     def _get_groups_by_type(self, group_type):
         groups = []
         for group in self.groups:
-            if group_type in group.template[None]:
+            if group_type in group.template.values():
                 groups.append(group)
         return groups
 
