@@ -1228,12 +1228,14 @@ class Note(Base, Inspect):
     note_id = Column(Integer(), primary_key=True, nullable=False)
 
     ref_key = Column(String(60),  nullable=False, index=True)
-
-    note_text = Column('value', LargeBinary(),  nullable=True)
+    
+    #i'd use 'text' here except text is a reserved keyword in sqlalchemy it seems
+    note_text    = Column('note_text', LargeBinary(),  nullable=True)
 
     created_by = Column(Integer(), ForeignKey('tUser.user_id'))
 
     cr_date = Column(TIMESTAMP(),  nullable=False, server_default=text(u'CURRENT_TIMESTAMP'))
+
     scenario_id = Column(Integer(), ForeignKey('tScenario.scenario_id'),  index=True, nullable=True)
     project_id = Column(Integer(), ForeignKey('tProject.project_id'),  index=True, nullable=True)
 
