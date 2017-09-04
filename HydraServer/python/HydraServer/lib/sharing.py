@@ -194,7 +194,7 @@ def set_project_permission(project_id, usernames, read, write, share,**kwargs):
                              " for user %s as this user is the creator." %
                              (project_id, username))
 
-        proj_i.set_owner(user_i.user_id, read=read, write=write)
+        proj_i.set_owner(user_i.user_id, read=read, write=write, share=share)
 
         for net_i in proj_i.networks:
             net_i.set_owner(user_i.user_id, read=read, write=write, share=share)
