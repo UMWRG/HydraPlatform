@@ -248,17 +248,27 @@ class HydraNetwork(HydraResource):
     def get_node_types(self, template_id=None):
         node_types = []
         for node in self.nodes:
-            for n_type in node.template[template_id]:
-                if n_type not in node_types:
-                    node_types.append(n_type)
+            if template_id is None:
+                for n_type in node.template.values():
+                    if n_type not in node_types:
+                        node_types.append(n_type)
+            else:
+                for n_type in node.template[template_id]:
+                    if n_type not in node_types:
+                        node_types.append(n_type)
         return node_types
 
     def get_link_types(self, template_id=None):
         link_types = []
         for link in self.links:
-            for l_type in link.template[template_id]:
-                if l_type not in link_types:
-                    link_types.append(l_type)
+            if template_id is None:
+                for l_type in link.template.values():
+                    if l_type not in link_types:
+                        link_types.append(l_type)
+            else:
+                for l_type in link.template[template_id]:
+                    if l_type not in link_types:
+                        link_types.append(l_type)
         return link_types
 
     def _get_node_by_name(self, name):
