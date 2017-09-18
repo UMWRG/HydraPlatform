@@ -49,8 +49,6 @@ create_resourcedata_view()
 
 from HydraServer.util.hdb import make_root_user
 
-
-
 from HydraServer.soap_server.network import NetworkService
 from HydraServer.soap_server.project import ProjectService
 from HydraServer.soap_server.attributes import AttributeService
@@ -74,9 +72,12 @@ from HydraServer.soap_server.sharing import SharingService
 from spyne.util.wsgi_wrapper import WsgiMounter
 import socket
 
+log = logging.getLogger(__name__)
+
 try:
     from hwi import app as ui_app
-except:
+except Exception, e:
+    log.exception(e)
     ui_app = None
 
 from beaker.middleware import SessionMiddleware
@@ -113,7 +114,6 @@ import traceback
 from cheroot.wsgi import Server
 from HydraServer.db import commit_transaction, rollback_transaction, close_session
 
-log = logging.getLogger(__name__)
 
 def _on_method_call(ctx):
 
