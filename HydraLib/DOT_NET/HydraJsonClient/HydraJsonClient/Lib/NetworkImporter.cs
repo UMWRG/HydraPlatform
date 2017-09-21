@@ -212,6 +212,27 @@ namespace HydraJsonClient.Lib
             Resourcegroup resourcegroup = jss.Deserialize<Resourcegroup>(respond);       
             return resourcegroup;                        
         }
+        
+         public Resourcegroup get_Template_by_name(string template_name)
+        {
+            Hashtable paras = new Hashtable();
+            paras["template_name"] = template_name;            
+            string respond = client.callServer("get_template_by_name", paras);
+            Resourcegroup resourcegroup = jss.Deserialize<Resourcegroup>(respond);
+            MessagesWriter.writeMessage("template by name is: " + resourcegroup.id + " and name is:  " + resourcegroup.name);
+            return resourcegroup;
+        }
+
+        public Resourcegroup get_Template_by_id(int template_id)
+        {
+            Hashtable paras = new Hashtable();
+            paras["template_id"] = template_id;          
+            string respond = client.callServer("get_template", paras);
+            //MessagesWriter.writeMessage(respond);
+            Resourcegroup resourcegroup = jss.Deserialize<Resourcegroup>(respond);
+            MessagesWriter.writeMessage("template by id  is: " + resourcegroup.id + ", and name is:  " + resourcegroup.name);
+            return resourcegroup;
+        }
     }
 }
 
