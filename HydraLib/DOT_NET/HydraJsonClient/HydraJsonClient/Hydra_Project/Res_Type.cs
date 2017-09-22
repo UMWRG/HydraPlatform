@@ -32,5 +32,7 @@ namespace HydraJsonClient.Hydra_Project
         public string name { get; set; }
         public int template_id { get; set; }
         public int id { get; set; }
+        public string resource_type { get; set; }
+
     }
 }
