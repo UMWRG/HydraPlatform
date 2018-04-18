@@ -217,7 +217,7 @@ class UserService(HydraService):
             ResourceNotFoundError: If the perm_id is not found
         """
         success = 'OK'
-        users.delete_perm(perm_id)
+        users.delete_perm(perm_id, **ctx.in_header.__dict__)
         return success
 
     @rpc(Integer, Integer, _returns=Role)

@@ -19,6 +19,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from HydraServer.db.model import User, Role, Perm, RoleUser, RolePerm
 from HydraServer.db import DBSession
 
+from HydraServer.util.permissions import check_perm
+
 import bcrypt
 
 from HydraLib.HydraException import ResourceNotFoundError, HydraError
@@ -73,7 +75,7 @@ def get_usernames_like(username,**kwargs):
 def add_user(user,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'add_user')
+    check_perm(kwargs.get('user_id'), 'add_user')
     u = User()
     
     u.username     = user.username
@@ -96,7 +98,7 @@ def add_user(user,**kwargs):
 def update_user_display_name(user,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'edit_user')
+    check_perm(kwargs.get('user_id'), 'edit_user')
     try:
         user_i = DBSession.query(User).filter(User.user_id==user.id).one()
         user_i.display_name = user.display_name
@@ -107,7 +109,7 @@ def update_user_display_name(user,**kwargs):
 def update_user_password(new_pwd_user_id, new_password,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'edit_user')
+    check_perm(kwargs.get('user_id'), 'edit_user')
     try:
         user_i = DBSession.query(User).filter(User.user_id==new_pwd_user_id).one()
         user_i.password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
@@ -127,7 +129,7 @@ def get_user_by_name(uname,**kwargs):
 def delete_user(deleted_user_id,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'edit_user')
+    check_perm(kwargs.get('user_id'), 'edit_user')
     try:
         user_i = DBSession.query(User).filter(User.user_id==deleted_user_id).one()
         DBSession.delete(user_i)
@@ -141,7 +143,7 @@ def delete_user(deleted_user_id,**kwargs):
 def add_role(role,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'add_role')
+    check_perm(kwargs.get('user_id'), 'add_role')
     role_i = Role(role_name=role.name, role_code=role.code)
     DBSession.add(role_i)
     DBSession.flush()
@@ -151,7 +153,7 @@ def add_role(role,**kwargs):
 def delete_role(role_id,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'edit_role')
+    check_perm(kwargs.get('user_id'), 'edit_role')
     try:
         role_i = DBSession.query(Role).filter(Role.role_id==role_id).one()
         DBSession.delete(role_i)
@@ -163,7 +165,7 @@ def delete_role(role_id,**kwargs):
 def add_perm(perm,**kwargs):
     """
     """
-    #check_perm(kwargs.get('user_id'), 'add_perm')
+    check_perm(kwargs.get('user_id'), 'add_perm')
     perm_i = Perm(perm_name=perm.name, perm_code=perm.code)
     DBSession.add(perm_i)
     DBSession.flush()
@@ -173,8 +175,7 @@ def add_perm(perm,**kwargs):
 def delete_perm(perm_id,**kwargs):
     """
     """
-
-    #check_perm(kwargs.get('user_id'), 'edit_perm')
+    check_perm(kwargs.get('user_id'), 'edit_perm')
     try:
         perm_i = DBSession.query(Perm).filter(Perm.perm_id==perm_id).one()
         DBSession.delete(perm_i)
@@ -188,7 +189,7 @@ def delete_perm(perm_id,**kwargs):
 
 
 def set_user_role(new_user_id, role_id,**kwargs):
-    #check_perm(kwargs.get('user_id'), 'edit_role')
+    check_perm(kwargs.get('user_id'), 'edit_role')
     try:
         _get_user(new_user_id)
         _get_role(role_id)
@@ -202,7 +203,7 @@ def set_user_role(new_user_id, role_id,**kwargs):
 
 def delete_user_role(deleted_user_id, role_id,**kwargs):
 
-    #check_perm(kwargs.get('user_id'), 'edit_role')
+    check_perm(kwargs.get('user_id'), 'edit_role')
     try:
         _get_user(deleted_user_id)
         _get_role(role_id)
@@ -214,7 +215,7 @@ def delete_user_role(deleted_user_id, role_id,**kwargs):
     return 'OK'
 
 def set_role_perm(role_id, perm_id,**kwargs):
-    #check_perm(kwargs.get('user_id'), 'edit_perm')
+    check_perm(kwargs.get('user_id'), 'edit_perm')
 
     _get_perm(perm_id)
     _get_role(role_id)
@@ -225,7 +226,7 @@ def set_role_perm(role_id, perm_id,**kwargs):
     return roleperm_i.role
 
 def delete_role_perm(role_id, perm_id,**kwargs):
-    #check_perm(kwargs.get('user_id'), 'edit_perm')
+    check_perm(kwargs.get('user_id'), 'edit_perm')
     _get_perm(perm_id)
     _get_role(role_id)
 
@@ -242,7 +243,7 @@ def update_role(role,**kwargs):
         Update the role.
         Used to add permissions and users to a role.
     """
-    #check_perm(kwargs.get('user_id'), 'edit_role')
+    check_perm(kwargs.get('user_id'), 'edit_role')
     try:
         role_i = DBSession.query(Role).filter(Role.role_id==role.id).one()
         role_i.role_name = role.name
