@@ -102,7 +102,7 @@ class HydraNetwork(HydraResource):
 
         self.name = soap_net.name
         self.ID = soap_net.id
-        self.description = soap_net.description
+        self.description = soap_net.get('description', '')
         self.scenario_id = soap_net.scenarios[0].id
         self.set_type(soap_net.types)
 
