@@ -46,7 +46,7 @@ def _check_dimension(typeattr, unit=None):
         unit_dimen = units.get_unit_dimension(unit)
 
         if unit_dimen.lower() != dimension.lower():
-            raise HydraError("Unit %s has dimension %s, but attribute has dimension %s"%
+            raise HydraError("Unit '%s' has dimension '%s', but attribute has dimension '%s'"%
                             (unit, unit_dimen, dimension))
 
 def get_types_by_attr(resource, template_id=None):
