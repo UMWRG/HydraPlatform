@@ -24,7 +24,7 @@ from HydraServer.util.permissions import check_perm
 import template
 from HydraServer.db.model import Project, Network, Scenario, Node, Link, ResourceGroup,\
         ResourceAttr, Attr, ResourceType, ResourceGroupItem, Dataset, Metadata, DatasetOwner,\
-        ResourceScenario, TemplateType, TypeAttr, Template
+        ResourceScenario, TemplateType, TypeAttr, Template, NetworkOwner
 from sqlalchemy.orm import noload, joinedload, joinedload_all
 from HydraServer.db import DBSession
 from sqlalchemy import func, and_, or_, distinct
@@ -442,7 +442,7 @@ def add_network(network,**kwargs):
     DBSession.autoflush = False
     user_id = kwargs.get('user_id')
 
-    #check_perm('add_network')
+    check_perm(user_id, 'add_network')
 
     start_time = datetime.datetime.now()
     log.debug("Adding network")
@@ -880,6 +880,17 @@ def _get_metadata(network_id, user_id):
 
     return metadata_dict
 
+def _get_network_owners(network_id):
+    """
+        Get all the nodes in a network
+    """
+    owners_i = DBSession.query(NetworkOwner).filter(
+                        NetworkOwner.network_id==network_id).options(noload('network')).options(joinedload_all('user')).all()
+    
+    owners = [dictobj(owner_i.__dict__) for owner_i in owners_i]
+
+    return owners
+
 def _get_nodes(network_id, template_id=None):
     """
         Get all the nodes in a network
@@ -1003,6 +1014,7 @@ def get_network(network_id, summary=False, include_data='N', scenario_ids=None, 
         net.nodes          = _get_nodes(network_id, template_id=template_id)
         net.links          = _get_links(network_id, template_id=template_id)
         net.resourcegroups = _get_groups(network_id, template_id=template_id)
+        net.owners         = _get_network_owners(network_id) 
 
         if summary is False:
             all_attributes = _get_all_resource_attributes(network_id, template_id)
