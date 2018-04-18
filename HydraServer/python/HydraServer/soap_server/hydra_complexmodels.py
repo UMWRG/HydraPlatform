@@ -552,7 +552,7 @@ class TemplateType(HydraComplexModel):
         ('resource_type', Unicode(values=['GROUP', 'NODE', 'LINK', 'NETWORK'], default=None)),
         ('alias',       Unicode(default=None)),
         ('layout',      AnyDict(min_occurs=0, max_occurs=1, default=None)),
-        ('template_id', Integer(min_occurs=0, max_occurs=1, default=None)),
+        ('template_id', Integer(min_occurs=0, default=None)),
         ('typeattrs',   SpyneArray(TypeAttr)),
         ('cr_date',     Unicode(default=None)),
     ]
