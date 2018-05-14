@@ -1121,6 +1121,36 @@ class ScenarioDiff(HydraComplexModel):
         self.resourcescenarios = [ResourceScenarioDiff(rd) for rd in parent['resourcescenarios']]
         self.groups = ResourceGroupDiff(parent['groups'])
 
+class Owner(HydraComplexModel):
+    """
+       - **user_id**  Integer
+       - **username** Unicode
+       - **display_name** Unicode
+       - **edit**     Unicode
+       - **view**     Unicode
+       - **share**     Unicode
+    """
+    _type_info = [
+        ('user_id', Integer),
+        ('username', Unicode),
+        ('display_name', Unicode),
+        ('edit', Unicode),
+        ('view', Unicode),
+        ('share', Unicode)
+    ]
+
+    def __init__(self, parent=None):
+        super(Owner, self).__init__()
+
+        if parent is None:
+            return
+        self.user_id = parent.user_id
+        self.username = parent.user.username
+        self.display_name = parent.user.display_name
+        self.edit = parent.edit
+        self.view = parent.view
+        self.share = parent.share
+
 class Network(Resource):
     """
        - **project_id**          Integer(default=None)
@@ -1154,6 +1184,7 @@ class Network(Resource):
         ('links',               SpyneArray(Link)),
         ('resourcegroups',      SpyneArray(ResourceGroup)),
         ('types',               SpyneArray(TypeSummary)),
+        ('owners',              SpyneArray(Owner)),
         ('projection',          Unicode(default=None)),
     ]
 
@@ -1176,6 +1207,7 @@ class Network(Resource):
         self.resourcegroups = [ResourceGroup(rg, summary) for rg in parent.resourcegroups]
         self.types          = [TypeSummary(t.templatetype) for t in parent.types]
         self.projection  = parent.projection
+        self.owners = [Owner(owner) for owner in parent.owners]
 
         if summary is False:
             self.attributes  = [ResourceAttr(ra) for ra in parent.attributes]
