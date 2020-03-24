@@ -1,6 +1,10 @@
 HydraPlatform
 =============
 
+### ***Warning***
+#### This repository is deprecated. The hydra platform repository has been moved to https://github.com/hydraplatform
+
+
 A library and web server for managing networks. Full documentation can be found [here](http://umwrg.github.io/HydraPlatform/).
 
 Installation
